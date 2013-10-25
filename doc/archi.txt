@@ -1,0 +1,3 @@
+
+Utilisation de Apache Chiro :
+http://shiro.apache.org/authentication-features.html
