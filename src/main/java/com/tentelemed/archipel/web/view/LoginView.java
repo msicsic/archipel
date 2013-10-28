@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.web.view;
 
+import com.tentelemed.archipel.module.security.domain.User;
 import com.tentelemed.archipel.web.component.PasswordValidator;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.FieldEvents;
@@ -40,8 +41,11 @@ public class LoginView extends CustomComponent implements View {
     @PostConstruct
     public void postConstruct() {
 
+        User user2 = User.createUser("", "", "", "");
+        System.err.println("email : "+user2.getEmail());
+
         setSizeFull();
-        setImmediate(true);
+
         // Create the user input field
         user = new TextField("User:");
         user.setWidth("300px");
@@ -50,12 +54,6 @@ public class LoginView extends CustomComponent implements View {
         user.addValidator(new EmailValidator("Username must be an email address"));
         user.setInvalidAllowed(false);
         user.setImmediate(true);
-        user.addBlurListener(new FieldEvents.BlurListener() {
-            @Override
-            public void blur(FieldEvents.BlurEvent event) {
-                System.err.println("hop");
-            }
-        });
 
         // Create the password input field
         password = new PasswordField("Password:");
@@ -64,6 +62,7 @@ public class LoginView extends CustomComponent implements View {
         password.setRequired(true);
         password.setValue("");
         password.setNullRepresentation("");
+        password.setImmediate(true);
 
         // Create login button
         Button loginButton = new Button("Login", new Button.ClickListener() {
