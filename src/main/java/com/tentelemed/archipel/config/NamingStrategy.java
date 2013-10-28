@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.infra;
+package com.tentelemed.archipel.config;
 
 import org.hibernate.cfg.ImprovedNamingStrategy;
 

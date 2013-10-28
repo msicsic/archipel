@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.infra;
+package com.tentelemed.archipel.config;
 
 import com.tentelemed.archipel.module.security.domain.User;
 import com.tentelemed.archipel.module.security.repo.UserRepository;
@@ -14,7 +14,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 public class Application {
 
     public static void main(String[] args) {
-        AbstractApplicationContext context = new AnnotationConfigApplicationContext(JPAConfiguration.class);
+        AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
         UserRepository repo = context.getBean(UserRepository.class);
         User user = User.createUser("Paul", "Durand", "login1", "password1");
         repo.save(user);

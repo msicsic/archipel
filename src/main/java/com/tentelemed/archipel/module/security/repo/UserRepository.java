@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query(value="select u from User u where \nlower(u.lastName) like ('%' || lower(:name) ||'%')\nor lower(u.firstName) like ('%' || lower(:name) ||'%') ")
     List<User> findByName(@Param("name") String name);
+
+    @Query(value="select u from User u where u.credentials.login=:login")
+    User findByLogin(@Param("login") String login);
 }

@@ -1,7 +1,9 @@
-package com.tentelemed.archipel.infra;
+package com.tentelemed.archipel.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -13,6 +15,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import ru.xpoft.vaadin.VaadinMessageSource;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -27,7 +30,22 @@ import javax.sql.DataSource;
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.tentelemed.archipel"})
 @EnableTransactionManagement
-public class JPAConfiguration {
+@ComponentScan("com.tentelemed.archipel")
+public class SpringConfiguration {
+
+
+    @Bean
+    public VaadinMessageSource vaadinMessageSource() {
+        return new VaadinMessageSource();
+    }
+
+    @Bean(name="messageSource")
+    public ReloadableResourceBundleMessageSource getMessageSource() {
+        ReloadableResourceBundleMessageSource res = new ReloadableResourceBundleMessageSource();
+        res.setBasename("classpath:/locales/messages");
+        res.setFallbackToSystemLocale(false);
+        return res;
+    }
 
     @Bean
     public DataSource dataSource() {
@@ -55,7 +73,7 @@ public class JPAConfiguration {
                 , "com.tentelemed.archipel.module.invoicing.domain"
                 , "com.tentelemed.archipel.module.security.domain"
         );
-        lef.getJpaPropertyMap().put("hibernate.ejb.naming_strategy", "com.tentelemed.archipel.infra.NamingStrategy");
+        lef.getJpaPropertyMap().put("hibernate.ejb.naming_strategy", "com.tentelemed.archipel.config.NamingStrategy");
         lef.afterPropertiesSet();
         return lef.getObject();
     }

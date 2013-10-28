@@ -1,3 +1,6 @@
 
 Utilisation de Apache Chiro :
 http://shiro.apache.org/authentication-features.html
+
+- Mise en place MVVM (http://martinfowler.com/eaaDev/PresentationModel.html)
+- Guava EventBus pour la navigation

@@ -1,7 +1,7 @@
 package com.tentelemed.persistence.integration;
 
 
-import com.tentelemed.archipel.infra.JPAConfiguration;
+import com.tentelemed.archipel.config.SpringConfiguration;
 import com.tentelemed.archipel.module.security.domain.User;
 import com.tentelemed.archipel.module.security.repo.UserRepository;
 import org.junit.Test;
@@ -18,7 +18,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JPAConfiguration.class})
+@ContextConfiguration(classes = {SpringConfiguration.class})
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 public class UserRepositoryIntegrationTests {

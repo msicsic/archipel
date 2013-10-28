@@ -16,7 +16,7 @@ public abstract class BaseEntity<B extends EntityId> {
     @Id
     @org.hibernate.annotations.GenericGenerator(
             name = "OidGen",
-            strategy = "com.tentelemed.archipel.infra.IdGenerator",
+            strategy = "com.tentelemed.archipel.config.IdGenerator",
             parameters = {
                     @Parameter(name = "table", value = "AC_HIBERNATE_UNIQUE_KEY"),
                     @Parameter(name = "column", value = "NEXT_HI"),

@@ -1,6 +1,6 @@
 package com.tentelemed.persistence.integration;
 
-import com.tentelemed.archipel.infra.JPAConfiguration;
+import com.tentelemed.archipel.config.SpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import static com.tentelemed.persistence.domain.fixture.JPAAssertions.assertTabl
 import static com.tentelemed.persistence.domain.fixture.JPAAssertions.assertTableHasColumn;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JPAConfiguration.class})
+@ContextConfiguration(classes = {SpringConfiguration.class})
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         TransactionalTestExecutionListener.class})
