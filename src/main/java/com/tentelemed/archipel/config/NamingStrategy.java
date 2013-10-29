@@ -3,11 +3,11 @@ package com.tentelemed.archipel.config;
 import org.hibernate.cfg.ImprovedNamingStrategy;
 
 /**
- * Stratégie de nommage des tables et colonnes pour éviter les conflits de nom qq soit la bdd
+ * StratÃ©gie de nommage des tables et colonnes pour Ã©viter les conflits de nom qq soit la bdd
  *
  * Created by IntelliJ IDEA.
  * User: msi
- * Date: 14 févr. 2011
+ * Date: 14 fÃ©vr. 2011
  * Time: 16:51:17
  */
 public class NamingStrategy extends ImprovedNamingStrategy {

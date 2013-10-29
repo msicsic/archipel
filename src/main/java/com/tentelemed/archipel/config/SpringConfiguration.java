@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.config;
 
+import com.google.common.eventbus.EventBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +34,10 @@ import javax.sql.DataSource;
 @ComponentScan("com.tentelemed.archipel")
 public class SpringConfiguration {
 
+    @Bean
+    public EventBus eventBus() {
+        return new EventBus();
+    }
 
     @Bean
     public VaadinMessageSource vaadinMessageSource() {

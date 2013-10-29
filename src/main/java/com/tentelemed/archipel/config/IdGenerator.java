@@ -30,7 +30,7 @@ public class IdGenerator extends SequenceStyleGenerator {
 
     public IdGenerator() {
         if (instance == null) {
-            log.info("OidGenerator instancié");
+            log.info("OidGenerator instanciÃ©");
             instance = this;
         }
     }

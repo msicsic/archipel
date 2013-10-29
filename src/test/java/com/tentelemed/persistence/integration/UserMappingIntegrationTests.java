@@ -31,7 +31,7 @@ public class UserMappingIntegrationTests {
     EntityManager manager;
 
     /**
-     * - La table créé doit respecter la NamingStrategy
+     * - La table crÃ©Ã© doit respecter la NamingStrategy
      * @throws Exception
      */
     @Test

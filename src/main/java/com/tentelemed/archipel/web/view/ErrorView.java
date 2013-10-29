@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.web.view;
 
 import com.tentelemed.archipel.web.component.ChooseLanguage;
+import com.tentelemed.archipel.web.view.login.LoginView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;

@@ -1,7 +1,5 @@
 package com.tentelemed.archipel.module.security.domain;
 
-import lombok.Getter;
-
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,11 +14,11 @@ import java.util.Objects;
 @Embeddable
 public class Credentials {
 
-    @Getter
+    //@Getter
     @NotNull @Size(min = 5)
     String login;
 
-    @Getter
+    //@Getter
     @NotNull @Size(min = 5)
     String password;
 
@@ -39,5 +37,13 @@ public class Credentials {
     public boolean match(String login, String password) {
         return Objects.equals(this.password, password) &&
                 Objects.equals(this.login, login) ;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

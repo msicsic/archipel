@@ -1,11 +1,13 @@
-package com.tentelemed.archipel.web.view;
+package com.tentelemed.archipel.web.view.main;
 
+import com.tentelemed.archipel.web.view.login.LoginView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.xpoft.vaadin.VaadinView;
@@ -21,6 +23,7 @@ import javax.annotation.PostConstruct;
 @Component
 @Scope("prototype")
 @VaadinView(MainView.NAME)
+@RequiresRoles("user")
 public class MainView extends CustomComponent implements View {
 
     public static final String NAME = "main";

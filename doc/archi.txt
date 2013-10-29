@@ -1,6 +1,11 @@
 
-Utilisation de Apache Chiro :
-http://shiro.apache.org/authentication-features.html
-
 - Mise en place MVVM (http://martinfowler.com/eaaDev/PresentationModel.html)
+  - binding de base ok
+  - manque les props avancées : visible, enabled...
+
 - Guava EventBus pour la navigation
+  - ok
+
+- Sécurité : intégration de Apache Chiro :
+  http://shiro.apache.org/authentication-features.html
+  - en cours...

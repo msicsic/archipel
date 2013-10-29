@@ -3,6 +3,9 @@ package com.tentelemed.archipel.web.config;
 import com.tentelemed.archipel.config.SpringConfiguration;
 import com.tentelemed.archipel.web.MyUI;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.util.Factory;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -12,6 +15,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
+import org.apache.shiro.mgt.SecurityManager;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,5 +47,10 @@ public class VaadinServlet extends SpringVaadinServlet implements WebApplication
 
         // Manage the lifecycle of the root application context
         container.addListener(new ContextLoaderListener(rootContext));
+
+        // init Shiro
+        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+        SecurityManager securityManager = factory.getInstance();
+        SecurityUtils.setSecurityManager(securityManager);
     }
 }
