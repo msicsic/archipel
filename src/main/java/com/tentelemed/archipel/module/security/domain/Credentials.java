@@ -39,6 +39,9 @@ public class Credentials {
                 Objects.equals(this.login, login) ;
     }
 
+    // ********************* ACCESSORS ***************************
+    // ***********************************************************
+
     public String getLogin() {
         return login;
     }

@@ -63,6 +63,14 @@
           <element id="library" level="project" name="Maven: com.vaadin:vaadin-client-compiled:7.1.7" />
           <element id="library" level="project" name="Maven: com.vaadin:vaadin-themes:7.1.7" />
           <element id="library" level="project" name="Maven: ru.xpoft.vaadin:spring-vaadin-integration:2.0.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml:classmate:0.8.0" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator:5.0.1.Final" />
+          <element id="library" level="project" name="Maven: org.apache.shiro:shiro-core:1.2.2" />
+          <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils:1.8.3" />
+          <element id="library" level="project" name="Maven: org.apache.shiro:shiro-web:1.2.2" />
+          <element id="library" level="project" name="Maven: org.apache.shiro:shiro-spring:1.2.2" />
+          <element id="library" level="project" name="Maven: org.apache.shiro:shiro-aspectj:1.2.2" />
+          <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.7.3" />
         </element>
       </element>
     </root>

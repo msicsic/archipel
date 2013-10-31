@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.module.security.domain;
 
 import com.google.common.base.Objects;
-import com.tentelemed.archipel.core.BaseAggregateRoot;
-import com.tentelemed.archipel.core.DomainException;
+import com.tentelemed.archipel.core.domain.BaseAggregateRoot;
+import com.tentelemed.archipel.core.domain.DomainException;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Embedded;
@@ -44,10 +44,6 @@ public class User extends BaseAggregateRoot<UserId> {
     @Email
     String email = "default@mail.com";
 
-    public String getLogin() {
-        return this.credentials.getLogin();
-    }
-
     public static User createUser(String firstName, String lastName, String login, String password) {
         User user = new User();
         user.firstName = firstName;
@@ -70,6 +66,9 @@ public class User extends BaseAggregateRoot<UserId> {
         }
     }
 
+    // ********************* ACCESSORS ***************************
+    // ***********************************************************
+
     public String getFirstName() {
         return firstName;
     }
@@ -81,4 +80,13 @@ public class User extends BaseAggregateRoot<UserId> {
     public String getEmail() {
         return email;
     }
+
+    public String getLogin() {
+        return this.credentials.getLogin();
+    }
+
+    public String getPassword() {
+        return this.credentials.getPassword();
+    }
+
 }

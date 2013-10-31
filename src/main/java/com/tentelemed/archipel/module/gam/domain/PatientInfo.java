@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.module.gam.domain;
 
-import com.tentelemed.archipel.core.Country;
-import com.tentelemed.archipel.core.ValueObject;
+import com.tentelemed.archipel.core.domain.Country;
+import com.tentelemed.archipel.core.domain.ValueObject;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;

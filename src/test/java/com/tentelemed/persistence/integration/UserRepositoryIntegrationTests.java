@@ -1,7 +1,7 @@
 package com.tentelemed.persistence.integration;
 
 
-import com.tentelemed.archipel.config.SpringConfiguration;
+import com.tentelemed.archipel.core.config.SpringConfiguration;
 import com.tentelemed.archipel.module.security.domain.User;
 import com.tentelemed.archipel.module.security.repo.UserRepository;
 import org.junit.Test;

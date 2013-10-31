@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.module.security.domain;
 
-import com.tentelemed.archipel.core.EntityId;
+import com.tentelemed.archipel.core.domain.EntityId;
 
 import javax.persistence.Embeddable;
 

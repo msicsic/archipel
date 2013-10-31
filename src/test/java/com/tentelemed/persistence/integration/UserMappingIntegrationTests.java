@@ -1,6 +1,6 @@
 package com.tentelemed.persistence.integration;
 
-import com.tentelemed.archipel.config.SpringConfiguration;
+import com.tentelemed.archipel.core.config.SpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

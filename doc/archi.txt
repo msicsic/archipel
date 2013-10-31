@@ -1,11 +1,47 @@
 
 - Mise en place MVVM (http://martinfowler.com/eaaDev/PresentationModel.html)
-  - binding de base ok
+  - ok : binding de base
   - manque les props avancées : visible, enabled...
 
 - Guava EventBus pour la navigation
-  - ok
+  - ok : navigation explicite depuis un modele de vue
+  - ok : evts applicatifs (sommaire...)
 
 - Sécurité : intégration de Apache Chiro :
   http://shiro.apache.org/authentication-features.html
-  - en cours...
+  - ok : intégration avec JPA
+  - intégration avec un serveur LDAP à faire
+
+UI :
+- ok : ne pas utiliser un Navigator, mais faire la navigation a la main
+- ok : découverte auto des classes "View" par Spring
+- ok : gestion de la navigation par evt
+- ok : shiro reste utilisé, mais indirectement (a la main sans passer par le ShiroNavigator)
+
+ TODO :
+ - TU pour ecran de login
+ - TU pour UserService
+ - TU pour UserRepository
+ - TU pour User
+
+ - menu de navigation entre les vues :
+   - propose les vues découvertes (plugins)
+   - affiche un icone et un nom pour chaque vue
+   - gestion des droits d'acces (acces au plugin en fonction de roles)
+
+ - chaque module doit contenir son fichier de langue
+
+ - intégration LDAP
+
+ - module d'edition des Patients
+
+ - mise en place CQRS
+
+ - mise en place de l'event sourcing
+
+ - module technique qui log les actions :
+   - ecoute l'activité (evts des autres modules) et log dans un fichier
+
+ - refactoring
+
+ - intégration de Camel

@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.module.gam.domain;
 
-import com.tentelemed.archipel.core.BaseAggregateRoot;
-import com.tentelemed.archipel.core.Country;
+import com.tentelemed.archipel.core.domain.BaseAggregateRoot;
+import com.tentelemed.archipel.core.domain.Country;
 import com.tentelemed.archipel.module.security.domain.UserId;
 
 import javax.persistence.Embedded;
