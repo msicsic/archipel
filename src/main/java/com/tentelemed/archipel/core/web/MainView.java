@@ -1,19 +1,19 @@
 package com.tentelemed.archipel.core.web;
 
 import com.google.common.eventbus.EventBus;
+import com.tentelemed.archipel.core.domain.Module;
 import com.tentelemed.archipel.module.security.service.UserService;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Reindeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.xpoft.vaadin.VaadinView;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,45 +22,80 @@ import javax.annotation.PostConstruct;
  * Time: 16:19
  */
 @Component
-@Scope("prototype")
-@VaadinView(MainView.NAME)
-public class MainView extends CustomComponent implements View {
+@Scope("session")
+@ModuleRoot(value = MainView.NAME, root = true)
+public class MainView extends BasicView<MainViewModel> implements RootView {
 
     public static final String NAME = "main";
-    private Label text;
 
-    @Autowired
-    UserService service;
+    Map<Module, MenuBar.MenuItem> mapMenu = new HashMap<>();
+    VerticalLayout childLayout;
 
-    @Autowired
-    EventBus eventBus;
+    @Autowired MainViewModel model;
 
     @PostConstruct
     public void postConstruct() {
-        text = new Label();
-        Button logout = new Button("Logout", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                doLogout();
+
+        // The view root layout
+        VerticalLayout viewLayout = new VerticalLayout();
+        viewLayout.setSizeFull();
+        viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
+        setCompositionRoot(viewLayout);
+
+        // Create a menu bar
+        MenuBar menubar = new MenuBar();
+        menubar.setSizeFull();
+        viewLayout.addComponent(menubar);
+
+        childLayout = new VerticalLayout();
+        viewLayout.addComponent(childLayout);
+
+        for (final Module module : model.getModules()) {
+            MenuBar.MenuItem item = menubar.addItem(module.getName(), null, new MenuBar.Command() {
+                @Override
+                public void menuSelected(MenuBar.MenuItem selectedItem) {
+                    model.setSelectedModule(module);
+                    refreshUI();
+                }
+            });
+            item.setCheckable(true);
+            mapMenu.put(module, item);
+        }
+        //menubar.addItem()
+        MenuBar.MenuItem logoutMenu = menubar.addItem("Logout", null, null);
+        logoutMenu.addItem("logout", null, new MenuBar.Command() {
+            @Override public void menuSelected(MenuBar.MenuItem selectedItem) {
+                model.logout();
             }
         });
 
-        setCompositionRoot(new CssLayout(text, logout));
     }
 
     @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        // Get the user name from the session
-        String username = String.valueOf(getSession().getAttribute("user"));
+    protected void onRefresh() {
+        for (Map.Entry<Module, MenuBar.MenuItem> entry : mapMenu.entrySet()) {
+            entry.getValue().setEnabled(true);
+            entry.getValue().setChecked(false);
+            entry.getValue().setText(entry.getKey().getName());
+        }
 
-        // And show the username
-        text.setValue("Hello " + username);
+        Module module = model.getSelectedModule();
+        if (module != null) {
+            MenuBar.MenuItem item = mapMenu.get(module);
+            item.setChecked(true);
+            item.setText("[" + module.getName() + "]");
+            item.setEnabled(false);
+        }
     }
 
-    private void doLogout() {
-        // "Logout" the user
-        getSession().setAttribute("user", null);
-        service.doLogout();
+    public void showView(AbstractComponent view) {
+        childLayout.removeAllComponents();
+        childLayout.addComponent(view);
+    }
+
+    @Override
+    protected MainViewModel getModel() {
+        return model;
     }
 }
 

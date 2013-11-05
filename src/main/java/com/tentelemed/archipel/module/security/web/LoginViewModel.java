@@ -25,10 +25,10 @@ public class LoginViewModel extends BasicViewModel {
     UserService userService;
 
     @NotNull @Size(min=3)
-    String userName = "";
+    String userName = "login1";
 
     @NotNull @Size(min=3)
-    String password = "";
+    String password = "password1";
 
     String error = "";
 

@@ -19,13 +19,14 @@ UI :
 - ok : shiro reste utilisé, mais indirectement (a la main sans passer par le ShiroNavigator)
 
  TODO :
+
  - TU pour ecran de login
  - TU pour UserService
  - TU pour UserRepository
  - TU pour User
 
  - menu de navigation entre les vues :
-   - propose les vues découvertes (plugins)
+   * propose les vues découvertes (plugins)
    - affiche un icone et un nom pour chaque vue
    - gestion des droits d'acces (acces au plugin en fonction de roles)
 

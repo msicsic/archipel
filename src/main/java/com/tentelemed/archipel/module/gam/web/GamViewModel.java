@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.module.invoicing.web;
+package com.tentelemed.archipel.module.gam.web;
 
 import com.tentelemed.archipel.core.web.BasicViewModel;
 import org.springframework.context.annotation.Scope;
@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("prototype")
-public class Module2ViewModel extends BasicViewModel {
+public class GamViewModel extends BasicViewModel {
+
     String text;
 
     public String getText() {

@@ -1,9 +1,9 @@
 package com.tentelemed.archipel.module.security.service;
 
 import com.google.common.eventbus.EventBus;
+import com.tentelemed.archipel.core.event.LoginEvent;
+import com.tentelemed.archipel.core.event.LogoutDoneEvent;
 import com.tentelemed.archipel.module.security.domain.User;
-import com.tentelemed.archipel.module.security.event.SecLoginEvent;
-import com.tentelemed.archipel.module.security.event.SecLogoutEvent;
 import com.tentelemed.archipel.module.security.event.SecUserCreatedEvent;
 import com.tentelemed.archipel.module.security.repo.UserRepository;
 import org.apache.shiro.SecurityUtils;
@@ -34,13 +34,13 @@ public class UserService {
         UsernamePasswordToken token = new UsernamePasswordToken(login, password);
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.login(token);
-        eventBus.post(new SecLoginEvent());
+        eventBus.post(new LoginEvent());
     }
 
     public void doLogout() {
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.logout();
-        eventBus.post(new SecLogoutEvent());
+        eventBus.post(new LogoutDoneEvent());
     }
 
     public void createUser(String firstName, String lastName, String login, String password) {

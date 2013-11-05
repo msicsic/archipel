@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.module.invoicing.web;
 
 import com.tentelemed.archipel.core.web.BasicView;
+import com.tentelemed.archipel.core.web.ModuleRoot;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
@@ -8,7 +9,6 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.xpoft.vaadin.VaadinView;
 
 import javax.annotation.PostConstruct;
 
@@ -20,17 +20,17 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope("prototype")
-@VaadinView(Module2View.NAME)
 @RequiresRoles({"user", "module2"})
-public class Module2View extends BasicView<Module2ViewModel> {
+@ModuleRoot(InvoicingView.NAME)
+public class InvoicingView extends BasicView<InvoicingViewModel> {
 
-    public final static String NAME = "module2";
+    public final static String NAME = "invoicing";
 
     @Autowired
-    Module2ViewModel model;
+    InvoicingViewModel model;
 
     @Override
-    protected Module2ViewModel getModel() {
+    protected InvoicingViewModel getModel() {
         return model;
     }
 
@@ -39,22 +39,14 @@ public class Module2View extends BasicView<Module2ViewModel> {
 
         setSizeFull();
 
-        // Create error message label
-        Label label = new Label();
-        bind(label, "text");
-
-        // Add both to a panel
-        VerticalLayout fields = new VerticalLayout(label);
-        fields.setCaption("Please login to access the application. (test@test.com/passw0rd)");
-        fields.setSpacing(true);
-        fields.setMargin(new MarginInfo(true, true, true, false));
-        fields.setSizeUndefined();
-
         // The view root layout
-        VerticalLayout viewLayout = new VerticalLayout(fields);
+        VerticalLayout viewLayout = new VerticalLayout();
         viewLayout.setSizeFull();
-        viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
         viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
         setCompositionRoot(viewLayout);
+
+        viewLayout.addComponent(new Label("INVOICING"));
+
     }
+
 }

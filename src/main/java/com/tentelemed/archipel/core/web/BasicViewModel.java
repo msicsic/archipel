@@ -21,12 +21,12 @@ public class BasicViewModel {
 
     protected static final Logger log = LoggerFactory.getLogger(BasicViewModel.class);
 
-    protected void fire(ViewEvent event) {
+    /*protected void fire(NavigationEvent event) {
         eventBus.post(event);
-    }
+    }*/
 
     protected void showView(String viewId) {
-        fire(new NavigationEvent(viewId));
+        eventBus.post(new NavigationEvent(viewId));
     }
 
     protected String getText(String key) {

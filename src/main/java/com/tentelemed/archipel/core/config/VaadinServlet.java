@@ -1,9 +1,15 @@
 package com.tentelemed.archipel.core.config;
 
-import com.tentelemed.archipel.core.config.DbInit;
-import com.tentelemed.archipel.core.config.SpringConfiguration;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import com.tentelemed.archipel.core.event.LoginEvent;
+import com.tentelemed.archipel.core.event.LogoutDoneEvent;
+import com.tentelemed.archipel.core.service.CoreService;
+import com.tentelemed.archipel.core.web.MainView;
 import com.tentelemed.archipel.core.web.MyUI;
+import com.tentelemed.archipel.core.web.NavigationEvent;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.ui.UI;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -16,7 +22,7 @@ import javax.servlet.annotation.WebServlet;
 
 /**
  * Controleur principal de Vaadin
- *
+ * <p/>
  * Created with IntelliJ IDEA.
  * User: Mael
  * Date: 25/10/13
@@ -24,7 +30,7 @@ import javax.servlet.annotation.WebServlet;
  */
 @WebServlet(value = {"/*", "/VAADIN/*"},
         asyncSupported = true, initParams = {
-        @WebInitParam(name="beanName", value="myUI")
+        @WebInitParam(name = "beanName", value = "myUI")
 })
 @VaadinServletConfiguration(
         productionMode = false,
@@ -50,6 +56,27 @@ public class VaadinServlet extends SpringVaadinServlet implements WebApplication
         // init de la bdd de test
         DbInit init = rootContext.getBean(DbInit.class);
         if (init != null) init.initDb();
+
+        CoreService service = rootContext.getBean(CoreService.class);
+        service.initApplication();
+
+        EventBus eventBus = rootContext.getBean(EventBus.class);
+        eventBus.register(this);
     }
 
+    @Subscribe
+    public void handleViewEvent(NavigationEvent event) {
+        ((MyUI) UI.getCurrent()).showView(event.getModuleId());
+    }
+
+    @Subscribe
+    public void handleViewEvent(LogoutDoneEvent event) {
+        UI.getCurrent().getSession().close();
+        UI.getCurrent().getPage().setLocation("/");
+    }
+
+    @Subscribe
+    public void handleViewEvent(LoginEvent event) {
+        ((MyUI) UI.getCurrent()).showView(MainView.NAME);
+    }
 }

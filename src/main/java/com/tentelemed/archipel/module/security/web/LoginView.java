@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.module.security.web;
 
 import com.tentelemed.archipel.core.web.BasicView;
+import com.tentelemed.archipel.core.web.ModuleRoot;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
@@ -8,7 +9,7 @@ import com.vaadin.ui.themes.Reindeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.xpoft.vaadin.VaadinView;
+
 import javax.annotation.PostConstruct;
 
 /**
@@ -19,7 +20,7 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope("prototype")
-@VaadinView(LoginView.NAME)
+@ModuleRoot(value=LoginView.NAME, login=true)
 public class LoginView extends BasicView<LoginViewModel> {
 
     public final static String NAME = "login";

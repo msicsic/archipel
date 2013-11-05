@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.core.web;
+package com.tentelemed.archipel.core.event;
 
 /**
  * Created with IntelliJ IDEA.
@@ -6,5 +6,5 @@ package com.tentelemed.archipel.core.web;
  * Date: 29/10/13
  * Time: 15:18
  */
-public class ViewEvent {
+public class DomainEvent {
 }
