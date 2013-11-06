@@ -2,6 +2,9 @@ package com.tentelemed.archipel.module.security.web;
 
 import com.tentelemed.archipel.core.web.BasicViewModel;
 import com.tentelemed.archipel.module.security.domain.User;
+import com.tentelemed.archipel.module.security.domain.UserId;
+import com.tentelemed.archipel.module.security.event.domain.UserDTO;
+import com.tentelemed.archipel.module.security.event.service.UserServiceAdapter;
 import com.tentelemed.archipel.module.security.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -11,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,15 +28,50 @@ import javax.validation.constraints.Size;
 public class UsersViewModel extends BasicViewModel {
 
     @Autowired
-    UserService userService;
+    UserServiceAdapter userService;
 
-    User selectedUser;
+    UserDTO selectedUser;
 
-    public User getSelectedUser() {
+    public UserDTO getSelectedUser() {
         return selectedUser;
     }
 
-    public void setSelectedUser(User selectedUser) {
+    public void setSelectedUser(UserDTO selectedUser) {
         this.selectedUser = selectedUser;
+    }
+
+    public List<UserDTO> getUsers() {
+        return userService.getAllUsers();
+    }
+
+    public void action_edit() {
+      // setSelectedUser(null);
+    }
+
+    @NotNull @Size(min=3)
+    public String getLogin() {
+        return getSelectedUser().getLogin();
+    }
+
+    public void setLogin(String login) {
+        getSelectedUser().setLogin(login);
+    }
+
+    @NotNull @Size(min=3)
+    public String getFirstName() {
+        return getSelectedUser().getFirstName();
+    }
+
+    public void setFirstName(String firstName) {
+        getSelectedUser().setFirstName(firstName);
+    }
+
+    @NotNull @Size(min=3)
+    public String getLastName() {
+        return getSelectedUser().getLastName();
+    }
+
+    public void setLastName(String name) {
+        getSelectedUser().setLastName(name);
     }
 }

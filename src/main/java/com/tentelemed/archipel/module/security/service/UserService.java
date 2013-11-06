@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
@@ -47,6 +49,10 @@ public class UserService {
         User user = User.createUser(firstName, lastName, login, password);
         user = repo.save(user);
         eventBus.post(new SecUserCreatedEvent(user.getEntityId(), user));
+    }
+
+    public List<User> getAllUsers() {
+        return repo.findAll();
     }
 }
 

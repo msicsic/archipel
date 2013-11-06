@@ -3,7 +3,12 @@ package com.tentelemed.archipel.module.security.web;
 import com.tentelemed.archipel.core.web.BasicView;
 import com.tentelemed.archipel.core.web.ModuleRoot;
 import com.tentelemed.archipel.module.security.domain.User;
+import com.tentelemed.archipel.module.security.domain.UserId;
+import com.tentelemed.archipel.module.security.event.domain.UserDTO;
+import com.vaadin.data.Container;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +32,8 @@ public class UsersView extends BasicView<UsersViewModel> {
     public final static String NAME = "users";
 
     @Autowired UsersViewModel model;
+
+    private Table table;
 
     @Override
     protected UsersViewModel getModel() {
@@ -76,55 +84,65 @@ public class UsersView extends BasicView<UsersViewModel> {
         hsplit.setFirstComponent(table);
 
         // Put a vertical split panel in the right panel
-        Panel formComponent = createFormComponent();
+        ComponentContainer formComponent = createFormComponent();
         hsplit.setSecondComponent(formComponent);
     }
 
-    private Panel createFormComponent() {
-        return new Panel();
+    private ComponentContainer createFormComponent() {
+        FormLayout layout = new FormLayout();
+        layout.addComponent(bind(new TextField("Login"), "login"));
+        layout.addComponent(bind(new TextField("First Name"), "firstName"));
+        layout.addComponent(bind(new TextField("Last Name"), "lastName"));
+//        layout.addComponent(bind(new TextField(), "selectedUser.firstName"));
+//        layout.addComponent(bind(new TextField(), "selectedUser.lastName"));
+        return layout;
     }
 
     private Table createTable() {
         /* Create the table with a caption. */
-        final Table table = new Table("This is my Table");
+        table = new Table("This is my Table");
+
+        BeanItemContainer<UserDTO> container = new BeanItemContainer<>(UserDTO.class);
+        table.setContainerDataSource(container);
 
         /* Define the names and data types of columns.
          * The "default value" parameter is meaningless here. */
-        table.addContainerProperty("First Name", String.class,  null);
-        table.addContainerProperty("Last Name",  String.class,  null);
-        table.addContainerProperty("Year",       Integer.class, null);
+        container.addNestedContainerProperty("firstName");
+        container.addNestedContainerProperty("lastName");
+        container.addNestedContainerProperty("login");
 
-        /* Add a few items in the table. */
-        table.addItem(new Object[] {
-                "Nicolaus","Copernicus",new Integer(1473)}, new Integer(1));
-        table.addItem(new Object[] {
-                "Tycho",   "Brahe",     new Integer(1546)}, new Integer(2));
-        table.addItem(new Object[] {
-                "Giordano","Bruno",     new Integer(1548)}, new Integer(3));
-        table.addItem(new Object[] {
-                "Galileo", "Galilei",   new Integer(1564)}, new Integer(4));
-        table.addItem(new Object[] {
-                "Johannes","Kepler",    new Integer(1571)}, new Integer(5));
-        table.addItem(new Object[] {
-                "Isaac",   "Newton",    new Integer(1643)}, new Integer(6));
+        // Use the login property as the item ID of the bean
+        //container.setBeanIdProperty("entityId");
 
-        // Allow selecting items from the table.
+        // Headers
+        table.setColumnHeader("firstName", "First Name");
+        table.setColumnHeader("lastName", "Last Name");
+        table.setColumnHeader("login", "Login");
+
+        // Have to set explicitly to hide the "equatorial" property
+        table.setVisibleColumns(new String[]{"firstName", "lastName", "login"});
+
+        container.addAll(getModel().getUsers());
+
         table.setSelectable(true);
-
-        // Send changes in selection immediately to server.
         table.setImmediate(true);
-
-        // Shows feedback from selection.
-        final Label current = new Label("Selected: -");
 
         // Handle selection change.
         table.addValueChangeListener(new Property.ValueChangeListener() {
             public void valueChange(Property.ValueChangeEvent event) {
-                User user = (User) table.getValue();
+                UserDTO user = (UserDTO) table.getValue();
                 model.setSelectedUser(user);
+                refreshUI();
             }
         });
+        model.setSelectedUser(getModel().getUsers().get(0));
 
         return table;
     }
+
+    @Override
+    protected void onRefresh() {
+        table.setValue(model.getSelectedUser());
+    }
+
 }

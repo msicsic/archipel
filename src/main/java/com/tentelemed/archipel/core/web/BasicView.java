@@ -1,9 +1,9 @@
 package com.tentelemed.archipel.core.web;
 
-import com.tentelemed.archipel.module.security.web.LoginViewModel;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.MethodProperty;
+import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
@@ -40,7 +40,7 @@ public abstract class BasicView<M extends BasicViewModel> extends CustomComponen
         new Notification(e.getMessage(), Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
     }
 
-    protected BeanItem<LoginViewModel> getItem() {
+    protected BeanItem<M> getItem() {
         if (item == null) {
             item = new BeanItem<>(getModel());
         }
@@ -52,6 +52,9 @@ public abstract class BasicView<M extends BasicViewModel> extends CustomComponen
             Property prop = item.getItemProperty(s);
             if (prop instanceof MethodProperty) {
                 ((MethodProperty)prop).fireValueChange();
+            } else if (prop instanceof NestedMethodProperty) {
+                NestedMethodProperty nmp = ((NestedMethodProperty)prop);
+                // TODO...
             }
         }
         onRefresh();
@@ -62,25 +65,36 @@ public abstract class BasicView<M extends BasicViewModel> extends CustomComponen
      */
     protected void onRefresh() {}
 
-    protected void bind(Label field, String path) {
+    protected Label bind(Label field, String path) {
+
+        getItem().addNestedProperty(path);
+        //field.setPropertyDataSource(new NestedMethodProperty())
         field.setPropertyDataSource(getItem().getItemProperty(path));
         field.setImmediate(true);
         itemProps.add(path);
+        return field;
     }
 
-    protected void bind(AbstractField field, String path) {
+    private Class<M> getModelClass() {
+        return (Class<M>) getModel().getClass();
+    }
+
+    protected <U extends AbstractField> U bind(U field, String path) {
+        //getItem().addNestedProperty(path);
         field.setPropertyDataSource(getItem().getItemProperty(path));
-        field.addValidator(new BeanValidator(LoginViewModel.class, path));
+        field.addValidator(new BeanValidator(getModelClass(), path));
         field.setImmediate(true);
         itemProps.add(path);
+        return field;
     }
 
-    protected void bind(Button button, final String path) {
+    protected Button bind(Button button, final String path) {
         button.addClickListener(new Button.ClickListener() {
             @Override public void buttonClick(Button.ClickEvent event) {
                 call(path);
             }
         });
+        return button;
     }
 
     protected void call(String path) {

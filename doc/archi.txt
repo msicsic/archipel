@@ -20,6 +20,9 @@ UI :
 
  TODO :
 
+ --> finir la table d'affichage des users : liste des users
+ --> formulaire d'edition d'un user
+
  - TU pour ecran de login
  - TU pour UserService
  - TU pour UserRepository
@@ -43,6 +46,12 @@ UI :
  - module technique qui log les actions :
    - ecoute l'activité (evts des autres modules) et log dans un fichier
 
- - refactoring
+ - refactoring :
+   - vérif hexagonal pattern ok
+   - découpage en sous projets : 1 par module
+   - découpage en sous projets : 1 par couche
+   - donc m x c projets ?
+   - systeme d'evts : comment faire pour que les evts d'un module par un autre ne necessitent pas l'import du module complet ?
+     - sous projet a part contenant les evts => les evts ne doivent pas contenir d'objets métiers pour rendre la couche autonome
 
  - intégration de Camel
