@@ -1,9 +1,9 @@
 package com.tentelemed.persistence.integration;
 
 
-import com.tentelemed.archipel.core.config.SpringConfiguration;
-import com.tentelemed.archipel.module.security.domain.User;
-import com.tentelemed.archipel.module.security.repo.UserRepository;
+import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
+import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.infrastructure.persistence.UserRepositoryUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import static junit.framework.TestCase.assertNotNull;
 public class UserRepositoryIntegrationTests {
 
     @Autowired
-    UserRepository repository;
+    UserRepositoryUtil repository;
 
     /**
      * - recherche par LastName exact

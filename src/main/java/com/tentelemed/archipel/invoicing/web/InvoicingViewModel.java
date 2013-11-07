@@ -1,0 +1,25 @@
+package com.tentelemed.archipel.invoicing.web;
+
+import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: Mael
+ * Date: 29/10/13
+ * Time: 10:42
+ */
+@Component
+@Scope("prototype")
+public class InvoicingViewModel extends BasicViewModel {
+    String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+}
