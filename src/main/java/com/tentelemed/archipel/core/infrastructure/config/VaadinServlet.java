@@ -62,6 +62,7 @@ public class VaadinServlet extends SpringVaadinServlet implements WebApplication
 
         EventBus eventBus = rootContext.getBean(EventBus.class);
         eventBus.register(this);
+
     }
 
     @Subscribe

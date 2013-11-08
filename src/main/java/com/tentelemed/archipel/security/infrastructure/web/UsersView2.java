@@ -71,6 +71,28 @@ public class UsersView2 extends BasicView<UsersView2Model> {
         panelButtons.addComponent(bind(new Button("Delete"), "delete"));
         panelButtons.addComponent(bind(new Button("Edit"), "edit"));
 
+        Button btCommit = new Button("Commit", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                try {
+                    binder.commit();
+                    Notification.show("User committed: " + getModel().getSelectedUser());
+                } catch (FieldGroup.CommitException e) {
+                    Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+                }
+            }
+        });
+        panelButtons.addComponent(btCommit);
+
+        Button btDiscard = new Button("Discard", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                binder.discard();
+                table.markAsDirtyRecursive();
+            }
+        });
+        panelButtons.addComponent(btDiscard);
+
         // Have a horizontal split panel as its content
         HorizontalSplitPanel hsplit = new HorizontalSplitPanel();
         grid.addComponent(panelFilters);
@@ -97,11 +119,11 @@ public class UsersView2 extends BasicView<UsersView2Model> {
         FormLayout layout = new FormLayout();
 
         binder = new BeanFieldGroup<>(UsersView2Model.class);
-        binder.setBuffered(false);
-
+        //binder.setBuffered(false);
         binder.bindMemberFields(this);
         binder.setItemDataSource(model);
-//        binder.setItemDataSource(new BeanItem<>(model));
+
+        //binder.setReadOnly(true);
 
         layout.addComponent(firstName);
         layout.addComponent(lastName);

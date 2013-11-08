@@ -45,6 +45,9 @@ public class MyUI extends UI {
             }
         }
 
+        // error handler
+
+
         showView(loginView);
     }
 

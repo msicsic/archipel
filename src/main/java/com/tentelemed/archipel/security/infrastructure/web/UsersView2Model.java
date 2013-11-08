@@ -68,4 +68,8 @@ public class UsersView2Model extends BasicViewModel {
     public void setLastName(String name) {
         getSelectedUser().setLastName(name);
     }
+
+    public void action_commit() {
+
+    }
 }
