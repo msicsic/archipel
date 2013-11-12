@@ -5,7 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.LoginEvent;
 import com.tentelemed.archipel.core.application.event.LogoutDoneEvent;
 import com.tentelemed.archipel.core.application.service.CoreService;
-import com.tentelemed.archipel.core.infrastructure.web.MainView;
+import com.tentelemed.archipel.core.infrastructure.web.UiMainView;
 import com.tentelemed.archipel.core.infrastructure.web.MyUI;
 import com.tentelemed.archipel.core.infrastructure.web.NavigationEvent;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -78,6 +78,6 @@ public class VaadinServlet extends SpringVaadinServlet implements WebApplication
 
     @Subscribe
     public void handleViewEvent(LoginEvent event) {
-        ((MyUI) UI.getCurrent()).showView(MainView.NAME);
+        ((MyUI) UI.getCurrent()).showView(UiMainView.NAME);
     }
 }

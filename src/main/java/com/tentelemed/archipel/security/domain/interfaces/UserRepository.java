@@ -20,4 +20,6 @@ public interface UserRepository {
     User findByLogin(String login);
 
     User findById(UserId id);
+
+    void deleteUser(UserId id);
 }

@@ -4,9 +4,12 @@ import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.event.LoginEvent;
 import com.tentelemed.archipel.core.application.event.LogoutDoneEvent;
 import com.tentelemed.archipel.security.application.event.SecUserCreatedEvent;
+import com.tentelemed.archipel.security.application.event.SecUserDeletedEvent;
+import com.tentelemed.archipel.security.application.event.SecUserUpdatedEvent;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.application.model.UserDTO;
+import com.tentelemed.archipel.security.domain.model.UserId;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -71,7 +74,11 @@ public class UserServiceAdapter {
     public void createUser(String firstName, String lastName, String login, String password) {
         User user = User.createUser(firstName, lastName, login, password);
         user = repo.save(user);
-        eventBus.post(new SecUserCreatedEvent(user.getEntityId(), user));
+        UserDTO u = new UserDTO();
+        u.setLogin(login);
+        u.setFirstName(login);
+        u.setLastName(login);
+        eventBus.post(new SecUserCreatedEvent(user.getEntityId(), u));
     }
 
     /**
@@ -86,5 +93,17 @@ public class UserServiceAdapter {
         User currentUser = repo.findById(user.getEntityId());
         currentUser.updateInfo(user.getFirstName(), user.getLastName(), user.getEmail(), user.getDob());
         repo.save(currentUser);
+        eventBus.post(new SecUserUpdatedEvent(user.getEntityId(), user));
+    }
+
+    /**
+     * @precond
+     * l'utilisateur doit exister
+     *
+     * @param id
+     */
+    public void deleteUser(UserId id) {
+        repo.deleteUser(id);
+        eventBus.post(new SecUserDeletedEvent(id));
     }
 }

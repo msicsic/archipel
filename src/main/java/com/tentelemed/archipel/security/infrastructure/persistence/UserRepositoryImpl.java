@@ -44,4 +44,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override public User findById(UserId id) {
         return repo.findOne(id.toString());
     }
+
+    @Override
+    public void deleteUser(UserId id) {
+        repo.delete(id.toString());
+    }
 }

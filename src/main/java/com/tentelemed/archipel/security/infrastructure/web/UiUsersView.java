@@ -20,12 +20,12 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope("prototype")
-@ModuleRoot(value = UiUsersView2.NAME)
-public class UiUsersView2 extends BasicView<UiUsersView2Model> {
+@ModuleRoot(value = UiUsersView.NAME)
+public class UiUsersView extends BasicView<UiUsersViewModel> {
 
-    public final static String NAME = "users2";
+    public final static String NAME = "users";
 
-    @Autowired UiUsersView2Model model;
+    @Autowired UiUsersViewModel model;
 
     private Table table;
     private TextField firstName = new TextField("First Name :");
@@ -34,7 +34,7 @@ public class UiUsersView2 extends BasicView<UiUsersView2Model> {
     private TextField email = new TextField("Email :");
 
     @Override
-    protected UiUsersView2Model getModel() {
+    protected UiUsersViewModel getModel() {
         return model;
     }
 
@@ -58,13 +58,8 @@ public class UiUsersView2 extends BasicView<UiUsersView2Model> {
         panelButtons.setSpacing(true);
         panelButtons.addComponent(bind(new Button("Add"), "add"));
         panelButtons.addComponent(bind(new Button("Delete"), "delete"));
-        panelButtons.addComponent(bind(new Button("Edit"), "edit"));
-
-        Button btCommit = bind(new Button("Commit"), "commit");
-        panelButtons.addComponent(btCommit);
-
-        Button btDiscard = bind(new Button("Discard"), "discard");
-        panelButtons.addComponent(btDiscard);
+        panelButtons.addComponent(bind(new Button("Commit"), "commit"));
+        panelButtons.addComponent(bind(new Button("Cancel"), "discard"));
 
         // Have a horizontal split panel as its content
         HorizontalSplitPanel hsplit = new HorizontalSplitPanel();
@@ -90,6 +85,7 @@ public class UiUsersView2 extends BasicView<UiUsersView2Model> {
 
     private ComponentContainer createFormComponent() {
         FormLayout layout = new FormLayout();
+        layout.setMargin(true);
         layout.addComponent(bind(firstName, "selectedUser.firstName"));
         layout.addComponent(bind(lastName, "selectedUser.lastName"));
         layout.addComponent(bind(login, "selectedUser.login"));

@@ -21,8 +21,8 @@ import java.util.Map;
  */
 @Component
 @Scope("session")
-@ModuleRoot(value = MainView.NAME, root = true)
-public class MainView extends BasicView<MainViewModel> implements RootView {
+@ModuleRoot(value = UiMainView.NAME, root = true)
+public class UiMainView extends BasicView<MainViewModel> implements RootView {
 
     public static final String NAME = "main";
 
@@ -49,7 +49,7 @@ public class MainView extends BasicView<MainViewModel> implements RootView {
         viewLayout.addComponent(childLayout);
 
         for (final Module module : model.getModules()) {
-            MenuBar.MenuItem item = menubar.addItem(module.getName(), null, new MenuBar.Command() {
+            MenuBar.MenuItem item = menubar.addItem(getName(module.getName()), null, new MenuBar.Command() {
                 @Override
                 public void menuSelected(MenuBar.MenuItem selectedItem) {
                     model.setSelectedModule(module);
@@ -69,19 +69,19 @@ public class MainView extends BasicView<MainViewModel> implements RootView {
 
     }
 
+    private String getName(String key) {
+        return msg.getMessage("RootMenu."+key);
+    }
+
     @Override
     protected void onRefresh() {
         for (Map.Entry<Module, MenuBar.MenuItem> entry : mapMenu.entrySet()) {
             entry.getValue().setEnabled(true);
-            entry.getValue().setChecked(false);
-            entry.getValue().setText(entry.getKey().getName());
         }
 
         Module module = model.getSelectedModule();
         if (module != null) {
             MenuBar.MenuItem item = mapMenu.get(module);
-            item.setChecked(true);
-            item.setText("[" + module.getName() + "]");
             item.setEnabled(false);
         }
     }

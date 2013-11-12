@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Component
 @Scope("prototype")
-public class UiUsersView2Model extends BasicViewModel {
+public class UiUsersViewModel extends BasicViewModel {
 
     @Autowired
     UserServiceAdapter userService;
@@ -44,16 +44,25 @@ public class UiUsersView2Model extends BasicViewModel {
         try {
             commit();
             userService.updateUserInfo(getSelectedUser());
-            Notification.show("User committed: " + getSelectedUser());
+            Notification.show("User committed");
         } catch (FieldGroup.CommitException e) {
             Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
         } catch (Exception e) {
             Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
         }
-
     }
 
     public void action_discard() {
         discard();
     }
+
+    public void action_delete() {
+        userService.deleteUser(getSelectedUser().getEntityId());
+    }
+
+    public void action_add() {
+        // TODO
+    }
+
+    // TODO : ecouter l'event "userDeleted" pour mettre la selection courante a null
 }
