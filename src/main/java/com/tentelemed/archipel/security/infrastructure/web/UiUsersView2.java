@@ -20,17 +20,21 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope("prototype")
-@ModuleRoot(value = UsersView.NAME)
-public class UsersView extends BasicView<UsersViewModel> {
+@ModuleRoot(value = UiUsersView2.NAME)
+public class UiUsersView2 extends BasicView<UiUsersView2Model> {
 
-    public final static String NAME = "users";
+    public final static String NAME = "users2";
 
-    @Autowired UsersViewModel model;
+    @Autowired UiUsersView2Model model;
 
     private Table table;
+    private TextField firstName = new TextField("First Name :");
+    private TextField lastName = new TextField("Last Name :");
+    private TextField login = new TextField("Login :");
+    private TextField email = new TextField("Email :");
 
     @Override
-    protected UsersViewModel getModel() {
+    protected UiUsersView2Model getModel() {
         return model;
     }
 
@@ -50,19 +54,17 @@ public class UsersView extends BasicView<UsersViewModel> {
         HorizontalLayout panelFilters = new HorizontalLayout();
         panelFilters.addComponent(new Label("Filters..."));
 
-        // Buttons...
-        Button btAdd = new Button("Add");
-        Button btDelete = new Button("Delete");
-        Button btEdit = new Button("Edit");
-        bind(btAdd, "add");
-        bind(btDelete, "delete");
-        bind(btEdit, "edit");
-
         HorizontalLayout panelButtons = new HorizontalLayout();
         panelButtons.setSpacing(true);
-        panelButtons.addComponent(btAdd);
-        panelButtons.addComponent(btDelete);
-        panelButtons.addComponent(btEdit);
+        panelButtons.addComponent(bind(new Button("Add"), "add"));
+        panelButtons.addComponent(bind(new Button("Delete"), "delete"));
+        panelButtons.addComponent(bind(new Button("Edit"), "edit"));
+
+        Button btCommit = bind(new Button("Commit"), "commit");
+        panelButtons.addComponent(btCommit);
+
+        Button btDiscard = bind(new Button("Discard"), "discard");
+        panelButtons.addComponent(btDiscard);
 
         // Have a horizontal split panel as its content
         HorizontalSplitPanel hsplit = new HorizontalSplitPanel();
@@ -82,13 +84,22 @@ public class UsersView extends BasicView<UsersViewModel> {
         hsplit.setSecondComponent(formComponent);
     }
 
+    public String getLogin() {
+        return getModel().getSelectedUser() == null ? "---" : getModel().getSelectedUser().getLogin();
+    }
+
     private ComponentContainer createFormComponent() {
         FormLayout layout = new FormLayout();
-        layout.addComponent(bind(new TextField("Login"), "login"));
-        layout.addComponent(bind(new TextField("First Name"), "firstName"));
-        layout.addComponent(bind(new TextField("Last Name"), "lastName"));
-//        layout.addComponent(bind(new TextField(), "selectedUser.firstName"));
-//        layout.addComponent(bind(new TextField(), "selectedUser.lastName"));
+        layout.addComponent(bind(firstName, "selectedUser.firstName"));
+        layout.addComponent(bind(lastName, "selectedUser.lastName"));
+        layout.addComponent(bind(login, "selectedUser.login"));
+        layout.addComponent(bind(email, "selectedUser.email"));
+        layout.addComponent(new Label("TOTO"));
+        layout.addComponent(bind(new TextField("Full Name : "), "selectedUser.fullName"));
+        layout.addComponent(bind(new DateField("Date of Birth : "), "selectedUser.dob"));
+        layout.addComponent(bind(new Label("Full Name : "), "selectedUser.fullName"));
+        //binder.bindMemberFields(this);
+        //binder.setItemDataSource(new NestingBeanItem(model));
         return layout;
     }
 
@@ -129,14 +140,15 @@ public class UsersView extends BasicView<UsersViewModel> {
                 refreshUI();
             }
         });
-        model.setSelectedUser(getModel().getUsers().get(0));
 
         return table;
     }
 
     @Override
     protected void onRefresh() {
+        getBinder().discard();
         table.setValue(model.getSelectedUser());
+        table.markAsDirtyRecursive();
     }
 
 }

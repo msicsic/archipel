@@ -3,12 +3,13 @@ package com.tentelemed.archipel.security.infrastructure.web;
 import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.ui.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -19,11 +20,12 @@ import java.util.List;
  */
 @Component
 @Scope("prototype")
-public class UsersViewModel extends BasicViewModel {
+public class UiUsersView2Model extends BasicViewModel {
 
     @Autowired
     UserServiceAdapter userService;
 
+    @Valid
     UserDTO selectedUser;
 
     public UserDTO getSelectedUser() {
@@ -38,34 +40,20 @@ public class UsersViewModel extends BasicViewModel {
         return userService.getAllUsers();
     }
 
-    public void action_edit() {
-      // setSelectedUser(null);
+    public void action_commit() {
+        try {
+            commit();
+            userService.updateUserInfo(getSelectedUser());
+            Notification.show("User committed: " + getSelectedUser());
+        } catch (FieldGroup.CommitException e) {
+            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+        } catch (Exception e) {
+            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+        }
+
     }
 
-    @NotNull @Size(min=3)
-    public String getLogin() {
-        return getSelectedUser().getLogin();
-    }
-
-    public void setLogin(String login) {
-        getSelectedUser().setLogin(login);
-    }
-
-    @NotNull @Size(min=3)
-    public String getFirstName() {
-        return getSelectedUser().getFirstName();
-    }
-
-    public void setFirstName(String firstName) {
-        getSelectedUser().setFirstName(firstName);
-    }
-
-    @NotNull @Size(min=3)
-    public String getLastName() {
-        return getSelectedUser().getLastName();
-    }
-
-    public void setLastName(String name) {
-        getSelectedUser().setLastName(name);
+    public void action_discard() {
+        discard();
     }
 }

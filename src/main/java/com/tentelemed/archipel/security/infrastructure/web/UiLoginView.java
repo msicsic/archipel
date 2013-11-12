@@ -20,16 +20,16 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope("prototype")
-@ModuleRoot(value=LoginView.NAME, login=true)
-public class LoginView extends BasicView<LoginViewModel> {
+@ModuleRoot(value= UiLoginView.NAME, login=true)
+public class UiLoginView extends BasicView<UiLoginViewModel> {
 
     public final static String NAME = "login";
 
     @Autowired
-    LoginViewModel model;
+    UiLoginViewModel model;
 
     @Override
-    protected LoginViewModel getModel() {
+    protected UiLoginViewModel getModel() {
         return model;
     }
 

@@ -20,16 +20,16 @@ import javax.annotation.PostConstruct;
 @Component
 @Scope("prototype")
 @RequiresRoles({"user", "module2"})
-@ModuleRoot(InvoicingView.NAME)
-public class InvoicingView extends BasicView<InvoicingViewModel> {
+@ModuleRoot(UiInvoicingView.NAME)
+public class UiInvoicingView extends BasicView<UiInvoicingViewModel> {
 
     public final static String NAME = "invoicing";
 
     @Autowired
-    InvoicingViewModel model;
+    UiInvoicingViewModel model;
 
     @Override
-    protected InvoicingViewModel getModel() {
+    protected UiInvoicingViewModel getModel() {
         return model;
     }
 

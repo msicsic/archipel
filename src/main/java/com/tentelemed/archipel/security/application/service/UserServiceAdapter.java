@@ -7,6 +7,7 @@ import com.tentelemed.archipel.security.application.event.SecUserCreatedEvent;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.application.model.UserDTO;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -71,5 +72,19 @@ public class UserServiceAdapter {
         User user = User.createUser(firstName, lastName, login, password);
         user = repo.save(user);
         eventBus.post(new SecUserCreatedEvent(user.getEntityId(), user));
+    }
+
+    /**
+     * @precond
+     * user doit exister (son id ne doit pas etre null)
+     *
+     * Mise à jour des infos utilisateur
+     * Rq : le login ne peut pas etre changé par ce biais
+     * @param user
+     */
+    public void updateUserInfo(UserDTO user) {
+        User currentUser = repo.findById(user.getEntityId());
+        currentUser.updateInfo(user.getFirstName(), user.getLastName(), user.getEmail(), user.getDob());
+        repo.save(currentUser);
     }
 }

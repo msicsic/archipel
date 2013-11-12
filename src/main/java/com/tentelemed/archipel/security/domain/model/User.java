@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +24,13 @@ public class User extends BaseAggregateRoot<UserId> {
         super(UserId.class);
     }
 
+    public void updateInfo(String firstName, String lastName, String email, Date dob) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.email = email;
+    }
+
     public static class ChangePasswordException extends DomainException {
     }
 
@@ -30,17 +38,16 @@ public class User extends BaseAggregateRoot<UserId> {
     @NotNull
     Credentials credentials;
 
-    //@Getter
     @NotNull
     @Size(min = 2, max = 50)
     String firstName;
 
-    //@Getter
     @NotNull
     @Size(min = 2, max = 50)
     String lastName;
 
-    //@Getter
+    Date dob;
+
     @Email
     String email = "default@mail.com";
 
@@ -48,13 +55,9 @@ public class User extends BaseAggregateRoot<UserId> {
         User user = new User();
         user.firstName = firstName;
         user.lastName = lastName;
+        user.dob = new Date();
         user.credentials = new Credentials(login, password);
         return user;
-    }
-
-    public void changeName(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
     }
 
     public void changePassword(String old, String new1, String new2) throws ChangePasswordException {
@@ -89,4 +92,7 @@ public class User extends BaseAggregateRoot<UserId> {
         return this.credentials.getPassword();
     }
 
+    public Date getDob() {
+        return dob;
+    }
 }

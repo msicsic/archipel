@@ -2,6 +2,7 @@ package com.tentelemed.archipel.security.infrastructure.persistence;
 
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.domain.model.UserId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,5 +39,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findByLogin(String login) {
         return repo.findByLogin(login);
+    }
+
+    @Override public User findById(UserId id) {
+        return repo.findOne(id.toString());
     }
 }

@@ -2,6 +2,7 @@ package com.tentelemed.archipel.security.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
 import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import javax.validation.constraints.Size;
  */
 @Component
 @Scope("prototype")
-public class LoginViewModel extends BasicViewModel {
+public class UiLoginViewModel extends BasicViewModel {
 
     @Autowired
     UserServiceAdapter userService;
@@ -34,12 +35,15 @@ public class LoginViewModel extends BasicViewModel {
 
     public void action_doLogin() {
         try {
+            commit();
             userService.doLogin(userName, password);
             showError("ok");
         } catch (UnknownAccountException e) {
             showError(gt("unknownAccount")+" "+userName);
         } catch (AuthenticationException e) {
             showError(gt("badCredentials")+" "+userName);
+        } catch (FieldGroup.CommitException e) {
+            showError("Validation Exception");
         }
     }
 

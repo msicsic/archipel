@@ -13,7 +13,18 @@ import java.io.Serializable;
 public class EntityId implements Serializable {
     String id;
 
-    void setId(String id) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public EntityId() {
+    }
+
+    public String toString() {
+        return id.toString();
     }
 }

@@ -1,8 +1,12 @@
 package com.tentelemed.archipel.core.domain.model;
 
 import org.hibernate.annotations.Parameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +16,7 @@ import javax.persistence.*;
  */
 @MappedSuperclass
 public abstract class BaseEntity<B extends EntityId> {
+    protected final static Logger log = LoggerFactory.getLogger(BaseEntity.class);
 
     @Id
     @org.hibernate.annotations.GenericGenerator(
@@ -39,10 +44,8 @@ public abstract class BaseEntity<B extends EntityId> {
             try {
                 entityId = idClass.newInstance();
                 entityId.setId(id);
-            } catch (InstantiationException e) {
-                // todo
-            } catch (IllegalAccessException e) {
-                // todo
+            } catch (InstantiationException | IllegalAccessException e) {
+                log.error(null, e);
             }
         }
         return entityId;

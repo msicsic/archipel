@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.security.domain.interfaces;
 
 import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.domain.model.UserId;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface UserRepository {
     List<User> getAllUsers();
 
     User findByLogin(String login);
+
+    User findById(UserId id);
 }

@@ -20,16 +20,16 @@ import javax.annotation.PostConstruct;
 @Component
 @Scope("prototype")
 @RequiresRoles({"user", "module1"})
-@ModuleRoot(GamView.NAME)
-public class GamView extends BasicView<GamViewModel> {
+@ModuleRoot(UiGamView.NAME)
+public class UiGamView extends BasicView<UiGamViewModel> {
 
     public final static String NAME = "gam";
 
     @Autowired
-    GamViewModel model;
+    UiGamViewModel model;
 
     @Override
-    protected GamViewModel getModel() {
+    protected UiGamViewModel getModel() {
         return model;
     }
 

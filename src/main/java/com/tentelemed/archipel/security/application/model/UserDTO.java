@@ -1,10 +1,14 @@
 package com.tentelemed.archipel.security.application.model;
 
+import com.tentelemed.archipel.core.domain.model.BaseDTO;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.domain.model.UserId;
 import org.apache.commons.beanutils.BeanUtils;
+import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,18 +16,30 @@ import javax.validation.constraints.NotNull;
  * Date: 06/11/13
  * Time: 17:15
  */
-public class UserDTO {
-    @NotNull
-    UserId id;
+public class UserDTO extends BaseDTO<UserId> {
 
     @NotNull
+    Date dob;
+
+    @NotNull @Size(min=3)
     String login;
 
-    @NotNull
+    @NotNull @Size(min=2)
     String firstName;
 
-    @NotNull
+    @NotNull @Size(min=2)
     String lastName;
+
+    @Email
+    String email;
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
 
     public String getLogin() {
         return login;
@@ -49,12 +65,16 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public UserId getId() {
-        return id;
+    public String getFullName() {
+        return getFirstName()+" "+getLastName();
     }
 
-    public void setId(UserId id) {
-        this.id = id;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public static UserDTO fromUser(User user) {
@@ -66,5 +86,10 @@ public class UserDTO {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    protected Class<UserId> getIdClass() {
+        return UserId.class;
     }
 }
