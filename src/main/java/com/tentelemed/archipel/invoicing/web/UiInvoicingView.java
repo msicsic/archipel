@@ -29,7 +29,7 @@ public class UiInvoicingView extends BasicView<UiInvoicingViewModel> {
     UiInvoicingViewModel model;
 
     @Override
-    protected UiInvoicingViewModel getModel() {
+    public UiInvoicingViewModel getModel() {
         return model;
     }
 

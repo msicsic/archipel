@@ -1,6 +1,9 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
+import com.google.common.eventbus.Subscribe;
+import com.tentelemed.archipel.core.application.service.EventListener;
 import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
+import com.tentelemed.archipel.security.application.event.SecUserDeletedEvent;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +24,7 @@ import java.util.List;
  */
 @Component
 @Scope("prototype")
+@EventListener
 public class UiUsersViewModel extends BasicViewModel {
 
     @Autowired
@@ -43,12 +48,16 @@ public class UiUsersViewModel extends BasicViewModel {
     public void action_commit() {
         try {
             commit();
-            userService.updateUserInfo(getSelectedUser());
-            Notification.show("User committed");
+            if (getSelectedUser().getEntityId() == null) {
+                userService.createUser(getSelectedUser());
+            } else {
+                userService.updateUserInfo(getSelectedUser());
+            }
+            show("User committed");
         } catch (FieldGroup.CommitException e) {
-            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+            show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
         } catch (Exception e) {
-            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+            show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
         }
     }
 
@@ -61,8 +70,18 @@ public class UiUsersViewModel extends BasicViewModel {
     }
 
     public void action_add() {
-        // TODO
+        setSelectedUser(new UserDTO());
     }
 
     // TODO : ecouter l'event "userDeleted" pour mettre la selection courante a null
+    // Il faut également notifier la vue pour qu'elle se mette a jour (ligne a retirer)
+    // BUG !!! l'instance n'est pas la meme que celle associée a la vue !
+    @Subscribe
+    public void handleEvent(SecUserDeletedEvent event) {
+        if (getSelectedUser() != null && Objects.equals(getSelectedUser().getEntityId(), event.getUserId())) {
+            setSelectedUser(null);
+        }
+    }
+
+
 }

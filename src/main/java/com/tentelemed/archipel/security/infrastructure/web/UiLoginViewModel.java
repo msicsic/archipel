@@ -29,7 +29,7 @@ public class UiLoginViewModel extends BasicViewModel {
     String userName = "login1";
 
     @NotNull @Size(min=3)
-    String password = "password1";
+    String password = "123456789";
 
     String error = "";
 

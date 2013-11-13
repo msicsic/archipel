@@ -29,11 +29,13 @@ public abstract class BasicView<M extends BasicViewModel> extends CustomComponen
     @Autowired
     protected VaadinMessageSource msg;
 
-    protected abstract M getModel();
+    public abstract M getModel();
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
     }
+
+    public abstract void postConstruct();
 
     protected void showError(Throwable e) {
         new Notification(e.getMessage(), Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
@@ -102,12 +104,25 @@ public abstract class BasicView<M extends BasicViewModel> extends CustomComponen
     }
 
     protected Button bind(Button button, final String path) {
+        if (! checkActionMethod(path)) {
+            throw new RuntimeException("Bad binding for button : "+path);
+        }
         button.addClickListener(new Button.ClickListener() {
-            @Override public void buttonClick(Button.ClickEvent event) {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
                 call(path);
             }
         });
         return button;
+    }
+
+    protected boolean checkActionMethod(String action) {
+        try {
+            getModel().getClass().getMethod("action_" + action);
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
     }
 
     protected void call(String path) {

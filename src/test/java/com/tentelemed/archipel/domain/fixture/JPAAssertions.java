@@ -1,4 +1,4 @@
-package com.tentelemed.persistence.domain.fixture;
+package com.tentelemed.archipel.domain.fixture;
 
 
 import org.hibernate.Session;

@@ -29,7 +29,7 @@ public class UiLoginView extends BasicView<UiLoginViewModel> {
     UiLoginViewModel model;
 
     @Override
-    protected UiLoginViewModel getModel() {
+    public UiLoginViewModel getModel() {
         return model;
     }
 

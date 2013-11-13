@@ -4,6 +4,8 @@ import com.google.common.eventbus.EventBus;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.server.Page;
+import com.vaadin.ui.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +29,45 @@ public class BasicViewModel {
 
     BeanFieldGroup<? extends BasicViewModel> binder;
     NestingBeanItem item;
+    boolean commited = false;
+    boolean discarded = false;
 
-    protected BeanItem getItem() {
+    protected void show(String caption, com.vaadin.ui.Notification.Type type) {
+        if (Page.getCurrent() != null) {
+            Notification.show(caption, type);
+        }
+    }
+
+    protected void show(String caption) {
+        if (Page.getCurrent() != null) {
+            Notification.show(caption);
+        }
+    }
+
+    public BeanItem getItem() {
         if (item == null) {
             item = new NestingBeanItem(this);
         }
         return item;
     }
 
-    protected void commit() throws FieldGroup.CommitException {
+    // Test only
+    public boolean isDiscarded() {
+        return discarded;
+    }
+
+    // Test only
+    public boolean isCommited() {
+        return commited;
+    }
+
+    public void commit() throws FieldGroup.CommitException {
+        commited = true;
         getBinder().commit();
     }
 
     protected void discard() {
+        discarded = true;
         getBinder().discard();
     }
 
@@ -55,12 +83,12 @@ public class BasicViewModel {
         return getText(key);
     }
 
-    public BeanFieldGroup<? extends BasicViewModel> getBinder() {
+    public BeanFieldGroup<BasicViewModel> getBinder() {
         if (binder == null) {
             binder = new BeanFieldGroup<>(getClass());
             //binder.setBuffered(false);
             binder.setItemDataSource(getItem());
         }
-        return binder;
+        return (BeanFieldGroup<BasicViewModel>) binder;
     }
 }

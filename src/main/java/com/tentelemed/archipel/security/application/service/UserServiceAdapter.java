@@ -71,14 +71,15 @@ public class UserServiceAdapter {
         eventBus.post(new LogoutDoneEvent());
     }
 
-    public void createUser(String firstName, String lastName, String login, String password) {
-        User user = User.createUser(firstName, lastName, login, password);
+    public void createUser(UserDTO userDto) {
+        User user = User.createUser(userDto.getFirstName(), userDto.getLastName(), userDto.getLogin(), generatePassword());
         user = repo.save(user);
-        UserDTO u = new UserDTO();
-        u.setLogin(login);
-        u.setFirstName(login);
-        u.setLastName(login);
-        eventBus.post(new SecUserCreatedEvent(user.getEntityId(), u));
+        userDto.setEntityId(user.getEntityId());
+        eventBus.post(new SecUserCreatedEvent(user.getEntityId(), userDto));
+    }
+
+    private String generatePassword() {
+        return "123456789";
     }
 
     /**

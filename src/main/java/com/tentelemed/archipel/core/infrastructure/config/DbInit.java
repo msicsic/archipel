@@ -1,8 +1,11 @@
 package com.tentelemed.archipel.core.infrastructure.config;
 
+import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,8 +20,9 @@ public class DbInit {
     UserServiceAdapter service;
 
     public void initDb() {
-        service.createUser("Paul1", "Durand1", "login1", "password1");
-        service.createUser("Paul2", "Durand2", "login2", "password2");
+        for (int i=0; i<100; i++) {
+            service.createUser(new UserDTO("Paul"+i, "Durand"+i, "login"+i, "mail1@mail.com", new Date()));
+        }
     }
 
 }

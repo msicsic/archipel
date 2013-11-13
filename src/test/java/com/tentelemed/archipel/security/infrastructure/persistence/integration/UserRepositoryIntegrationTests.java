@@ -1,9 +1,9 @@
-package com.tentelemed.persistence.integration;
+package com.tentelemed.archipel.security.infrastructure.persistence.integration;
 
 
 import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
+import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.infrastructure.persistence.UserRepositoryUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import static junit.framework.TestCase.assertNotNull;
 public class UserRepositoryIntegrationTests {
 
     @Autowired
-    UserRepositoryUtil repository;
+    UserRepository repository;
 
     /**
      * - recherche par LastName exact
@@ -33,38 +33,50 @@ public class UserRepositoryIntegrationTests {
      * @throws Exception
      */
     @Test
-    public void thatFindByLastNameWorks() throws Exception {
-
+    public void thatFindByLoginWorks() throws Exception {
         for (int i=0; i<2; i++) {
             User user = User.createUser("Paul"+i, "Durand"+i, "login"+i, "password"+i);
             repository.save(user);
         }
 
-        List<User> retrievedUsers = repository.findByLastName("Durand1");
-        assertNotNull(retrievedUsers);
-        assertEquals(retrievedUsers.size(), 1);
-        assertEquals(retrievedUsers.get(0).getFirstName(), "Paul1");
+        User user = repository.findByLogin("login1");
+        assertNotNull(user);
+        assertEquals(user.getFirstName(), "Paul1");
 
-        retrievedUsers = repository.findByLastName("durand1");
-        assertEquals(retrievedUsers.size(), 0);
+        user = repository.findByLogin("LoGin1");
+        assertEquals(user, null);
     }
 
-    /**
-     * - recherche par FirstName ou LastName contains
-     * - insensible a la casse
-     * @throws Exception
-     */
     @Test
-    public void thatFindByNameWorks() throws Exception {
+    public void thatGetAllUsersWorks() throws Exception {
         for (int i=0; i<2; i++) {
             User user = User.createUser("Paul"+i, "Durand"+i, "login"+i, "password"+i);
             repository.save(user);
         }
-        List<User> retrievedUsers = repository.findByName("Durand");
-        assertEquals(retrievedUsers.size(), 2);
 
-        retrievedUsers = repository.findByName("durand");
-        assertEquals(retrievedUsers.size(), 2);
+        List<User> users = repository.getAllUsers();
+        assertNotNull(users);
+        assertEquals(users.size(), 2);
+    }
+
+    @Test
+    public void thatFindByIdWorks() throws Exception {
+        User user = User.createUser("Paul", "Durand", "login", "password");
+        user = repository.save(user);
+        assertNotNull(user.getEntityId());
+        User user2 = repository.findById(user.getEntityId());
+        assertEquals(user, user2);
+    }
+
+    @Test
+    public void thatDeleteWorks() throws Exception {
+        User user = User.createUser("Paul", "Durand", "login", "password");
+        user = repository.save(user);
+        List<User> users = repository.getAllUsers();
+        assertEquals(users.size(), 1);
+        repository.deleteUser(user.getEntityId());
+        users = repository.getAllUsers();
+        assertEquals(users.size(), 0);
     }
 
 }

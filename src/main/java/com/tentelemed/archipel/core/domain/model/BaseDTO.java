@@ -19,6 +19,13 @@ public abstract class BaseDTO<M extends EntityId> implements Serializable {
     String id;
     transient M entityId;
 
+    public BaseDTO() {
+    }
+
+    public BaseDTO(String id) {
+        this.id = id;
+    }
+
     protected String getId() {
         return id;
     }
@@ -47,4 +54,20 @@ public abstract class BaseDTO<M extends EntityId> implements Serializable {
 
     protected abstract Class<M> getIdClass();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BaseDTO baseDTO = (BaseDTO) o;
+
+        if (id != null ? !id.equals(baseDTO.id) : baseDTO.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

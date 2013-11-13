@@ -29,7 +29,7 @@ public class UiGamView extends BasicView<UiGamViewModel> {
     UiGamViewModel model;
 
     @Override
-    protected UiGamViewModel getModel() {
+    public UiGamViewModel getModel() {
         return model;
     }
 

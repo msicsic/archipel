@@ -33,6 +33,21 @@ public class UserDTO extends BaseDTO<UserId> {
     @Email
     String email;
 
+    public UserDTO() {
+    }
+
+    public UserDTO(String s) {
+        super(s);
+    }
+
+    public UserDTO(String firstName, String lastName, String login, String email, Date dob) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.dob = dob;
+        this.login = login;
+    }
+
     public Date getDob() {
         return dob;
     }

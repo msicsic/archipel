@@ -1,4 +1,4 @@
-package com.tentelemed.persistence.integration;
+package com.tentelemed.archipel.security.infrastructure.persistence.integration;
 
 import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
 import org.junit.Test;
@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
-import static com.tentelemed.persistence.domain.fixture.JPAAssertions.assertTableExists;
-import static com.tentelemed.persistence.domain.fixture.JPAAssertions.assertTableHasColumn;
+import static com.tentelemed.archipel.domain.fixture.JPAAssertions.assertTableExists;
+import static com.tentelemed.archipel.domain.fixture.JPAAssertions.assertTableHasColumn;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringConfiguration.class})

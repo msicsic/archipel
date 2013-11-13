@@ -92,7 +92,7 @@ public class UiMainView extends BasicView<MainViewModel> implements RootView {
     }
 
     @Override
-    protected MainViewModel getModel() {
+    public MainViewModel getModel() {
         return model;
     }
 }

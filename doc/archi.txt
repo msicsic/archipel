@@ -18,24 +18,26 @@ UI :
 - ok : gestion de la navigation par evt
 - ok : shiro reste utilisé, mais indirectement (a la main sans passer par le ShiroNavigator)
 
- TODO :
+ __TODO__ :
 
- --> finir la table d'affichage des users : liste des users
- --> formulaire d'edition d'un user
+ - gestion de l'etat des boutons :
+   - ex : desactivé lorsque ligne dans tableau pas selectionnée
 
- - TU pour ecran de login
- - TU pour UserService
- - TU pour UserRepository
- - TU pour User
+ - notification de la vue par le modele de vue :
+   - le modele de vue peut ecouter les evts applicatifs et reagir
+   - la vue associée doit se mettre à jour
+   - ex : suppression d'une ligne dans un tableau en cours d'affichage : la ligne disparait automatiquement
+
+ - TU Binding : il reste a controler le binding dans les tables
 
  - menu de navigation entre les vues :
    * propose les vues découvertes (plugins)
    - affiche un icone et un nom pour chaque vue
    - gestion des droits d'acces (acces au plugin en fonction de roles)
 
- - chaque module doit contenir son fichier de langue
+ - chaque module/ecran(?) doit contenir son fichier de langue
 
- - intégration LDAP
+ (- intégration LDAP)
 
  - module d'edition des Patients
 

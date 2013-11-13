@@ -16,4 +16,8 @@ public class SecUserDeletedEvent implements ApplicationEvent {
     public SecUserDeletedEvent(UserId userId) {
         this.userId = userId;
     }
+
+    public UserId getUserId() {
+        return userId;
+    }
 }

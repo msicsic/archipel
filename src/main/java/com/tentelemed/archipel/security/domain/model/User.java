@@ -61,7 +61,7 @@ public class User extends BaseAggregateRoot<UserId> {
     }
 
     public void changePassword(String old, String new1, String new2) throws ChangePasswordException {
-        if (!Objects.equal(new1, new2)) {
+        if (!Objects.equal(old, getPassword()) || !Objects.equal(new1, new2)) {
             throw new ChangePasswordException();
         }
         if (credentials.matchPassword(old)) {
