@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.application.event;
 
-import com.tentelemed.archipel.core.application.DomainEvent;
+import com.tentelemed.archipel.core.application.ApplicationEvent;
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,5 +8,5 @@ import com.tentelemed.archipel.core.application.DomainEvent;
  * Date: 05/11/13
  * Time: 14:24
  */
-public class LogoutDoneEvent extends DomainEvent {
+public class LogoutDoneEvent implements ApplicationEvent {
 }

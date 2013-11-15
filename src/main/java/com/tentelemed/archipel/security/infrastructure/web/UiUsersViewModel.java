@@ -70,12 +70,11 @@ public class UiUsersViewModel extends BasicViewModel {
     }
 
     public void action_add() {
-        setSelectedUser(new UserDTO());
+        setSelectedUser(new UserDTO("-", "-", "-", "-", null));
     }
 
-    // TODO : ecouter l'event "userDeleted" pour mettre la selection courante a null
     // Il faut également notifier la vue pour qu'elle se mette a jour (ligne a retirer)
-    // BUG !!! l'instance n'est pas la meme que celle associée a la vue !
+    // TODO : BUG !!! l'instance n'est pas la meme que celle associée a la vue !
     @Subscribe
     public void handleEvent(SecUserDeletedEvent event) {
         if (getSelectedUser() != null && Objects.equals(getSelectedUser().getEntityId(), event.getUserId())) {
@@ -83,5 +82,8 @@ public class UiUsersViewModel extends BasicViewModel {
         }
     }
 
+    public boolean isDeleteEnabled() {
+        return getSelectedUser() != null;
+    }
 
 }

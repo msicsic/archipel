@@ -8,6 +8,5 @@ import com.tentelemed.archipel.core.domain.model.EntityId;
  * Date: 29/10/13
  * Time: 15:18
  */
-public interface DomainEvent<M extends EntityId> {
-    M getId();
+public interface DeleteEvent<M extends EntityId> extends DomainEvent<M> {
 }

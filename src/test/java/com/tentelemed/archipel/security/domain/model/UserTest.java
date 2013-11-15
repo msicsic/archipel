@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.security.domain.model;
 
+import com.tentelemed.archipel.security.application.model.UserDTO;
 import org.junit.Test;
 
 import java.util.Date;
@@ -19,7 +20,7 @@ public class UserTest {
     public void testUpdateInfo() throws Exception {
         User user = new User();
         Date date = new Date();
-        user.updateInfo("firstName", "lastName", "email", date);
+        user.updateInfo(new UserDTO("firstName", "lastName", "login", "email", date));
         assertEquals(user.getFirstName(), "firstName");
         assertEquals(user.getLastName(), "lastName");
         assertEquals(user.getEmail(), "email");

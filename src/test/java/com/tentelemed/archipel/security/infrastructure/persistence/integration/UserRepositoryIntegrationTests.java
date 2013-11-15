@@ -64,7 +64,7 @@ public class UserRepositoryIntegrationTests {
         User user = User.createUser("Paul", "Durand", "login", "password");
         user = repository.save(user);
         assertNotNull(user.getEntityId());
-        User user2 = repository.findById(user.getEntityId());
+        User user2 = repository.load(user.getEntityId());
         assertEquals(user, user2);
     }
 

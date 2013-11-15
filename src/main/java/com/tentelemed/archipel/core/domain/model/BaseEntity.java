@@ -30,7 +30,7 @@ public abstract class BaseEntity<B extends EntityId> {
     )
 
     @GeneratedValue(generator = "OidGen")
-    String id;
+    protected String id;
 
     @Version
     private Long version;

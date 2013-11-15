@@ -1,15 +1,16 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.tentelemed.archipel.core.domain.model.Module;
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.server.ClassResource;
+import com.vaadin.server.FileResource;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +44,14 @@ public class UiMainView extends BasicView<MainViewModel> implements RootView {
         // Create a menu bar
         MenuBar menubar = new MenuBar();
         menubar.setSizeFull();
+
+        VerticalLayout imageLayout = new VerticalLayout();
+        Image image = new Image(null, new ClassResource("/gemed.jpg"));
+        imageLayout.setStyleName("black-bg");
+        imageLayout.addComponent(image);
+        imageLayout.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+
+        viewLayout.addComponent(imageLayout);
         viewLayout.addComponent(menubar);
 
         childLayout = new VerticalLayout();

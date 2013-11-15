@@ -20,13 +20,12 @@ UI :
 
  __TODO__ :
 
- - gestion de l'etat des boutons :
-   - ex : desactivé lorsque ligne dans tableau pas selectionnée
-
+ (((
  - notification de la vue par le modele de vue :
    - le modele de vue peut ecouter les evts applicatifs et reagir
    - la vue associée doit se mettre à jour
    - ex : suppression d'une ligne dans un tableau en cours d'affichage : la ligne disparait automatiquement
+ )))
 
  - TU Binding : il reste a controler le binding dans les tables
 
@@ -41,9 +40,9 @@ UI :
 
  - module d'edition des Patients
 
- - mise en place CQRS
-
- - mise en place de l'event sourcing
+ - mise en place CQRS + event sourcing
+   http://www.jayway.com/2013/03/08/aggregates-event-sourcing-distilled/
+   http://www.jayway.com/2013/06/20/dont-publish-domain-events-return-them/
 
  - module technique qui log les actions :
    - ecoute l'activité (evts des autres modules) et log dans un fichier

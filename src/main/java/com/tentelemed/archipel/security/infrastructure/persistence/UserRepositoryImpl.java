@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.persistence;
 
+import com.tentelemed.archipel.core.application.event.EventStore;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.domain.model.UserId;
@@ -26,10 +27,13 @@ public class UserRepositoryImpl implements UserRepository {
     @Autowired
     UserRepositoryUtil repo;
 
-    @Override
+    @Autowired
+    EventStore eventStore;
+
+    /*@Override
     public User save(User user) {
         return repo.save(user);
-    }
+    }*/
 
     @Override
     public List<User> getAllUsers() {
@@ -41,12 +45,14 @@ public class UserRepositoryImpl implements UserRepository {
         return repo.findByLogin(login);
     }
 
-    @Override public User findById(UserId id) {
-        return repo.findOne(id.toString());
+    @Override
+    public User load(UserId id) {
+        //return repo.findOne(id.toString());
+        return (User) eventStore.get(id);
     }
 
-    @Override
+    /*@Override
     public void deleteUser(UserId id) {
         repo.delete(id.toString());
-    }
+    }*/
 }

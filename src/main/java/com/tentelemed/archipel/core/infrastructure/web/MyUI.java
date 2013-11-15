@@ -2,6 +2,7 @@ package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.application.service.CoreService;
+import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.AbstractComponent;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("session")
 @Title("Login frame")
+@Theme("mytheme")
 public class MyUI extends UI {
 
     @Autowired

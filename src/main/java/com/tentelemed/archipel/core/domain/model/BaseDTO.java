@@ -36,7 +36,7 @@ public abstract class BaseDTO<M extends EntityId> implements Serializable {
 
     public M getEntityId() {
         try {
-            if (entityId == null) {
+            if (entityId == null && getId() != null) {
                 entityId = getIdClass().newInstance();
                 entityId.setId(getId());
             }

@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
-import com.tentelemed.archipel.core.application.DomainEvent;
+import com.tentelemed.archipel.core.application.ApplicationEvent;
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,7 +8,7 @@ import com.tentelemed.archipel.core.application.DomainEvent;
  * Date: 29/10/13
  * Time: 15:33
  */
-public class NavigationEvent extends DomainEvent {
+public class NavigationEvent implements ApplicationEvent {
     String moduleId;
 
     public NavigationEvent(String moduleId) {

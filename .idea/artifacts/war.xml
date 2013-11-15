@@ -71,8 +71,10 @@
           <element id="library" level="project" name="Maven: org.apache.shiro:shiro-spring:1.2.2" />
           <element id="library" level="project" name="Maven: org.apache.shiro:shiro-aspectj:1.2.2" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.7.3" />
+          <element id="dir-copy" path="$PROJECT_DIR$/src/main/webapp" />
         </element>
       </element>
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/webapp" />
     </root>
   </artifact>
 </component>

@@ -43,9 +43,9 @@ public class UserDTO extends BaseDTO<UserId> {
     public UserDTO(String firstName, String lastName, String login, String email, Date dob) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.login = login;
         this.email = email;
         this.dob = dob;
-        this.login = login;
     }
 
     public Date getDob() {
@@ -98,7 +98,7 @@ public class UserDTO extends BaseDTO<UserId> {
             BeanUtils.copyProperties(u, user);
             return u;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(null, e);
             return null;
         }
     }

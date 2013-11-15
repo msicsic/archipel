@@ -15,7 +15,9 @@ import ru.xpoft.vaadin.VaadinMessageSource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -82,6 +84,28 @@ public abstract class BasicView<M extends BasicViewModel> extends CustomComponen
                 ((NestedMethodProperty2)prop).fireValueChange();
             }
         }
+        for (Map.Entry<String, Button> entry : boundedButtons.entrySet()) {
+            String path = entry.getKey();
+            Button button = entry.getValue();
+            try {
+                Method m = getModelClass().getMethod("is"+path.substring(0,1).toUpperCase()+path.substring(1)+"Enabled");
+                if (m != null) {
+                    boolean value = (boolean) m.invoke(getModel());
+                    button.setEnabled(value);
+                }
+            } catch (Exception e) {
+                // ras
+            }
+            try {
+                Method m = getModelClass().getMethod("is"+path.substring(0,1).toUpperCase()+path.substring(1)+"Visible");
+                if (m != null) {
+                    boolean value = (boolean) m.invoke(getModel());
+                    button.setVisible(value);
+                }
+            } catch (Exception e) {
+                // ras
+            }
+        }
         onRefresh();
     }
 
@@ -103,10 +127,13 @@ public abstract class BasicView<M extends BasicViewModel> extends CustomComponen
         return field;
     }
 
+    Map<String, Button> boundedButtons = new HashMap<>();
+
     protected Button bind(Button button, final String path) {
         if (! checkActionMethod(path)) {
             throw new RuntimeException("Bad binding for button : "+path);
         }
+        boundedButtons.put(path, button);
         button.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {

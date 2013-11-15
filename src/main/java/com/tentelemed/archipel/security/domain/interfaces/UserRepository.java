@@ -13,13 +13,13 @@ import java.util.List;
  */
 public interface UserRepository {
 
-    User save(User user);
+    //User save(User user);
 
     List<User> getAllUsers();
 
     User findByLogin(String login);
 
-    User findById(UserId id);
+    User load(UserId id);
 
-    void deleteUser(UserId id);
+    //void deleteUser(UserId id);
 }

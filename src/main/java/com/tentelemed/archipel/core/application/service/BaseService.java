@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.application.service;
 
 import com.google.common.eventbus.EventBus;
+import com.tentelemed.archipel.core.application.ApplicationEvent;
 import com.tentelemed.archipel.core.application.DomainEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ public class BaseService {
     @Autowired
     EventBus eventBus;
 
-    protected void fire(DomainEvent event) {
+    protected void fire(ApplicationEvent event) {
         eventBus.post(event);
     }
 }

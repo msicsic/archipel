@@ -1,0 +1,9 @@
+@import "../reindeer/reindeer.scss";
+
+@mixin mytheme {
+  @include reindeer;
+
+  .black-bg {
+    background-color: #000000;
+  }
+}
