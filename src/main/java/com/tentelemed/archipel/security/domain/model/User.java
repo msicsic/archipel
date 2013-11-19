@@ -1,12 +1,13 @@
 package com.tentelemed.archipel.security.domain.model;
 
 import com.google.common.base.Objects;
-import com.tentelemed.archipel.core.application.DomainEvent;
+import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.security.application.event.UserDeleted;
+import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.application.event.UserInfoUpdated;
-import com.tentelemed.archipel.security.application.event.UserInitialized;
+import com.tentelemed.archipel.security.application.event.UserRegistered;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import org.hibernate.validator.constraints.Email;
 
@@ -45,12 +46,9 @@ public class User extends BaseAggregateRoot<UserId> {
     @Email
     String email = "default@mail.com";
 
-    protected User() {
-        super(UserId.class);
-    }
-
-    public static User createEmptyUser() {
-        return new User();
+    @Override
+    protected Class<UserId> getIdClass() {
+        return UserId.class;
     }
 
     public static User createUser(String firstName, String lastName, String login, String password) {
@@ -74,12 +72,6 @@ public class User extends BaseAggregateRoot<UserId> {
 
     static long count = 0;
 
-    protected UserId createId() {
-        UserId res = new UserId();
-        res.setId(""+count++);
-        return res;
-    }
-
     private String generatePassword() {
         return "123456789";
     }
@@ -87,24 +79,18 @@ public class User extends BaseAggregateRoot<UserId> {
     // ********************* COMMANDS ****************************
     // ***********************************************************
 
-    public List<DomainEvent<UserId>> delete(UserId id) {
+    public List<DomainEvent> register(UserId id, UserDTO userDTO) {
+        return list(new UserRegistered(id, userDTO, generatePassword()));
+    }
+
+    public List<DomainEvent> delete(UserId id) {
         return list(new UserDeleted(id));
     }
 
-    public List<DomainEvent<UserId>> updateInfo(UserDTO info) {
+    public List<DomainEvent> updateInfo(UserDTO info) {
         return list(new UserInfoUpdated(getEntityId(), info));
     }
 
-    public List<DomainEvent<UserId>> initialise(UserDTO userDto) {
-        // creation d'un ID
-        UserId id = createId();
-
-        // generation d'un mdp
-        String password = generatePassword();
-
-        // creation de l'evt
-        return list(new UserInitialized(id, userDto, password));
-    }
 
     // ********************* EVENTS ******************************
     // ***********************************************************
@@ -112,20 +98,20 @@ public class User extends BaseAggregateRoot<UserId> {
     public void handle(UserDeleted event) {
     }
 
-    public void handle(UserInfoUpdated event) {
-        this.firstName = event.getInfo().getFirstName();
-        this.lastName = event.getInfo().getLastName();
-        this.dob = event.getInfo().getDob();
-        this.email = event.getInfo().getEmail();
-    }
-
-    public void handle(UserInitialized event) {
-        this.id = event.getId().getId();
+    public void handle(UserRegistered event) {
+        this.id = event.getAggregateId().getId();
         this.firstName = event.getInfo().getFirstName();
         this.lastName = event.getInfo().getLastName();
         this.dob = event.getInfo().getDob();
         this.email = event.getInfo().getEmail();
         this.credentials = new Credentials(event.getInfo().getLogin(), event.getPassword());
+    }
+
+    public void handle(UserInfoUpdated event) {
+        this.firstName = event.getInfo().getFirstName();
+        this.lastName = event.getInfo().getLastName();
+        this.dob = event.getInfo().getDob();
+        this.email = event.getInfo().getEmail();
     }
 
     // ********************* ACCESSORS ***************************

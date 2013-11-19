@@ -1,8 +1,6 @@
 package com.tentelemed.archipel.security.application.event;
 
-import com.tentelemed.archipel.core.application.DeleteEvent;
-import com.tentelemed.archipel.core.application.DomainEvent;
-import com.tentelemed.archipel.security.application.model.UserDTO;
+import com.tentelemed.archipel.core.application.event.DeleteEvent;
 import com.tentelemed.archipel.security.domain.model.UserId;
 
 /**
@@ -11,15 +9,8 @@ import com.tentelemed.archipel.security.domain.model.UserId;
  * Date: 15/11/13
  * Time: 16:10
  */
-public class UserDeleted implements DeleteEvent<UserId> {
-    final UserId id;
-
+public class UserDeleted extends UserDomainEvent implements DeleteEvent {
     public UserDeleted(UserId id) {
-        this.id = id;
-    }
-
-    @Override
-    public UserId getId() {
-        return id;
+        super(id);
     }
 }

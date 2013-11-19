@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.application.service;
 
+import com.google.common.base.Strings;
 import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.application.event.LogoutRequestEvent;
@@ -10,8 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Service;
 
@@ -101,8 +104,19 @@ public class CoreService extends BaseService {
             Set<BeanDefinition> list = scanner.findCandidateComponents("com.tentelemed.archipel");
             for (BeanDefinition def : list) {
                 try {
+                    // il ne faut pas enregistrer les Scope autre que singleton
                     Class c = Class.forName(def.getBeanClassName());
-                    allListeners.add(c);
+                    Scope scope = (Scope) c.getAnnotation(Scope.class);
+                    boolean dontAdd = false;
+                    if (scope != null) {
+                        if (Strings.isNullOrEmpty(scope.value()) || scope.value().equals(ConfigurableBeanFactory.SCOPE_SINGLETON)) {
+                        } else {
+                            dontAdd = true;
+                        }
+                    }
+                    if (! dontAdd) {
+                        allListeners.add(c);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

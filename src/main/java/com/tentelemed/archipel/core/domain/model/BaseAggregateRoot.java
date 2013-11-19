@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.domain.model;
 
-import com.tentelemed.archipel.core.application.DomainEvent;
+import com.tentelemed.archipel.core.application.event.DomainEvent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,13 +13,11 @@ import java.util.List;
  */
 public abstract class BaseAggregateRoot<M extends EntityId> extends BaseEntity<M> {
 
-    BaseAggregateRoot(){}
-
-    protected BaseAggregateRoot(Class<M> idClass) {
-        this.idClass = idClass;
+    public List<DomainEvent> list(DomainEvent... event) {
+        return Arrays.asList(event);
     }
 
-    public List<DomainEvent<M>> list(DomainEvent<M>... event) {
-        return Arrays.asList(event);
+    public void _setId(String id) {
+        this.id = id;
     }
 }

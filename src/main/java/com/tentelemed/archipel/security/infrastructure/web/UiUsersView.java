@@ -1,11 +1,9 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
-import com.tentelemed.archipel.core.application.service.EventListener;
 import com.tentelemed.archipel.core.infrastructure.web.BasicView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.vaadin.data.Property;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,14 +145,14 @@ public class UiUsersView extends BasicView<UiUsersViewModel> {
     @Override
     protected void onRefresh() {
         getBinder().discard();
-        BeanItemContainer<UserDTO> container = (BeanItemContainer<UserDTO>)table.getContainerDataSource();
+        BeanItemContainer<UserDTO> container = (BeanItemContainer<UserDTO>) table.getContainerDataSource();
 
         Set<UserDTO> currentUsers = new HashSet<>();
         currentUsers.addAll(getModel().getUsers());
 
         Set<UserDTO> toRemove = new HashSet<>();
         for (UserDTO item : container.getItemIds()) {
-            if (! currentUsers.contains(item)) {
+            if (!currentUsers.contains(item)) {
                 toRemove.add(item);
             }
         }

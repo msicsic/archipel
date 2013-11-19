@@ -27,7 +27,7 @@ public @interface ModuleRoot {
     boolean visible() default true;
 
     /**
-     * Module principal qui héberge les autres (ecran principal)
+     * Module principal qui hÃ©berge les autres (ecran principal)
      * @return
      */
     boolean root() default false;

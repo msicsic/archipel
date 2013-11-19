@@ -18,7 +18,54 @@ UI :
 - ok : gestion de la navigation par evt
 - ok : shiro reste utilisé, mais indirectement (a la main sans passer par le ShiroNavigator)
 
+*** Repository ***
+- normalement les echanges avec le repo se font uniquement avec des objets métiers
+- il doit doit donc faire la conversion en interne avec les types d'objets persistés
+- attention : dans CQRS, le repo fait partie de la partie 'lecture' de l'application et ne manipule donc pas des objets métiers
+
+*** Event Sourcing ***
+Generation des evts :
+- execution d'une commande (un service adapter) :
+  - récuperation de l'agregat concerné (normalement 1 seul doit etre modifié par la commande)
+  - appel à la méthode métier sur l'agregat
+  - cette méthode ne modifie pas directement l'etat de l'agregat, mais retourne une liste d'evts qui chacun décrivent une modification "métier"
+  - cette liste d'evts est ensuite passée à l'eventStore qui se charge de :
+    - appliquer les evts sur l'agregat
+    - stocket les evts
+    - propager les evts aux listeners
+
+*** CQRS ***
+- l'application est coupée en 2 parties :
+  - commandes : méthodes qui modifient l'état de l'appli
+    - service applicatif dédié
+    - objets metier
+    - eventStore
+  - queries : requetes en consultation
+    - service applicatif dédié
+    - le service effectue les conversions entre les types "evt" et ceux du service (les utilisateurs du service
+      doivent ne voir que des types de le couche "evt"
+    - repo dédié
+    - manipule des pojos
+    - ecoute l'eventStore pour se maintenir a jour
+
  __TODO__ :
+
+URGENT :
+ - ? créer des classes commande. Les mettre en tant que classes statiques dans le service ? (pour les retrouver facilement)
+ - gestion des evts dans l'ihm : lors de la modif d'un objet, la ligne du tableau
+   correspondante doit se mettre à jour
+   - attention : comment lier le bus global à chaque instance de vue ?
+ - persistence du EventStore
+
+ - A l'init de la session utilisateur, un bus dédié à l'utilisateur est créé
+ - les vues de ce user s'enregistrent sur ce bus
+ - ce bus écoute et forwarde les evts envoyés sur le bus principal
+ => Il faut activer le scope session de Spring pour :
+   - injection directe dans les vues du bus
+   - init du bus a la creation de la session (enregistrement aupres du bus principal)
+   - le plus sur est peut etre de ne pas enregistrer les bus locaux sur le bus principal
+     mais de passer par un intermédiaire (pour eviter les leaks)
+     Dans ce cas les bus locaux doivent tous etre enregistrés dans une map
 
  (((
  - notification de la vue par le modele de vue :

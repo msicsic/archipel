@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
-import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
+import com.tentelemed.archipel.security.application.service.UserQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -22,7 +22,7 @@ public class UiLoginViewModelTest {
     UiLoginViewModel model;
 
     @Mock
-    UserServiceAdapter service;
+    UserQueryService userQuery;
 
     @Before
     public void setUp() {
@@ -40,7 +40,7 @@ public class UiLoginViewModelTest {
         model.action_doLogin();
 
         // then
-        verify(service).doLogin("login1", "password1");
+        verify(userQuery).doLogin("login1", "password1");
         assertTrue(model.isCommited());
     }
 }

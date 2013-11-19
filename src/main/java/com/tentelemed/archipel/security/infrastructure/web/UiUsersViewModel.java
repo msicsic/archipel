@@ -5,7 +5,8 @@ import com.tentelemed.archipel.core.application.service.EventListener;
 import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
 import com.tentelemed.archipel.security.application.event.SecUserDeletedEvent;
 import com.tentelemed.archipel.security.application.model.UserDTO;
-import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
+import com.tentelemed.archipel.security.application.service.UserCommandService;
+import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,10 @@ import java.util.Objects;
 public class UiUsersViewModel extends BasicViewModel {
 
     @Autowired
-    UserServiceAdapter userService;
+    UserCommandService userCommand;
+
+    @Autowired
+    UserQueryService userQuery;
 
     @Valid
     UserDTO selectedUser;
@@ -42,22 +46,24 @@ public class UiUsersViewModel extends BasicViewModel {
     }
 
     public List<UserDTO> getUsers() {
-        return userService.getAllUsers();
+        return userQuery.getAllUsers();
     }
 
     public void action_commit() {
         try {
             commit();
             if (getSelectedUser().getEntityId() == null) {
-                userService.createUser(getSelectedUser());
+                userCommand.registerUser(getSelectedUser());
             } else {
-                userService.updateUserInfo(getSelectedUser());
+                userCommand.updateUserInfo(getSelectedUser());
             }
             show("User committed");
         } catch (FieldGroup.CommitException e) {
             show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
         } catch (Exception e) {
-            show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+            e.printStackTrace();
+            log.error(null, e);
+            show(e);
         }
     }
 
@@ -66,15 +72,15 @@ public class UiUsersViewModel extends BasicViewModel {
     }
 
     public void action_delete() {
-        userService.deleteUser(getSelectedUser().getEntityId());
+        userCommand.deleteUser(getSelectedUser().getEntityId());
     }
 
     public void action_add() {
         setSelectedUser(new UserDTO("-", "-", "-", "-", null));
     }
 
-    // Il faut également notifier la vue pour qu'elle se mette a jour (ligne a retirer)
-    // TODO : BUG !!! l'instance n'est pas la meme que celle associée a la vue !
+    // Il faut Ã©galement notifier la vue pour qu'elle se mette a jour (ligne a retirer)
+    // TODO : BUG !!! l'instance n'est pas la meme que celle associÃ©e a la vue !
     @Subscribe
     public void handleEvent(SecUserDeletedEvent event) {
         if (getSelectedUser() != null && Objects.equals(getSelectedUser().getEntityId(), event.getUserId())) {

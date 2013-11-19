@@ -10,6 +10,8 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.xpoft.vaadin.VaadinMessageSource;
 
@@ -27,17 +29,17 @@ import java.util.Set;
  * Time: 14:25
  */
 public abstract class BasicView<M extends BasicViewModel> extends CustomComponent implements View {
+    Logger log = LoggerFactory.getLogger(BasicView.class);
 
     @Autowired
     protected VaadinMessageSource msg;
 
     public abstract M getModel();
+    public abstract void postConstruct();
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
     }
-
-    public abstract void postConstruct();
 
     protected void showError(Throwable e) {
         new Notification(e.getMessage(), Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
@@ -157,9 +159,11 @@ public abstract class BasicView<M extends BasicViewModel> extends CustomComponen
             Method m = getModel().getClass().getMethod("action_" + path);
             m.invoke(getModel());
         } catch (InvocationTargetException e) {
-            showError(e.getTargetException());
+            getModel().show(e.getTargetException());
+            log.error(null, e);
         } catch (Exception e) {
-            showError(e);
+            getModel().show(e);
+            log.error(null, e);
         } finally {
             refreshUI();
         }

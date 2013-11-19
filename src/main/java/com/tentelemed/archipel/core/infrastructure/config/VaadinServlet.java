@@ -53,16 +53,15 @@ public class VaadinServlet extends SpringVaadinServlet implements WebApplication
         // Manage the lifecycle of the root application context
         container.addListener(new ContextLoaderListener(rootContext));
 
-        // init de la bdd de test
-        DbInit init = rootContext.getBean(DbInit.class);
-        if (init != null) init.initDb();
-
         CoreService service = rootContext.getBean(CoreService.class);
         service.initApplication();
 
-        EventBus eventBus = rootContext.getBean(EventBus.class);
+        EventBus eventBus = (EventBus) rootContext.getBean("eventBus");
         eventBus.register(this);
 
+        // init de la bdd de test
+        DbInit init = rootContext.getBean(DbInit.class);
+        if (init != null) init.initDb();
     }
 
     @Subscribe

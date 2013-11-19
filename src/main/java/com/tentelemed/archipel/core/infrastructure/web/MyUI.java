@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
+import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.application.service.CoreService;
 import com.vaadin.annotations.Theme;
@@ -8,6 +9,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,10 @@ public class MyUI extends UI {
     @Autowired
     CoreService coreService;
 
+    @Autowired
+    @Qualifier("localBus")
+    EventBus bus;
+
     AbstractComponent mainView;
     AbstractComponent loginView;
 
@@ -46,9 +52,9 @@ public class MyUI extends UI {
                 loginView = appContext.getBean(module.getViewClass());
             }
         }
+        //vaadinRequest.getWrappedSession().setAttribute("localBus", bus);
 
         // error handler
-
 
         showView(loginView);
     }

@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
+import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -31,6 +32,13 @@ public class BasicViewModel {
     NestingBeanItem item;
     boolean commited = false;
     boolean discarded = false;
+
+    protected void show(Throwable t) {
+        if (Page.getCurrent() != null) {
+            String s = Throwables.getStackTraceAsString(t);
+            Notification.show(s, Notification.Type.ERROR_MESSAGE);
+        }
+    }
 
     protected void show(String caption, com.vaadin.ui.Notification.Type type) {
         if (Page.getCurrent() != null) {

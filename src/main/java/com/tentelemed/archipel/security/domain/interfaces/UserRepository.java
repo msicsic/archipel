@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface UserRepository {
 
-    //User save(User user);
+    User save(User user);
 
     List<User> getAllUsers();
 
@@ -21,5 +21,5 @@ public interface UserRepository {
 
     User load(UserId id);
 
-    //void deleteUser(UserId id);
+    void deleteUser(UserId id);
 }

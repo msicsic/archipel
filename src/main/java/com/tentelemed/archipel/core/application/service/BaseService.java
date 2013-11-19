@@ -2,7 +2,6 @@ package com.tentelemed.archipel.core.application.service;
 
 import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.ApplicationEvent;
-import com.tentelemed.archipel.core.application.DomainEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

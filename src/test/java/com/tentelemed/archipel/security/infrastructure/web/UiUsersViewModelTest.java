@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
 import com.tentelemed.archipel.security.application.model.UserDTO;
-import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
+import com.tentelemed.archipel.security.application.service.UserCommandService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ public class UiUsersViewModelTest {
     UiUsersViewModel model;
 
     @Mock
-    UserServiceAdapter service;
+    UserCommandService service;
 
     @Before
     public void setUp() {

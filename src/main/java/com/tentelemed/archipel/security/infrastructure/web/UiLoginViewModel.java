@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
-import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
+import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -23,7 +23,7 @@ import javax.validation.constraints.Size;
 public class UiLoginViewModel extends BasicViewModel {
 
     @Autowired
-    UserServiceAdapter userService;
+    UserQueryService userQuery;
 
     @NotNull @Size(min=3)
     String userName = "login1";
@@ -36,7 +36,7 @@ public class UiLoginViewModel extends BasicViewModel {
     public void action_doLogin() {
         try {
             commit();
-            userService.doLogin(userName, password);
+            userQuery.doLogin(userName, password);
             showError("ok");
         } catch (UnknownAccountException e) {
             showError(gt("unknownAccount")+" "+userName);

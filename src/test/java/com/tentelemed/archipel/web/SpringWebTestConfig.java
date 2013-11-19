@@ -1,12 +1,6 @@
 package com.tentelemed.archipel.web;
 
-import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
-import com.tentelemed.archipel.security.infrastructure.web.UiLoginViewModel;
-import org.springframework.beans.factory.annotation.Autowire;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import static org.mockito.Mockito.*;
 
 /**
  * Created with IntelliJ IDEA.

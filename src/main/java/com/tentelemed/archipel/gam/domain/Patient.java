@@ -22,10 +22,6 @@ public class Patient extends BaseAggregateRoot<PatientId> {
 
     public static enum Status {ALIVE, DEAD}
 
-    protected Patient() {
-        super(PatientId.class);
-    }
-
     @NotNull
     @Size(min = 2, max = 50)
     String firstName;
@@ -65,6 +61,8 @@ public class Patient extends BaseAggregateRoot<PatientId> {
     @Valid
     PatientInfo info;
 
-
-
+    @Override
+    protected Class<PatientId> getIdClass() {
+        return PatientId.class;
+    }
 }

@@ -8,7 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 /**
- * Classe utilitaire gÈnÈrÈe automatiquement par Spring DATA
+ * Classe utilitaire g√©n√©r√©e automatiquement par Spring DATA
+ * Utilis√©e par le UserRepository pour fournir des impl√©mentations par default des requetes les plus standards
  *
  * Created with IntelliJ IDEA.
  * User: Mael

@@ -3,7 +3,7 @@ package com.tentelemed.archipel.security.application;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.LogoutRequestEvent;
 import com.tentelemed.archipel.core.application.service.EventListener;
-import com.tentelemed.archipel.security.application.service.UserServiceAdapter;
+import com.tentelemed.archipel.security.application.service.UserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Component;
 public class UserServiceListener {
 
     @Autowired
-    UserServiceAdapter service;
+    UserQueryService userQuery;
 
     @Subscribe
     public void handleEvent(LogoutRequestEvent event) {
-        service.doLogout();
+        userQuery.doLogout();
     }
 }

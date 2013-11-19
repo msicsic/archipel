@@ -29,7 +29,7 @@ public class MyRealm extends AuthorizingRealm {
     @Autowired
     ApplicationContext context;
 
-    // Rq : '@Autowired' pas possible ici car composant instancié avant la dépendance...
+    // Rq : '@Autowired' pas possible ici car composant instanciÃ© avant la dÃ©pendance...
     private UserRepository getRepository() {
         return (UserRepository) context.getBean("userRepository");
     }
