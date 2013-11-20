@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Component
 @Scope("prototype")
-public class MainViewModel extends BasicViewModel {
+public class MainViewModel extends BaseViewModel {
 
     Module selectedModule;
 

@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.invoicing.web;
 
-import com.tentelemed.archipel.core.infrastructure.web.BasicView;
+import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
 @Scope("prototype")
 @RequiresRoles({"user", "module2"})
 @ModuleRoot(UiInvoicingView.NAME)
-public class UiInvoicingView extends BasicView<UiInvoicingViewModel> {
+public class UiInvoicingView extends BaseView<UiInvoicingViewModel> {
 
     public final static String NAME = "invoicing";
 

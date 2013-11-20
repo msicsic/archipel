@@ -2,7 +2,6 @@ package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.tentelemed.archipel.core.domain.model.Module;
 import com.vaadin.server.ClassResource;
-import com.vaadin.server.FileResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +21,7 @@ import java.util.Map;
 @Component
 @Scope("session")
 @ModuleRoot(value = UiMainView.NAME, root = true)
-public class UiMainView extends BasicView<MainViewModel> implements RootView {
+public class UiMainView extends BaseView<MainViewModel> implements RootView {
 
     public static final String NAME = "main";
 

@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.gam.web;
 
-import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
+import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("prototype")
-public class UiGamViewModel extends BasicViewModel {
+public class UiGamViewModel extends BaseViewModel {
 
     String text;
 

@@ -2,7 +2,7 @@ package com.tentelemed.archipel.security.infrastructure.web;
 
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.service.EventListener;
-import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
+import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.security.application.event.SecUserDeletedEvent;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
@@ -26,7 +26,7 @@ import java.util.Objects;
 @Component
 @Scope("prototype")
 @EventListener
-public class UiUsersViewModel extends BasicViewModel {
+public class UiUsersViewModel extends BaseViewModel {
 
     @Autowired
     UserCommandService userCommand;

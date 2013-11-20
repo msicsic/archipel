@@ -6,10 +6,7 @@ import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -87,7 +84,7 @@ public class SpringConfiguration {
     }
 
     @Bean(name="localBus")
-    @Scope("prototype")
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public EventBus sessionEventBus() {
         return new EventBus();
     }

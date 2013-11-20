@@ -10,6 +10,7 @@ import com.vaadin.ui.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import ru.xpoft.vaadin.VaadinMessageSource;
 
 /**
@@ -18,17 +19,18 @@ import ru.xpoft.vaadin.VaadinMessageSource;
  * Date: 29/10/13
  * Time: 10:53
  */
-public class BasicViewModel {
+public class BaseViewModel {
 
-    protected static final Logger log = LoggerFactory.getLogger(BasicViewModel.class);
+    protected static final Logger log = LoggerFactory.getLogger(BaseViewModel.class);
 
     @Autowired
+    @Qualifier("localBus")
     EventBus eventBus;
 
     @Autowired
     protected VaadinMessageSource msg;
 
-    BeanFieldGroup<? extends BasicViewModel> binder;
+    BeanFieldGroup<? extends BaseViewModel> binder;
     NestingBeanItem item;
     boolean commited = false;
     boolean discarded = false;
@@ -91,12 +93,12 @@ public class BasicViewModel {
         return getText(key);
     }
 
-    public BeanFieldGroup<BasicViewModel> getBinder() {
+    public BeanFieldGroup<BaseViewModel> getBinder() {
         if (binder == null) {
             binder = new BeanFieldGroup<>(getClass());
             //binder.setBuffered(false);
             binder.setItemDataSource(getItem());
         }
-        return (BeanFieldGroup<BasicViewModel>) binder;
+        return (BeanFieldGroup<BaseViewModel>) binder;
     }
 }

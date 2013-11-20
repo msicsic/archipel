@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
-import com.tentelemed.archipel.core.infrastructure.web.BasicView;
+import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.MarginInfo;
@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
 @Component
 @Scope("prototype")
 @ModuleRoot(value= UiLoginView.NAME, login=true)
-public class UiLoginView extends BasicView<UiLoginViewModel> {
+public class UiLoginView extends BaseView<UiLoginViewModel> {
 
     public final static String NAME = "login";
 

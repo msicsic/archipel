@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
-import com.tentelemed.archipel.core.infrastructure.web.BasicView;
+import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.vaadin.data.Property;
@@ -23,7 +23,7 @@ import java.util.Set;
 @Component
 @Scope("prototype")
 @ModuleRoot(value = UiUsersView.NAME)
-public class UiUsersView extends BasicView<UiUsersViewModel> {
+public class UiUsersView extends BaseView<UiUsersViewModel> {
 
     public final static String NAME = "users";
 

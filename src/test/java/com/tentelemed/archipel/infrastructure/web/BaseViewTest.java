@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.infrastructure.web;
 
-import com.tentelemed.archipel.core.infrastructure.web.BasicView;
-import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
+import com.tentelemed.archipel.core.infrastructure.web.BaseView;
+import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.core.infrastructure.web.NestingBeanItem;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -9,13 +9,9 @@ import com.vaadin.data.util.MethodProperty;
 import com.vaadin.data.util.NestedMethodProperty2;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.xpoft.vaadin.VaadinMessageSource;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -31,17 +27,17 @@ import static org.mockito.Mockito.when;
  * Date: 13/11/13
  * Time: 11:49
  */
-public abstract class BaseViewTest<M extends BasicView, MM extends BasicViewModel> {
+public abstract class BaseViewTest<M extends BaseView, MM extends BaseViewModel> {
     Logger log = LoggerFactory.getLogger(BaseViewTest.class);
 
-    protected NestingBeanItem<BasicViewModel> item;
-    protected BeanFieldGroup<BasicViewModel> binder;
+    protected NestingBeanItem<BaseViewModel> item;
+    protected BeanFieldGroup<BaseViewModel> binder;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         item = new NestingBeanItem(getViewModel());
-        binder = new BeanFieldGroup<>(BasicViewModel.class);
+        binder = new BeanFieldGroup<>(BaseViewModel.class);
         binder.setItemDataSource(item);
 
         when(getViewModel().getBinder()).thenReturn(binder);

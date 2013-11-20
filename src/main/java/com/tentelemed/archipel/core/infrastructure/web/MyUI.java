@@ -53,6 +53,8 @@ public class MyUI extends UI {
             }
         }
         //vaadinRequest.getWrappedSession().setAttribute("localBus", bus);
+        // TODO : enregistrer le localBus aupres du bus global
+        // ...
 
         // error handler
 

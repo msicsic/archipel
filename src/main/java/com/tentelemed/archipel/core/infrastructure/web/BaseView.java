@@ -3,7 +3,6 @@ package com.tentelemed.archipel.core.infrastructure.web;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.MethodProperty;
-import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.NestedMethodProperty2;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.navigator.View;
@@ -18,9 +17,7 @@ import ru.xpoft.vaadin.VaadinMessageSource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,8 +25,8 @@ import java.util.Set;
  * Date: 29/10/13
  * Time: 14:25
  */
-public abstract class BasicView<M extends BasicViewModel> extends CustomComponent implements View {
-    Logger log = LoggerFactory.getLogger(BasicView.class);
+public abstract class BaseView<M extends BaseViewModel> extends CustomComponent implements View {
+    Logger log = LoggerFactory.getLogger(BaseView.class);
 
     @Autowired
     protected VaadinMessageSource msg;
@@ -45,7 +42,7 @@ public abstract class BasicView<M extends BasicViewModel> extends CustomComponen
         new Notification(e.getMessage(), Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
     }
 
-    protected BeanFieldGroup<? extends BasicViewModel> getBinder() {
+    protected BeanFieldGroup<? extends BaseViewModel> getBinder() {
         return getModel().getBinder();
     }
 

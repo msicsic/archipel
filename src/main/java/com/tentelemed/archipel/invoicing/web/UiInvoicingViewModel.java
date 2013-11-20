@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.invoicing.web;
 
-import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
+import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("prototype")
-public class UiInvoicingViewModel extends BasicViewModel {
+public class UiInvoicingViewModel extends BaseViewModel {
     String text;
 
     public String getText() {

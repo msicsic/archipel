@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
-import com.tentelemed.archipel.core.infrastructure.web.BasicViewModel;
+import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import org.apache.shiro.authc.AuthenticationException;
@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
  */
 @Component
 @Scope("prototype")
-public class UiLoginViewModel extends BasicViewModel {
+public class UiLoginViewModel extends BaseViewModel {
 
     @Autowired
     UserQueryService userQuery;
