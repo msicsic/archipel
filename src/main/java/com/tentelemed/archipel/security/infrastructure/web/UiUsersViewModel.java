@@ -4,9 +4,12 @@ import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.service.EventListener;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.security.application.event.SecUserDeletedEvent;
+import com.tentelemed.archipel.security.application.event.UserDeleted;
+import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
+import com.tentelemed.archipel.security.domain.model.UserId;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +57,7 @@ public class UiUsersViewModel extends BaseViewModel {
             commit();
             if (getSelectedUser().getEntityId() == null) {
                 userCommand.registerUser(getSelectedUser());
+                //setSelectedUser(null);
             } else {
                 userCommand.updateUserInfo(getSelectedUser());
             }
@@ -79,12 +83,14 @@ public class UiUsersViewModel extends BaseViewModel {
         setSelectedUser(new UserDTO("-", "-", "-", "-", null));
     }
 
-    // Il faut également notifier la vue pour qu'elle se mette a jour (ligne a retirer)
-    // TODO : BUG !!! l'instance n'est pas la meme que celle associée a la vue !
     @Subscribe
-    public void handleEvent(SecUserDeletedEvent event) {
-        if (getSelectedUser() != null && Objects.equals(getSelectedUser().getEntityId(), event.getUserId())) {
-            setSelectedUser(null);
+    public void handleEvent(UserDomainEvent event) {
+        if (event.isDelete()) {
+            if (getSelectedUser() != null && Objects.equals(getSelectedUser().getEntityId(), event.getAggregateId())) {
+                setSelectedUser(null);
+            }
+        } else if (event.isCreate() && getSelectedUser() == null) {
+            setSelectedUser(userQuery.getUser(event.getAggregateId()));
         }
     }
 

@@ -1,18 +1,14 @@
 package com.tentelemed.archipel.core.application;
 
 import com.google.common.eventbus.EventBus;
-import com.tentelemed.archipel.core.application.event.CreateEvent;
-import com.tentelemed.archipel.core.application.event.DeleteEvent;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
 import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.domain.model.UserId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -44,12 +40,12 @@ public class EventStore {
 
     public <M extends EntityId> BaseAggregateRoot<M> get(M id) {
         List<DomainEvent> events = mapEvents.get(id);
-        if (events == null || events.size()==0) return null;
+        if (events == null || events.size() == 0) return null;
         DomainEvent firstEvent = events.get(0);
-        if (! (firstEvent instanceof CreateEvent)) {
+        if (!(firstEvent.isCreate())) {
             throw new RuntimeException("First event must be CreateEvent");
         }
-        BaseAggregateRoot target = newAgregateRoot((CreateEvent)firstEvent);
+        BaseAggregateRoot target = newAgregateRoot(firstEvent);
         applyEvents(target, events);
         return target;
     }
@@ -57,10 +53,11 @@ public class EventStore {
     /**
      * Trouver un moyen de faciliter la tache : comment instancier facilement
      * un agregat à partir d'un id ?
+     *
      * @param id
      * @return
      */
-    private BaseAggregateRoot newAgregateRoot(CreateEvent event) {
+    private BaseAggregateRoot newAgregateRoot(DomainEvent event) {
         if (event instanceof UserRegistered) {
             return new User();
         }
@@ -69,14 +66,14 @@ public class EventStore {
 
     protected BaseAggregateRoot applyEvents(BaseAggregateRoot agregate, Collection<? extends DomainEvent> events) {
         for (DomainEvent event : events) {
-            if (event instanceof DeleteEvent) {
+            if (event.isDelete()) {
                 return null;
             }
             try {
-                Method m = agregate.getClass().getMethod("handle", new Class[] {event.getClass()});
+                Method m = agregate.getClass().getMethod("handle", new Class[]{event.getClass()});
                 m.invoke(agregate, event);
             } catch (Exception e) {
-                log.error("Cant find event handler method : "+agregate.getClass().getSimpleName()+"."+event.getClass().getSimpleName(), e);
+                log.error("Cant find event handler method : " + agregate.getClass().getSimpleName() + "." + event.getClass().getSimpleName(), e);
                 throw new RuntimeException(e);
             }
         }

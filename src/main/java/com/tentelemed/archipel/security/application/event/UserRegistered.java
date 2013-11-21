@@ -1,6 +1,5 @@
 package com.tentelemed.archipel.security.application.event;
 
-import com.tentelemed.archipel.core.application.event.CreateEvent;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.domain.model.UserId;
 
@@ -10,7 +9,7 @@ import com.tentelemed.archipel.security.domain.model.UserId;
  * Date: 15/11/13
  * Time: 16:10
  */
-public class UserRegistered extends UserDomainEvent implements CreateEvent {
+public class UserRegistered extends UserDomainEvent {
     UserDTO info;
     String password;
 
@@ -26,5 +25,10 @@ public class UserRegistered extends UserDomainEvent implements CreateEvent {
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.CREATE;
     }
 }

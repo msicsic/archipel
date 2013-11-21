@@ -10,6 +10,18 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * Le REPO appartient a la couche métier et doit donc prendre en entrée sortie des objets de
+ * type métier. Il lui appartient donc de faire les conversions vers le type interne manipulé
+ * lors du stockage (par ex des objets annoté hibernate)
+ *
+ * Attention cependant ici le pattern CQRS est utilisé, et l'application est donc coupée en 2 :
+ * - commandes : couche métier complete, pas de repo mais un EventStore. Les objets metiers ne
+ *   doivent pas fuir vers les couches supérieures (conversion en objets de la couche evt)
+ *   Privilégie la pureté du modele métier (ne pas mélanger les aspect techniques)
+ * - queries : objets pojo, utilisation d'un repo
+ *   Privilégie les performances (éviter les traitements inutiles)
+ *
+ *
  * Le REPO doit manipuler en entrée sortie des objets BUSINESS et non des objets de la couche persistence
  * Rq : dans le cas particulier de ce repo, la couche persistence utilise directement les objets métiers
  *

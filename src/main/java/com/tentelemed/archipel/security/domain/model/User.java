@@ -5,7 +5,6 @@ import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.security.application.event.UserDeleted;
-import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.application.event.UserInfoUpdated;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
 import com.tentelemed.archipel.security.application.model.UserDTO;

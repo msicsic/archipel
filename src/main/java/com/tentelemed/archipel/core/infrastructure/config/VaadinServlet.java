@@ -1,15 +1,9 @@
 package com.tentelemed.archipel.core.infrastructure.config;
 
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
-import com.tentelemed.archipel.core.application.event.LoginEvent;
-import com.tentelemed.archipel.core.application.event.LogoutDoneEvent;
 import com.tentelemed.archipel.core.application.service.CoreService;
-import com.tentelemed.archipel.core.infrastructure.web.UiMainView;
 import com.tentelemed.archipel.core.infrastructure.web.MyUI;
-import com.tentelemed.archipel.core.infrastructure.web.NavigationEvent;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.ui.UI;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -37,6 +31,8 @@ import javax.servlet.annotation.WebServlet;
         ui = MyUI.class)
 public class VaadinServlet extends SpringVaadinServlet implements WebApplicationInitializer {
 
+    private AnnotationConfigWebApplicationContext context;
+
     @Override
     public void init() throws ServletException {
         System.err.println("VaadinServlet.init");
@@ -46,37 +42,21 @@ public class VaadinServlet extends SpringVaadinServlet implements WebApplication
     public void onStartup(ServletContext container) throws ServletException {
         System.err.println("VaadinServlet.onStartup");
         // Create the 'root' Spring application context
-        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(SpringConfiguration.class);
-        rootContext.refresh();
+        context = new AnnotationConfigWebApplicationContext();
+        context.register(SpringConfiguration.class);
+        context.refresh();
 
         // Manage the lifecycle of the root application context
-        container.addListener(new ContextLoaderListener(rootContext));
+        container.addListener(new ContextLoaderListener(context));
 
-        CoreService service = rootContext.getBean(CoreService.class);
+        CoreService service = context.getBean(CoreService.class);
         service.initApplication();
 
-        EventBus eventBus = (EventBus) rootContext.getBean("eventBus");
+        EventBus eventBus = (EventBus) context.getBean("eventBus");
         eventBus.register(this);
 
         // init de la bdd de test
-        DbInit init = rootContext.getBean(DbInit.class);
+        DbInit init = context.getBean(DbInit.class);
         if (init != null) init.initDb();
-    }
-
-    @Subscribe
-    public void handleViewEvent(NavigationEvent event) {
-        ((MyUI) UI.getCurrent()).showView(event.getModuleId());
-    }
-
-    @Subscribe
-    public void handleViewEvent(LogoutDoneEvent event) {
-        UI.getCurrent().getSession().close();
-        UI.getCurrent().getPage().setLocation("/");
-    }
-
-    @Subscribe
-    public void handleViewEvent(LoginEvent event) {
-        ((MyUI) UI.getCurrent()).showView(UiMainView.NAME);
     }
 }

@@ -103,3 +103,33 @@ URGENT :
      - sous projet a part contenant les evts => les evts ne doivent pas contenir d'objets métiers pour rendre la couche autonome
 
  - intégration de Camel
+
+==> Propagation des evts sur le bus
+- l'application possede un bus global
+- a chaque modif d'objet, un evt est envoyé sur le bus
+- cet evt doit etre envoyé aux autres modules
+- les ihm doivent également recevoir cet evt
+- les ihm sont instanciées a chaque session utilisateur
+- il faut donc enregistrer chaque instance d'ihm sur le bus global
+- afin de limiter les risques de leak, il est préférable de créer un bus de session
+  puis d'enregistrer ce bus de session aupres du global, et ensuite d'enregistrer
+  chaque ihm sur le bus de session
+- cas du login : service->LoginEvent(GLOBALBUS)-->LocalDispatcher.handle->LoginEvent(LOCALBUS)-->MyUI.handle->login
+- cas du logout :
+
+=> Description de l'archi
+- la couche business est celle qui contient le code métier important
+- cette couche ne doit pas fuir vers les clients (ihm, autres modules...)
+- les données contenues dans ces objets doivent donc etre transportées dans des DTO
+- ces DTO sont echangés entre les modules. Ils doivent donc etre le plus simple possible (pas de dépendances techniques)
+- l'application est coupée en 2 (CQRS) : Command et Query
+- Command est la seule partie a accéder à business
+- business genere des evts lors des traitements
+- ces evts transportent des données sous forme de DTO (en aucun cas ne doivent contenir des refs vers les objets metiers)
+- Command accede a un eventStore pour persister les evts générés par business et retrouver un agregat par id
+- Command ne retourne pas de valeurs, mais notifie (envoi d'evts)
+- Query manipule des DTO, et pas des objets métiers
+- Query accede à un moyen de stockage (ex JPA), mais cela ne doit en aucun cas avoir un impact sur les DTO manipulés
+- IHM accede a la fois a Command et Query, ainsi qu'aux DTO (et events)
+- Rq : dans l'implémentation actuelle, les objets persistés par Query sont en fait les objets métier
+  C'est une "bidouille" afin de gagner du temps. A voir pour la suite si c'est viable

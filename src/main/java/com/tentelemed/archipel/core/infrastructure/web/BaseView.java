@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
+import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.MethodProperty;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.xpoft.vaadin.VaadinMessageSource;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -172,5 +174,14 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
 
     protected String gt(String key) {
         return getText(key);
+    }
+
+    @PostConstruct
+    private void _postConstruct() {
+        getModel().register(this);
+    }
+
+    protected void onDomainEventReceived(DomainEvent event) {
+
     }
 }

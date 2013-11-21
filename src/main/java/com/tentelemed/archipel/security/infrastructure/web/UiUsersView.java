@@ -1,7 +1,9 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
+import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
+import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
@@ -11,8 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -145,29 +145,19 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
     @Override
     protected void onRefresh() {
         getBinder().discard();
-        BeanItemContainer<UserDTO> container = (BeanItemContainer<UserDTO>) table.getContainerDataSource();
-
-        Set<UserDTO> currentUsers = new HashSet<>();
-        currentUsers.addAll(getModel().getUsers());
-
-        Set<UserDTO> toRemove = new HashSet<>();
-        for (UserDTO item : container.getItemIds()) {
-            if (!currentUsers.contains(item)) {
-                toRemove.add(item);
-            }
-        }
-        for (UserDTO user : toRemove) {
-            container.removeItem(user);
-        }
-//        for (UserDTO user : model.getUsers()) {
-//            BeanItem<UserDTO> item = container.getItem(user);
-//            if (item == null) {
-//                // nouvelle ligne
-//            }
-//        }
-//
         table.setValue(model.getSelectedUser());
-        //table.markAsDirtyRecursive();
     }
 
+    @Override
+    protected void onDomainEventReceived(DomainEvent event) {
+        if (event instanceof UserDomainEvent) {
+            if (event.isUpdate()) {
+                table.refreshRowCache();
+            } else {
+                BeanItemContainer<UserDTO> container = (BeanItemContainer<UserDTO>) table.getContainerDataSource();
+                container.removeAllItems();
+                container.addAll(getModel().getUsers());
+            }
+        }
+    }
 }

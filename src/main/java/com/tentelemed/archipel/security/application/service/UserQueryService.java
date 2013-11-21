@@ -1,11 +1,11 @@
 package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.core.application.event.LoginEvent;
-import com.tentelemed.archipel.core.application.event.LogoutDoneEvent;
 import com.tentelemed.archipel.core.application.service.BaseQueryService;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.domain.model.UserId;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -59,7 +59,11 @@ public class UserQueryService extends BaseQueryService {
 
     public void doLogout() {
         Subject currentUser = SecurityUtils.getSubject();
+        // attention : "logout" cloture la session http
         currentUser.logout();
-        post(new LogoutDoneEvent());
+    }
+
+    public UserDTO getUser(UserId id) {
+        return UserDTO.fromUser(userRepository.load(id));
     }
 }

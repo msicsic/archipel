@@ -13,7 +13,7 @@ public class UserInfoUpdated extends UserDomainEvent {
     final UserDTO info;
 
     public UserInfoUpdated(UserId id, UserDTO info) {
-        this.id = id;
+        super(id);
         this.info = info;
     }
 

@@ -1,6 +1,8 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import com.tentelemed.archipel.core.application.event.LoginEvent;
 import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.application.service.CoreService;
 import com.vaadin.annotations.Theme;
@@ -13,6 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 
 /**
@@ -34,8 +39,14 @@ public class MyUI extends UI {
     CoreService coreService;
 
     @Autowired
+    LocalDispatcher dispatcher;
+
+    @Autowired
     @Qualifier("localBus")
-    EventBus bus;
+    EventBus localBus;
+
+    @Autowired
+    EventBus eventBus;
 
     AbstractComponent mainView;
     AbstractComponent loginView;
@@ -52,13 +63,24 @@ public class MyUI extends UI {
                 loginView = appContext.getBean(module.getViewClass());
             }
         }
-        //vaadinRequest.getWrappedSession().setAttribute("localBus", bus);
-        // TODO : enregistrer le localBus aupres du bus global
-        // ...
 
         // error handler
+        // ...
 
         showView(loginView);
+    }
+
+    @PostConstruct
+    public void _onPostConstruct() {
+        eventBus.register(dispatcher);
+        localBus.register(this);
+    }
+
+    @PreDestroy
+    public void _onPreDestroy() {
+        eventBus.unregister(dispatcher);
+        UI.getCurrent().getSession().close();
+        UI.getCurrent().getPage().setLocation("/");
     }
 
     public void showView(String moduleId) {
@@ -76,5 +98,14 @@ public class MyUI extends UI {
         this.setContent(view);
     }
 
+    @Subscribe
+    public void handleViewEvent(NavigationEvent event) {
+        ((MyUI) UI.getCurrent()).showView(event.getModuleId());
+    }
+
+    @Subscribe
+    public void handleViewEvent(LoginEvent event) {
+        ((MyUI) UI.getCurrent()).showView(UiMainView.NAME);
+    }
 
 }

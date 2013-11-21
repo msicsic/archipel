@@ -9,6 +9,12 @@ import com.tentelemed.archipel.core.domain.model.EntityId;
  * Time: 17:41
  */
 public interface DomainEvent<M extends EntityId> {
+    enum Type {
+        CREATE, UPDATE, DELETE
+    }
+    Type getType();
     M getAggregateId();
-
+    boolean isUpdate();
+    boolean isDelete();
+    boolean isCreate();
 }

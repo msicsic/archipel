@@ -2,6 +2,8 @@ package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
@@ -13,15 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import ru.xpoft.vaadin.VaadinMessageSource;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
  * Date: 29/10/13
  * Time: 10:53
  */
-public class BaseViewModel {
+public abstract class BaseViewModel {
 
     protected static final Logger log = LoggerFactory.getLogger(BaseViewModel.class);
+
+    private BaseView view;
 
     @Autowired
     @Qualifier("localBus")
@@ -34,6 +41,17 @@ public class BaseViewModel {
     NestingBeanItem item;
     boolean commited = false;
     boolean discarded = false;
+
+    @PostConstruct
+    public void _postConstruct() {
+        // register the model on the session EventBus
+        eventBus.register(this);
+    }
+
+    @PreDestroy
+    public void _preDestroy() {
+        eventBus.unregister(this);
+    }
 
     protected void show(Throwable t) {
         if (Page.getCurrent() != null) {
@@ -100,5 +118,21 @@ public class BaseViewModel {
             binder.setItemDataSource(getItem());
         }
         return (BeanFieldGroup<BaseViewModel>) binder;
+    }
+
+    @Subscribe
+    public void handleEvent(DomainEvent event) {
+        // le modele peut traiter l'evt ici
+        onDomainEventReceived(event);
+
+        // ensuite delegation a la vue
+        view.onDomainEventReceived(event);
+    }
+
+    protected void onDomainEventReceived(DomainEvent event) {
+    }
+
+    public void register(BaseView view) {
+        this.view = view;
     }
 }
