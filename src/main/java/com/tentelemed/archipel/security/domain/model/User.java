@@ -8,6 +8,8 @@ import com.tentelemed.archipel.security.application.event.UserDeleted;
 import com.tentelemed.archipel.security.application.event.UserInfoUpdated;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
 import com.tentelemed.archipel.security.application.model.UserDTO;
+import com.tentelemed.archipel.security.application.model.UserId;
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Embedded;
@@ -68,12 +70,22 @@ public class User extends BaseAggregateRoot<UserId> {
         }
     }
 
-
-    static long count = 0;
-
     private String generatePassword() {
         return "123456789";
     }
+
+    public static UserDTO toDTO(User user) {
+        UserDTO u = new UserDTO();
+        try {
+            BeanUtils.copyProperties(u, user);
+            return u;
+        } catch (Exception e) {
+            log.error(null, e);
+            return null;
+        }
+    }
+
+
 
     // ********************* COMMANDS ****************************
     // ***********************************************************

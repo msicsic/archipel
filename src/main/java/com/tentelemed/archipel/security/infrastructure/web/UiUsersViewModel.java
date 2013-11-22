@@ -3,15 +3,12 @@ package com.tentelemed.archipel.security.infrastructure.web;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.service.EventListener;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
-import com.tentelemed.archipel.security.application.event.SecUserDeletedEvent;
-import com.tentelemed.archipel.security.application.event.UserDeleted;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
-import com.tentelemed.archipel.security.domain.model.UserId;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.Notification;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -76,7 +73,12 @@ public class UiUsersViewModel extends BaseViewModel {
     }
 
     public void action_delete() {
-        userCommand.deleteUser(getSelectedUser().getEntityId());
+        confirm("Confirm dialog", "Please confirm that you want to delete this User", new Runnable() {
+            @Override
+            public void run() {
+                userCommand.deleteUser(getSelectedUser().getEntityId());
+            }
+        });
     }
 
     public void action_add() {
@@ -89,7 +91,7 @@ public class UiUsersViewModel extends BaseViewModel {
             if (getSelectedUser() != null && Objects.equals(getSelectedUser().getEntityId(), event.getAggregateId())) {
                 setSelectedUser(null);
             }
-        } else if (event.isCreate() && getSelectedUser() == null) {
+        } else if (event.isCreate() && getSelectedUser().getEntityId() == null) {
             setSelectedUser(userQuery.getUser(event.getAggregateId()));
         }
     }

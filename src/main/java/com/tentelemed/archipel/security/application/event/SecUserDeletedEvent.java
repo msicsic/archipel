@@ -1,8 +1,7 @@
 package com.tentelemed.archipel.security.application.event;
 
 import com.tentelemed.archipel.core.application.ApplicationEvent;
-import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.application.model.UserId;
 
 /**
  * Created with IntelliJ IDEA.

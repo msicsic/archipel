@@ -1,6 +1,6 @@
-package com.tentelemed.archipel.gam.domain;
+package com.tentelemed.archipel.gam.application.model;
 
-import com.tentelemed.archipel.core.domain.model.EntityId;
+import com.tentelemed.archipel.core.application.model.EntityId;
 
 /**
  * Created with IntelliJ IDEA.

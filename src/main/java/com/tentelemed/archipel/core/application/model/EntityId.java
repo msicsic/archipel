@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.core.domain.model;
+package com.tentelemed.archipel.core.application.model;
 
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;

@@ -1,11 +1,9 @@
-package com.tentelemed.archipel.core.domain.model;
+package com.tentelemed.archipel.core.application.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created with IntelliJ IDEA.

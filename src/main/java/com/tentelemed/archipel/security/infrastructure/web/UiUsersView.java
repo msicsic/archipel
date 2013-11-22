@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 /**
  * Created with IntelliJ IDEA.
@@ -145,7 +146,11 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
     @Override
     protected void onRefresh() {
         getBinder().discard();
-        table.setValue(model.getSelectedUser());
+        Object selected = table.getValue();
+        if (! Objects.equals(selected, model.getSelectedUser())) {
+            table.setValue(model.getSelectedUser());
+            table.setCurrentPageFirstItemId(model.getSelectedUser());
+        }
     }
 
     @Override

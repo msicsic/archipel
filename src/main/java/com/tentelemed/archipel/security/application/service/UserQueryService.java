@@ -5,7 +5,7 @@ import com.tentelemed.archipel.core.application.service.BaseQueryService;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.application.model.UserId;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -45,7 +45,7 @@ public class UserQueryService extends BaseQueryService {
     public List<UserDTO> getAllUsers() {
         List<UserDTO> users = new ArrayList<>();
         for (User user : userRepository.getAllUsers()) {
-            users.add(UserDTO.fromUser(user));
+            users.add(User.toDTO(user));
         }
         return users;
     }
@@ -64,6 +64,6 @@ public class UserQueryService extends BaseQueryService {
     }
 
     public UserDTO getUser(UserId id) {
-        return UserDTO.fromUser(userRepository.load(id));
+        return User.toDTO(userRepository.load(id));
     }
 }

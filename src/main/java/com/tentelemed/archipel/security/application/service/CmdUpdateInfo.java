@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.security.application.event;
+package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.model.UserId;
@@ -6,13 +6,13 @@ import com.tentelemed.archipel.security.application.model.UserId;
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
- * Date: 15/11/13
- * Time: 16:10
+ * Date: 22/11/13
+ * Time: 12:18
  */
-public class UserInfoUpdated extends UserDomainEvent {
-    final UserDTO info;
+public class CmdUpdateInfo extends Command<UserId> {
+    UserDTO info;
 
-    public UserInfoUpdated(UserId id, UserDTO info) {
+    public CmdUpdateInfo(UserId id, UserDTO info) {
         super(id);
         this.info = info;
     }

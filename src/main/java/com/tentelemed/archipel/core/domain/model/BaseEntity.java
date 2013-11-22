@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.domain.model;
 
+import com.tentelemed.archipel.core.application.model.EntityId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

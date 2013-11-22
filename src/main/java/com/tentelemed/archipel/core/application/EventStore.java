@@ -3,7 +3,7 @@ package com.tentelemed.archipel.core.application;
 import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
-import com.tentelemed.archipel.core.domain.model.EntityId;
+import com.tentelemed.archipel.core.application.model.EntityId;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
 import com.tentelemed.archipel.security.domain.model.User;
 import org.slf4j.Logger;

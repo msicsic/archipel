@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.domain.model;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.model.EntityId;
 
 import java.util.Arrays;
 import java.util.List;

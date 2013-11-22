@@ -51,21 +51,26 @@ Generation des evts :
  __TODO__ :
 
 URGENT :
+ - implémenter qq filtres dans l'ecran users
  - ? créer des classes commande. Les mettre en tant que classes statiques dans le service ? (pour les retrouver facilement)
- - gestion des evts dans l'ihm : lors de la modif d'un objet, la ligne du tableau
-   correspondante doit se mettre à jour
-   - attention : comment lier le bus global à chaque instance de vue ?
+ - faut il ou non avoir des commandes asynchrones ?
+   - unification des command et queries ?
+   - conserver tout le contexte necessaire dans la commande (user, ...)
+   - pouvoir lier la commande avec la réponse ultérieure (UUID...)
+   - pool de threads pour traiter les commandes et queries
+   - notifier ensuite l'emetteur pour indiquer resultat dispo
  - persistence du EventStore
+ - controle des droits utilisateur pour l'execution de chaque commande ou query
+ - controle de validité des parametres de la commande : utilisation de Shiro "service:method:instance"
+ - JMS + Camel ? (lier le EventBus avec JMS)
 
- - A l'init de la session utilisateur, un bus dédié à l'utilisateur est créé
- - les vues de ce user s'enregistrent sur ce bus
- - ce bus écoute et forwarde les evts envoyés sur le bus principal
+
+ * A l'init de la session utilisateur, un bus dédié à l'utilisateur est créé
+ * les vues de ce user s'enregistrent sur ce bus
+ * ce bus écoute et forwarde les evts envoyés sur le bus principal
  => Il faut activer le scope session de Spring pour :
-   - injection directe dans les vues du bus
-   - init du bus a la creation de la session (enregistrement aupres du bus principal)
-   - le plus sur est peut etre de ne pas enregistrer les bus locaux sur le bus principal
-     mais de passer par un intermédiaire (pour eviter les leaks)
-     Dans ce cas les bus locaux doivent tous etre enregistrés dans une map
+   * injection directe dans les vues du bus
+   * init du bus a la creation de la session (enregistrement aupres du bus principal)
 
  (((
  - notification de la vue par le modele de vue :
@@ -105,31 +110,60 @@ URGENT :
  - intégration de Camel
 
 ==> Propagation des evts sur le bus
-- l'application possede un bus global
-- a chaque modif d'objet, un evt est envoyé sur le bus
-- cet evt doit etre envoyé aux autres modules
-- les ihm doivent également recevoir cet evt
-- les ihm sont instanciées a chaque session utilisateur
-- il faut donc enregistrer chaque instance d'ihm sur le bus global
-- afin de limiter les risques de leak, il est préférable de créer un bus de session
+* l'application possede un bus global
+* a chaque modif d'objet, un evt est envoyé sur le bus
+* cet evt doit etre envoyé aux autres modules
+* les ihm doivent également recevoir cet evt
+* les ihm sont instanciées a chaque session utilisateur
+* il faut donc enregistrer chaque instance d'ihm sur le bus global
+* afin de limiter les risques de leak, il est préférable de créer un bus de session
   puis d'enregistrer ce bus de session aupres du global, et ensuite d'enregistrer
   chaque ihm sur le bus de session
-- cas du login : service->LoginEvent(GLOBALBUS)-->LocalDispatcher.handle->LoginEvent(LOCALBUS)-->MyUI.handle->login
-- cas du logout :
+* cas du login : service->LoginEvent(GLOBALBUS)-->LocalDispatcher.handle->LoginEvent(LOCALBUS)-->MyUI.handle->login
+* cas du logout : ok
 
 => Description de l'archi
-- la couche business est celle qui contient le code métier important
-- cette couche ne doit pas fuir vers les clients (ihm, autres modules...)
-- les données contenues dans ces objets doivent donc etre transportées dans des DTO
-- ces DTO sont echangés entre les modules. Ils doivent donc etre le plus simple possible (pas de dépendances techniques)
-- l'application est coupée en 2 (CQRS) : Command et Query
-- Command est la seule partie a accéder à business
-- business genere des evts lors des traitements
-- ces evts transportent des données sous forme de DTO (en aucun cas ne doivent contenir des refs vers les objets metiers)
-- Command accede a un eventStore pour persister les evts générés par business et retrouver un agregat par id
-- Command ne retourne pas de valeurs, mais notifie (envoi d'evts)
-- Query manipule des DTO, et pas des objets métiers
-- Query accede à un moyen de stockage (ex JPA), mais cela ne doit en aucun cas avoir un impact sur les DTO manipulés
+* la couche business est celle qui contient le code métier important
+* cette couche ne doit pas fuir vers les clients (ihm, autres modules...)
+* les données contenues dans ces objets doivent donc etre transportées dans des DTO
+* ces DTO sont echangés entre les modules. Ils doivent donc etre le plus simple possible (pas de dépendances techniques)
+- ces DTO ne doivent pas faire ref aux objets métier (sinon pas possible de les echanger entre modules)
+- le code de conversion objet métier - DTO doit donc necessairement etre dans objet metier
+- les Id d'objets métier et de DTO sont communs (c'est ce qui permet de faire le lien)
+- ces Ids sont typé (par objet métier), mais comme ils doivent etre transportés ils font partie de la couche DTO
+* l'application est coupée en 2 (CQRS) : Command et Query
+* Command est la seule partie a accéder à business
+* business genere des evts lors des traitements
+* ces evts transportent des données sous forme de DTO (en aucun cas ne doivent contenir des refs vers les objets metiers)
+* Command accede a un eventStore pour persister les evts générés par business et retrouver un agregat par id
+- Q : comment Command peut il effectuer des controles du type : login unique dans le store ?
+  - développer un repo spécial pour Command qui contienne uniquement les queries necessaires pour les controles (ex :
+    rechercher les utilisateurs ayant le meme login)
+  - ou bien simplement donner acces à Query depuis Command ?
+* Command ne retourne pas de valeurs, mais notifie (envoi d'evts)
+* Query manipule des DTO, et pas des objets métiers
+* Query accede à un moyen de stockage (ex JPA), mais cela ne doit en aucun cas avoir un impact sur les DTO manipulés
 - IHM accede a la fois a Command et Query, ainsi qu'aux DTO (et events)
 - Rq : dans l'implémentation actuelle, les objets persistés par Query sont en fait les objets métier
   C'est une "bidouille" afin de gagner du temps. A voir pour la suite si c'est viable
+
+=> Visibilité
+- application.event et application.model sont publics
+- il faudrait présenter une interface pour les Service Command et Query
+  afin que les modules puissent s'appeler les uns les autres
+
+=> Communication entre applications
+- Il se peut qu'on ait besoin d'appeler un module explicitement depuis un autre
+- dans ce cas le module appelant doit posséder une ref sur les classes publiques de l'appelé
+- l'utilisation d'un bus JMS semble adapté au transit des messages et evts
+- envoi d'une commande sur le bus, traitement par module concerné, generation d'evts sur le
+  bus, resultat de la commande envoyé sur le bus (code d'erreur, exception pour les commandes
+  en modif, données demandées pour les queries)
+- il faudra alors mettre en place une gestion asynchrone des commandes
+- attention dans ce cas ce n'est pas le thread http qui effectue le traitement
+  donc la session utilisateur n'est pas accessible normalement.
+- tous les parametres necessaires au traitement doivent etre stockés dans la commande
+  par ex utilisateur connecté, car la session n'est plus dispo pendant traitement
+- une fois la commande traitée, il faut notifier l'appelant que le résultat est dispo
+- le resultat est posté sur le bus global, mais il faut ensuite notifier le bus local
+  a l'origine de l'appel -> comment le retrouver ?

@@ -1,9 +1,6 @@
 package com.tentelemed.archipel.security.application.model;
 
-import com.tentelemed.archipel.core.domain.model.BaseDTO;
-import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.domain.model.UserId;
-import org.apache.commons.beanutils.BeanUtils;
+import com.tentelemed.archipel.core.application.model.BaseDTO;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
@@ -90,17 +87,6 @@ public class UserDTO extends BaseDTO<UserId> {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public static UserDTO fromUser(User user) {
-        UserDTO u = new UserDTO();
-        try {
-            BeanUtils.copyProperties(u, user);
-            return u;
-        } catch (Exception e) {
-            log.error(null, e);
-            return null;
-        }
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.application.event;
 
-import com.tentelemed.archipel.core.domain.model.EntityId;
+import com.tentelemed.archipel.core.application.model.EntityId;
 
 /**
  * Created with IntelliJ IDEA.

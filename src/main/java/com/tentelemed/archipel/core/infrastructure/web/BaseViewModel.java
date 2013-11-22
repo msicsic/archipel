@@ -9,6 +9,7 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,4 +136,10 @@ public abstract class BaseViewModel {
     public void register(BaseView view) {
         this.view = view;
     }
+
+    protected void confirm(String title, String message, Runnable r) {
+        UI.getCurrent().addWindow(new ConfirmDialog(title, message, r));
+    }
+
+
 }

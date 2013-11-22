@@ -1,14 +1,17 @@
 package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.model.EntityId;
 import com.tentelemed.archipel.core.application.service.BaseCommandService;
-import com.tentelemed.archipel.security.application.event.UserDomainEvent;
+import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.application.model.UserId;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -48,6 +51,7 @@ public class UserCommandService extends BaseCommandService {
      * Mise à jour des infos utilisateur
      * Rq : le login ne peut pas etre changé par ce biais
      */
+    // TODO : controle de droits
     public void updateUserInfo(UserDTO userDTO) {
         // chargement de l'agregat
         User user = (User) get(userDTO.getEntityId());
@@ -69,4 +73,36 @@ public class UserCommandService extends BaseCommandService {
         List<DomainEvent> events = user.delete(id);
         post(user, events);
     }
+
+//    public void executeCommand(Command command) {
+//        UserId id = (UserId) command.getId();
+//
+//        User user;
+//        if (id == null) {
+//            user = get(User.class);
+//        } else {
+//            user = (User) get(id);
+//        }
+//        List<DomainEvent> events = handleCmd(user, command);
+//    }
+//
+//    private List<DomainEvent> handleCmd(BaseAggregateRoot aggregate, Command cmd) throws Throwable {
+//        Method m;
+//        try {
+//            m = getClass().getMethod("handle", new Class[] {aggregate.getClass(), cmd.getClass()});
+//        } catch (Exception e) {
+//            log.error("Commnand handler not found : "+cmd.getClass());
+//            throw e;
+//        }
+//        try {
+//            return (List<DomainEvent>) m.invoke(this, aggregate, cmd);
+//        } catch (InvocationTargetException e) {
+//            throw e.getTargetException();
+//        }
+//    }
+//
+//    // TODO : controle de droits
+//    public List<DomainEvent> handle(User user, CmdUpdateInfo cmd) {
+//        return user.updateInfo(cmd.getInfo());
+//    }
 }
