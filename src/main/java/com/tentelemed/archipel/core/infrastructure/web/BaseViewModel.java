@@ -39,6 +39,7 @@ public abstract class BaseViewModel {
     protected VaadinMessageSource msg;
 
     BeanFieldGroup<? extends BaseViewModel> binder;
+    BeanFieldGroup<? extends BaseViewModel> unBufferedBinder;
     NestingBeanItem item;
     boolean commited = false;
     boolean discarded = false;
@@ -115,10 +116,18 @@ public abstract class BaseViewModel {
     public BeanFieldGroup<BaseViewModel> getBinder() {
         if (binder == null) {
             binder = new BeanFieldGroup<>(getClass());
-            //binder.setBuffered(false);
             binder.setItemDataSource(getItem());
         }
         return (BeanFieldGroup<BaseViewModel>) binder;
+    }
+
+    public BeanFieldGroup<BaseViewModel> getUnbufferedBinder() {
+        if (unBufferedBinder == null) {
+            unBufferedBinder = new BeanFieldGroup<>(getClass());
+            unBufferedBinder.setBuffered(false);
+            unBufferedBinder.setItemDataSource(getItem());
+        }
+        return (BeanFieldGroup<BaseViewModel>) unBufferedBinder;
     }
 
     @Subscribe

@@ -1,11 +1,7 @@
 package com.tentelemed.archipel.gam.domain;
 
-import com.tentelemed.archipel.core.domain.model.Country;
 import com.tentelemed.archipel.core.domain.model.ValueObject;
-
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,13 +12,32 @@ import javax.validation.constraints.NotNull;
 @ValueObject
 @Embeddable
 public class PatientInfo {
-    @NotNull
-    String town;
 
-    @NotNull
-    String address;
+    Address address;
+    PhoneNumber mainPhone;
+    PhoneNumber mobilePhone;
+    Email email;
 
-    @Embedded
-    Country nationality;
+    public Address getAddress() {
+        return address;
+    }
 
+    public PhoneNumber getMainPhone() {
+        return mainPhone;
+    }
+
+    public PhoneNumber getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public Email getEmail() {
+        return email;
+    }
+
+    public PatientInfo(Address address, Email email, PhoneNumber mainPhone, PhoneNumber mobilePhone) {
+        this.address = address;
+        this.email = email;
+        this.mainPhone = mainPhone;
+        this.mobilePhone = mobilePhone;
+    }
 }

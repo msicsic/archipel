@@ -34,6 +34,7 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     protected VaadinMessageSource msg;
 
     public abstract M getModel();
+
     public abstract void postConstruct();
 
     @Override
@@ -48,6 +49,10 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
         return getModel().getBinder();
     }
 
+    protected BeanFieldGroup<? extends BaseViewModel> getUnbufferedBinder() {
+        return getModel().getUnbufferedBinder();
+    }
+
     protected Label bind(Label field, String path) {
         getModel().getItem().addNestedProperty(path);
         field.setPropertyDataSource(getModel().getItem().getItemProperty(path));
@@ -56,14 +61,49 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     }
 
     protected <C extends Field> C bind(C field, String path) {
+        return bind(field, path, false, true);
+    }
 
-        getBinder().bind(field, path);
+    protected <C extends Field> C bindFilter(C field, String path) {
+        return bind(field, path, true, false);
+    }
 
-        if (field instanceof FieldEvents.BlurNotifier) {
-            ((FieldEvents.BlurNotifier)field).addBlurListener(new FieldEvents.BlurListener() {
+    Field currentComponent = null;
+
+    protected <C extends Field> C bind(final C field, String path, final boolean refresh, boolean buffered) {
+
+        if (field instanceof AbstractComponent) {
+            ((AbstractComponent) field).setImmediate(true);
+        }
+
+        if (buffered) {
+            getBinder().bind(field, path);
+            if (field instanceof FieldEvents.BlurNotifier) {
+                ((FieldEvents.BlurNotifier) field).addBlurListener(new FieldEvents.BlurListener() {
+                    @Override
+                    public void blur(FieldEvents.BlurEvent event) {
+                        // nothing special to do, but this empty listener is needed to activate validation on focus lost
+                        System.err.println("on blur : " + event.getSource());
+                    }
+                });
+            }
+        } else {
+            getUnbufferedBinder().bind(field, path);
+            field.addValueChangeListener(new Property.ValueChangeListener() {
                 @Override
-                public void blur(FieldEvents.BlurEvent event) {
-                    // nothing special to do, but this empty listener is needed to activate validation on focus lost
+                public void valueChange(Property.ValueChangeEvent event) {
+                    // refresh screen
+                    if (refresh) {
+                        if (field == currentComponent) {
+                            return;
+                        }
+                        try {
+                            currentComponent = field;
+                            refreshUI();
+                        } finally {
+                            currentComponent = null;
+                        }
+                    }
                 }
             });
         }
@@ -80,16 +120,16 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
             String s = os.toString();
             Property prop = getModel().getItem().getItemProperty(s);
             if (prop instanceof MethodProperty) {
-                ((MethodProperty)prop).fireValueChange();
+                ((MethodProperty) prop).fireValueChange();
             } else if (prop instanceof NestedMethodProperty2) {
-                ((NestedMethodProperty2)prop).fireValueChange();
+                ((NestedMethodProperty2) prop).fireValueChange();
             }
         }
         for (Map.Entry<String, Button> entry : boundedButtons.entrySet()) {
             String path = entry.getKey();
             Button button = entry.getValue();
             try {
-                Method m = getModelClass().getMethod("is"+path.substring(0,1).toUpperCase()+path.substring(1)+"Enabled");
+                Method m = getModelClass().getMethod("is" + path.substring(0, 1).toUpperCase() + path.substring(1) + "Enabled");
                 if (m != null) {
                     boolean value = (boolean) m.invoke(getModel());
                     button.setEnabled(value);
@@ -98,7 +138,7 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
                 // ras
             }
             try {
-                Method m = getModelClass().getMethod("is"+path.substring(0,1).toUpperCase()+path.substring(1)+"Visible");
+                Method m = getModelClass().getMethod("is" + path.substring(0, 1).toUpperCase() + path.substring(1) + "Visible");
                 if (m != null) {
                     boolean value = (boolean) m.invoke(getModel());
                     button.setVisible(value);
@@ -107,13 +147,15 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
                 // ras
             }
         }
+        getBinder().discard();
         onRefresh();
     }
 
     /**
      * Listen refresh UI events.
      */
-    protected void onRefresh() {}
+    protected void onRefresh() {
+    }
 
     private Class<M> getModelClass() {
         return (Class<M>) getModel().getClass();
@@ -131,8 +173,8 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     Map<String, Button> boundedButtons = new HashMap<>();
 
     protected Button bind(Button button, final String path) {
-        if (! checkActionMethod(path)) {
-            throw new RuntimeException("Bad binding for button : "+path);
+        if (!checkActionMethod(path)) {
+            throw new RuntimeException("Bad binding for button : " + path);
         }
         boundedButtons.put(path, button);
         button.addClickListener(new Button.ClickListener() {
@@ -169,7 +211,7 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     }
 
     protected String getText(String key) {
-        return msg.getMessage(getModel().getClass().getSimpleName()+"."+key);
+        return msg.getMessage(getModel().getClass().getSimpleName() + "." + key);
     }
 
     protected String gt(String key) {

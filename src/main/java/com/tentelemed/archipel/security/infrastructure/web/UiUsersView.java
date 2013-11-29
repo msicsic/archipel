@@ -1,12 +1,17 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
+import com.google.common.base.Strings;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.application.model.UserDTO;
+import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -35,6 +40,8 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
     private TextField lastName = new TextField("Last Name :");
     private TextField login = new TextField("Login :");
     private TextField email = new TextField("Email :");
+    private SimpleStringFilter filter;
+    private BeanItemContainer<UserDTO> container;
 
     @Override
     public UiUsersViewModel getModel() {
@@ -55,8 +62,12 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
 
         // Filters...
         HorizontalLayout panelFilters = new HorizontalLayout();
-        panelFilters.addComponent(new Label("Filters..."));
+        panelFilters.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+        panelFilters.addComponent(new Label("Patient Name : "));
+        panelFilters.addComponent(bindFilter(new TextField(), "nameFilter"));
+        panelFilters.setSpacing(true);
 
+        // action buttons
         HorizontalLayout panelButtons = new HorizontalLayout();
         panelButtons.setSpacing(true);
         panelButtons.addComponent(bind(new Button("Add"), "add"));
@@ -71,6 +82,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
         grid.addComponent(panelButtons);
         grid.setComponentAlignment(panelButtons, Alignment.MIDDLE_RIGHT);
 
+        // table
         Table table = createTable();
         table.setSizeFull();
 
@@ -106,7 +118,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
         /* Create the table with a caption. */
         table = new Table("This is my Table");
 
-        BeanItemContainer<UserDTO> container = new BeanItemContainer<>(UserDTO.class);
+        container = new BeanItemContainer<>(UserDTO.class);
         table.setContainerDataSource(container);
 
         /* Define the names and data types of columns.
@@ -145,7 +157,17 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
 
     @Override
     protected void onRefresh() {
-        getBinder().discard();
+        // gestion des filtres
+        container.removeAllContainerFilters();
+        if (! Strings.isNullOrEmpty(getModel().getNameFilter())) {
+            container.addContainerFilter(
+                    new Or(
+                            new SimpleStringFilter("firstName", getModel().getNameFilter(), true, false)
+                            ,new SimpleStringFilter("lastName", getModel().getNameFilter(), true, false)
+                    ));
+        }
+
+        // gestion de la selection dans la table
         Object selected = table.getValue();
         if (! Objects.equals(selected, model.getSelectedUser())) {
             table.setValue(model.getSelectedUser());
@@ -157,8 +179,10 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
     protected void onDomainEventReceived(DomainEvent event) {
         if (event instanceof UserDomainEvent) {
             if (event.isUpdate()) {
+                // rafraichir le contenu des cellules du tableau
                 table.refreshRowCache();
             } else {
+                // reconstruit le modele du tableau
                 BeanItemContainer<UserDTO> container = (BeanItemContainer<UserDTO>) table.getContainerDataSource();
                 container.removeAllItems();
                 container.addAll(getModel().getUsers());

@@ -1,17 +1,13 @@
 package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.core.application.model.EntityId;
 import com.tentelemed.archipel.core.application.service.BaseCommandService;
-import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.security.application.model.UserDTO;
-import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.application.model.UserId;
+import com.tentelemed.archipel.security.domain.model.User;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**

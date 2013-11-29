@@ -23,13 +23,25 @@ public class Patient extends BaseAggregateRoot<PatientId> {
 
     public static enum Status {ALIVE, DEAD}
 
-    @NotNull
-    @Size(min = 2, max = 50)
+    public static enum FamillyStatus {SINGLE, MARRIED, DIVORCED}
+
+    public static enum IdentityStatus {VERIFIED, NOT_VERIFIED}
+
+    public static enum DobType {NORMAL, APPROX, MOON}
+
+    @NotNull @Size(min = 2, max = 50)
     String firstName;
 
-    @NotNull
-    @Size(min = 2, max = 50)
+    @NotNull @Size(min = 2, max = 50)
+    String firstName2;
+
+    @NotNull @Size(min = 2, max = 50)
     String lastName;
+
+    boolean confidential;
+
+    @NotNull
+    IPP IPP;
 
     @NotNull
     Sex sex;
@@ -58,6 +70,8 @@ public class Patient extends BaseAggregateRoot<PatientId> {
     @NotNull
     String birthTown;
 
+    String job;
+
     @Embedded
     @Valid
     PatientInfo info;
@@ -66,4 +80,6 @@ public class Patient extends BaseAggregateRoot<PatientId> {
     protected Class<PatientId> getIdClass() {
         return PatientId.class;
     }
+
+
 }

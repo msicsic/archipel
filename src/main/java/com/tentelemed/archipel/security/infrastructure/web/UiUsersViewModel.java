@@ -36,6 +36,7 @@ public class UiUsersViewModel extends BaseViewModel {
 
     @Valid
     UserDTO selectedUser;
+    private String nameFilter = "";
 
     public UserDTO getSelectedUser() {
         return selectedUser;
@@ -100,4 +101,11 @@ public class UiUsersViewModel extends BaseViewModel {
         return getSelectedUser() != null;
     }
 
+    public String getNameFilter() {
+        return nameFilter;
+    }
+
+    public void setNameFilter(String nameFilter) {
+        this.nameFilter = nameFilter;
+    }
 }
