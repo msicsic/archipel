@@ -10,6 +10,7 @@ public class PhoneNumber {
     String value;
 
     public PhoneNumber(String value) {
+        // TODO : verifier le format
         this.value = value;
     }
 

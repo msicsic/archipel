@@ -15,6 +15,7 @@ public class IPP {
 
     public IPP(String value) {
         assertThat(value, notNullValue());
+        // TODO : verif format
         this.value = value;
     }
 

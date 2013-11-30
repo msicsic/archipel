@@ -1,6 +1,10 @@
 package com.tentelemed.archipel.gam.domain;
 
+import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.gam.application.event.PhysicianInfoUpdated;
+
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,13 +38,22 @@ public class Physician extends BaseAggregateRoot<PhysicianId> {
         this.specialty = specialty;
     }
 
-    public void updateInfos(String firstName, String lastName, Address address, Specialty specialty, PhoneNumber phone) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.specialty = specialty;
-        this.phone = phone;
+    // COMMANDS
+
+    public List<DomainEvent> updateInfos(String firstName, String lastName, Address address, Specialty specialty, PhoneNumber phone) {
+        return list(new PhysicianInfoUpdated(firstName, lastName, address, specialty, phone));
     }
+
+    // EVENTS
+    public void handle(PhysicianInfoUpdated evt) {
+        this.firstName = evt.getFirstName();
+        this.lastName = evt.getLastName();
+        this.address = evt.getAddress();
+        this.specialty = evt.getSpecialty();
+        this.phone = evt.getPhone();
+    }
+
+    // GETTERS
 
     public String getFirstName() {
         return firstName;
