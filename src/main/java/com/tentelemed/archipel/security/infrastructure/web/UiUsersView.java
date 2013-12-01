@@ -5,13 +5,11 @@ import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
-import com.tentelemed.archipel.security.application.model.UserDTO;
-import com.vaadin.data.Container;
+import com.tentelemed.archipel.security.domain.model.User;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -41,7 +39,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
     private TextField login = new TextField("Login :");
     private TextField email = new TextField("Email :");
     private SimpleStringFilter filter;
-    private BeanItemContainer<UserDTO> container;
+    private BeanItemContainer<User> container;
 
     @Override
     public UiUsersViewModel getModel() {
@@ -118,7 +116,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
         /* Create the table with a caption. */
         table = new Table("This is my Table");
 
-        container = new BeanItemContainer<>(UserDTO.class);
+        container = new BeanItemContainer<>(User.class);
         table.setContainerDataSource(container);
 
         /* Define the names and data types of columns.
@@ -146,7 +144,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
         // Handle selection change.
         table.addValueChangeListener(new Property.ValueChangeListener() {
             public void valueChange(Property.ValueChangeEvent event) {
-                UserDTO user = (UserDTO) table.getValue();
+                User user = (User) table.getValue();
                 model.setSelectedUser(user);
                 refreshUI();
             }
@@ -183,7 +181,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
                 table.refreshRowCache();
             } else {
                 // reconstruit le modele du tableau
-                BeanItemContainer<UserDTO> container = (BeanItemContainer<UserDTO>) table.getContainerDataSource();
+                BeanItemContainer<User> container = (BeanItemContainer<User>) table.getContainerDataSource();
                 container.removeAllItems();
                 container.addAll(getModel().getUsers());
             }

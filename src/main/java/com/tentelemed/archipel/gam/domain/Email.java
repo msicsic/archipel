@@ -1,5 +1,7 @@
 package com.tentelemed.archipel.gam.domain;
 
+import com.tentelemed.archipel.core.domain.model.BaseVO;
+
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -9,8 +11,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Date: 29/11/13
  * Time: 16:52
  */
-public class Email {
-    String value;
+public class Email extends BaseVO {
+    private final String value;
 
     public Email(String value) {
         // TODO : vérif regexpr

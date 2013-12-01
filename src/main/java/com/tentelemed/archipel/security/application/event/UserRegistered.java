@@ -1,7 +1,9 @@
 package com.tentelemed.archipel.security.application.event;
 
-import com.tentelemed.archipel.security.application.model.UserDTO;
-import com.tentelemed.archipel.security.application.model.UserId;
+import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.domain.model.Credentials;
+
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,25 +12,46 @@ import com.tentelemed.archipel.security.application.model.UserId;
  * Time: 16:10
  */
 public class UserRegistered extends UserDomainEvent {
-    UserDTO info;
-    String password;
 
-    public UserRegistered(UserId id, UserDTO info, String password) {
+
+    private final UserId id;
+    private final String firstName;
+    private final String lastName;
+    private final Date dob;
+    private final String email;
+    private final Credentials credentials;
+
+    public UserRegistered(UserId id, String firstName, String lastName, Date dob, String email, Credentials credentials) {
         this.id = id;
-        this.info = info;
-        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.email = email;
+        this.credentials = credentials;
     }
 
-    public UserDTO getInfo() {
-        return info;
+    public UserId getId() {
+        return id;
     }
 
-    public String getPassword() {
-        return password;
+    public String getFirstName() {
+        return firstName;
     }
 
-    @Override
-    public Type getType() {
-        return Type.CREATE;
+    public String getLastName() {
+        return lastName;
     }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
 }

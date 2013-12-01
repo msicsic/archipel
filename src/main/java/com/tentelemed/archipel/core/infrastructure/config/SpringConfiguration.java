@@ -124,7 +124,7 @@ public class SpringConfiguration {
         lef.setDataSource(dataSource);
         lef.setJpaVendorAdapter(jpaVendorAdapter);
         lef.setPackagesToScan(
-                "com.tentelemed.archipel.gam.domain.model"
+                  "com.tentelemed.archipel.gam.domain.model"
                 , "com.tentelemed.archipel.invoicing.domain.model"
                 , "com.tentelemed.archipel.security.domain.model"
         );

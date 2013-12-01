@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
-import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
+import com.tentelemed.archipel.security.domain.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -35,14 +35,14 @@ public class UiUsersViewModelTest {
     public void thatCommitWorks() {
 
         // given
-        UserDTO user = new UserDTO();
+        User user = new User();
         model.setSelectedUser(user);
 
         // when
         model.action_commit();
 
         // then
-        verify(service).updateUserInfo(user);
+        verify(service).updateUserInfo(user.getEntityId(), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail());
         assertTrue(model.isCommited());
     }
 
@@ -50,7 +50,7 @@ public class UiUsersViewModelTest {
     public void thatDeleteWorks() {
 
         // given
-        UserDTO user = new UserDTO("123");
+        User user = new User();
         model.setSelectedUser(user);
 
         // when
@@ -64,14 +64,14 @@ public class UiUsersViewModelTest {
     public void thatCancelWorks() {
 
         // given
-        UserDTO user = new UserDTO();
+        User user = new User();
         model.setSelectedUser(user);
 
         // when
         model.action_discard();
 
         // then
-        verify(service, never()).updateUserInfo(user);
+        verify(service, never()).updateUserInfo(user.getEntityId(), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail());
         assertTrue(!model.isCommited());
         assertTrue(model.isDiscarded());
     }

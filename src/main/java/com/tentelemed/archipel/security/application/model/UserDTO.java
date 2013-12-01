@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.security.application.model;
 
 import com.tentelemed.archipel.core.application.model.BaseDTO;
+import com.tentelemed.archipel.security.domain.model.UserId;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;

@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.gam.domain;
 
-import com.tentelemed.archipel.core.domain.model.ValueObject;
-import javax.persistence.Embeddable;
+import com.tentelemed.archipel.core.domain.model.BaseVO;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,14 +8,23 @@ import javax.persistence.Embeddable;
  * Date: 22/10/13
  * Time: 14:26
  */
-@ValueObject
-@Embeddable
-public class PatientInfo {
+public class PatientInfo extends BaseVO {
 
-    Address address;
-    PhoneNumber mainPhone;
-    PhoneNumber mobilePhone;
-    Email email;
+    private final Address address;
+    private final PhoneNumber mainPhone;
+    private final PhoneNumber mobilePhone;
+    private final Email email;
+
+    public PatientInfo(Address address, Email email, PhoneNumber mainPhone, PhoneNumber mobilePhone) {
+        validate("address", address);
+        validate("email", email);
+        validate("mainPhone", mainPhone);
+        validate("mobilePhone", mobilePhone);
+        this.address = address;
+        this.email = email;
+        this.mainPhone = mainPhone;
+        this.mobilePhone = mobilePhone;
+    }
 
     public Address getAddress() {
         return address;
@@ -34,10 +42,4 @@ public class PatientInfo {
         return email;
     }
 
-    public PatientInfo(Address address, Email email, PhoneNumber mainPhone, PhoneNumber mobilePhone) {
-        this.address = address;
-        this.email = email;
-        this.mainPhone = mainPhone;
-        this.mobilePhone = mobilePhone;
-    }
 }

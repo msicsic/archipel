@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.domain.interfaces;
 
 import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.application.model.UserId;
+import com.tentelemed.archipel.security.domain.model.UserId;
 
 import java.util.List;
 

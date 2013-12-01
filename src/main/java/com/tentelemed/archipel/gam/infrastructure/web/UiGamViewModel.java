@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.gam.web;
+package com.tentelemed.archipel.gam.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import org.springframework.context.annotation.Scope;

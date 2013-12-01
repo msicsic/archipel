@@ -2,12 +2,12 @@ package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.BaseCommandService;
-import com.tentelemed.archipel.security.application.model.UserDTO;
-import com.tentelemed.archipel.security.application.model.UserId;
+import com.tentelemed.archipel.security.domain.model.UserId;
 import com.tentelemed.archipel.security.domain.model.User;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,29 +32,29 @@ import java.util.List;
 @Transactional
 public class UserCommandService extends BaseCommandService {
 
-    public void registerUser(UserDTO userDTO) {
+    public void registerUser(String firstName, String lastName, Date dob, String email, String login) {
         // c'est une commande de creation d'agregat :
         // il faut donc instancier l'agregat puis lui attribuer un id
         User user = get(User.class);
-        List<DomainEvent> events = user.register(user.getEntityId(), userDTO);
+        List<DomainEvent> events = user.register(user.getEntityId(), firstName, lastName, dob, email, login);
         post(user, events);
     }
 
     /**
-     * @param userDTO
+     * @param id
      * @precond user doit exister (son id ne doit pas etre null)
      * <p/>
      * Mise à jour des infos utilisateur
      * Rq : le login ne peut pas etre changé par ce biais
      */
     // TODO : controle de droits
-    public void updateUserInfo(UserDTO userDTO) {
+    public void updateUserInfo(UserId id, String firstName, String lastName, Date dob, String email) {
         // chargement de l'agregat
-        User user = (User) get(userDTO.getEntityId());
+        User user = (User) get(id);
 
         // appel a la méthode métier et récuperation des evenements
         // = application de la commande
-        List<DomainEvent> events = user.updateInfo(userDTO);
+        List<DomainEvent> events = user.updateInfo(firstName, lastName, dob, email);
 
         // traitement par l'EventStore puis propagation
         post(user, events);

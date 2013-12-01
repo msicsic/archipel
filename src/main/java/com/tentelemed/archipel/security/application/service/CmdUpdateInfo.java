@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.security.application.model.UserDTO;
-import com.tentelemed.archipel.security.application.model.UserId;
+import com.tentelemed.archipel.security.domain.model.UserId;
 
 /**
  * Created with IntelliJ IDEA.

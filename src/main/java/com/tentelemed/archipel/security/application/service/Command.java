@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.security.application.service;
 
-import com.tentelemed.archipel.core.application.model.EntityId;
+import com.tentelemed.archipel.core.domain.model.EntityId;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.security.domain.model;
 
-import javax.persistence.Embeddable;
+import com.tentelemed.archipel.core.domain.model.BaseVO;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -11,21 +12,14 @@ import java.util.Objects;
  * Date: 21/10/13
  * Time: 16:45
  */
-@Embeddable
-public class Credentials {
+public class Credentials extends BaseVO {
 
-    //@Getter
-    @NotNull @Size(min = 5)
-    String login;
-
-    //@Getter
-    @NotNull @Size(min = 5)
-    String password;
-
-    Credentials() {
-    }
+    @NotNull @Size(min = 5) String login;
+    @NotNull @Size(min = 5) String password;
 
     public Credentials(String login, String password) {
+        validate("login", login);
+        validate("password", password);
         this.login = login;
         this.password = password;
     }
@@ -36,7 +30,7 @@ public class Credentials {
 
     public boolean match(String login, String password) {
         return Objects.equals(this.password, password) &&
-                Objects.equals(this.login, login) ;
+                Objects.equals(this.login, login);
     }
 
     // ********************* ACCESSORS ***************************

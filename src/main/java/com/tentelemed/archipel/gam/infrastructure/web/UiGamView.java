@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.gam.web;
+package com.tentelemed.archipel.gam.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;

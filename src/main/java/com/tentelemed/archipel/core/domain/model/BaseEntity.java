@@ -1,10 +1,11 @@
 package com.tentelemed.archipel.core.domain.model;
 
-import com.tentelemed.archipel.core.application.model.EntityId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,7 @@ import javax.persistence.*;
  * Date: 22/10/13
  * Time: 11:01
  */
-@MappedSuperclass
+//@MappedSuperclass
 public abstract class BaseEntity<B extends EntityId> {
     protected final static Logger log = LoggerFactory.getLogger(BaseEntity.class);
 
@@ -34,6 +35,19 @@ public abstract class BaseEntity<B extends EntityId> {
     //private Long version;
 
     private transient B entityId;
+
+    protected Validator validator;
+
+    protected Validator getValidator() {
+        if (validator == null) {
+            this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        }
+        return this.validator;
+    }
+
+    protected void validate(String property, Object value) {
+        getValidator().validateValue(getClass(), property, value);
+    }
 
     public B getEntityId() {
         if (entityId == null) {

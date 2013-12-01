@@ -4,9 +4,9 @@ import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.service.EventListener;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
-import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
+import com.tentelemed.archipel.security.domain.model.User;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +35,18 @@ public class UiUsersViewModel extends BaseViewModel {
     UserQueryService userQuery;
 
     @Valid
-    UserDTO selectedUser;
+    User selectedUser;
     private String nameFilter = "";
 
-    public UserDTO getSelectedUser() {
+    public User getSelectedUser() {
         return selectedUser;
     }
 
-    public void setSelectedUser(UserDTO selectedUser) {
+    public void setSelectedUser(User selectedUser) {
         this.selectedUser = selectedUser;
     }
 
-    public List<UserDTO> getUsers() {
+    public List<User> getUsers() {
         return userQuery.getAllUsers();
     }
 
@@ -54,10 +54,11 @@ public class UiUsersViewModel extends BaseViewModel {
         try {
             commit();
             if (getSelectedUser().getEntityId() == null) {
-                userCommand.registerUser(getSelectedUser());
-                //setSelectedUser(null);
+                User u = getSelectedUser();
+                userCommand.registerUser(u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail(), u.getLogin());
             } else {
-                userCommand.updateUserInfo(getSelectedUser());
+                User u = getSelectedUser();
+                userCommand.updateUserInfo(u.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail());
             }
             show("User committed");
         } catch (FieldGroup.CommitException e) {
@@ -83,7 +84,7 @@ public class UiUsersViewModel extends BaseViewModel {
     }
 
     public void action_add() {
-        setSelectedUser(new UserDTO("-", "-", "-", "-", null));
+        setSelectedUser(new User());
     }
 
     @Subscribe

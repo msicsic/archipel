@@ -6,14 +6,10 @@ import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.security.application.event.UserDeleted;
 import com.tentelemed.archipel.security.application.event.UserInfoUpdated;
+import com.tentelemed.archipel.security.application.event.UserPasswordUpdated;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
-import com.tentelemed.archipel.security.application.model.UserDTO;
-import com.tentelemed.archipel.security.application.model.UserId;
-import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -25,81 +21,52 @@ import java.util.List;
  * Date: 21/10/13
  * Time: 16:45
  */
-@Entity
 public class User extends BaseAggregateRoot<UserId> {
 
-    public static class ChangePasswordException extends DomainException {}
+    public static class ChangePasswordException extends DomainException {
+    }
 
-    @Embedded
-    @NotNull
-    Credentials credentials;
-
-    @NotNull
-    @Size(min = 2, max = 50)
-    String firstName;
-
-    @NotNull
-    @Size(min = 2, max = 50)
-    String lastName;
-
+    @NotNull Credentials credentials;
+    @NotNull @Size(min = 2, max = 50) String firstName;
+    @NotNull @Size(min = 2, max = 50) String lastName;
     Date dob;
+    @Email String email = "default@mail.com";
 
-    @Email
-    String email = "default@mail.com";
-
-    @Override
-    protected Class<UserId> getIdClass() {
-        return UserId.class;
-    }
-
-    public static User createUser(String firstName, String lastName, String login, String password) {
-        User user = new User();
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.dob = new Date();
-        user.credentials = new Credentials(login, password);
-        return user;
-    }
-
-    public void changePassword(String old, String new1, String new2) throws ChangePasswordException {
-        if (!Objects.equal(old, getPassword()) || !Objects.equal(new1, new2)) {
-            throw new ChangePasswordException();
-        }
-        if (credentials.matchPassword(old)) {
-            credentials = new Credentials(credentials.getLogin(), new1);
-        }
-    }
-
-    private String generatePassword() {
+    String generatePassword() {
         return "123456789";
     }
-
-    public static UserDTO toDTO(User user) {
-        UserDTO u = new UserDTO();
-        try {
-            BeanUtils.copyProperties(u, user);
-            return u;
-        } catch (Exception e) {
-            log.error(null, e);
-            return null;
-        }
-    }
-
-
 
     // ********************* COMMANDS ****************************
     // ***********************************************************
 
-    public List<DomainEvent> register(UserId id, UserDTO userDTO) {
-        return list(new UserRegistered(id, userDTO, generatePassword()));
+    public List<DomainEvent> register(UserId id, String firstName, String lastName, Date dob, String email, String login) {
+        validate("id", id);
+        validate("firstName", firstName);
+        validate("lastName", lastName);
+        validate("dob", dob);
+        validate("email", email);
+        validate("login", login);
+        return list(new UserRegistered(id, firstName, lastName, dob, email, new Credentials(login, generatePassword())));
     }
 
     public List<DomainEvent> delete(UserId id) {
+        validate("id", id);
         return list(new UserDeleted(id));
     }
 
-    public List<DomainEvent> updateInfo(UserDTO info) {
-        return list(new UserInfoUpdated(getEntityId(), info));
+    public List<DomainEvent> updateInfo(String firstName, String lastName, Date dob, String email) {
+        validate("firstName", firstName);
+        validate("lastName", lastName);
+        validate("dob", dob);
+        validate("email", email);
+        return list(new UserInfoUpdated(getEntityId(), firstName, lastName, dob, email));
+    }
+
+    public List<DomainEvent> changePassword(String old, String new1, String new2) throws ChangePasswordException {
+        if (!Objects.equal(old, getPassword()) || !Objects.equal(new1, new2)) {
+            throw new ChangePasswordException();
+        }
+        return list(new UserPasswordUpdated(new1));
     }
 
 
@@ -111,22 +78,31 @@ public class User extends BaseAggregateRoot<UserId> {
 
     public void handle(UserRegistered event) {
         this.id = event.getAggregateId().getId();
-        this.firstName = event.getInfo().getFirstName();
-        this.lastName = event.getInfo().getLastName();
-        this.dob = event.getInfo().getDob();
-        this.email = event.getInfo().getEmail();
-        this.credentials = new Credentials(event.getInfo().getLogin(), event.getPassword());
+        this.firstName = event.getFirstName();
+        this.lastName = event.getLastName();
+        this.dob = event.getDob();
+        this.email = event.getEmail();
+        this.credentials = event.getCredentials();
     }
 
     public void handle(UserInfoUpdated event) {
-        this.firstName = event.getInfo().getFirstName();
-        this.lastName = event.getInfo().getLastName();
-        this.dob = event.getInfo().getDob();
-        this.email = event.getInfo().getEmail();
+        this.firstName = event.getFirstName();
+        this.lastName = event.getLastName();
+        this.dob = event.getDob();
+        this.email = event.getEmail();
+    }
+
+    public void handle(UserPasswordUpdated event) {
+        credentials = new Credentials(credentials.getLogin(), event.getPassword());
     }
 
     // ********************* ACCESSORS ***************************
     // ***********************************************************
+
+    @Override
+    protected Class<UserId> getIdClass() {
+        return UserId.class;
+    }
 
     public String getFirstName() {
         return firstName;

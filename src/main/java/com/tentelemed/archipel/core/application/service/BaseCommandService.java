@@ -5,7 +5,7 @@ import com.tentelemed.archipel.core.application.ApplicationEvent;
 import com.tentelemed.archipel.core.application.EventStore;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
-import com.tentelemed.archipel.core.application.model.EntityId;
+import com.tentelemed.archipel.core.domain.model.EntityId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

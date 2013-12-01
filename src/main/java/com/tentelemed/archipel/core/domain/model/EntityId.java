@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.core.application.model;
+package com.tentelemed.archipel.core.domain.model;
 
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -13,15 +13,19 @@ import java.io.Serializable;
 public class EntityId implements Serializable {
     String id;
 
+    public EntityId() {
+    }
+
+    public EntityId(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public EntityId() {
     }
 
     public String toString() {

@@ -20,7 +20,7 @@ public class Application {
         AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
 
         UserCommandService service = context.getBean(UserCommandService.class);
-        service.registerUser(new UserDTO("Paul", "Durand", "login1", "mail@mail.com", new Date()));
+        service.registerUser("Paul", "Durand", new Date(), "mail@mail.com", "login1");
         //UserRepositoryUtil repo = context.getBean(UserRepositoryUtil.class);
         //User user = User.createUser("Paul", "Durand", "login1", "password1");
         //repo.save(user);
