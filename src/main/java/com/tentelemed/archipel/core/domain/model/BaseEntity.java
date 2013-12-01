@@ -46,7 +46,11 @@ public abstract class BaseEntity<B extends EntityId> {
     }
 
     protected void validate(String property, Object value) {
-        getValidator().validateValue(getClass(), property, value);
+        try {
+            getValidator().validateValue(getClass(), property, value);
+        } catch (RuntimeException e) {
+            throw e;
+        }
     }
 
     public B getEntityId() {

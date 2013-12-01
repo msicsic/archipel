@@ -61,7 +61,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User findByLogin(String login) {
-        return UserHb.toUser(findByLogin(login));
+        return UserHb.toUser(repo.findByLogin(login));
     }
 
     @Override

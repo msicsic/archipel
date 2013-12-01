@@ -99,6 +99,10 @@ public class User extends BaseAggregateRoot<UserId> {
     // ********************* ACCESSORS ***************************
     // ***********************************************************
 
+    public String getFullName() {
+        return getFirstName()+" "+getLastName();
+    }
+
     @Override
     protected Class<UserId> getIdClass() {
         return UserId.class;

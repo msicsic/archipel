@@ -13,8 +13,6 @@ import java.util.Date;
  */
 public class UserRegistered extends UserDomainEvent {
 
-
-    private final UserId id;
     private final String firstName;
     private final String lastName;
     private final Date dob;

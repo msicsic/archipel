@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -64,20 +65,22 @@ public class EventStore {
         return null;
     }
 
-    protected BaseAggregateRoot applyEvents(BaseAggregateRoot agregate, Collection<? extends DomainEvent> events) {
+    protected BaseAggregateRoot applyEvents(BaseAggregateRoot aggregate, Collection<? extends DomainEvent> events) {
         for (DomainEvent event : events) {
             if (event.isDelete()) {
                 return null;
             }
             try {
-                Method m = agregate.getClass().getMethod("handle", new Class[]{event.getClass()});
-                m.invoke(agregate, event);
+                Method m = aggregate.getClass().getMethod("handle", new Class[]{event.getClass()});
+                m.invoke(aggregate, event);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException((e.getTargetException()));
             } catch (Exception e) {
-                log.error("Cant find event handler method : " + agregate.getClass().getSimpleName() + "." + event.getClass().getSimpleName(), e);
+                log.error("Cant find event handler method : " + aggregate.getClass().getSimpleName() + "." + event.getClass().getSimpleName(), e);
                 throw new RuntimeException(e);
             }
         }
-        return agregate;
+        return aggregate;
     }
 
     public void addAndApplyEvents(BaseAggregateRoot target, Collection<? extends DomainEvent> events) {

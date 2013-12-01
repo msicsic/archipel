@@ -13,6 +13,10 @@ import javax.persistence.MappedSuperclass;
 public class BaseEntityHb {
     @Id protected String id;
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

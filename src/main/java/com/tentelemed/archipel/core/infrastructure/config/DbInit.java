@@ -21,7 +21,7 @@ public class DbInit {
 
     public void initDb() {
         for (int i=0; i<100; i++) {
-            service.registerUser("Paul"+i, "Durand"+i, new Date(), "mail"+i+"@mail.com", "login1");
+            service.registerUser("Paul"+i, "Durand"+i, new Date(), "mail"+i+"@mail.com", "login"+i);
         }
     }
 

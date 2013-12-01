@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.persistence.domain;
 
 import com.tentelemed.archipel.core.infrastructure.domain.BaseEntityHb;
-import com.tentelemed.archipel.security.domain.model.Credentials;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.domain.model.UserId;
 import org.hibernate.validator.constraints.Email;
@@ -25,6 +24,17 @@ public class UserHb extends BaseEntityHb {
     @Email String email = "default@mail.com";
     @NotNull String login;
     String password;
+
+    public UserHb() {
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getLogin() {
         return login;
@@ -68,10 +78,13 @@ public class UserHb extends BaseEntityHb {
 
     public static UserHb fromUser(User user) {
         UserHb res = new UserHb();
+        res.setId(user.getEntityId().getId());
         res.setDob(user.getDob());
         res.setEmail(user.getEmail());
         res.setFirstName(user.getFirstName());
         res.setLastName(user.getLastName());
+        res.setLogin(user.getLogin());
+        res.setPassword(user.getPassword());
         return res;
     }
 

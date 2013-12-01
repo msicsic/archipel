@@ -1,6 +1,5 @@
 package com.tentelemed.archipel.security.infrastructure.persistence;
 
-import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserHb;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,6 +23,6 @@ public interface UserRepositoryUtil extends JpaRepository<UserHb, String> {
     @Query(value="select u from UserHb u where \nlower(u.lastName) like ('%' || lower(:name) ||'%')\nor lower(u.firstName) like ('%' || lower(:name) ||'%') ")
     List<UserHb> findByName(@Param("name") String name);
 
-    @Query(value="select u from UserHb u where u.credentials.login=:login")
+    @Query(value="select u from UserHb u where u.login=:login")
     UserHb findByLogin(@Param("login") String login);
 }
