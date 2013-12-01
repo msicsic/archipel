@@ -4,9 +4,11 @@ import com.tentelemed.archipel.core.application.EventStore;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserHb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,17 +46,22 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        return repo.save(user);
+        UserHb u = UserHb.fromUser(user);
+        return UserHb.toUser(repo.save(u));
     }
 
     @Override
     public List<User> getAllUsers() {
-        return repo.findAll();
+        List<User> res = new ArrayList<>();
+        for (UserHb user : repo.findAll()) {
+            res.add(UserHb.toUser(user));
+        }
+        return res;
     }
 
     @Override
     public User findByLogin(String login) {
-        return repo.findByLogin(login);
+        return UserHb.toUser(findByLogin(login));
     }
 
     @Override
