@@ -20,7 +20,7 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @Scope("prototype")
-@ModuleRoot(value= UiLoginView.NAME, login=true)
+@ModuleRoot(value = UiLoginView.NAME, login = true)
 public class UiLoginView extends BaseView<UiLoginViewModel> {
 
     public final static String NAME = "login";

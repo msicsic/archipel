@@ -48,7 +48,7 @@ public class IdGenerator extends SequenceStyleGenerator {
     }
 
     public void configure(Type type, Properties properties, Dialect dialect) {
-        if (! configured) {
+        if (!configured) {
             configured = true;
             instance.__superConfigure(new IntegerType(), properties, dialect);
         }
@@ -81,6 +81,6 @@ public class IdGenerator extends SequenceStyleGenerator {
     }
 
     public synchronized static String createTmpId() {
-        return tmpKey + "/" + nextTmpId ++;
+        return tmpKey + "/" + nextTmpId++;
     }
 }

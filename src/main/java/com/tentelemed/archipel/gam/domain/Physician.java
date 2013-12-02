@@ -34,7 +34,7 @@ public class Physician extends BaseAggregateRoot<PhysicianId> {
         validate("firstName", firstName);
         validate("lastName", lastName);
         validate("specialty", specialty);
-        return list(new PhysicianRegistered(firstName, lastName, specialty));
+        return list(new PhysicianRegistered(getEntityId(), firstName, lastName, specialty));
     }
 
     public List<DomainEvent> updateInfos(String firstName, String lastName, Address address, Specialty specialty, PhoneNumber phone) {
@@ -43,23 +43,23 @@ public class Physician extends BaseAggregateRoot<PhysicianId> {
         validate("address", address);
         validate("specialty", specialty);
         validate("phone", phone);
-        return list(new PhysicianInfoUpdated(firstName, lastName, address, specialty, phone));
+        return list(new PhysicianInfoUpdated(getEntityId(), firstName, lastName, address, specialty, phone));
     }
 
     // EVENTS
 
     public void handle(PhysicianRegistered event) {
-        this.firstName = event.getFirstName();
-        this.lastName = event.getLastName();
-        this.specialty = event.getSpecialty();
+        this.firstName = event.firstName;
+        this.lastName = event.lastName;
+        this.specialty = event.specialty;
     }
 
     public void handle(PhysicianInfoUpdated evt) {
-        this.firstName = evt.getFirstName();
-        this.lastName = evt.getLastName();
-        this.address = evt.getAddress();
-        this.specialty = evt.getSpecialty();
-        this.phone = evt.getPhone();
+        this.firstName = evt.firstName;
+        this.lastName = evt.lastName;
+        this.address = evt.address;
+        this.specialty = evt.specialty;
+        this.phone = evt.phone;
     }
 
     // GETTERS

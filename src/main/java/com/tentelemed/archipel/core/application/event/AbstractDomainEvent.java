@@ -9,10 +9,7 @@ import com.tentelemed.archipel.core.domain.model.EntityId;
  * Time: 15:21
  */
 public abstract class AbstractDomainEvent<M extends EntityId> implements DomainEvent<M> {
-    protected M id;
-
-    protected AbstractDomainEvent() {
-    }
+    public final M id;
 
     protected AbstractDomainEvent(M id) {
         this.id = id;
@@ -38,7 +35,8 @@ public abstract class AbstractDomainEvent<M extends EntityId> implements DomainE
         return getType().equals(Type.CREATE);
     }
 
-    @Override public Type getType() {
+    @Override
+    public Type getType() {
         return Type.UPDATE;
     }
 }

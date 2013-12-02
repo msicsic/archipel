@@ -4,10 +4,12 @@ import com.vaadin.ui.*;
 
 public class ConfirmDialog extends Window {
     Runnable run;
+    BaseViewModel bvm;
 
-    public ConfirmDialog(String title, String message, Runnable r) {
+    public ConfirmDialog(BaseViewModel bvm, String title, String message, Runnable r) {
         super(title); // Set window caption
         this.run = r;
+        this.bvm = bvm;
         setModal(true);
         center();
 
@@ -27,6 +29,8 @@ public class ConfirmDialog extends Window {
             public void buttonClick(Button.ClickEvent event) {
                 try {
                     run.run();
+                } catch (Throwable t) {
+                    ConfirmDialog.this.bvm.show(t);
                 } finally {
                     close(); // Close the sub-window
                 }

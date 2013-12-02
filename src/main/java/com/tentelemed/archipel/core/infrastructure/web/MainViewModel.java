@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.google.common.base.Objects;
-import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.application.service.CoreService;
+import com.tentelemed.archipel.core.domain.model.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

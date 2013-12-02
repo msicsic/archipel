@@ -6,7 +6,7 @@ import javax.servlet.annotation.WebServlet;
 
 /**
  * Sert le contenu statique
- *
+ * <p/>
  * Created with IntelliJ IDEA.
  * User: Mael
  * Date: 28/10/13

@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
 import com.tentelemed.archipel.security.application.service.UserCommandService;
-import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -35,7 +35,7 @@ public class UiUsersViewModelTest {
     public void thatCommitWorks() {
 
         // given
-        User user = new User();
+        UserQ user = new UserQ();
         model.setSelectedUser(user);
 
         // when
@@ -50,7 +50,7 @@ public class UiUsersViewModelTest {
     public void thatDeleteWorks() {
 
         // given
-        User user = new User();
+        UserQ user = new UserQ();
         model.setSelectedUser(user);
 
         // when
@@ -64,7 +64,7 @@ public class UiUsersViewModelTest {
     public void thatCancelWorks() {
 
         // given
-        User user = new User();
+        UserQ user = new UserQ();
         model.setSelectedUser(user);
 
         // when

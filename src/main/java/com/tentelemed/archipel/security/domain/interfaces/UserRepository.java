@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.domain.interfaces;
 
-import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 
 import java.util.List;
 
@@ -13,13 +13,13 @@ import java.util.List;
  */
 public interface UserRepository {
 
-    User save(User user);
+    UserQ save(UserQ user);
 
-    List<User> getAllUsers();
+    List<UserQ> getAllUsers();
 
-    User findByLogin(String login);
+    UserQ findByLogin(String login);
 
-    User load(UserId id);
+    UserQ load(UserId id);
 
     void deleteUser(UserId id);
 }

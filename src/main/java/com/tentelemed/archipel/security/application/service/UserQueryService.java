@@ -2,10 +2,9 @@ package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.core.application.event.LoginEvent;
 import com.tentelemed.archipel.core.application.service.BaseQueryService;
-import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
-import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,13 +40,8 @@ public class UserQueryService extends BaseQueryService {
     @Autowired
     UserRepository userRepository;
 
-    public List<User> getAllUsers() {
+    public List<UserQ> getAllUsers() {
         return userRepository.getAllUsers();
-//        List<UserDTO> users = new ArrayList<>();
-//        for (User user : userRepository.getAllUsers()) {
-//            users.add(User.toDTO(user));
-//        }
-//        return users;
     }
 
     public void doLogin(String login, String password) throws AuthenticationException {
@@ -64,8 +57,11 @@ public class UserQueryService extends BaseQueryService {
         currentUser.logout();
     }
 
-    public User getUser(UserId id) {
-        //return User.toDTO(userRepository.load(id));
+    public UserQ getUser(UserId id) {
         return userRepository.load(id);
+    }
+
+    public UserQ findByLogin(String login) {
+        return userRepository.findByLogin(login);
     }
 }

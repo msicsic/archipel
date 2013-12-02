@@ -16,35 +16,33 @@
 
 package com.tentelemed.archipel.core.infrastructure.web;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import com.vaadin.data.Validator;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator.Context;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import javax.validation.metadata.ConstraintDescriptor;
-
-import com.vaadin.data.Validator;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * Vaadin {@link Validator} using the JSR-303 (javax.validation)
  * annotation-based bean validation.
- *
+ * <p/>
  * The annotations of the fields of the beans are used to determine the
  * validation to perform.
- *
+ * <p/>
  * Note that a JSR-303 implementation (e.g. Hibernate Validator or Apache Bean
  * Validation - formerly agimatec validation) must be present on the project
  * classpath when using bean validation.
  *
- * @since 7.0
- *
  * @author Petri Hakala
  * @author Henri Sara
+ * @since 7.0
  */
 public class BeanValidator implements Validator {
 
@@ -68,11 +66,9 @@ public class BeanValidator implements Validator {
         /**
          * Create a simple immutable message interpolator context.
          *
-         * @param value
-         *            value being validated
-         * @param descriptor
-         *            ConstraintDescriptor corresponding to the constraint being
-         *            validated
+         * @param value      value being validated
+         * @param descriptor ConstraintDescriptor corresponding to the constraint being
+         *                   validated
          */
         public SimpleContext(Object value, ConstraintDescriptor<?> descriptor) {
             this.value = value;
@@ -98,10 +94,8 @@ public class BeanValidator implements Validator {
     /**
      * Creates a Vaadin {@link Validator} utilizing JSR-303 bean validation.
      *
-     * @param beanClass
-     *            bean class based on which the validation should be performed
-     * @param propertyName
-     *            property to validate
+     * @param beanClass    bean class based on which the validation should be performed
+     * @param propertyName property to validate
      */
     public BeanValidator(Class<?> beanClass, String propertyName) {
         this.beanClass = beanClass;
@@ -142,7 +136,7 @@ public class BeanValidator implements Validator {
 
     /**
      * Sets the locale used for validation error messages.
-     *
+     * <p/>
      * Revalidation is not automatically triggered by setting the locale.
      *
      * @param locale

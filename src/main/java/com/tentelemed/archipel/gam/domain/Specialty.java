@@ -4,9 +4,6 @@ import com.tentelemed.archipel.core.domain.model.BaseVO;
 
 import javax.validation.constraints.NotNull;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Mael

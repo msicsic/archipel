@@ -4,8 +4,8 @@ import com.tentelemed.archipel.core.application.ApplicationEvent;
 
 /**
  * Demande de deco de la part de l'application
- * Cet evt doit etre traité par le module security
- *
+ * Cet evt doit etre traitï¿½ par le module security
+ * <p/>
  * Created with IntelliJ IDEA.
  * User: Mael
  * Date: 04/11/13

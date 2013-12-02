@@ -3,7 +3,7 @@ package com.tentelemed.archipel.core.domain.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
+import javax.persistence.Id;
 import javax.validation.Validation;
 import javax.validation.Validator;
 

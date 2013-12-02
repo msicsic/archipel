@@ -1,8 +1,6 @@
 package com.tentelemed.archipel.gam.application.event;
 
 import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
-import com.tentelemed.archipel.gam.domain.Address;
-import com.tentelemed.archipel.gam.domain.PhoneNumber;
 import com.tentelemed.archipel.gam.domain.PhysicianId;
 import com.tentelemed.archipel.gam.domain.Specialty;
 
@@ -15,26 +13,14 @@ import com.tentelemed.archipel.gam.domain.Specialty;
 
 public class PhysicianRegistered extends AbstractDomainEvent<PhysicianId> {
 
-    private final String firstName;
-    private final String lastName;
-    private final Specialty specialty;
+    public final String firstName;
+    public final String lastName;
+    public final Specialty specialty;
 
-    public PhysicianRegistered(String firstName, String lastName, Specialty specialty) {
-
+    public PhysicianRegistered(PhysicianId id, String firstName, String lastName, Specialty specialty) {
+        super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.specialty = specialty;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public Specialty getSpecialty() {
-        return specialty;
     }
 }

@@ -12,9 +12,14 @@ public interface DomainEvent<M extends EntityId> {
     enum Type {
         CREATE, UPDATE, DELETE
     }
+
     Type getType();
+
     M getAggregateId();
+
     boolean isUpdate();
+
     boolean isDelete();
+
     boolean isCreate();
 }

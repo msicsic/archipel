@@ -13,31 +13,32 @@ import java.util.Collection;
  * Time: 12:12
  */
 public class QueryUpdateEvent {
-    EntityId id;
-    BaseAggregateRoot aggregate;
-    Collection<? extends DomainEvent> events;
-    Class<? extends BaseAggregateRoot> clazz;
 
-    public QueryUpdateEvent(Class<? extends BaseAggregateRoot> clazz, EntityId id, BaseAggregateRoot aggregate, Collection<? extends DomainEvent> events) {
-        this.clazz = clazz;
+    /**
+     * id de l'agregat modifié
+     */
+    public final EntityId id;
+
+    /**
+     * agregat dans sa version deja modifiée
+     */
+    public final BaseAggregateRoot aggregate;
+
+    /**
+     * liste des evts de modification sur l'agregat
+     */
+    public final Collection<? extends DomainEvent> events;
+
+    /**
+     * type de l'agregat (utile dans le cas ou l'agregat est null, comme dans le cas d'une suppression
+     */
+    //public final Class<? extends BaseAggregateRoot> clazz;
+
+    // Class<? extends BaseAggregateRoot> clazz
+    public QueryUpdateEvent(EntityId id, BaseAggregateRoot aggregate, Collection<? extends DomainEvent> events) {
+        //this.clazz = clazz;
         this.id = id;
         this.aggregate = aggregate;
         this.events = events;
-    }
-
-    public Class<? extends BaseAggregateRoot> getClazz() {
-        return clazz;
-    }
-
-    public BaseAggregateRoot getAggregate() {
-        return aggregate;
-    }
-
-    public Collection<? extends DomainEvent> getEvents() {
-        return events;
-    }
-
-    public EntityId getId() {
-        return id;
     }
 }

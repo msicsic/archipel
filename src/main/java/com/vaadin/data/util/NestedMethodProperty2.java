@@ -15,6 +15,9 @@
  */
 package com.vaadin.data.util;
 
+import com.vaadin.data.Property;
+import com.vaadin.data.util.MethodProperty.MethodException;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,22 +25,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.util.AbstractProperty;
-import com.vaadin.data.util.MethodProperty;
-import com.vaadin.data.util.MethodProperty.MethodException;
-
 /**
  * Nested accessor based property for a bean.
- *
+ * <p/>
  * The property is specified in the dotted notation, e.g. "address.street", and
  * can contain multiple levels of nesting.
- *
+ * <p/>
  * When accessing the property value, all intermediate getters must return
  * non-null values.
  *
  * @see MethodProperty
- *
  * @since 6.6
  */
 public class NestedMethodProperty2<T> extends AbstractProperty<T> {
@@ -79,12 +76,9 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
      * property name is a dot separated string pointing to a nested property,
      * e.g. "manager.address.street".
      *
-     * @param instance
-     *            top-level bean to which the property applies
-     * @param propertyName
-     *            dot separated nested property name
-     * @throws IllegalArgumentException
-     *             if the property name is invalid
+     * @param instance     top-level bean to which the property applies
+     * @param propertyName dot separated nested property name
+     * @throws IllegalArgumentException if the property name is invalid
      */
     public NestedMethodProperty2(Object instance, String propertyName) {
         this.instance = instance;
@@ -96,8 +90,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
      * Calling {@link #setValue(Object)} or {@link #getValue()} on properties
      * constructed this way is not supported.
      *
-     * @param instanceClass
-     *            class of the top-level bean
+     * @param instanceClass class of the top-level bean
      * @param propertyName
      */
     NestedMethodProperty2(Class<?> instanceClass, String propertyName) {
@@ -109,12 +102,9 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
      * Initializes most of the internal fields based on the top-level bean
      * instance and property name (dot-separated string).
      *
-     * @param beanClass
-     *            class of the top-level bean to which the property applies
-     * @param propertyName
-     *            dot separated nested property name
-     * @throws IllegalArgumentException
-     *             if the property name is invalid
+     * @param beanClass    class of the top-level bean to which the property applies
+     * @param propertyName dot separated nested property name
+     * @throws IllegalArgumentException if the property name is invalid
      */
     private void initialize(Class<?> beanClass, String propertyName)
             throws IllegalArgumentException {
@@ -168,7 +158,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
             }
 
             setMethod = lastClass.getMethod("set" + lastSimplePropertyName,
-                    new Class[] { type });
+                    new Class[]{type});
         } catch (final NoSuchMethodException skipped) {
         }
 
@@ -214,10 +204,10 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
      * Sets the value of the property. The new value must be assignable to the
      * type of this property.
      *
-     * @param newValue
-     *            the New value of the property.
-     * @throws <code>Property.ReadOnlyException</code> if the object is in
-     *         read-only mode.
+     * @param newValue the New value of the property.
+     * @throws <code>Property.ReadOnlyException</code>
+     *          if the object is in
+     *          read-only mode.
      * @see #invokeSetMethod(Object)
      */
     @Override
@@ -243,7 +233,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
             for (int i = 0; i < getMethods.size() - 1; i++) {
                 object = getMethods.get(i).invoke(object);
             }
-            setMethod.invoke(object, new Object[] { value });
+            setMethod.invoke(object, new Object[]{value});
         } catch (final InvocationTargetException e) {
             throw new MethodException(this, e.getTargetException());
         } catch (final Exception e) {
@@ -254,7 +244,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
     /**
      * Returns an unmodifiable list of getter methods to call in sequence to get
      * the property value.
-     *
+     * <p/>
      * This API may change in future versions.
      *
      * @return unmodifiable list of getter methods corresponding to each segment

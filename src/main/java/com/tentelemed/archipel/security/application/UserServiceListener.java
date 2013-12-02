@@ -2,7 +2,7 @@ package com.tentelemed.archipel.security.application;
 
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.LogoutRequestEvent;
-import com.tentelemed.archipel.core.application.service.EventListener;
+import com.tentelemed.archipel.core.application.service.EventHandler;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * Time: 18:14
  */
 @Component
-@EventListener
+@EventHandler
 public class UserServiceListener {
 
     @Autowired

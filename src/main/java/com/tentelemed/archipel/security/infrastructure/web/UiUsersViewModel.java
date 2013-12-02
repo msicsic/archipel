@@ -1,14 +1,14 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
 import com.google.common.eventbus.Subscribe;
-import com.tentelemed.archipel.core.application.service.EventListener;
+import com.tentelemed.archipel.core.application.service.EventHandler;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
-import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import java.util.Objects;
  */
 @Component
 @Scope("prototype")
-@EventListener
+@EventHandler
 public class UiUsersViewModel extends BaseViewModel {
 
     @Autowired
@@ -35,29 +35,29 @@ public class UiUsersViewModel extends BaseViewModel {
     UserQueryService userQuery;
 
     @Valid
-    User selectedUser;
+    UserQ selectedUser;
     private String nameFilter = "";
 
-    public User getSelectedUser() {
+    public UserQ getSelectedUser() {
         return selectedUser;
     }
 
-    public void setSelectedUser(User selectedUser) {
+    public void setSelectedUser(UserQ selectedUser) {
         this.selectedUser = selectedUser;
     }
 
-    public List<User> getUsers() {
+    public List<UserQ> getUsers() {
         return userQuery.getAllUsers();
     }
 
     public void action_commit() {
         try {
             commit();
-            if (getSelectedUser().getEntityId() == null) {
-                User u = getSelectedUser();
+            if (getSelectedUser().getId() == null) {
+                UserQ u = getSelectedUser();
                 userCommand.registerUser(u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail(), u.getLogin());
             } else {
-                User u = getSelectedUser();
+                UserQ u = getSelectedUser();
                 userCommand.updateUserInfo(u.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail());
             }
             show("User committed");
@@ -84,16 +84,16 @@ public class UiUsersViewModel extends BaseViewModel {
     }
 
     public void action_add() {
-        setSelectedUser(new User());
+        setSelectedUser(new UserQ());
     }
 
     @Subscribe
     public void handleEvent(UserDomainEvent event) {
         if (event.isDelete()) {
-            if (getSelectedUser() != null && Objects.equals(getSelectedUser().getEntityId(), event.getAggregateId())) {
+            if (getSelectedUser() != null && Objects.equals(getSelectedUser().getId(), event.getAggregateId().getId())) {
                 setSelectedUser(null);
             }
-        } else if (event.isCreate() && getSelectedUser().getEntityId() == null) {
+        } else if (event.isCreate() && getSelectedUser().getId() == null) {
             setSelectedUser(userQuery.getUser(event.getAggregateId()));
         }
     }

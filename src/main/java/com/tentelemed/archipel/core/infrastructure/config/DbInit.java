@@ -1,6 +1,5 @@
 package com.tentelemed.archipel.core.infrastructure.config;
 
-import com.tentelemed.archipel.security.application.model.UserDTO;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,8 +19,8 @@ public class DbInit {
     UserCommandService service;
 
     public void initDb() {
-        for (int i=0; i<100; i++) {
-            service.registerUser("Paul"+i, "Durand"+i, new Date(), "mail"+i+"@mail.com", "login"+i);
+        for (int i = 0; i < 100; i++) {
+            service.registerUser("Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i);
         }
     }
 

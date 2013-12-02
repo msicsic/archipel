@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Repost events send on the application bus on the session bus
- *
+ * <p/>
  * Created with IntelliJ IDEA.
  * User: Mael
  * Date: 21/11/13

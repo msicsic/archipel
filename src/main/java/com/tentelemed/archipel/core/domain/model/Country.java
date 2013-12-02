@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public class Country {
 
     @NotNull
-    @Size(min=3, max=3)
+    @Size(min = 3, max = 3)
     String isoCode;
 
     public String getIsoCode() {

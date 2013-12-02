@@ -2,8 +2,8 @@ package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.BaseCommandService;
-import com.tentelemed.archipel.security.domain.model.UserId;
 import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.domain.model.UserId;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

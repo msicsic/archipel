@@ -1,7 +1,8 @@
 package com.tentelemed.archipel.security.infrastructure.shiro;
 
-import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
+import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -30,15 +31,15 @@ public class MyRealm extends AuthorizingRealm {
     ApplicationContext context;
 
     // Rq : '@Autowired' pas possible ici car composant instancié avant la dépendance...
-    private UserRepository getRepository() {
-        return (UserRepository) context.getBean("userRepository");
+    private UserQueryService getRepository() {
+        return (UserQueryService) context.getBean("userQueryService");
     }
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
 
-        User user = getRepository().findByLogin(upToken.getUsername());
+        UserQ user = getRepository().findByLogin(upToken.getUsername());
         if (user == null) {
             throw new AuthenticationException("Login name [" + upToken.getUsername() + "] not found!");
         }
@@ -47,9 +48,9 @@ public class MyRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Set<String>			roles			= new HashSet<>();
-        Set<Permission>		permissions		= new HashSet<>();
-        Collection<User> principalsList	= principals.byType(User.class);
+        Set<String> roles = new HashSet<>();
+        Set<Permission> permissions = new HashSet<>();
+        Collection<User> principalsList = principals.byType(User.class);
 
         if (principalsList.isEmpty()) {
             throw new AuthorizationException("Empty principals list!");

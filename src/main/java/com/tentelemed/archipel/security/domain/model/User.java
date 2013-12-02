@@ -66,7 +66,7 @@ public class User extends BaseAggregateRoot<UserId> {
         if (!Objects.equal(old, getPassword()) || !Objects.equal(new1, new2)) {
             throw new ChangePasswordException();
         }
-        return list(new UserPasswordUpdated(new1));
+        return list(new UserPasswordUpdated(getEntityId(), new1));
     }
 
 
@@ -78,29 +78,29 @@ public class User extends BaseAggregateRoot<UserId> {
 
     public void handle(UserRegistered event) {
         this.id = event.getAggregateId().getId();
-        this.firstName = event.getFirstName();
-        this.lastName = event.getLastName();
-        this.dob = event.getDob();
-        this.email = event.getEmail();
-        this.credentials = event.getCredentials();
+        this.firstName = event.firstName;
+        this.lastName = event.lastName;
+        this.dob = event.dob;
+        this.email = event.email;
+        this.credentials = event.credentials;
     }
 
     public void handle(UserInfoUpdated event) {
-        this.firstName = event.getFirstName();
-        this.lastName = event.getLastName();
-        this.dob = event.getDob();
-        this.email = event.getEmail();
+        this.firstName = event.firstName;
+        this.lastName = event.lastName;
+        this.dob = event.dob;
+        this.email = event.email;
     }
 
     public void handle(UserPasswordUpdated event) {
-        credentials = new Credentials(credentials.getLogin(), event.getPassword());
+        credentials = new Credentials(credentials.getLogin(), event.password);
     }
 
     // ********************* ACCESSORS ***************************
     // ***********************************************************
 
     public String getFullName() {
-        return getFirstName()+" "+getLastName();
+        return getFirstName() + " " + getLastName();
     }
 
     @Override

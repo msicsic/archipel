@@ -30,7 +30,7 @@ public class BaseCommandService {
 
     protected <M extends EntityId> void post(BaseAggregateRoot target, Collection<? extends DomainEvent> events) {
         // application des evts sur l'agregat
-        eventStore.addAndApplyEvents(target, events);
+        eventStore.handleEvents(target, events);
     }
 
     protected <I extends EntityId, M extends DomainEvent<I>> void post(BaseAggregateRoot<I> target, M... events) {

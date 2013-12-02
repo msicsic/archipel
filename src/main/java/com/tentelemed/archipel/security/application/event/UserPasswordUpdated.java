@@ -1,5 +1,7 @@
 package com.tentelemed.archipel.security.application.event;
 
+import com.tentelemed.archipel.security.domain.model.UserId;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
@@ -7,13 +9,10 @@ package com.tentelemed.archipel.security.application.event;
  * Time: 16:10
  */
 public class UserPasswordUpdated extends UserDomainEvent {
-    String password;
+    public final String password;
 
-    public UserPasswordUpdated(String newPassword) {
+    public UserPasswordUpdated(UserId id, String newPassword) {
+        super(id);
         this.password = newPassword;
-    }
-
-    public String getPassword() {
-        return password;
     }
 }

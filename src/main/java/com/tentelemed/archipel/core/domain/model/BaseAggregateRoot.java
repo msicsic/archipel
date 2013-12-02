@@ -14,6 +14,13 @@ import java.util.List;
  */
 public abstract class BaseAggregateRoot<M extends EntityId> extends BaseEntity<M> {
 
+    /**
+     * Applique les evts passés en parametre dans une liste en retour, en
+     * appliquant prealablement les evts sur l'agregat
+     *
+     * @param events evts de modification d'etat
+     * @return liste des evts passés en param
+     */
     protected List<DomainEvent> list(DomainEvent... events) {
         for (DomainEvent event : events) {
             handle(event);
@@ -29,6 +36,8 @@ public abstract class BaseAggregateRoot<M extends EntityId> extends BaseEntity<M
         try {
             Method method = getClass().getMethod("handle", event.getClass());
             method.invoke(this, event);
+            // TODO : ajouter un memento de l'objet avant et apres application de l'evt
+            // ceci afin de faciliter les operations de persistence et de suivi des modifs
             return event;
         } catch (Exception e) {
             log.error(null, e);

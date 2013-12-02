@@ -5,7 +5,7 @@ import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
-import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.filter.Or;
@@ -39,7 +39,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
     private TextField login = new TextField("Login :");
     private TextField email = new TextField("Email :");
     private SimpleStringFilter filter;
-    private BeanItemContainer<User> container;
+    private BeanItemContainer<UserQ> container;
 
     @Override
     public UiUsersViewModel getModel() {
@@ -116,7 +116,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
         /* Create the table with a caption. */
         table = new Table("This is my Table");
 
-        container = new BeanItemContainer<>(User.class);
+        container = new BeanItemContainer<>(UserQ.class);
         table.setContainerDataSource(container);
 
         /* Define the names and data types of columns.
@@ -144,7 +144,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
         // Handle selection change.
         table.addValueChangeListener(new Property.ValueChangeListener() {
             public void valueChange(Property.ValueChangeEvent event) {
-                User user = (User) table.getValue();
+                UserQ user = (UserQ) table.getValue();
                 model.setSelectedUser(user);
                 refreshUI();
             }
@@ -157,17 +157,17 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
     protected void onRefresh() {
         // gestion des filtres
         container.removeAllContainerFilters();
-        if (! Strings.isNullOrEmpty(getModel().getNameFilter())) {
+        if (!Strings.isNullOrEmpty(getModel().getNameFilter())) {
             container.addContainerFilter(
                     new Or(
                             new SimpleStringFilter("firstName", getModel().getNameFilter(), true, false)
-                            ,new SimpleStringFilter("lastName", getModel().getNameFilter(), true, false)
+                            , new SimpleStringFilter("lastName", getModel().getNameFilter(), true, false)
                     ));
         }
 
         // gestion de la selection dans la table
         Object selected = table.getValue();
-        if (! Objects.equals(selected, model.getSelectedUser())) {
+        if (!Objects.equals(selected, model.getSelectedUser())) {
             table.setValue(model.getSelectedUser());
             table.setCurrentPageFirstItemId(model.getSelectedUser());
         }
@@ -181,7 +181,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
                 table.refreshRowCache();
             } else {
                 // reconstruit le modele du tableau
-                BeanItemContainer<User> container = (BeanItemContainer<User>) table.getContainerDataSource();
+                BeanItemContainer<UserQ> container = (BeanItemContainer<UserQ>) table.getContainerDataSource();
                 container.removeAllItems();
                 container.addAll(getModel().getUsers());
             }

@@ -6,7 +6,7 @@ import javax.servlet.annotation.WebListener;
 
 /**
  * Pour init de Spring
- *
+ * <p/>
  * Created with IntelliJ IDEA.
  * User: Mael
  * Date: 28/10/13

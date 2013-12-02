@@ -16,24 +16,28 @@ import java.lang.annotation.Target;
 public @interface ModuleRoot {
     /**
      * Identifiant du module
+     *
      * @return
      */
     String value();
 
     /**
      * Indique s'il est visible dans le menu
+     *
      * @return
      */
     boolean visible() default true;
 
     /**
      * Module principal qui héberge les autres (ecran principal)
+     *
      * @return
      */
     boolean root() default false;
 
     /**
      * Module permettant l'authentification
+     *
      * @return
      */
     boolean login() default false;

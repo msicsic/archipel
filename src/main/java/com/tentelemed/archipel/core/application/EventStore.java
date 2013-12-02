@@ -1,7 +1,10 @@
 package com.tentelemed.archipel.core.application;
 
+import com.google.common.eventbus.DeadEvent;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.service.EventHandler;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
@@ -9,6 +12,7 @@ import com.tentelemed.archipel.security.domain.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,12 +25,16 @@ import java.util.*;
  * Date: 15/11/13
  * Time: 16:55
  */
+@EventHandler("storeEventBus")
 @Component
 public class EventStore {
     private static final Logger log = LoggerFactory.getLogger(EventStore.class);
 
     @Autowired
     EventBus eventBus;
+
+    @Autowired @Qualifier("storeEventBus")
+    EventBus storeEventBus;
 
     Map<EntityId, List<DomainEvent>> mapEvents = new HashMap<>();
 
@@ -55,7 +63,7 @@ public class EventStore {
      * Trouver un moyen de faciliter la tache : comment instancier facilement
      * un agregat à partir d'un id ?
      *
-     * @param id
+     * @param event
      * @return
      */
     private BaseAggregateRoot newAgregateRoot(DomainEvent event) {
@@ -83,23 +91,47 @@ public class EventStore {
         return aggregate;
     }
 
-    public void addAndApplyEvents(BaseAggregateRoot target, Collection<? extends DomainEvent> events) {
+    /**
+     * - Persiste les evts dans le Store
+     * - Propage sur le bus du store (pour la partie Query)
+     * - Propage sur le bus principal (pour les sous systemes)
+     *
+     * @param target agregat deja modifié
+     * @param events les evts qui ont modifiés l'agregat
+     */
+    public void handleEvents(BaseAggregateRoot target, Collection<? extends DomainEvent> events) {
         // maj de l'agregat
-        Class<? extends BaseAggregateRoot> clazz = target.getClass();
-        EntityId id = target.getEntityId();
-        target = applyEvents(target, events);
+        //Class<? extends BaseAggregateRoot> clazz = target.getClass();
+        //EntityId id = target.getEntityId();
+        // target = applyEvents(target, events);
 
         // ajout des evts dans le store
         for (DomainEvent event : events) {
             addEvent(event);
+            // TODO : persister le store
         }
 
         // propagation aux QueryManagers (pour maj des bdd de consultation)
-        eventBus.post(new QueryUpdateEvent(clazz, id, target, events));
+        for (DomainEvent event : events) {
+            failed.set(Boolean.FALSE);
+            storeEventBus.post(event);
+            if (failed.get()) {
+                throw new RuntimeException("Event without persistence handler : " + event.getClass().getSimpleName());
+            }
+        }
+        //storeEventBus.post(new QueryUpdateEvent(clazz, id, target, events));
 
         // propagation aux listeners d'evts (les autres modules principalement)
         for (DomainEvent event : events) {
             eventBus.post(event);
         }
+
+    }
+
+    ThreadLocal<Boolean> failed = new ThreadLocal<>();
+
+    @Subscribe
+    public void handle(DeadEvent event) {
+        failed.set(Boolean.TRUE);
     }
 }

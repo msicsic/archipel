@@ -1,11 +1,12 @@
 package com.tentelemed.archipel.security.infrastructure.persistence.domain;
 
-import com.tentelemed.archipel.core.infrastructure.domain.BaseEntityHb;
-import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.core.infrastructure.domain.BaseEntityQ;
 import com.tentelemed.archipel.security.domain.model.UserId;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -17,15 +18,20 @@ import java.util.Date;
  * Time: 01:13
  */
 @Entity
-public class UserHb extends BaseEntityHb {
+public class UserQ extends BaseEntityQ<UserId> {
     @NotNull @Size(min = 2, max = 50) String firstName;
     @NotNull @Size(min = 2, max = 50) String lastName;
-    Date dob;
+    @Temporal(TemporalType.TIME) Date dob;
     @Email String email = "default@mail.com";
     @NotNull String login;
     String password;
 
-    public UserHb() {
+    public UserQ() {
+    }
+
+    @Override
+    protected Class<UserId> getIdClass() {
+        return UserId.class;
     }
 
     public void setLogin(String login) {
@@ -76,22 +82,7 @@ public class UserHb extends BaseEntityHb {
         this.email = email;
     }
 
-    public static UserHb fromUser(User user) {
-        UserHb res = new UserHb();
-        res.setId(user.getEntityId().getId());
-        res.setDob(user.getDob());
-        res.setEmail(user.getEmail());
-        res.setFirstName(user.getFirstName());
-        res.setLastName(user.getLastName());
-        res.setLogin(user.getLogin());
-        res.setPassword(user.getPassword());
-        return res;
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
     }
-
-    public static User toUser(UserHb user) {
-        User res = new User();
-        res.register(new UserId(user.getId()), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail(), user.getLogin());
-        return res;
-    }
-
 }

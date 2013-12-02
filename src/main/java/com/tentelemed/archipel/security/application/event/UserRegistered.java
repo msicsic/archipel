@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.application.event;
 
-import com.tentelemed.archipel.security.domain.model.UserId;
 import com.tentelemed.archipel.security.domain.model.Credentials;
+import com.tentelemed.archipel.security.domain.model.UserId;
 
 import java.util.Date;
 
@@ -13,43 +13,23 @@ import java.util.Date;
  */
 public class UserRegistered extends UserDomainEvent {
 
-    private final String firstName;
-    private final String lastName;
-    private final Date dob;
-    private final String email;
-    private final Credentials credentials;
+    @Override
+    public Type getType() {
+        return Type.CREATE;
+    }
+
+    public final String firstName;
+    public final String lastName;
+    public final Date dob;
+    public final String email;
+    public final Credentials credentials;
 
     public UserRegistered(UserId id, String firstName, String lastName, Date dob, String email, Credentials credentials) {
-        this.id = id;
+        super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
         this.email = email;
         this.credentials = credentials;
     }
-
-    public UserId getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public Date getDob() {
-        return dob;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Credentials getCredentials() {
-        return credentials;
-    }
-
 }

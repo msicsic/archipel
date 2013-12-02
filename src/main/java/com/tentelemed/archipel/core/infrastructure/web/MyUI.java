@@ -3,8 +3,8 @@ package com.tentelemed.archipel.core.infrastructure.web;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.LoginEvent;
-import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.application.service.CoreService;
+import com.tentelemed.archipel.core.domain.model.Module;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;
@@ -90,7 +90,7 @@ public class MyUI extends UI {
             showView(mainView);
         } else {
             AbstractComponent view = appContext.getBean(module.getViewClass());
-            ((RootView)mainView).showView(view);
+            ((RootView) mainView).showView(view);
         }
     }
 

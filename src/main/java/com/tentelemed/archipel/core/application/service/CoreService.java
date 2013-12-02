@@ -2,13 +2,14 @@ package com.tentelemed.archipel.core.application.service;
 
 import com.google.common.base.Strings;
 import com.google.common.eventbus.EventBus;
-import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.application.event.LogoutRequestEvent;
+import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.core.infrastructure.web.RootView;
 import com.vaadin.ui.AbstractComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -18,9 +19,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,7 +36,6 @@ public class CoreService extends BaseService {
     @Autowired ApplicationContext applicationContext;
 
     List<Module> allModules;
-    List<Class> allListeners;
 
     public List<Module> findNonRootModules() {
         List<Module> views = _findModules();
@@ -96,44 +94,56 @@ public class CoreService extends BaseService {
         return allModules;
     }
 
-    private List<Class> _findListeners() {
-        if (allListeners == null) {
-            allListeners = new ArrayList<>();
-            ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
-            scanner.addIncludeFilter(new AnnotationTypeFilter(EventListener.class));
-            Set<BeanDefinition> list = scanner.findCandidateComponents("com.tentelemed.archipel");
-            for (BeanDefinition def : list) {
-                try {
-                    // il ne faut pas enregistrer les Scope autre que singleton
-                    Class c = Class.forName(def.getBeanClassName());
-                    Scope scope = (Scope) c.getAnnotation(Scope.class);
-                    boolean dontAdd = false;
-                    if (scope != null) {
-                        if (Strings.isNullOrEmpty(scope.value()) || scope.value().equals(ConfigurableBeanFactory.SCOPE_SINGLETON)) {
-                        } else {
-                            dontAdd = true;
-                        }
-                    }
-                    if (! dontAdd) {
-                        allListeners.add(c);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+    private Map<String, List<Class>> _findListeners() {
+        Map<String, List<Class>> result = new HashMap<>();
+        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+        scanner.addIncludeFilter(new AnnotationTypeFilter(EventHandler.class));
+        Set<BeanDefinition> list = scanner.findCandidateComponents("com.tentelemed.archipel");
+        for (BeanDefinition def : list) {
+            try {
+                // il ne faut pas enregistrer les Scope autre que singleton
+                Class c = Class.forName(def.getBeanClassName());
+                EventHandler listener = (EventHandler) c.getAnnotation(EventHandler.class);
+                String busName = listener.value();
+                List<Class> listeners = result.get(busName);
+                if (listeners == null) {
+                    listeners = new ArrayList<>();
+                    result.put(busName, listeners);
                 }
+                Scope scope = (Scope) c.getAnnotation(Scope.class);
+                boolean dontAdd = false;
+                if (scope != null) {
+                    if (Strings.isNullOrEmpty(scope.value()) || scope.value().equals(ConfigurableBeanFactory.SCOPE_SINGLETON)) {
+                    } else {
+                        dontAdd = true;
+                    }
+                }
+                if (!dontAdd) {
+                    listeners.add(c);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        return allListeners;
+        return result;
     }
 
 
     public void initApplication() {
         _findModules();
-        for (Class listenerClass :_findListeners()) {
-            try {
-                Object listener = applicationContext.getBean(listenerClass);
-                eventBus.register(listener);
-            } catch (Exception e) {
-                log.error(null, e);
+        for (Map.Entry<String, List<Class>> entry : _findListeners().entrySet()) {
+            String busName = entry.getKey();
+            EventBus bus = (EventBus) applicationContext.getBean("eventBus");
+            if (!busName.equals(EventHandler.DEFAULT_BUS)) {
+                bus = (EventBus) applicationContext.getBean(busName);
+            }
+            for (Class c : entry.getValue()) {
+                try {
+                    Object listener = applicationContext.getBean(c);
+                    bus.register(listener);
+                } catch (BeansException e) {
+                    log.error(null, e);
+                }
             }
         }
     }

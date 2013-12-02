@@ -25,10 +25,10 @@ public class UiLoginViewModel extends BaseViewModel {
     @Autowired
     UserQueryService userQuery;
 
-    @NotNull @Size(min=3)
+    @NotNull @Size(min = 3)
     String userName = "login1";
 
-    @NotNull @Size(min=3)
+    @NotNull @Size(min = 3)
     String password = "123456789";
 
     String error = "";
@@ -39,9 +39,9 @@ public class UiLoginViewModel extends BaseViewModel {
             userQuery.doLogin(userName, password);
             showError("ok");
         } catch (UnknownAccountException e) {
-            showError(gt("unknownAccount")+" "+userName);
+            showError(gt("unknownAccount") + " " + userName);
         } catch (AuthenticationException e) {
-            showError(gt("badCredentials")+" "+userName);
+            showError(gt("badCredentials") + " " + userName);
         } catch (FieldGroup.CommitException e) {
             showError("Validation Exception");
         }

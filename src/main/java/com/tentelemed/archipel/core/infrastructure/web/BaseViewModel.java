@@ -55,7 +55,7 @@ public abstract class BaseViewModel {
         eventBus.unregister(this);
     }
 
-    protected void show(Throwable t) {
+    public void show(Throwable t) {
         if (Page.getCurrent() != null) {
             String s = Throwables.getStackTraceAsString(t);
             Notification.show(s, Notification.Type.ERROR_MESSAGE);
@@ -106,7 +106,7 @@ public abstract class BaseViewModel {
     }
 
     protected String getText(String key) {
-        return msg.getMessage(getClass().getSimpleName()+"."+key);
+        return msg.getMessage(getClass().getSimpleName() + "." + key);
     }
 
     protected String gt(String key) {
@@ -147,7 +147,7 @@ public abstract class BaseViewModel {
     }
 
     protected void confirm(String title, String message, Runnable r) {
-        UI.getCurrent().addWindow(new ConfirmDialog(title, message, r));
+        UI.getCurrent().addWindow(new ConfirmDialog(this, title, message, r));
     }
 
 

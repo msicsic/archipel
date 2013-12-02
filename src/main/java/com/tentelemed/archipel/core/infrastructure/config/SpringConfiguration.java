@@ -78,12 +78,17 @@ public class SpringConfiguration {
         return new MyRealm();
     }
 
-    @Bean(name="eventBus")
+    @Bean(name = "eventBus")
     public EventBus eventBus() {
         return new EventBus();
     }
 
-    @Bean(name="localBus")
+    @Bean(name = "storeEventBus")
+    public EventBus storeEventBus() {
+        return new EventBus();
+    }
+
+    @Bean(name = "localBus")
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public EventBus sessionEventBus() {
         return new EventBus();
@@ -124,7 +129,7 @@ public class SpringConfiguration {
         lef.setDataSource(dataSource);
         lef.setJpaVendorAdapter(jpaVendorAdapter);
         lef.setPackagesToScan(
-                  "com.tentelemed.archipel.gam.infrastructure.persistence.domain"
+                "com.tentelemed.archipel.gam.infrastructure.persistence.domain"
                 , "com.tentelemed.archipel.invoicing.infrastructure.persistence.domain"
                 , "com.tentelemed.archipel.security.infrastructure.persistence.domain"
         );

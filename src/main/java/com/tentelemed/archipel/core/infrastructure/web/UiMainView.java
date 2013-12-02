@@ -77,7 +77,7 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
     }
 
     private String getName(String key) {
-        return msg.getMessage("RootMenu."+key);
+        return msg.getMessage("RootMenu." + key);
     }
 
     @Override

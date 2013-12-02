@@ -3,18 +3,61 @@ Regles à retenir :
 - Utilisation systématique de VO (Value Object) pour tous les attributs typés, afin de
   - valider les valeurs
   - typer plus fortement que "String"
+- Les VO sont toujours imutables
+- Attention : les BO étant mutables, les utiliser dans les evts n'est pas tres sur. Les evts peuvent
+  en effet etre envoyés sur un bus en asynchrone, et lorsqu'il sera pris en compte, le BO référencé
+  peut avoir changé. Les Evts ne doivent transporter que des données immutables : des champs simples,
+  un DTO, ou bien un memento
 - Validation "fail fast" des objets (lors de la construction ou affectation, et pas apres coup par une méthode validate)
-- Les objets ne doivent jamais etre dans un état invalide
+  - Les objets ne doivent donc jamais etre dans un état invalide
 - La plupart des setters ne sont pas necessaires, les modifs se faisant dans des cas d'utilisation
   précis (nom de méthode explicite), c'est dans ces méthodes la que les controles de validité doivent etre faits
+- dans un premier temps, les objets du domaine seront publics (exposés au reste de l'appli). A voir
+  si c'est viable.
+- afin de pouvoir persister les BO, il faut récupérer les états internes. Dans un premier
+  temps, le pattern "memento" ne sera pas utilisé, et des getters sevront donc etre présent
+  pour tous les attributs (meme internes) des BO. A voir si c'est viable.
+
+REMARQUES d'implementation :
+- les EVTs sont immutables et tres simples (collection de champs simples), il n'est donc pas
+  necessaire de coder les getter, des champs public final suffisente
+- Les DTOs sont un peu plus complexes (code de validation, et aussi code de conversion, ex :
+  getFullName()) Il contiennement donc des getters.
+- Les vues utilisent uniquement les version "Q" des objets metiers. Les BO de la partie Command
+  peuvent donc rester privés
+
+A EVALUER :
+- Les Bounded Context correspondent a des sous domaines de l'application
+  Chaque sous domaine peut potentiellement etre implémenté de facon différente
+  (par ex CRUD pour un, CQRS pour les autres...). Voir comment faire communiquer un sous
+  systeme CRUD avec le reste (quels evts generer)
 
 PROBLEMES :
+- La partie Command est clean, mais la partie Query partage ses modeles entre la couche
+  persistance et ihm. Cela simplifie grandement l'appli, il faudra voir a l'usage si
+  c'est viable. On a donc "seulement" 2 versions des modeles : 1 pour Command, et 1 pour Query
 - Actuellement la couche domaine utilise la couche app, c'est pas bon (ca devrait etre exclusivement
   dans l'autre sens)
 - Les evts utilisent des DTO, mais est ce vraiment utile ? Cela rend plus complexe l'application
   (conversion necessaire), alors que les objets du domaine ne sont pas techniques et peuvent donc
   etre transportés. A voir pour les entités... En tout cas les VO au moins doivent pouvoir etre
   partagés
+
+A FAIRE (URGENT) :
+ - persistence du EventStore
+ * implémenter qq filtres dans l'ecran users
+ - ? créer des classes commande. Les mettre en tant que classes statiques dans le service ? (pour les retrouver facilement)
+ - faut il ou non avoir des commandes asynchrones ?
+   - unification des command et queries ?
+   - conserver tout le contexte necessaire dans la commande (user, ...)
+   - pouvoir lier la commande avec la r�ponse ult�rieure (UUID...)
+   - pool de threads pour traiter les commandes et queries
+   - notifier ensuite l'emetteur pour indiquer resultat dispo
+ - controle des droits utilisateur pour l'execution de chaque commande ou query
+ - controle de validit� des parametres de la commande : utilisation de Shiro "service:method:instance"
+ - JMS + Camel ? (lier le EventBus avec JMS)
+
+
 
 
 - Mise en place MVVM (http://martinfowler.com/eaaDev/PresentationModel.html)
@@ -65,22 +108,6 @@ Generation des evts :
     - repo d�di�
     - manipule des pojos
     - ecoute l'eventStore pour se maintenir a jour
-
- __TODO__ :
-
-URGENT :
- * implémenter qq filtres dans l'ecran users
- - ? créer des classes commande. Les mettre en tant que classes statiques dans le service ? (pour les retrouver facilement)
- - faut il ou non avoir des commandes asynchrones ?
-   - unification des command et queries ?
-   - conserver tout le contexte necessaire dans la commande (user, ...)
-   - pouvoir lier la commande avec la r�ponse ult�rieure (UUID...)
-   - pool de threads pour traiter les commandes et queries
-   - notifier ensuite l'emetteur pour indiquer resultat dispo
- - persistence du EventStore
- - controle des droits utilisateur pour l'execution de chaque commande ou query
- - controle de validit� des parametres de la commande : utilisation de Shiro "service:method:instance"
- - JMS + Camel ? (lier le EventBus avec JMS)
 
 
  * A l'init de la session utilisateur, un bus d�di� � l'utilisateur est cr��

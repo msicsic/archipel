@@ -18,9 +18,13 @@ import java.util.Date;
 public class Patient extends BaseAggregateRoot<PatientId> {
 
     public static enum Sex {MALE, FEMALE}
+
     public static enum Status {ALIVE, DEAD}
+
     public static enum FamillyStatus {SINGLE, MARRIED, DIVORCED}
+
     public static enum IdentityStatus {VERIFIED, NOT_VERIFIED}
+
     public static enum DobType {NORMAL, APPROX, MOON}
 
     @NotNull @Size(min = 2, max = 50) String firstName;

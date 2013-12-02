@@ -4,9 +4,8 @@ package com.tentelemed.archipel.security.infrastructure.persistence.integration;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
-import com.tentelemed.archipel.security.domain.model.UserId;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
-import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -18,7 +17,8 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
@@ -54,13 +54,12 @@ public class UserRepositoryIntegrationTests {
      */
     @Test
     public void thatFindByLoginWorks() throws Exception {
-        for (int i=0; i<2; i++) {
-            User user = new User();
-            user.register(new UserId(i + ""), "Paul" + i, "Durand" + i, new Date(), "mail@mail.com", "login" + i);
+        for (int i = 0; i < 2; i++) {
+            UserQ user = createUser(i);
             repository.save(user);
         }
 
-        User user = repository.findByLogin("login1");
+        UserQ user = repository.findByLogin("login1");
         assertNotNull(user);
         assertEquals(user.getFirstName(), "Paul1");
 
@@ -70,37 +69,44 @@ public class UserRepositoryIntegrationTests {
 
     @Test
     public void thatGetAllUsersWorks() throws Exception {
-        for (int i=0; i<2; i++) {
-            User user = new User();
-            user.register(new UserId(i + ""), "Paul" + i, "Durand" + i, new Date(), "mail@mail.com", "login" + i);
+        for (int i = 0; i < 2; i++) {
+            UserQ user = createUser(i);
             repository.save(user);
         }
 
-        List<User> users = repository.getAllUsers();
+        List<UserQ> users = repository.getAllUsers();
         assertNotNull(users);
         assertEquals(users.size(), 2);
     }
 
     @Test
     public void thatFindByIdWorks() throws Exception {
-        User user = new User();
-        user.register(new UserId("1"), "Paul", "Durand", new Date(), "mail@mail.com", "login");
+        UserQ user = createUser(1);
         user = repository.save(user);
-        assertNotNull(user.getEntityId());
-        User user2 = repository.load(user.getEntityId());
+        assertNotNull(user.getId());
+        UserQ user2 = repository.load(user.getEntityId());
         assertEquals(user, user2);
     }
 
     @Test
     public void thatDeleteWorks() throws Exception {
-        User user = new User();
-        user.register(new UserId("1"), "Paul", "Durand", new Date(), "mail@mail.com", "login");
+        UserQ user = createUser(1);
         user = repository.save(user);
-        List<User> users = repository.getAllUsers();
+        List<UserQ> users = repository.getAllUsers();
         assertEquals(users.size(), 1);
         repository.deleteUser(user.getEntityId());
         users = repository.getAllUsers();
         assertEquals(users.size(), 0);
     }
 
+    private UserQ createUser(int i) {
+        UserQ user = new UserQ();
+        user.setDob(new Date());
+        user.setLogin("login" + i);
+        user.setPassword("123456789");
+        user.setFirstName("firstname" + i);
+        user.setLastName("lastname" + i);
+        user.setEmail("email" + i + "@mail.com");
+        return user;
+    }
 }
