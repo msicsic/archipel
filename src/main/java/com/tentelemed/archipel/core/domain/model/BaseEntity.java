@@ -13,30 +13,15 @@ import javax.validation.Validator;
  * Date: 22/10/13
  * Time: 11:01
  */
-//@MappedSuperclass
 public abstract class BaseEntity<B extends EntityId> {
     protected final static Logger log = LoggerFactory.getLogger(BaseEntity.class);
 
     @Id
-    /*@org.hibernate.annotations.GenericGenerator(
-            name = "OidGen",
-            strategy = "com.tentelemed.archipel.core.infrastructure.repo.IdGenerator",
-            parameters = {
-                    @Parameter(name = "table", value = "AC_HIBERNATE_UNIQUE_KEY"),
-                    @Parameter(name = "column", value = "NEXT_HI"),
-                    @Parameter(name = "max_lo", value = "100")
-            }
-    )*/
-
-    //@GeneratedValue(generator = "OidGen")
     protected String id;
-
-    //@Version
-    //private Long version;
+    private Long version = 0L;
 
     private transient B entityId;
-
-    protected Validator validator;
+    private transient Validator validator;
 
     protected Validator getValidator() {
         if (validator == null) {
@@ -45,9 +30,10 @@ public abstract class BaseEntity<B extends EntityId> {
         return this.validator;
     }
 
-    protected void validate(String property, Object value) {
+    protected <M> M validate(String property, M value) {
         try {
             getValidator().validateValue(getClass(), property, value);
+            return value;
         } catch (RuntimeException e) {
             throw e;
         }
@@ -82,5 +68,9 @@ public abstract class BaseEntity<B extends EntityId> {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    public Long getVersion() {
+        return version;
     }
 }

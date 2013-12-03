@@ -15,7 +15,7 @@ import java.util.Date;
  */
 public class Application {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfiguration.class);
 
         UserCommandService service = context.getBean(UserCommandService.class);
@@ -25,5 +25,5 @@ public class Application {
         //repo.save(user);
         //Iterable<User> users = repo.findAll();
         System.err.println("hop");
-    }
+    }*/
 }

@@ -49,7 +49,7 @@ public class UserTest {
     @Test
     public void testCreateUser() throws Exception {
         User user = new User();
-        user = handle(user, user.register(new UserId("1"), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
+        user = handle(user, user.register(new RoleId("1"), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
         assertEquals(user.getFirstName(), "firstName");
         assertEquals(user.getLastName(), "lastName");
         assertEquals(user.getLogin(), "login");
@@ -59,7 +59,7 @@ public class UserTest {
     @Test(expected = User.ChangePasswordException.class)
     public void testChangePasswordWithBadOldPwd() throws Exception {
         User user = new User();
-        user = handle(user, user.register(new UserId("1"), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
+        user = handle(user, user.register(new RoleId("1"), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
         user = handle(user, user.changePassword("wrongold", "aaa", "aaa"));
     }
 

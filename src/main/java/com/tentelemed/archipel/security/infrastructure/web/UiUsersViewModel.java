@@ -6,6 +6,7 @@ import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.Notification;
@@ -55,7 +56,8 @@ public class UiUsersViewModel extends BaseViewModel {
             commit();
             if (getSelectedUser().getId() == null) {
                 UserQ u = getSelectedUser();
-                userCommand.registerUser(u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail(), u.getLogin());
+                RoleQ role = userQuery.getAnyRole();
+                userCommand.registerUser(role.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail(), u.getLogin());
             } else {
                 UserQ u = getSelectedUser();
                 userCommand.updateUserInfo(u.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail());

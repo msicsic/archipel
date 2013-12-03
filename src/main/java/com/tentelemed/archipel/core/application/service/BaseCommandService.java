@@ -28,9 +28,10 @@ public class BaseCommandService {
     @Autowired
     EventBus eventBus;
 
-    protected <M extends EntityId> void post(BaseAggregateRoot target, Collection<? extends DomainEvent> events) {
+    protected <M extends EntityId, MM extends BaseAggregateRoot<M>> MM post(MM target, Collection<? extends DomainEvent> events) {
         // application des evts sur l'agregat
         eventStore.handleEvents(target, events);
+        return target;
     }
 
     protected <I extends EntityId, M extends DomainEvent<I>> void post(BaseAggregateRoot<I> target, M... events) {

@@ -33,6 +33,9 @@ A EVALUER :
   systeme CRUD avec le reste (quels evts generer)
 
 PROBLEMES :
+- Affectation ID ne fonctionne pas dans HB
+- La restoration d'un Memento ne fonctionne pas pour les objets sans constructeur publique
+
 - La partie Command est clean, mais la partie Query partage ses modeles entre la couche
   persistance et ihm. Cela simplifie grandement l'appli, il faudra voir a l'usage si
   c'est viable. On a donc "seulement" 2 versions des modeles : 1 pour Command, et 1 pour Query

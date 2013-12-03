@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.security.application.event;
 
 import com.tentelemed.archipel.security.domain.model.Credentials;
+import com.tentelemed.archipel.security.domain.model.RoleId;
 import com.tentelemed.archipel.security.domain.model.UserId;
 
 import java.util.Date;
@@ -23,9 +24,11 @@ public class UserRegistered extends UserDomainEvent {
     public final Date dob;
     public final String email;
     public final Credentials credentials;
+    public final RoleId roleId;
 
-    public UserRegistered(UserId id, String firstName, String lastName, Date dob, String email, Credentials credentials) {
+    public UserRegistered(UserId id, RoleId roleId, String firstName, String lastName, Date dob, String email, Credentials credentials) {
         super(id);
+        this.roleId = roleId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;

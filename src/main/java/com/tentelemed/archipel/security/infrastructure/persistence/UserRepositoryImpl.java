@@ -2,6 +2,7 @@ package com.tentelemed.archipel.security.infrastructure.persistence;
 
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,30 +37,38 @@ import java.util.List;
 public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
-    UserRepositoryUtil repo;
+    UserRepositoryUtil userRepo;
+
+    @Autowired
+    RoleRepositoryUtil roleRepo;
 
     @Override
     public UserQ save(UserQ user) {
-        return repo.save(user);
+        return userRepo.save(user);
     }
 
     @Override
     public List<UserQ> getAllUsers() {
-        return repo.findAll();
+        return userRepo.findAll();
     }
 
     @Override
     public UserQ findByLogin(String login) {
-        return repo.findByLogin(login);
+        return userRepo.findByLogin(login);
     }
 
     @Override
     public UserQ load(UserId id) {
-        return repo.findOne(id.getId());
+        return userRepo.findOne(id.getId());
     }
 
     @Override
     public void deleteUser(UserId id) {
-        repo.delete(id.toString());
+        userRepo.delete(id.toString());
+    }
+
+    @Override
+    public List<RoleQ> getRoles() {
+        return roleRepo.findAll();
     }
 }

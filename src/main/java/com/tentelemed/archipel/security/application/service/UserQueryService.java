@@ -4,6 +4,7 @@ import com.tentelemed.archipel.core.application.event.LoginEvent;
 import com.tentelemed.archipel.core.application.service.BaseQueryService;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -63,5 +64,11 @@ public class UserQueryService extends BaseQueryService {
 
     public UserQ findByLogin(String login) {
         return userRepository.findByLogin(login);
+    }
+
+    public RoleQ getAnyRole() {
+        List<RoleQ> roles = userRepository.getRoles();
+        if (roles.isEmpty()) return null;
+        return roles.get(0);
     }
 }

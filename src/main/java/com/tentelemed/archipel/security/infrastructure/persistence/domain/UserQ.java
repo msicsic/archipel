@@ -1,6 +1,8 @@
 package com.tentelemed.archipel.security.infrastructure.persistence.domain;
 
 import com.tentelemed.archipel.core.infrastructure.domain.BaseEntityQ;
+import com.tentelemed.archipel.security.domain.model.Role;
+import com.tentelemed.archipel.security.domain.model.RoleId;
 import com.tentelemed.archipel.security.domain.model.UserId;
 import org.hibernate.validator.constraints.Email;
 
@@ -10,6 +12,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +28,7 @@ public class UserQ extends BaseEntityQ<UserId> {
     @Email String email = "default@mail.com";
     @NotNull String login;
     String password;
+    RoleId roleId;
 
     public UserQ() {
     }
@@ -84,5 +88,13 @@ public class UserQ extends BaseEntityQ<UserId> {
 
     public String getFullName() {
         return getFirstName() + " " + getLastName();
+    }
+
+    public RoleId getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(RoleId roleId) {
+        this.roleId = roleId;
     }
 }

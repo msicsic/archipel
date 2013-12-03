@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.persistence;
 
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,13 +17,6 @@ import java.util.List;
  * Date: 22/10/13
  * Time: 12:20
  */
-public interface UserRepositoryUtil extends JpaRepository<UserQ, String> {
+public interface RoleRepositoryUtil extends JpaRepository<RoleQ, String> {
 
-    List<UserQ> findByLastName(String lastName);
-
-    @Query(value = "select u from UserQ u where \nlower(u.lastName) like ('%' || lower(:name) ||'%')\nor lower(u.firstName) like ('%' || lower(:name) ||'%') ")
-    List<UserQ> findByName(@Param("name") String name);
-
-    @Query(value = "select u from UserQ u where u.login=:login")
-    UserQ findByLogin(@Param("login") String login);
 }

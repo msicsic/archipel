@@ -1,5 +1,7 @@
 package com.tentelemed.archipel.core.domain.model;
 
+import org.apache.commons.beanutils.PropertyUtils;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
 
@@ -19,7 +21,13 @@ public class BaseVO {
         return this.validator;
     }
 
-    protected void validate(String property, Object value) {
+    protected <M> M validate(String property, M value) {
         getValidator().validateValue(getClass(), property, value);
+        /*try {
+            PropertyUtils.setProperty(this, property, value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }*/
+        return value;
     }
 }

@@ -2,12 +2,12 @@ package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.BaseCommandService;
-import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.domain.model.*;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -32,12 +32,17 @@ import java.util.List;
 @Transactional
 public class UserCommandService extends BaseCommandService {
 
-    public void registerUser(String firstName, String lastName, Date dob, String email, String login) {
+    public Role registerRole(String name) {
+        Role role = get(Role.class);
+        return post(role, role.register(name, new HashSet<Right>()));
+    }
+
+    public User registerUser(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
         // c'est une commande de creation d'agregat :
         // il faut donc instancier l'agregat puis lui attribuer un id
         User user = get(User.class);
-        List<DomainEvent> events = user.register(user.getEntityId(), firstName, lastName, dob, email, login);
-        post(user, events);
+        List<DomainEvent> events = user.register(roleId, firstName, lastName, dob, email, login);
+        return post(user, events);
     }
 
     /**
@@ -48,7 +53,7 @@ public class UserCommandService extends BaseCommandService {
      * Rq : le login ne peut pas etre changé par ce biais
      */
     // TODO : controle de droits
-    public void updateUserInfo(UserId id, String firstName, String lastName, Date dob, String email) {
+    public User updateUserInfo(UserId id, String firstName, String lastName, Date dob, String email) {
         // chargement de l'agregat
         User user = (User) get(id);
 
@@ -57,17 +62,17 @@ public class UserCommandService extends BaseCommandService {
         List<DomainEvent> events = user.updateInfo(firstName, lastName, dob, email);
 
         // traitement par l'EventStore puis propagation
-        post(user, events);
+        return post(user, events);
     }
 
     /**
      * @param id
      * @precond l'utilisateur doit exister
      */
-    public void deleteUser(UserId id) {
+    public User deleteUser(UserId id) {
         User user = (User) get(id);
         List<DomainEvent> events = user.delete(id);
-        post(user, events);
+        return post(user, events);
     }
 
 //    public void executeCommand(Command command) {

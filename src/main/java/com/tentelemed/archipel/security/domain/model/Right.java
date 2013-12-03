@@ -11,14 +11,22 @@ import javax.validation.constraints.NotNull;
  * Time: 02:01
  */
 public class Right extends BaseVO {
-    @NotNull private final String id;
+    public final static Right RIGHT_A = new Right("A", "*:*:*");
+    public final static Right RIGHT_B = new Right("B", "*");
 
-    public Right(String id) {
-        validate("id", id);
-        this.id = id;
+    @NotNull private final String name;
+    @NotNull private final String value;
+
+    public Right(String name, String value) {
+        this.name = validate("name", name);
+        this.value = validate("value", value);
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

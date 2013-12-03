@@ -7,6 +7,7 @@ import com.tentelemed.archipel.gam.application.event.PhysicianRegistered;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -83,4 +84,5 @@ public class Physician extends BaseAggregateRoot<PhysicianId> {
     public PhoneNumber getPhone() {
         return phone;
     }
+
 }

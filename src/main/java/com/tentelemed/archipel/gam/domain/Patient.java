@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,13 +19,9 @@ import java.util.Date;
 public class Patient extends BaseAggregateRoot<PatientId> {
 
     public static enum Sex {MALE, FEMALE}
-
     public static enum Status {ALIVE, DEAD}
-
     public static enum FamillyStatus {SINGLE, MARRIED, DIVORCED}
-
     public static enum IdentityStatus {VERIFIED, NOT_VERIFIED}
-
     public static enum DobType {NORMAL, APPROX, MOON}
 
     @NotNull @Size(min = 2, max = 50) String firstName;
@@ -48,6 +45,5 @@ public class Patient extends BaseAggregateRoot<PatientId> {
     protected Class<PatientId> getIdClass() {
         return PatientId.class;
     }
-
 
 }

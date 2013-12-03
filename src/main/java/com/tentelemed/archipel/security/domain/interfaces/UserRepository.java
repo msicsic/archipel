@@ -1,6 +1,8 @@
 package com.tentelemed.archipel.security.domain.interfaces;
 
+import com.tentelemed.archipel.security.domain.model.Role;
 import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.infrastructure.persistence.domain.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 
 import java.util.List;
@@ -22,4 +24,6 @@ public interface UserRepository {
     UserQ load(UserId id);
 
     void deleteUser(UserId id);
+
+    List<RoleQ> getRoles();
 }

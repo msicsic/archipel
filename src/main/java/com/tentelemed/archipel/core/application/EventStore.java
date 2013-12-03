@@ -7,6 +7,7 @@ import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.EventHandler;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
+import com.tentelemed.archipel.core.domain.model.Memento;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
 import com.tentelemed.archipel.security.domain.model.User;
 import org.slf4j.Logger;
@@ -80,6 +81,9 @@ public class EventStore {
             }
             try {
                 Method m = aggregate.getClass().getMethod("handle", new Class[]{event.getClass()});
+                if (event.isCreate()) {
+                    aggregate._setId(event.getAggregateId().getId());
+                }
                 m.invoke(aggregate, event);
             } catch (InvocationTargetException e) {
                 throw new RuntimeException((e.getTargetException()));
@@ -110,6 +114,10 @@ public class EventStore {
             addEvent(event);
             // TODO : persister le store
         }
+
+//        Memento memento = target.createMemento();
+//        System.err.println("M : "+memento);
+//        target.applyMemento(memento);
 
         // propagation aux QueryManagers (pour maj des bdd de consultation)
         for (DomainEvent event : events) {
