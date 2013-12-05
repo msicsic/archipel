@@ -1,10 +1,16 @@
 package com.tentelemed.archipel.core.infrastructure.config;
 
 import com.tentelemed.archipel.security.application.service.UserCommandService;
+import com.tentelemed.archipel.security.domain.model.Right;
 import com.tentelemed.archipel.security.domain.model.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.Date;
 
 /**
@@ -15,12 +21,32 @@ import java.util.Date;
  */
 @Component
 public class DbInit {
+    private final static Logger log = LoggerFactory.getLogger(DbInit.class);
 
     @Autowired
     UserCommandService service;
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     public void initDb() {
-        Role role = service.registerRole("administrateur");
+        try {
+            Connection conn = jdbcTemplate.getDataSource().getConnection();
+            ResultSet tables = conn.getMetaData().getTables(conn.getCatalog(), null, "EVENTS", null);
+            boolean created = tables.next();
+            tables.close();
+
+            if (! created) {
+                jdbcTemplate.update(
+                        "create table EVENTS (AggregateId VARCHAR(64), Data TEXT, Version INTEGER)"
+                );
+            }
+            System.err.println("hop");
+        } catch (Exception e) {
+            log.error(null, e);
+        }
+
+        Role role = service.registerRole("administrateur", Right.RIGHT_A);
         for (int i = 0; i < 100; i++) {
             service.registerUser(role.getEntityId(), "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i);
         }

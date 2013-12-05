@@ -10,20 +10,18 @@ import com.tentelemed.archipel.core.domain.model.BaseVO;
  */
 public class PatientInfo extends BaseVO {
 
-    private final Address address;
-    private final PhoneNumber mainPhone;
-    private final PhoneNumber mobilePhone;
-    private final Email email;
+    private Address address;
+    private PhoneNumber mainPhone;
+    private PhoneNumber mobilePhone;
+    private Email email;
+
+    PatientInfo() {}
 
     public PatientInfo(Address address, Email email, PhoneNumber mainPhone, PhoneNumber mobilePhone) {
-        validate("address", address);
-        validate("email", email);
-        validate("mainPhone", mainPhone);
-        validate("mobilePhone", mobilePhone);
-        this.address = address;
-        this.email = email;
-        this.mainPhone = mainPhone;
-        this.mobilePhone = mobilePhone;
+        this.address = validate("address", address);
+        this.email = validate("email", email);
+        this.mainPhone = validate("mainPhone", mainPhone);
+        this.mobilePhone = validate("mobilePhone", mobilePhone);
     }
 
     public Address getAddress() {

@@ -11,8 +11,8 @@ import javax.validation.Validator;
  * Date: 30/11/13
  * Time: 23:17
  */
-public class BaseVO {
-    protected Validator validator;
+public abstract class BaseVO implements BuildingBlock {
+    protected transient Validator validator;
 
     protected Validator getValidator() {
         if (validator == null) {

@@ -10,10 +10,16 @@ import com.tentelemed.archipel.security.domain.model.UserId;
  * Time: 16:10
  */
 public class UserRoleUpdated extends UserDomainEvent {
-    public final RoleId roleId;
+    private RoleId roleId;
+
+    public UserRoleUpdated() {}
 
     public UserRoleUpdated(UserId id, RoleId roleId) {
         super(id);
         this.roleId = roleId;
+    }
+
+    public RoleId getRoleId() {
+        return roleId;
     }
 }

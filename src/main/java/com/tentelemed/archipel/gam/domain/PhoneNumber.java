@@ -9,11 +9,13 @@ import com.tentelemed.archipel.core.domain.model.BaseVO;
  * Time: 16:36
  */
 public class PhoneNumber extends BaseVO {
-    private final String value;
+    // TODO : verifier le format
+    private String value;
+
+    PhoneNumber() {}
 
     public PhoneNumber(String value) {
-        // TODO : verifier le format
-        this.value = value;
+        this.value = validate("value", value);
     }
 
     public String getValue() {

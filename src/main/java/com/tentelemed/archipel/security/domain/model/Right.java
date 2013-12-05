@@ -14,8 +14,10 @@ public class Right extends BaseVO {
     public final static Right RIGHT_A = new Right("A", "*:*:*");
     public final static Right RIGHT_B = new Right("B", "*");
 
-    @NotNull private final String name;
-    @NotNull private final String value;
+    @NotNull private String name;
+    @NotNull private String value;
+
+    Right() {}
 
     public Right(String name, String value) {
         this.name = validate("name", name);

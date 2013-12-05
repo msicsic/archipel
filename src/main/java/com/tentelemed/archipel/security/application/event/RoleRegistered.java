@@ -18,12 +18,22 @@ public class RoleRegistered extends RoleDomainEvent {
         return Type.CREATE;
     }
 
-    public final String name;
-    public final Set<Right> rights;
+    private String name;
+    private Set<Right> rights;
+
+    RoleRegistered() {}
 
     public RoleRegistered(RoleId id, String name, Set<Right> rights) {
         super(id);
         this.name = name;
         this.rights = rights;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Set<Right> getRights() {
+        return rights;
     }
 }

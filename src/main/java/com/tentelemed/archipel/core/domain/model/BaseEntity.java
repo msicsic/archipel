@@ -13,7 +13,7 @@ import javax.validation.Validator;
  * Date: 22/10/13
  * Time: 11:01
  */
-public abstract class BaseEntity<B extends EntityId> {
+public abstract class BaseEntity<B extends EntityId> implements BuildingBlock {
     protected final static Logger log = LoggerFactory.getLogger(BaseEntity.class);
 
     @Id
@@ -45,7 +45,7 @@ public abstract class BaseEntity<B extends EntityId> {
                 entityId = getIdClass().newInstance();
                 entityId.setId(id);
             } catch (InstantiationException | IllegalAccessException e) {
-                log.error(null, e);
+                throw new RuntimeException("Cannot instanciate entityId : \""+getIdClass().getSimpleName()+"\", please provide an empty constructor");
             }
         }
         return entityId;

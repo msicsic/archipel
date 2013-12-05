@@ -58,7 +58,7 @@ public class RoleQ extends BaseEntityQ<RoleId> {
 
     public void setRights(Set<Right> rights) {
         this.rights = rights;
-        this.rightString = null;
+        buildRightsString();
     }
 
     private void buildRightsString() {

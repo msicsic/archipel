@@ -11,6 +11,8 @@ import com.tentelemed.archipel.security.domain.model.UserId;
  */
 public abstract class UserDomainEvent extends AbstractDomainEvent<UserId> {
 
+    protected UserDomainEvent(){}
+
     protected UserDomainEvent(UserId id) {
         super(id);
     }

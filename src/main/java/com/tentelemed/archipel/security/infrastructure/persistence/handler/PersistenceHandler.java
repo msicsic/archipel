@@ -3,7 +3,9 @@ package com.tentelemed.archipel.security.infrastructure.persistence.handler;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.EventHandler;
+import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.core.infrastructure.domain.BaseEntityQ;
+import com.tentelemed.archipel.core.infrastructure.domain.EntityQUtil;
 import com.tentelemed.archipel.security.application.event.RoleDomainEvent;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.infrastructure.persistence.RoleRepositoryUtil;
@@ -12,11 +14,10 @@ import com.tentelemed.archipel.security.infrastructure.persistence.domain.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
@@ -29,8 +30,6 @@ import java.lang.reflect.Modifier;
 @Component
 public class PersistenceHandler {
 
-//    @Autowired
-//    JpaRepository repo;
     @Autowired
     RoleRepositoryUtil roleRepo;
 
@@ -43,10 +42,14 @@ public class PersistenceHandler {
         if (event.isCreate()) {
             user = new UserQ();
         } else {
-            user = userRepo.findOne(event.id.getId());
+            user = userRepo.findOne(event.getAggregateId().getId());
         }
-        applyEvent(user, event);
-        userRepo.save(user);
+        if (event.isCreate() || event.isUpdate()) {
+            EntityQUtil.applyEvent(user, event);
+            userRepo.save(user);
+        } else {
+            userRepo.delete(user);
+        }
     }
 
     @Subscribe
@@ -55,24 +58,14 @@ public class PersistenceHandler {
         if (event.isCreate()) {
             role = new RoleQ();
         } else {
-            role = (RoleQ) roleRepo.findOne(event.id.getId());
+            role = roleRepo.findOne(event.getAggregateId().getId());
         }
-        applyEvent(role, event);
-        roleRepo.save(role);
+        if (event.isCreate() || event.isUpdate()) {
+            EntityQUtil.applyEvent(role, event);
+            roleRepo.save(role);
+        } else {
+            roleRepo.delete(role);
+        }
     }
 
-    protected void applyEvent(BaseEntityQ entity, DomainEvent event) {
-        for (Field field : event.getClass().getDeclaredFields()) {
-            try {
-                int mod = field.getModifiers();
-                if (Modifier.isFinal(mod) && Modifier.isPublic(mod)) {
-                    String fieldName = field.getName();
-                    Object fieldValue = field.get(event);
-                    PropertyUtils.setProperty(entity, fieldName, fieldValue);
-                }
-            } catch (Exception e) {
-                throw new RuntimeException("Can't copy field : " + field.getName());
-            }
-        }
-    }
 }

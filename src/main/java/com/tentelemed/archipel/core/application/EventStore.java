@@ -8,14 +8,17 @@ import com.tentelemed.archipel.core.application.service.EventHandler;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.core.domain.model.Memento;
+import com.tentelemed.archipel.core.domain.model.MementoUtil;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
 import com.tentelemed.archipel.security.domain.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -30,6 +33,9 @@ import java.util.*;
 @Component
 public class EventStore {
     private static final Logger log = LoggerFactory.getLogger(EventStore.class);
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @Autowired
     EventBus eventBus;
@@ -112,12 +118,13 @@ public class EventStore {
         // ajout des evts dans le store
         for (DomainEvent event : events) {
             addEvent(event);
+            Memento memento = MementoUtil.createMemento(event);
+            String serial = MementoUtil.mementoToString(memento);
+
+            long version = 1L;
+            //jdbcTemplate.update("insert into EVENTS values (?,?,?)", event.getAggregateId(), data, version);
             // TODO : persister le store
         }
-
-//        Memento memento = target.createMemento();
-//        System.err.println("M : "+memento);
-//        target.applyMemento(memento);
 
         // propagation aux QueryManagers (pour maj des bdd de consultation)
         for (DomainEvent event : events) {
@@ -127,7 +134,6 @@ public class EventStore {
                 throw new RuntimeException("Event without persistence handler : " + event.getClass().getSimpleName());
             }
         }
-        //storeEventBus.post(new QueryUpdateEvent(clazz, id, target, events));
 
         // propagation aux listeners d'evts (les autres modules principalement)
         for (DomainEvent event : events) {

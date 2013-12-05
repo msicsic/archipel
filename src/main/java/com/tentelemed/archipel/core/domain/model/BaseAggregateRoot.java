@@ -2,12 +2,9 @@ package com.tentelemed.archipel.core.domain.model;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -49,11 +46,11 @@ public abstract class BaseAggregateRoot<M extends EntityId> extends BaseEntity<M
     }
 
     public Memento createMemento() {
-        return MementoUtil._createMemento(getClass(), this);
+        return MementoUtil.createMemento(this);
     }
 
-    public void applyMemento(Memento memento) {
-        MementoUtil._applyMemento(memento, this);
-    }
+//    public void applyMemento(Memento memento) {
+//        MementoUtil._applyMemento(memento, this);
+//    }
 
 }

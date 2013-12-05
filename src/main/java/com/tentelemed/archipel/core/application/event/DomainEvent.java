@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.application.event;
 
+import com.tentelemed.archipel.core.domain.model.BuildingBlock;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 
 /**
@@ -8,7 +9,7 @@ import com.tentelemed.archipel.core.domain.model.EntityId;
  * Date: 18/11/13
  * Time: 17:41
  */
-public interface DomainEvent<M extends EntityId> {
+public interface DomainEvent<M extends EntityId> extends BuildingBlock {
     enum Type {
         CREATE, UPDATE, DELETE
     }

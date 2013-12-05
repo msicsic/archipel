@@ -17,11 +17,11 @@ public class Credentials extends BaseVO {
     @NotNull @Size(min = 5) String login;
     @NotNull @Size(min = 5) String password;
 
+    Credentials() {}
+
     public Credentials(String login, String password) {
-        validate("login", login);
-        validate("password", password);
-        this.login = login;
-        this.password = password;
+        this.login = validate("login", login);
+        this.password = validate("password", password);
     }
 
     public boolean matchPassword(String password) {

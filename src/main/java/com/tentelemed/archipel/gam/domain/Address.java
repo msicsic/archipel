@@ -10,20 +10,19 @@ import com.tentelemed.archipel.core.domain.model.Country;
  * Time: 16:33
  */
 public class Address extends BaseVO {
-    private final String street;
-    private final String town;
-    private final String postalCode;
-    private final Country country;
+    private String street;
+    private String town;
+    private String postalCode;
+    private Country country;
+
+    // constructeur privé nécessaire pour des raisons techniques (reconstruire l'objet a partir d'un Memento)
+    Address() {}
 
     public Address(String street, String postalCode, String town, Country country) {
-        validate("street", street);
-        validate("postalCode", postalCode);
-        validate("town", town);
-        validate("country", country);
-        this.street = street;
-        this.postalCode = postalCode;
-        this.town = town;
-        this.country = country;
+        this.street = validate("street", street);
+        this.postalCode = validate("postalCode", postalCode);
+        this.town = validate("town", town);
+        this.country = validate("country", country);
     }
 
     public String getStreet() {

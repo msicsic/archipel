@@ -12,7 +12,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Time: 16:12
  */
 public class IPP extends BaseVO {
-    private final String value;
+    private String value;
+
+    IPP() { }
 
     public IPP(String value) {
         assertThat(value, notNullValue());

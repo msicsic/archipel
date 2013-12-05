@@ -12,7 +12,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Time: 16:52
  */
 public class Email extends BaseVO {
-    private final String value;
+    private String value;
+
+    Email() { }
 
     public Email(String value) {
         // TODO : vérif regexpr

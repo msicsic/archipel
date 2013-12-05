@@ -89,6 +89,7 @@
           <element id="library" level="project" name="Maven: org.jbehave:jbehave-spring:3.8" />
           <element id="library" level="project" name="Maven: com.cedarsoftware:json-io:2.3.0" />
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" />
+          <element id="library" level="project" name="Maven: com.thoughtworks.xstream:xstream:1.4.5" />
         </element>
       </element>
       <element id="dir-copy" path="$PROJECT_DIR$/src/main/webapp" />

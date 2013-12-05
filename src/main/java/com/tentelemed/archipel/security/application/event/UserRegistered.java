@@ -19,12 +19,14 @@ public class UserRegistered extends UserDomainEvent {
         return Type.CREATE;
     }
 
-    public final String firstName;
-    public final String lastName;
-    public final Date dob;
-    public final String email;
-    public final Credentials credentials;
-    public final RoleId roleId;
+    private String firstName;
+    private String lastName;
+    private Date dob;
+    private String email;
+    private Credentials credentials;
+    private RoleId roleId;
+
+    UserRegistered() {}
 
     public UserRegistered(UserId id, RoleId roleId, String firstName, String lastName, Date dob, String email, Credentials credentials) {
         super(id);
@@ -34,5 +36,29 @@ public class UserRegistered extends UserDomainEvent {
         this.dob = dob;
         this.email = email;
         this.credentials = credentials;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
+    public RoleId getRoleId() {
+        return roleId;
     }
 }

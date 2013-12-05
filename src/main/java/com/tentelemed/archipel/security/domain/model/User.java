@@ -79,27 +79,27 @@ public class User extends BaseAggregateRoot<UserId> implements UserEventHandler 
     }
 
     public void handle(UserRegistered event) {
-        this.roleId = event.roleId;
-        this.firstName = event.firstName;
-        this.lastName = event.lastName;
-        this.dob = event.dob;
-        this.email = event.email;
-        this.credentials = event.credentials;
+        this.roleId = event.getRoleId();
+        this.firstName = event.getFirstName();
+        this.lastName = event.getLastName();
+        this.dob = event.getDob();
+        this.email = event.getEmail();
+        this.credentials = event.getCredentials();
     }
 
     public void handle(UserInfoUpdated event) {
-        this.firstName = event.firstName;
-        this.lastName = event.lastName;
-        this.dob = event.dob;
-        this.email = event.email;
+        this.firstName = event.getFirstName();
+        this.lastName = event.getLastName();
+        this.dob = event.getDob();
+        this.email = event.getEmail();
     }
 
     public void handle(UserPasswordUpdated event) {
-        this.credentials = new Credentials(credentials.getLogin(), event.password);
+        this.credentials = new Credentials(credentials.getLogin(), event.getPassword());
     }
 
     public void handle(UserRoleUpdated event) {
-        this.roleId = event.roleId;
+        this.roleId = event.getRoleId();
     }
 
     // ********************* ACCESSORS ***************************

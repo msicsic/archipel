@@ -1,9 +1,31 @@
+Avancement du projet (4/12/13)
+=> socle technique :
+ - bases du DDD en place (VO, Entity, Aggregate)
+ - tests unitaires à finaliser, mais la plupart en place
+ - scenarios BDD en place (permet de décrire les scenarios et de creer le modele)
+ - CQRS/Event sourcing quasi fini (manque la persistence du store)
+ - hibernate en place
+ -
+
+TODO (Tests) :
+* creation d'un Memento à partir d'un Aggregate
+* creation d'un Aggregate à partir d'un Memento
+* rechargement d'un Aggregate à partir d'un Memento
+* creation d'un Memento à partir d'un DomainEvent
+* creation d'un DomainEvent à partir d'un Memento
+* serialization d'un Memento sous forme texte
+* de-serialization d'un Memento à partir de la forme texte
+- EntityQUtil.applyEvents
+- PersistenceHandler.handle(*)
+
+
 DDD :
 Regles à retenir :
 - Utilisation systématique de VO (Value Object) pour tous les attributs typés, afin de
   - valider les valeurs
   - typer plus fortement que "String"
 - Les VO sont toujours imutables
+- Toujours surcharger equals() et hashCode() sur les VO !
 - Attention : les BO étant mutables, les utiliser dans les evts n'est pas tres sur. Les evts peuvent
   en effet etre envoyés sur un bus en asynchrone, et lorsqu'il sera pris en compte, le BO référencé
   peut avoir changé. Les Evts ne doivent transporter que des données immutables : des champs simples,
@@ -33,8 +55,8 @@ A EVALUER :
   systeme CRUD avec le reste (quels evts generer)
 
 PROBLEMES :
-- Affectation ID ne fonctionne pas dans HB
-- La restoration d'un Memento ne fonctionne pas pour les objets sans constructeur publique
+- Si l'evt ne correspond pas exactement au EntityQ, l'application de l'event ne fonctionne pas
+  Il faut prévoir un systeme de mapping Event-EntityQ
 
 - La partie Command est clean, mais la partie Query partage ses modeles entre la couche
   persistance et ihm. Cela simplifie grandement l'appli, il faudra voir a l'usage si

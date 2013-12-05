@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.persistence.domain;
 
 import com.tentelemed.archipel.core.infrastructure.domain.BaseEntityQ;
+import com.tentelemed.archipel.security.application.event.UserRegistered;
 import com.tentelemed.archipel.security.domain.model.Role;
 import com.tentelemed.archipel.security.domain.model.RoleId;
 import com.tentelemed.archipel.security.domain.model.UserId;
@@ -96,5 +97,15 @@ public class UserQ extends BaseEntityQ<UserId> {
 
     public void setRoleId(RoleId roleId) {
         this.roleId = roleId;
+    }
+
+    public void applyEvent(UserRegistered event) {
+        this.dob = event.getDob();
+        this.email = event.getEmail();
+        this.firstName = event.getFirstName();
+        this.lastName = event.getLastName();
+        this.id = event.getAggregateId().getId();
+        this.login = event.getCredentials().getLogin();
+        this.password = event.getCredentials().getPassword();
     }
 }

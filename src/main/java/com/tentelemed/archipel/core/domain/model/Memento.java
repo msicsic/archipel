@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.domain.model;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 /**
@@ -17,5 +18,18 @@ public class Memento extends HashMap<String, Object> {
 
     public Class getType() {
         return type;
+    }
+
+    public BuildingBlock instanciate() {
+        Constructor constructor = null;
+        try {
+            constructor = getType().getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return (BuildingBlock) constructor.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("You must declare a default constructor for Class : "+getType(), e);
+        } finally {
+            if (constructor != null) constructor.setAccessible(false);
+        }
     }
 }

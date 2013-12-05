@@ -50,17 +50,17 @@ public class Physician extends BaseAggregateRoot<PhysicianId> {
     // EVENTS
 
     public void handle(PhysicianRegistered event) {
-        this.firstName = event.firstName;
-        this.lastName = event.lastName;
-        this.specialty = event.specialty;
+        this.firstName = event.getFirstName();
+        this.lastName = event.getLastName();
+        this.specialty = event.getSpecialty();
     }
 
     public void handle(PhysicianInfoUpdated evt) {
-        this.firstName = evt.firstName;
-        this.lastName = evt.lastName;
-        this.address = evt.address;
-        this.specialty = evt.specialty;
-        this.phone = evt.phone;
+        this.firstName = evt.getFirstName();
+        this.lastName = evt.getLastName();
+        this.address = evt.getAddress();
+        this.specialty = evt.getSpecialty();
+        this.phone = evt.getPhone();
     }
 
     // GETTERS

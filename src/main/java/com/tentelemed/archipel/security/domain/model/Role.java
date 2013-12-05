@@ -37,12 +37,12 @@ public class Role extends BaseAggregateRoot<RoleId> implements RoleEventHandler 
     // *********** EVENTS ************************
 
     public void handle(RoleRegistered event) {
-        this.name = event.name;
-        this.rights = event.rights;
+        this.name = event.getName();
+        this.rights = event.getRights();
     }
 
     public void handle(RoleRightsUpdated event) {
-        this.rights = event.rights;
+        this.rights = event.getRights();
     }
 
     // *********** GETTERS ***********************

@@ -11,7 +11,9 @@ import javax.validation.constraints.NotNull;
  * Time: 18:02
  */
 public class Specialty extends BaseVO {
-    private final @NotNull String name;
+    @NotNull private String name;
+
+    Specialty() {}
 
     public Specialty(String name) {
         //assertThat(name, notNullValue());

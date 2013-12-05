@@ -13,11 +13,16 @@ import java.util.Set;
  */
 public class RoleRightsUpdated extends RoleDomainEvent {
 
-    public final Set<Right> rights;
+    private Set<Right> rights;
+
+    RoleRightsUpdated() {}
 
     public RoleRightsUpdated(RoleId id, Set<Right> rights) {
         super(id);
         this.rights = rights;
     }
 
+    public Set<Right> getRights() {
+        return rights;
+    }
 }

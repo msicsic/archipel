@@ -6,9 +6,7 @@ import com.tentelemed.archipel.security.domain.model.*;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Dans cette implémentation, la couche Application joue ces roles :
@@ -32,9 +30,9 @@ import java.util.List;
 @Transactional
 public class UserCommandService extends BaseCommandService {
 
-    public Role registerRole(String name) {
+    public Role registerRole(String name, Right... rights) {
         Role role = get(Role.class);
-        return post(role, role.register(name, new HashSet<Right>()));
+        return post(role, role.register(name, new HashSet<>(Arrays.asList(rights))));
     }
 
     public User registerUser(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {

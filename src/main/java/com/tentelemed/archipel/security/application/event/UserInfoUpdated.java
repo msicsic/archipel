@@ -12,10 +12,12 @@ import java.util.Date;
  */
 public class UserInfoUpdated extends UserDomainEvent {
 
-    public final String firstName;
-    public final String lastName;
-    public final Date dob;
-    public final String email;
+    private String firstName;
+    private String lastName;
+    private Date dob;
+    private String email;
+
+    UserInfoUpdated() {}
 
     public UserInfoUpdated(UserId entityId, String firstName, String lastName, Date dob, String email) {
         super(entityId);
@@ -25,4 +27,19 @@ public class UserInfoUpdated extends UserDomainEvent {
         this.email = email;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }
