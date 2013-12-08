@@ -78,6 +78,7 @@
             <version>3.8</version>
         </dependency>
 
+        <!-- APACHE SHIRO -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
@@ -97,6 +98,20 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-aspectj</artifactId>
             <version>1.2.2</version>
+        </dependency>
+
+        <!--APACHE CAMEL-->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.12.2</version>
+        </dependency>
+
+        <!--APACHE ActiveMQ-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.9.0</version>
         </dependency>
 
         <dependency>

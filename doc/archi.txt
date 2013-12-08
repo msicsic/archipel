@@ -15,7 +15,7 @@ TODO (Tests) :
 * creation d'un DomainEvent à partir d'un Memento
 * serialization d'un Memento sous forme texte
 * de-serialization d'un Memento à partir de la forme texte
-- EntityQUtil.applyEvents
+* EntityQUtil.applyEvents
 - PersistenceHandler.handle(*)
 
 

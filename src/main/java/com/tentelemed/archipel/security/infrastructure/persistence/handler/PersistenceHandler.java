@@ -1,24 +1,19 @@
 package com.tentelemed.archipel.security.infrastructure.persistence.handler;
 
 import com.google.common.eventbus.Subscribe;
+import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.EventHandler;
-import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.core.infrastructure.domain.BaseEntityQ;
 import com.tentelemed.archipel.core.infrastructure.domain.EntityQUtil;
 import com.tentelemed.archipel.security.application.event.RoleDomainEvent;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
-import com.tentelemed.archipel.security.infrastructure.persistence.RoleRepositoryUtil;
-import com.tentelemed.archipel.security.infrastructure.persistence.UserRepositoryUtil;
 import com.tentelemed.archipel.security.infrastructure.persistence.domain.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,41 +25,32 @@ import java.lang.reflect.Modifier;
 @Component
 public class PersistenceHandler {
 
-    @Autowired
-    RoleRepositoryUtil roleRepo;
-
-    @Autowired
-    UserRepositoryUtil userRepo;
+    @PersistenceContext
+    EntityManager em;
 
     @Subscribe
-    public void handle(UserDomainEvent event) {
-        UserQ user;
+    public void handle(AbstractDomainEvent event) throws Exception {
+        BaseEntityQ object;
         if (event.isCreate()) {
-            user = new UserQ();
+            object = newObjectQ(event).newInstance();
         } else {
-            user = userRepo.findOne(event.getAggregateId().getId());
+            object = em.find(newObjectQ(event), event.getAggregateId().getId());
         }
         if (event.isCreate() || event.isUpdate()) {
-            EntityQUtil.applyEvent(user, event);
-            userRepo.save(user);
+            EntityQUtil.applyEvent(object, event);
+            em.persist(object);
         } else {
-            userRepo.delete(user);
+            em.remove(object);
         }
     }
 
-    @Subscribe
-    public void handle(RoleDomainEvent event) {
-        RoleQ role;
-        if (event.isCreate()) {
-            role = new RoleQ();
+    private Class<? extends BaseEntityQ> newObjectQ(DomainEvent event) {
+        if (event instanceof UserDomainEvent) {
+            return UserQ.class;
+        } else if (event instanceof RoleDomainEvent) {
+            return RoleQ.class;
         } else {
-            role = roleRepo.findOne(event.getAggregateId().getId());
-        }
-        if (event.isCreate() || event.isUpdate()) {
-            EntityQUtil.applyEvent(role, event);
-            roleRepo.save(role);
-        } else {
-            roleRepo.delete(role);
+            return null;
         }
     }
 
