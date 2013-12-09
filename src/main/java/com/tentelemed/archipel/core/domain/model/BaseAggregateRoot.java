@@ -28,7 +28,7 @@ public abstract class BaseAggregateRoot<M extends EntityId> extends BaseEntity<M
         return Arrays.asList(events);
     }
 
-    public void _setId(String id) {
+    public void _setId(Integer id) {
         this.id = id;
     }
 

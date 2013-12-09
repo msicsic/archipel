@@ -48,10 +48,17 @@ public class BaseCommandService {
         return eventStore.get(id);
     }
 
-    static long count = 0;
+    static long count = -1;
 
-    private String nextId() {
-        return "" + count++;
+    private void initCount() {
+        if (count == -1) {
+            count = eventStore.getMaxAggregateId();
+        }
+    }
+
+    private Integer nextId() {
+        initCount();
+        return (int)(count++);
     }
 
     protected <M extends BaseAggregateRoot> M get(Class<M> clazz) {

@@ -21,15 +21,15 @@ public class MementoUtilTest {
     private TestUser createUser() {
         TestRole role = new TestRole("Admin");
 
-        TestUser kevin = new TestUser(new TestUserId("11"), role, "Kevin", "Durand", "Login1");
+        TestUser kevin = new TestUser(new TestUserId(11), role, "Kevin", "Durand", "Login1");
         TestCountry country = new TestCountry("FR");
         TestAddress address = new TestAddress("102 av Edouard Vaillant", "Boulogne", country);
         kevin.setAddress(address);
 
-        TestUser kevina = new TestUser(new TestUserId("13"), role, "Kevina", "Durand", "Login2");
+        TestUser kevina = new TestUser(new TestUserId(13), role, "Kevina", "Durand", "Login2");
         kevina.setAddress(address);
 
-        TestUser albert = new TestUser(new TestUserId("12"), role, "Albert", "Durand", "Login3");
+        TestUser albert = new TestUser(new TestUserId(12), role, "Albert", "Durand", "Login3");
         albert.setAddress(address);
         albert.addChild(kevin);
         albert.addChild(kevina);
@@ -47,7 +47,7 @@ public class MementoUtilTest {
         // then
         assertThat(memento, notNullValue());
         assertThat(memento.getType().getName(), equalTo(albert.getClass().getName()));
-        assertThat((String)memento.get("id"), equalTo("12"));
+        assertThat((int)memento.get("id"), equalTo(12));
         assertThat((String)memento.get("lastName"), equalTo("Durand"));
         Memento adr = (Memento) memento.get("address");
         assertThat(adr, notNullValue());

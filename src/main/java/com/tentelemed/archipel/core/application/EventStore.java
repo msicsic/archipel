@@ -18,10 +18,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,20 +44,16 @@ public class EventStore {
     @Autowired @Qualifier("storeEventBus")
     EventBus storeEventBus;
 
-    Map<EntityId, List<DomainEvent>> mapEvents = new HashMap<>();
-
-    protected <M extends EntityId> void addEvent(DomainEvent<M> event) {
-        List<DomainEvent> events = mapEvents.get(event.getAggregateId());
-        if (events == null) {
-            events = new ArrayList<>();
-            mapEvents.put(event.getAggregateId(), events);
-        }
-        events.add(event);
-    }
-
     public <M extends EntityId> BaseAggregateRoot<M> get(M id) {
-        List<DomainEvent> events = mapEvents.get(id);
-        if (events == null || events.size() == 0) return null;
+        List<String> eventStrings = jdbcTemplate.queryForList("select e.c_data from T_EVENTS e where e.c_aggregate_id=? order by c_version", String.class, id.getId());
+        if (eventStrings == null || eventStrings.size() == 0) return null;
+        List<DomainEvent> events = new ArrayList<>();
+        for (String s : eventStrings) {
+            Memento memento = MementoUtil.mementoFromString(s);
+            DomainEvent event = (DomainEvent) MementoUtil.instanciateFromMemento(memento);
+            events.add(event);
+        }
+
         DomainEvent firstEvent = events.get(0);
         if (!(firstEvent.isCreate())) {
             throw new RuntimeException("First event must be CreateEvent");
@@ -115,15 +112,23 @@ public class EventStore {
         //EntityId id = target.getEntityId();
         // target = applyEvents(target, events);
 
+        // recup de la derniere version
+        Long version = jdbcTemplate.queryForObject("select max(e.c_version) from T_EVENTS e where e.c_aggregate_id=?", Long.class, target.getEntityId().getId());
+        if (version == null) {
+            // enregistrer l'agregat
+            version = 0L;
+            jdbcTemplate.update("insert into T_AGGREGATE values (?,?,?)", target.getEntityId().getId(), target.getClass().getName(), version + events.size() - 1);
+        } else {
+            version++;
+            jdbcTemplate.update("update T_AGGREGATE set c_version=? where c_aggregate_id=?", version + events.size() - 1, target.getEntityId().getId());
+        }
+
         // ajout des evts dans le store
         for (DomainEvent event : events) {
-            addEvent(event);
+            //addEvent(event);
             Memento memento = MementoUtil.createMemento(event);
             String serial = MementoUtil.mementoToString(memento);
-
-            long version = 1L;
-            //jdbcTemplate.update("insert into EVENTS values (?,?,?)", event.getAggregateId(), data, version);
-            // TODO : persister le store
+            jdbcTemplate.update("insert into T_EVENTS values (?,?,?)", event.getAggregateId().getId(), serial, version++);
         }
 
         // propagation aux QueryManagers (pour maj des bdd de consultation)
@@ -147,5 +152,11 @@ public class EventStore {
     @Subscribe
     public void handle(DeadEvent event) {
         failed.set(Boolean.TRUE);
+    }
+
+    public long getMaxAggregateId() {
+        Long res = jdbcTemplate.queryForObject("select max(c_aggregate_id) from T_AGGREGATE", Long.class);
+        if (res == null) return 0;
+        return res;
     }
 }

@@ -15,7 +15,7 @@ public class UserId extends EntityId {
     public UserId() {
     }
 
-    public UserId(String id) {
+    public UserId(Integer id) {
         super(id);
     }
 }

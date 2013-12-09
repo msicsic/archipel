@@ -10,7 +10,7 @@ public class TestUserId extends EntityId {
     public TestUserId() {
     }
 
-    public TestUserId(String id) {
+    public TestUserId(Integer id) {
         super(id);
     }
 }

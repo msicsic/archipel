@@ -11,20 +11,20 @@ import java.io.Serializable;
  */
 @MappedSuperclass
 public class EntityId implements Serializable {
-    String id;
+    Integer id;
 
     public EntityId() {
     }
 
-    public EntityId(String id) {
+    public EntityId(Integer id) {
         this.id = id;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

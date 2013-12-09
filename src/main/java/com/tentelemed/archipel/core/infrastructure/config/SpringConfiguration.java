@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.infrastructure.config;
 
 import com.google.common.eventbus.EventBus;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.tentelemed.archipel.security.infrastructure.shiro.MyRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -115,9 +116,18 @@ public class SpringConfiguration {
 
     @Bean
     public DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .build();
+//        return new EmbeddedDatabaseBuilder()
+//                .setType(EmbeddedDatabaseType.H2)
+//                .build();
+        MysqlDataSource ds = new MysqlDataSource();
+        ds.setDatabaseName("gemed");
+        ds.setUser("root");
+        ds.setPassword("root");
+
+        //ds.set
+
+        return ds;
+
     }
 
     @Bean
@@ -125,7 +135,8 @@ public class SpringConfiguration {
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
         hibernateJpaVendorAdapter.setShowSql(true);
         hibernateJpaVendorAdapter.setGenerateDdl(true);
-        hibernateJpaVendorAdapter.setDatabase(Database.H2);
+        hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
+//        hibernateJpaVendorAdapter.setDatabase(Database.H2);
         return hibernateJpaVendorAdapter;
     }
 

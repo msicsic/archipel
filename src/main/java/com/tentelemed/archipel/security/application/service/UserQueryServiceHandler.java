@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.security.application;
+package com.tentelemed.archipel.security.application.service;
 
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.LogoutRequestEvent;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @EventHandler
-public class UserServiceListener {
+public class UserQueryServiceHandler {
 
     @Autowired
     UserQueryService userQuery;

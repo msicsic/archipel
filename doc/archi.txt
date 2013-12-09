@@ -16,7 +16,7 @@ TODO (Tests) :
 * serialization d'un Memento sous forme texte
 * de-serialization d'un Memento à partir de la forme texte
 * EntityQUtil.applyEvents
-- PersistenceHandler.handle(*)
+/ PersistenceHandler.handle(*)
 
 
 DDD :
@@ -55,9 +55,8 @@ A EVALUER :
   systeme CRUD avec le reste (quels evts generer)
 
 PROBLEMES :
-- Si l'evt ne correspond pas exactement au EntityQ, l'application de l'event ne fonctionne pas
+* Si l'evt ne correspond pas exactement au EntityQ, l'application de l'event ne fonctionne pas
   Il faut prévoir un systeme de mapping Event-EntityQ
-
 - La partie Command est clean, mais la partie Query partage ses modeles entre la couche
   persistance et ihm. Cela simplifie grandement l'appli, il faudra voir a l'usage si
   c'est viable. On a donc "seulement" 2 versions des modeles : 1 pour Command, et 1 pour Query
@@ -69,7 +68,7 @@ PROBLEMES :
   partagés
 
 A FAIRE (URGENT) :
- - persistence du EventStore
+ * persistence du EventStore
  * implémenter qq filtres dans l'ecran users
  - ? créer des classes commande. Les mettre en tant que classes statiques dans le service ? (pour les retrouver facilement)
  - faut il ou non avoir des commandes asynchrones ?

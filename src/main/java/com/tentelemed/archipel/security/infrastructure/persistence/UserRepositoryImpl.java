@@ -64,7 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteUser(UserId id) {
-        userRepo.delete(id.toString());
+        userRepo.delete(id.getId());
     }
 
     @Override

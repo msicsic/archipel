@@ -20,13 +20,13 @@ public abstract class BaseEntityQ<I extends EntityId> {
     protected final static Logger log = LoggerFactory.getLogger(BaseEntityQ.class);
 
     private transient I entityId;
-    @Id protected String id;
+    @Id protected Integer id;
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 

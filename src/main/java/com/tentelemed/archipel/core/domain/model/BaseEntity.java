@@ -17,7 +17,7 @@ public abstract class BaseEntity<B extends EntityId> implements BuildingBlock {
     protected final static Logger log = LoggerFactory.getLogger(BaseEntity.class);
 
     @Id
-    protected String id;
+    protected Integer id;
     private Long version = 0L;
 
     private transient B entityId;

@@ -16,7 +16,7 @@ import java.util.List;
  * Date: 22/10/13
  * Time: 12:20
  */
-public interface UserRepositoryUtil extends JpaRepository<UserQ, String> {
+public interface UserRepositoryUtil extends JpaRepository<UserQ, Integer> {
 
     List<UserQ> findByLastName(String lastName);
 

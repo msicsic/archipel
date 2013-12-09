@@ -12,7 +12,7 @@ public class RoleId extends EntityId {
     public RoleId() {
     }
 
-    public RoleId(String id) {
+    public RoleId(Integer id) {
         super(id);
     }
 }
