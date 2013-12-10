@@ -3,9 +3,9 @@ Avancement du projet (4/12/13)
  - bases du DDD en place (VO, Entity, Aggregate)
  - tests unitaires à finaliser, mais la plupart en place
  - scenarios BDD en place (permet de décrire les scenarios et de creer le modele)
- - CQRS/Event sourcing quasi fini (manque la persistence du store)
+ - CQRS/Event sourcing quasi fini (manque la gestion des snapshots)
  - hibernate en place
- -
+ - tout est en synchrone pour le moment (commandes et events, ansi que maj bdd de lecture)
 
 TODO (Tests) :
 * creation d'un Memento à partir d'un Aggregate
@@ -55,6 +55,14 @@ A EVALUER :
   systeme CRUD avec le reste (quels evts generer)
 
 PROBLEMES :
+- Comment traiter le scenario suivant avec des commandes asynchrones :
+  - commande de creation d'un User -> retours immédiat avant enregistrement dans la bdd de lecture
+  - selection auto du nouveau user qui doit apparaitre dans la liste des users
+  -> faut il faire evoluer l'etat de la commande (commande envoyée, traitée (traitement effectué),
+     finalisée (bdd de lecture mise à jour)
+  -> ou bien lorsque traitée, retourner id du nouvel agregat, puis dans la vue attendre que la bdd
+     de lecture envoie un msg "nouveau user créé" avec le meme id ?
+
 * Si l'evt ne correspond pas exactement au EntityQ, l'application de l'event ne fonctionne pas
   Il faut prévoir un systeme de mapping Event-EntityQ
 - La partie Command est clean, mais la partie Query partage ses modeles entre la couche

@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
 import com.tentelemed.archipel.security.application.service.UserCommandService;
-import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
+import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

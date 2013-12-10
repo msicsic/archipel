@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.domain.model;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.infrastructure.model.EntityQUtil;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -43,6 +44,10 @@ public abstract class BaseAggregateRoot<M extends EntityId> extends BaseEntity<M
             log.error(null, e);
             return null;
         }
+    }
+
+    protected void apply(DomainEvent event) {
+        EntityQUtil.applyEvent(this, event);
     }
 
     public Memento createMemento() {

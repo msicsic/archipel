@@ -39,39 +39,42 @@ public class UserTest {
     public void testUpdateInfo() throws Exception {
         User user = new User();
         Date date = new Date();
-        user = handle(user, user.updateInfo("firstName", "lastName", date, "email"));
+        handle(user, user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
+        handle(user, user.updateInfo("firstName", "lastName", date, "email99@mail.com"));
         assertEquals(user.getFirstName(), "firstName");
         assertEquals(user.getLastName(), "lastName");
-        assertEquals(user.getEmail(), "email");
+        assertEquals(user.getEmail(), "email99@mail.com");
         assertEquals(user.getDob(), date);
     }
 
     @Test
     public void testCreateUser() throws Exception {
         User user = new User();
-        user = handle(user, user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
+        handle(user, user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
         assertEquals(user.getFirstName(), "firstName");
         assertEquals(user.getLastName(), "lastName");
-        assertEquals(user.getLogin(), "login");
-        assertEquals(user.getPassword(), "password");
+        assertEquals(user.getLogin(), "login1");
     }
 
     @Test(expected = User.ChangePasswordException.class)
     public void testChangePasswordWithBadOldPwd() throws Exception {
         User user = new User();
-        user = handle(user, user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
-        user = handle(user, user.changePassword("wrongold", "aaa", "aaa"));
+        handle(user, user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
+        handle(user, user.changePassword("wrongold", "aaa", "aaa"));
     }
 
     @Test
     public void testChangePasswordOk() throws Exception {
         User user = new User();
-        user = handle(user, user.changePassword("password", "newPass1", "newPass1"));
+        handle(user, user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
+        String password = user.getPassword();
+        handle(user, user.changePassword(password, "newPass1", "newPass1"));
     }
 
     @Test(expected = User.ChangePasswordException.class)
     public void testChangePasswordBadNewPwd() throws Exception {
         User user = new User();
-        user = handle(user, user.changePassword("password", "newPass1", "newPass99"));
+        handle(user, user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
+        handle(user, user.changePassword("password", "newPass1", "newPass99"));
     }
 }

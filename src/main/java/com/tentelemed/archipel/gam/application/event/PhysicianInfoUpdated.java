@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.gam.application.event;
 
 import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
-import com.tentelemed.archipel.gam.domain.Address;
-import com.tentelemed.archipel.gam.domain.PhoneNumber;
+import com.tentelemed.archipel.core.domain.model.Address;
+import com.tentelemed.archipel.core.domain.model.PhoneNumber;
 import com.tentelemed.archipel.gam.domain.PhysicianId;
 import com.tentelemed.archipel.gam.domain.Specialty;
 

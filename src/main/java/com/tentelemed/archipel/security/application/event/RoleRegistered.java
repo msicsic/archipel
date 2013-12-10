@@ -14,7 +14,7 @@ import java.util.Set;
 public class RoleRegistered extends RoleDomainEvent {
 
     @Override
-    public Type getType() {
+    public Type getCrudType() {
         return Type.CREATE;
     }
 

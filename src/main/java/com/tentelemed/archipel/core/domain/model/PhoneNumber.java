@@ -1,6 +1,8 @@
-package com.tentelemed.archipel.gam.domain;
+package com.tentelemed.archipel.core.domain.model;
 
 import com.tentelemed.archipel.core.domain.model.BaseVO;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +12,7 @@ import com.tentelemed.archipel.core.domain.model.BaseVO;
  */
 public class PhoneNumber extends BaseVO {
     // TODO : verifier le format
-    private String value;
+    @NotNull private String value;
 
     PhoneNumber() {}
 

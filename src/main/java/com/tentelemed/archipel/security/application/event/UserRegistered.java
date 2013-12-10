@@ -15,7 +15,7 @@ import java.util.Date;
 public class UserRegistered extends UserDomainEvent {
 
     @Override
-    public Type getType() {
+    public Type getCrudType() {
         return Type.CREATE;
     }
 

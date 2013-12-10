@@ -17,7 +17,7 @@ public class UserDeleted extends UserDomainEvent {
     }
 
     @Override
-    public Type getType() {
+    public Type getCrudType() {
         return Type.DELETE;
     }
 }

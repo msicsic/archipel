@@ -14,7 +14,7 @@ public interface DomainEvent<M extends EntityId> extends BuildingBlock {
         CREATE, UPDATE, DELETE
     }
 
-    Type getType();
+    Type getCrudType();
 
     M getAggregateId();
 

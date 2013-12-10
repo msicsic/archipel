@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Id;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.validation.*;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,7 +32,14 @@ public abstract class BaseEntity<B extends EntityId> implements BuildingBlock {
 
     protected <M> M validate(String property, M value) {
         try {
-            getValidator().validateValue(getClass(), property, value);
+            Set violations = getValidator().validateValue(getClass(), property, value);
+            if (! violations.isEmpty()) {
+                for (Object oviolation : violations) {
+                    ConstraintViolation violation = (ConstraintViolation) oviolation;
+                    log.warn("constraint violation : "+violation.getMessage());
+                }
+                throw new ConstraintViolationException(violations);
+            }
             return value;
         } catch (RuntimeException e) {
             throw e;
@@ -72,5 +79,13 @@ public abstract class BaseEntity<B extends EntityId> implements BuildingBlock {
 
     public Long getVersion() {
         return version;
+    }
+
+    protected void validate() {
+        Set violations = getValidator().validate(this);
+        if (! violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+
     }
 }

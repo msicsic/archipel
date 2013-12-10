@@ -1,10 +1,9 @@
-package com.tentelemed.archipel.core.infrastructure.domain;
+package com.tentelemed.archipel.core.infrastructure.model;
 
 import com.tentelemed.archipel.security.domain.model.RoleId;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**

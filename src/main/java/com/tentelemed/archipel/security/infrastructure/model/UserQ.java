@@ -1,8 +1,7 @@
-package com.tentelemed.archipel.security.infrastructure.persistence.domain;
+package com.tentelemed.archipel.security.infrastructure.model;
 
-import com.tentelemed.archipel.core.infrastructure.domain.BaseEntityQ;
+import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
-import com.tentelemed.archipel.security.domain.model.Role;
 import com.tentelemed.archipel.security.domain.model.RoleId;
 import com.tentelemed.archipel.security.domain.model.UserId;
 import org.hibernate.validator.constraints.Email;
@@ -13,7 +12,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.

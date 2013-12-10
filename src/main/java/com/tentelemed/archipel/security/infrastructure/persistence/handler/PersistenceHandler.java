@@ -4,12 +4,12 @@ import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.EventHandler;
-import com.tentelemed.archipel.core.infrastructure.domain.BaseEntityQ;
-import com.tentelemed.archipel.core.infrastructure.domain.EntityQUtil;
+import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
+import com.tentelemed.archipel.core.infrastructure.model.EntityQUtil;
 import com.tentelemed.archipel.security.application.event.RoleDomainEvent;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
-import com.tentelemed.archipel.security.infrastructure.persistence.domain.RoleQ;
-import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
+import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
+import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;

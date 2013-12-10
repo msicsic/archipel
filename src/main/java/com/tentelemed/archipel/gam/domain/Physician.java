@@ -1,13 +1,14 @@
 package com.tentelemed.archipel.gam.domain;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.domain.model.Address;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.core.domain.model.PhoneNumber;
 import com.tentelemed.archipel.gam.application.event.PhysicianInfoUpdated;
 import com.tentelemed.archipel.gam.application.event.PhysicianRegistered;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
 
 
 /**

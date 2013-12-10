@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.core.domain.model;
 
 import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
-import com.tentelemed.archipel.core.infrastructure.domain.TestRoleQ;
+import com.tentelemed.archipel.core.infrastructure.model.TestRoleQ;
 
 import java.util.Date;
 

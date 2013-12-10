@@ -28,21 +28,21 @@ public abstract class AbstractDomainEvent<M extends EntityId> implements DomainE
 
     @Override
     public boolean isUpdate() {
-        return getType().equals(Type.UPDATE);
+        return getCrudType().equals(Type.UPDATE);
     }
 
     @Override
     public boolean isDelete() {
-        return getType().equals(Type.DELETE);
+        return getCrudType().equals(Type.DELETE);
     }
 
     @Override
     public boolean isCreate() {
-        return getType().equals(Type.CREATE);
+        return getCrudType().equals(Type.CREATE);
     }
 
     @Override
-    public Type getType() {
+    public Type getCrudType() {
         return Type.UPDATE;
     }
 }

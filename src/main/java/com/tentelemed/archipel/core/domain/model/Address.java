@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.gam.domain;
+package com.tentelemed.archipel.core.domain.model;
 
 import com.tentelemed.archipel.core.domain.model.BaseVO;
 import com.tentelemed.archipel.core.domain.model.Country;

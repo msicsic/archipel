@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.core.infrastructure.domain;
+package com.tentelemed.archipel.core.infrastructure.model;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.EntityId;
@@ -16,7 +16,7 @@ import java.lang.reflect.Modifier;
  */
 public class EntityQUtil {
 
-    public static void applyEvent(BaseEntityQ entity, DomainEvent event) {
+    public static void applyEvent(Object entity, DomainEvent event) {
         Class currentClass = event.getClass();
 
         try {

@@ -1,6 +1,9 @@
 package com.tentelemed.archipel.gam.domain;
 
+import com.tentelemed.archipel.core.domain.model.Address;
 import com.tentelemed.archipel.core.domain.model.BaseVO;
+import com.tentelemed.archipel.core.domain.model.Email;
+import com.tentelemed.archipel.core.domain.model.PhoneNumber;
 
 /**
  * Created with IntelliJ IDEA.

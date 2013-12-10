@@ -53,7 +53,7 @@ public class MementoUtilTest {
         assertThat(adr, notNullValue());
         assertThat((String)adr.get("street"), equalTo("102 av Edouard Vaillant"));
         assertThat(Collection.class.isAssignableFrom(memento.get("children").getClass()), equalTo(true));
-        assertThat(((List)memento.get("children")).size(), equalTo(1));
+        assertThat(((List)memento.get("children")).size(), equalTo(2));
         Memento child = (Memento) ((List)memento.get("children")).get(0);
         assertThat((Memento)child.get("tutor"), equalTo(memento));
     }

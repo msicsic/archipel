@@ -7,6 +7,7 @@ import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.security.application.event.*;
 import org.hibernate.validator.constraints.Email;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -24,7 +25,7 @@ public class User extends BaseAggregateRoot<UserId> implements UserEventHandler 
     public static class ChangePasswordException extends DomainException {
     }
 
-    @NotNull Credentials credentials;
+    @NotNull @Valid Credentials credentials;
     @NotNull @Size(min = 2, max = 50) String firstName;
     @NotNull @Size(min = 2, max = 50) String lastName;
     @Email String email = "default@mail.com";

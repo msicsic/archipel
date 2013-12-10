@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.persistence;
 
-import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
+import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

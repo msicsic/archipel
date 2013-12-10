@@ -2,7 +2,7 @@ package com.tentelemed.archipel.security.infrastructure.shiro;
 
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
+import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;

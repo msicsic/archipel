@@ -5,7 +5,7 @@ import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
-import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
+import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -101,6 +101,7 @@ public class UserRepositoryIntegrationTests {
 
     private UserQ createUser(int i) {
         UserQ user = new UserQ();
+        user.setId(i);
         user.setDob(new Date());
         user.setLogin("login" + i);
         user.setPassword("123456789");

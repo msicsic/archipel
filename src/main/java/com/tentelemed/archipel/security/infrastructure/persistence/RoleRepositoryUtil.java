@@ -1,12 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.persistence;
 
-import com.tentelemed.archipel.security.infrastructure.persistence.domain.RoleQ;
-import com.tentelemed.archipel.security.infrastructure.persistence.domain.UserQ;
+import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 /**
  * Classe utilitaire générée automatiquement par Spring DATA

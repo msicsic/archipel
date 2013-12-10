@@ -1,7 +1,5 @@
 package com.tentelemed.archipel.core.domain.model;
 
-import org.apache.commons.beanutils.PropertyUtils;
-
 import javax.validation.Validation;
 import javax.validation.Validator;
 
@@ -30,4 +28,16 @@ public abstract class BaseVO implements BuildingBlock {
         }*/
         return value;
     }
+
+    protected void validate() {
+        getValidator().validate(this);
+    }
+
+    /*@Override
+    public abstract boolean equals(Object obj);
+
+    @Override
+    public abstract int hashCode();*/
+
+
 }
