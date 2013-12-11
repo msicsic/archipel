@@ -36,6 +36,7 @@ public class UiUsersViewModelTest {
 
         // given
         UserQ user = new UserQ();
+        user.setId(1);
         model.setSelectedUser(user);
 
         // when

@@ -4,6 +4,7 @@ package com.tentelemed.archipel.security.infrastructure.persistence.integration;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
+import com.tentelemed.archipel.infrastructure.config.TestSpringConfiguration;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.junit.Test;
@@ -24,7 +25,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringConfiguration.class})
+@ContextConfiguration(classes = {TestSpringConfiguration.class})
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 public class UserRepositoryIntegrationTests {
@@ -61,7 +62,7 @@ public class UserRepositoryIntegrationTests {
 
         UserQ user = repository.findByLogin("login1");
         assertNotNull(user);
-        assertEquals(user.getFirstName(), "Paul1");
+        assertEquals(user.getFirstName(), "firstname1");
 
         user = repository.findByLogin("LoGin1");
         assertEquals(user, null);

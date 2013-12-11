@@ -147,7 +147,12 @@ public abstract class BaseViewModel {
     }
 
     protected void confirm(String title, String message, Runnable r) {
-        UI.getCurrent().addWindow(new ConfirmDialog(this, title, message, r));
+        if (UI.getCurrent() != null) {
+            UI.getCurrent().addWindow(new ConfirmDialog(this, title, message, r));
+        } else {
+            // dans le cas des TU, on lance directement le runnable
+            r.run();
+        }
     }
 
 

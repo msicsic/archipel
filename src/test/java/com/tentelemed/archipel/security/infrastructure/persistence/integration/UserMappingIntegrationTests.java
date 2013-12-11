@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.persistence.integration;
 
 import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
+import com.tentelemed.archipel.infrastructure.config.TestSpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import static com.tentelemed.archipel.domain.fixture.JPAAssertions.assertTableEx
 import static com.tentelemed.archipel.domain.fixture.JPAAssertions.assertTableHasColumn;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringConfiguration.class})
+@ContextConfiguration(classes = {TestSpringConfiguration.class})
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         TransactionalTestExecutionListener.class})
@@ -36,10 +37,10 @@ public class UserMappingIntegrationTests {
      */
     @Test
     public void thatTableCreationWorks() throws Exception {
-        assertTableExists(manager, "t_user");
-        assertTableHasColumn(manager, "t_user", "c_first_name");
-        assertTableHasColumn(manager, "t_user", "c_credentials_login");
-        assertTableHasColumn(manager, "t_user", "c_credentials_password");
+        assertTableExists(manager, "t_userq");
+        assertTableHasColumn(manager, "t_userq", "c_first_name");
+        assertTableHasColumn(manager, "t_userq", "c_login");
+        assertTableHasColumn(manager, "t_userq", "c_password");
     }
 
 }

@@ -32,6 +32,7 @@ public abstract class BaseViewTest<M extends BaseView, MM extends BaseViewModel>
 
     protected NestingBeanItem<BaseViewModel> item;
     protected BeanFieldGroup<BaseViewModel> binder;
+    protected BeanFieldGroup<BaseViewModel> unBufferedBinder;
 
     @Before
     public void setUp() {
@@ -39,8 +40,12 @@ public abstract class BaseViewTest<M extends BaseView, MM extends BaseViewModel>
         item = new NestingBeanItem(getViewModel());
         binder = new BeanFieldGroup<>(BaseViewModel.class);
         binder.setItemDataSource(item);
+        unBufferedBinder = new BeanFieldGroup<>(BaseViewModel.class);
+        unBufferedBinder.setBuffered(false);
+        unBufferedBinder.setItemDataSource(item);
 
         when(getViewModel().getBinder()).thenReturn(binder);
+        when(getViewModel().getUnbufferedBinder()).thenReturn(unBufferedBinder);
         when(getViewModel().getItem()).thenReturn(item);
     }
 
@@ -59,7 +64,7 @@ public abstract class BaseViewTest<M extends BaseView, MM extends BaseViewModel>
         for (Object id : item.getItemPropertyIds()) {
             Property prop = item.getItemProperty(id);
             if (prop instanceof MethodProperty || prop instanceof NestedMethodProperty2) {
-                // vérifier que cette méthode existe bien
+                // vï¿½rifier que cette mï¿½thode existe bien
                 try {
                     String propName = (String) id;
                     log.info("("+getClass().getSimpleName()+") Testing path : "+propName);
@@ -90,7 +95,7 @@ public abstract class BaseViewTest<M extends BaseView, MM extends BaseViewModel>
                         }
                     }
                 }
-                // si on n'a pas trouvé, elle n'existe pas
+                // si on n'a pas trouvï¿½, elle n'existe pas
                 if (!found) {
                     return null;
                 }
