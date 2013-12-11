@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.model;
 
+import com.tentelemed.archipel.core.domain.model.TestUserId;
 import com.tentelemed.archipel.core.domain.model.TestUserRegistered;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Date: 05/12/13
  * Time: 19:14
  */
-public class EntityQUtilTest {
+public class EventUtilTest {
 
     @Test
     public void testApplyEvent() throws Exception {
@@ -22,15 +23,15 @@ public class EntityQUtilTest {
         // Given
         TestUserQ user = new TestUserQ();
         TestRoleQ role = new TestRoleQ();
-        TestUserRegistered event = new TestUserRegistered("Paul", "Durand", new Date(), "login", "password", role);
+        TestUserRegistered event = new TestUserRegistered(new TestUserId(11), "Paul", "Durand", new Date(), "login", "password", role);
 
         // When
-        EntityQUtil.applyEvent(user, event);
+        EventUtil.applyEvent(user, event);
 
         // Then
         assertThat(user.getFirstName(), equalTo(event.getFirstName()));
         assertThat(user.getRole(), equalTo(event.getRole()));
         assertThat(user.getRole().getName(), equalTo(event.getRole().getName()));
-
+        assertThat(user.getId(), equalTo(11));
     }
 }

@@ -5,7 +5,7 @@ import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.EventHandler;
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.core.infrastructure.model.EntityQUtil;
+import com.tentelemed.archipel.core.infrastructure.model.EventUtil;
 import com.tentelemed.archipel.security.application.event.RoleDomainEvent;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
@@ -37,7 +37,7 @@ public class PersistenceHandler {
             object = em.find(newObjectQ(event), event.getAggregateId().getId());
         }
         if (event.isCreate() || event.isUpdate()) {
-            EntityQUtil.applyEvent(object, event);
+            EventUtil.applyEvent(object, event);
             em.persist(object);
         } else {
             em.remove(object);

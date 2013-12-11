@@ -14,10 +14,15 @@ import java.lang.reflect.Modifier;
  * Date: 05/12/13
  * Time: 19:13
  */
-public class EntityQUtil {
+public class EventUtil {
 
     public static void applyEvent(Object entity, DomainEvent event) {
         Class currentClass = event.getClass();
+
+        // un event ne doit jamais avoir un id null
+        if (event.getAggregateId() == null) {
+            throw new RuntimeException("Event must have non null ID : "+event.getClass().getSimpleName());
+        }
 
         try {
             Method method = entity.getClass().getMethod("applyEvent", event.getClass());
@@ -35,14 +40,36 @@ public class EntityQUtil {
                                 fieldValue = ((EntityId) fieldValue).getId();
                             }
                             String fieldName = field.getName();
-                            PropertyUtils.setProperty(entity, fieldName, fieldValue);
+                            Field aggregateField = findField(entity, fieldName);
+                            //PropertyUtils.setProperty(entity, fieldName, fieldValue);
+                            if (aggregateField != null) {
+                                try {
+                                    aggregateField.setAccessible(true);
+                                    aggregateField.set(entity, fieldValue);
+                                } finally {
+                                    aggregateField.setAccessible(false);
+                                }
+                            }
                         }
                     } catch (Exception e) {
-                        throw new RuntimeException("Can't copy field : " + field.getName());
+                        throw new RuntimeException("Can't copy field '" + field.getName()+"', aggregate : "+entity.getClass().getSimpleName()+", event : "+event.getClass().getSimpleName());
                     }
                 }
                 currentClass = currentClass.getSuperclass();
             }
         }
+    }
+
+    private static Field findField(Object entity, String fieldName) {
+        Class currentClass = entity.getClass();
+        while (currentClass != null) {
+            for (Field field : currentClass.getDeclaredFields()) {
+                if (field.getName().equals(fieldName)) {
+                    return field;
+                }
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        return null;
     }
 }

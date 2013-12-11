@@ -1,162 +1,35 @@
 package com.tentelemed.archipel.core.application;
 
-import com.google.common.eventbus.DeadEvent;
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.core.application.service.EventHandler;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
-import com.tentelemed.archipel.core.domain.model.Memento;
-import com.tentelemed.archipel.core.domain.model.MementoUtil;
-import com.tentelemed.archipel.security.application.event.UserRegistered;
-import com.tentelemed.archipel.security.domain.model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
- * Date: 15/11/13
- * Time: 16:55
+ * Date: 11/12/13
+ * Time: 14:57
  */
-@EventHandler("storeEventBus")
-@Component
-public class EventStore {
-    private static final Logger log = LoggerFactory.getLogger(EventStore.class);
-
-    @Autowired
-    JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    EventBus eventBus;
-
-    @Autowired @Qualifier("storeEventBus")
-    EventBus storeEventBus;
-
-    public <M extends EntityId> BaseAggregateRoot<M> get(M id) {
-        List<String> eventStrings = jdbcTemplate.queryForList("select e.c_data from T_EVENTS e where e.c_aggregate_id=? order by c_version", String.class, id.getId());
-        if (eventStrings == null || eventStrings.size() == 0) return null;
-        List<DomainEvent> events = new ArrayList<>();
-        for (String s : eventStrings) {
-            Memento memento = MementoUtil.mementoFromString(s);
-            DomainEvent event = (DomainEvent) MementoUtil.instanciateFromMemento(memento);
-            events.add(event);
-        }
-
-        DomainEvent firstEvent = events.get(0);
-        if (!(firstEvent.isCreate())) {
-            throw new RuntimeException("First event must be CreateEvent");
-        }
-        BaseAggregateRoot target = newAgregateRoot(firstEvent);
-        applyEvents(target, events);
-        return target;
-    }
-
+public interface EventStore {
     /**
-     * Trouver un moyen de faciliter la tache : comment instancier facilement
-     * un agregat à partir d'un id ?
-     *
-     * @param event
+     * Retourne un objet présent dans le store
+     * @param id
+     * @param <M>
      * @return
      */
-    private BaseAggregateRoot newAgregateRoot(DomainEvent event) {
-        if (event instanceof UserRegistered) {
-            return new User();
-        }
-        return null;
-    }
-
-    protected BaseAggregateRoot applyEvents(BaseAggregateRoot aggregate, Collection<? extends DomainEvent> events) {
-        for (DomainEvent event : events) {
-            if (event.isDelete()) {
-                return null;
-            }
-            try {
-                Method m = aggregate.getClass().getMethod("handle", new Class[]{event.getClass()});
-                if (event.isCreate()) {
-                    aggregate._setId(event.getAggregateId().getId());
-                }
-                m.invoke(aggregate, event);
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException((e.getTargetException()));
-            } catch (Exception e) {
-                log.error("Cant find event handler method : " + aggregate.getClass().getSimpleName() + "." + event.getClass().getSimpleName(), e);
-                throw new RuntimeException(e);
-            }
-        }
-        return aggregate;
-    }
+    <M extends EntityId> BaseAggregateRoot<M> get(M id);
 
     /**
-     * - Persiste les evts dans le Store
-     * - Propage sur le bus du store (pour la partie Query)
-     * - Propage sur le bus principal (pour les sous systemes)
-     *
-     * @param target agregat deja modifié
-     * @param events les evts qui ont modifiés l'agregat
+     * Instancie un nouvel Aggregate et lui attribu un id
+     * @param aggregateClass
+     * @param <M>
+     * @return
      */
-    public void handleEvents(BaseAggregateRoot target, Collection<? extends DomainEvent> events) {
-        // maj de l'agregat
-        //Class<? extends BaseAggregateRoot> clazz = target.getClass();
-        //EntityId id = target.getEntityId();
-        // target = applyEvents(target, events);
+    <M extends BaseAggregateRoot> M get(Class<M> aggregateClass);
 
-        // recup de la derniere version
-        Long version = jdbcTemplate.queryForObject("select max(e.c_version) from T_EVENTS e where e.c_aggregate_id=?", Long.class, target.getEntityId().getId());
-        if (version == null) {
-            // enregistrer l'agregat
-            version = 0L;
-            jdbcTemplate.update("insert into T_AGGREGATE values (?,?,?)", target.getEntityId().getId(), target.getClass().getName(), version + events.size() - 1);
-        } else {
-            version++;
-            jdbcTemplate.update("update T_AGGREGATE set c_version=? where c_aggregate_id=?", version + events.size() - 1, target.getEntityId().getId());
-        }
+    void handleEvents(BaseAggregateRoot target, Collection<DomainEvent> events);
 
-        // ajout des evts dans le store
-        for (DomainEvent event : events) {
-            //addEvent(event);
-            Memento memento = MementoUtil.createMemento(event);
-            String serial = MementoUtil.mementoToString(memento);
-            jdbcTemplate.update("insert into T_EVENTS values (?,?,?)", event.getAggregateId().getId(), serial, version++);
-        }
-
-        // propagation aux QueryManagers (pour maj des bdd de consultation)
-        for (DomainEvent event : events) {
-            failed.set(Boolean.FALSE);
-            storeEventBus.post(event);
-            if (failed.get()) {
-                throw new RuntimeException("Event without persistence handler : " + event.getClass().getSimpleName());
-            }
-        }
-
-        // propagation aux listeners d'evts (les autres modules principalement)
-        for (DomainEvent event : events) {
-            eventBus.post(event);
-        }
-
-    }
-
-    ThreadLocal<Boolean> failed = new ThreadLocal<>();
-
-    @Subscribe
-    public void handle(DeadEvent event) {
-        failed.set(Boolean.TRUE);
-    }
-
-    public long getMaxAggregateId() {
-        Long res = jdbcTemplate.queryForObject("select max(c_aggregate_id) from T_AGGREGATE", Long.class);
-        if (res == null) return 0;
-        return res;
-    }
+    long getMaxAggregateId();
 }

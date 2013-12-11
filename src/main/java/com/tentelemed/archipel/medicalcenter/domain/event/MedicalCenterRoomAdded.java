@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.medicalcenter.domain.event;
 
 
+import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterInfo;
 import com.tentelemed.archipel.medicalcenter.domain.model.RoomId;
 
@@ -15,7 +16,8 @@ public class MedicalCenterRoomAdded extends MedicalCenterDomainEvent {
 
     MedicalCenterRoomAdded() {}
 
-    public MedicalCenterRoomAdded(RoomId roomId) {
+    public MedicalCenterRoomAdded(MedicalCenterId id, RoomId roomId) {
+        super(id);
         this.roomId = roomId;
     }
 

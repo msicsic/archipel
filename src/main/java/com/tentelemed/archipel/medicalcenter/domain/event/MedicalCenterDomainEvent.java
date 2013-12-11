@@ -10,4 +10,10 @@ import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
  * Time: 14:35
  */
 public class MedicalCenterDomainEvent extends AbstractDomainEvent<MedicalCenterId> {
+    public MedicalCenterDomainEvent() {
+    }
+
+    public MedicalCenterDomainEvent(MedicalCenterId id) {
+        super(id);
+    }
 }

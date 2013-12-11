@@ -1,7 +1,5 @@
 package com.tentelemed.gam.domain;
 
-import com.tentelemed.archipel.domain.Stories;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,7 @@ import java.util.List;
 public class MedicalCenterStories extends Stories {
     @Override
     protected List<Object> mySteps() {
-        List<Object> steps = new ArrayList(1);
+        List<Object> steps = new ArrayList<>();
         steps.add(new MedicalCenterSteps());
         return steps;
     }

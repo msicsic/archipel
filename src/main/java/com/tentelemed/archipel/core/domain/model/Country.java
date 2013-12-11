@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
  */
 public class Country extends BaseVO {
 
-    @NotNull @Size(min = 3, max = 3) private String isoCode;
+    @NotNull @Size(min = 2, max = 3) private String isoCode;
 
     Country() {}
 

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/tentelemed/archipel/core/application/EventStore.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/tentelemed/archipel/core/infrastructure/config/NamingStrategy.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/tentelemed/archipel/core/infrastructure/repo/EventStoreImpl.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/tentelemed/archipel/core/infrastructure/repo/IdGenerator.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/tentelemed/archipel/core/infrastructure/web/ModuleRoot.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/tentelemed/archipel/security/application/service/UserCommandService.java" charset="UTF-8" />

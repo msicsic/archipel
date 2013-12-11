@@ -29,7 +29,7 @@ public class Sector extends BaseVO implements Location {
         this.type = type;
         this.name = name;
         this.code = code;
-        this.services = services;
+        this.services = services==null ? new ArrayList<Service>() : services;
         validate();
     }
 

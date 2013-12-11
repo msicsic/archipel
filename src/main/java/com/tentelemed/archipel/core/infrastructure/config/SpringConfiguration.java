@@ -2,6 +2,8 @@ package com.tentelemed.archipel.core.infrastructure.config;
 
 import com.google.common.eventbus.EventBus;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.tentelemed.archipel.core.application.EventStore;
+import com.tentelemed.archipel.core.infrastructure.repo.EventStoreImpl;
 import com.tentelemed.archipel.security.infrastructure.shiro.MyRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -11,8 +13,6 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -83,6 +83,11 @@ public class SpringConfiguration {
     @Bean
     public Realm myRealm() {
         return new MyRealm();
+    }
+
+    @Bean
+    public EventStore eventStore() {
+        return new EventStoreImpl();
     }
 
     @Bean(name = "eventBus")

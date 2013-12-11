@@ -1,39 +1,45 @@
-package com.tentelemed.archipel.domain;
+package com.tentelemed.gam.domain;
 
+import de.codecentric.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.Keywords;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.i18n.LocalizedKeywords;
 import org.jbehave.core.io.CodeLocations;
 import org.jbehave.core.io.LoadFromClasspath;
-import org.jbehave.core.io.LoadFromURL;
 import org.jbehave.core.io.StoryFinder;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.model.ExamplesTableFactory;
 import org.jbehave.core.parsers.RegexStoryParser;
-import org.jbehave.core.reporters.*;
-import org.jbehave.core.steps.*;
+import org.jbehave.core.reporters.FilePrintStreamFactory;
+import org.jbehave.core.reporters.Format;
+import org.jbehave.core.reporters.StoryReporterBuilder;
+import org.jbehave.core.steps.InstanceStepsFactory;
+import org.jbehave.core.steps.MarkUnmatchedStepsAsPending;
+import org.jbehave.core.steps.ParameterConverters;
+import org.junit.runner.RunWith;
 
-import java.io.File;
-import java.io.PrintStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import static java.util.Arrays.asList;
 
+@RunWith(JUnitReportingRunner.class)
 public abstract class Stories extends JUnitStories {
 
-    private  URL  codeLocation = null;
+    private URL codeLocation = null;
 
     protected Stories() {
         codeLocation = CodeLocations.codeLocationFromClass(this.getClass());
-        configuredEmbedder().embedderControls()
+        configuredEmbedder()
+                .embedderControls()
                 .doGenerateViewAfterStories(true)
-                .doIgnoreFailureInStories(true)
+                .doIgnoreFailureInStories(false)
+                .doIgnoreFailureInView(false)
                 .doVerboseFailures(true)
-                .useThreads(1);
+                .useThreads(1)
+                .useStoryTimeoutInSecs(30);
 
     }
 
@@ -67,7 +73,7 @@ public abstract class Stories extends JUnitStories {
     }
 
     @Override
-    protected List<String> storyPaths() {
+    public List<String> storyPaths() {
         List<String> storyPaths = new StoryFinder().findPaths(codeLocation.getFile(), asList(storyPattern()), asList(""));
         return storyPaths;
     }

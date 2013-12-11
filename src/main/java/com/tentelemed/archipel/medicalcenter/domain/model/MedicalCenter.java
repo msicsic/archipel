@@ -27,28 +27,48 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
     @NotNull String ident;
     @NotNull @Valid Division division;
     @Valid Set<RoomId> rooms = new HashSet<>();
-    @NotNull @Valid MedicalCenterInfo info;
+    @Valid MedicalCenterInfo info;
+
 
     // COMMANDS
-    public List<DomainEvent> register(Type type, String name, String ident, Division division, MedicalCenterInfo info) {
+    public List<DomainEvent> register(Type type, String name, String ident) {
         validate("type", type);
         validate("name", name);
         validate("ident", ident);
-        validate("info", info);
-        validate("division", division);
-        return list(new MedicalCenterRegistered(type, name, ident, division, info));
+        return list(new MedicalCenterRegistered(getEntityId(), type, name, ident, createDefaultDivision()));
     }
 
-    public List<DomainEvent> update(Type type, String name, String ident, Division division, MedicalCenterInfo info) {
-        return list(new MedicalCenterUpdated(type, name, ident, division, info));
+    public List<DomainEvent> updateMainInfo(Type type, String name, String ident) {
+        validate("type", type);
+        validate("name", name);
+        validate("ident", ident);
+        return list(new MedicalCenterMainInfoUpdated(getEntityId(), type, name, ident));
+    }
+
+    public List<DomainEvent> updateAdditionalInfo(MedicalCenterInfo info) {
+        validate("info", info);
+        return list(new MedicalCenterAdditionalInfoUpdated(getEntityId(), info));
     }
 
     public List<DomainEvent> addRoom(RoomId room) {
-        return list(new MedicalCenterRoomAdded(room));
+        // TODO : tester l'existance de la Room
+        return list(new MedicalCenterRoomAdded(getEntityId(), room));
     }
 
     public List<DomainEvent> removeRoom(RoomId room) {
-        return list(new MedicalCenterRoomRemoved(room));
+        // TODO : tester l'existance de la Room
+        return list(new MedicalCenterRoomRemoved(getEntityId(), room));
+    }
+
+    // methodes utilitaires
+
+    /**
+     * Au minimum une Disivion possede un Sector de type médical
+     */
+    private Division createDefaultDivision() {
+        Set<Sector> sectors = new HashSet<>();
+        sectors.add(new Sector(Sector.Type.MED, "Default", "UNDEF", null));
+        return new Division(sectors);
     }
 
     // EVENTS
@@ -58,7 +78,12 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
     }
 
     @Override
-    public void handle(MedicalCenterUpdated event) {
+    public void handle(MedicalCenterMainInfoUpdated event) {
+        apply(event);
+    }
+
+    @Override
+    public void handle(MedicalCenterAdditionalInfoUpdated event) {
         apply(event);
     }
 

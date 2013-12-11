@@ -1,6 +1,5 @@
 package com.tentelemed.archipel.security.infrastructure.persistence.integration;
 
-import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
 import com.tentelemed.archipel.infrastructure.config.TestSpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +20,7 @@ import static com.tentelemed.archipel.domain.fixture.JPAAssertions.assertTableHa
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestSpringConfiguration.class})
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         TransactionalTestExecutionListener.class})
 @Transactional
@@ -33,6 +32,7 @@ public class UserMappingIntegrationTests {
 
     /**
      * - La table créé doit respecter la NamingStrategy
+     *
      * @throws Exception
      */
     @Test

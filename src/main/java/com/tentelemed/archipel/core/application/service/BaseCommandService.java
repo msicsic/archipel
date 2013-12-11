@@ -28,13 +28,13 @@ public class BaseCommandService {
     @Autowired
     EventBus eventBus;
 
-    protected <M extends EntityId, MM extends BaseAggregateRoot<M>> MM post(MM target, Collection<? extends DomainEvent> events) {
+    protected <M extends EntityId, MM extends BaseAggregateRoot<M>> MM post(MM target, Collection<DomainEvent> events) {
         // application des evts sur l'agregat
         eventStore.handleEvents(target, events);
         return target;
     }
 
-    protected <I extends EntityId, M extends DomainEvent<I>> void post(BaseAggregateRoot<I> target, M... events) {
+    protected <I extends EntityId, M extends DomainEvent<I>> void post(BaseAggregateRoot<I> target, DomainEvent... events) {
         post(target, Arrays.asList(events));
     }
 
@@ -48,27 +48,7 @@ public class BaseCommandService {
         return eventStore.get(id);
     }
 
-    static long count = -1;
-
-    private void initCount() {
-        if (count == -1) {
-            count = eventStore.getMaxAggregateId();
-        }
-    }
-
-    private Integer nextId() {
-        initCount();
-        return (int)(count++);
-    }
-
     protected <M extends BaseAggregateRoot> M get(Class<M> clazz) {
-        try {
-            M res = clazz.newInstance();
-            res._setId(nextId());
-            return res;
-        } catch (Exception e) {
-            log.error(null, e);
-            throw new RuntimeException(e);
-        }
+        return eventStore.get(clazz);
     }
 }

@@ -47,7 +47,7 @@ public abstract class BaseEntity<B extends EntityId> implements BuildingBlock {
     }
 
     public B getEntityId() {
-        if (entityId == null) {
+        if (entityId == null && id != null) {
             try {
                 entityId = getIdClass().newInstance();
                 entityId.setId(id);

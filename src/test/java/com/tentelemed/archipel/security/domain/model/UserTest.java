@@ -28,7 +28,7 @@ public class UserTest {
                 Method method = object.getClass().getMethod("handle", event.getClass());
                 method.invoke(object, event);
             } catch (Exception e) {
-                log.error(null, e);
+                throw new RuntimeException(e);
             }
         }
         return object;

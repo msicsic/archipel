@@ -65,7 +65,6 @@ public class Room extends BaseAggregateRoot<RoomId> implements RoomEventHandler 
 
     // GETTERS
 
-
     public LocationCode getLocationCode() {
         return locationCode;
     }
