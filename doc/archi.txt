@@ -1,3 +1,6 @@
+BUGS:
+- la mise à jour du login ne fonctionne pas
+
 Avancement du projet (4/12/13)
 => socle technique :
  - bases du DDD en place (VO, Entity, Aggregate)
