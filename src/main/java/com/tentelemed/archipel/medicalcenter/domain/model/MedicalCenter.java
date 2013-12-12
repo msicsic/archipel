@@ -18,11 +18,8 @@ import java.util.Set;
  * Time: 11:40
  */
 public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements MedicalCenterEventHandler {
-    public static enum Type {
-        CHU, CHD, Clinic, CS
-    }
 
-    @NotNull Type type;
+    @NotNull MedicalCenterType type;
     @NotNull String name;
     @NotNull String ident;
     @NotNull @Valid Division division;
@@ -31,14 +28,14 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
 
 
     // COMMANDS
-    public List<DomainEvent> register(Type type, String name, String ident) {
+    public List<DomainEvent> register(MedicalCenterType type, String name, String ident) {
         validate("type", type);
         validate("name", name);
         validate("ident", ident);
         return list(new MedicalCenterRegistered(getEntityId(), type, name, ident, createDefaultDivision()));
     }
 
-    public List<DomainEvent> updateMainInfo(Type type, String name, String ident) {
+    public List<DomainEvent> updateMainInfo(MedicalCenterType type, String name, String ident) {
         validate("type", type);
         validate("name", name);
         validate("ident", ident);
@@ -104,7 +101,7 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
         return MedicalCenterId.class;
     }
 
-    public Type getType() {
+    public MedicalCenterType getType() {
         return type;
     }
 

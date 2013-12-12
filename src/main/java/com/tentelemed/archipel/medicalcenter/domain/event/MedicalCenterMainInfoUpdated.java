@@ -1,11 +1,8 @@
 package com.tentelemed.archipel.medicalcenter.domain.event;
 
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.medicalcenter.domain.model.Division;
-import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenter;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
-import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterInfo;
+import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterType;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,18 +12,18 @@ import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterInfo;
  */
 public class MedicalCenterMainInfoUpdated extends MedicalCenterDomainEvent {
 
-    private MedicalCenter.Type type;
+    private MedicalCenterType type;
     private String name;
     private String ident;
 
-    public MedicalCenterMainInfoUpdated(MedicalCenterId id, MedicalCenter.Type type, String name, String ident) {
+    public MedicalCenterMainInfoUpdated(MedicalCenterId id, MedicalCenterType type, String name, String ident) {
         super(id);
         this.type = type;
         this.name = name;
         this.ident = ident;
     }
 
-    public MedicalCenter.Type getType() {
+    public MedicalCenterType getType() {
         return type;
     }
 

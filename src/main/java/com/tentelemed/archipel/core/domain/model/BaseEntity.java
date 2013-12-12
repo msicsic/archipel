@@ -36,7 +36,7 @@ public abstract class BaseEntity<B extends EntityId> implements BuildingBlock {
             if (! violations.isEmpty()) {
                 for (Object oviolation : violations) {
                     ConstraintViolation violation = (ConstraintViolation) oviolation;
-                    log.warn("constraint violation : "+violation.getMessage());
+                    log.warn("constraint violation : "+getClass().getSimpleName()+"."+property+" "+violation.getMessage());
                 }
                 throw new ConstraintViolationException(violations);
             }

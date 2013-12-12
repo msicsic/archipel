@@ -54,7 +54,7 @@ public class MedicalCenterSteps {
     @When("the user register a new MedicalCenter with name center1, type CHU, ident CTR1")
     public void whenTheUserRegisterANewMedicalCenterWithNameCenter1TypeCHUIdentCTR1() {
         center = getEventStore().get(MedicalCenter.class);
-        getEventStore().handleEvents(center, center.register(MedicalCenter.Type.CHU, "center1", "CTR1"));
+        getEventStore().handleEvents(center, center.register(MedicalCenterType.CHU, "center1", "CTR1"));
         System.err.println("hop");
     }
 
@@ -84,7 +84,7 @@ public class MedicalCenterSteps {
     @Given("a MedicalCenter")
     public void givenAMedicalCenter() {
         center = getEventStore().get(MedicalCenter.class);
-        getEventStore().handleEvents(center, center.register(MedicalCenter.Type.CHU, "center1", "CTR1"));
+        getEventStore().handleEvents(center, center.register(MedicalCenterType.CHU, "center1", "CTR1"));
     }
 
     @When("the user update the additional infos")
@@ -92,7 +92,7 @@ public class MedicalCenterSteps {
         Address address = new Address("street", "code", "Paris", new Country("FR"));
         PhoneNumber phone = new PhoneNumber("0155200800");
         PhoneNumber fax = new PhoneNumber("0155200800");
-        Bank bank = new Bank("BNP");
+        Bank bank = new Bank("BNP", "BNP");
         MedicalCenterInfo info = new MedicalCenterInfo("siret", address, phone, fax, "Dupont", bank, true, true, true);
         getEventStore().handleEvents(center, center.updateAdditionalInfo(info));
     }

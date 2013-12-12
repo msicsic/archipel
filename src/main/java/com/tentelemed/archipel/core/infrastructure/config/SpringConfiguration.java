@@ -151,9 +151,10 @@ public class SpringConfiguration {
         lef.setDataSource(dataSource);
         lef.setJpaVendorAdapter(jpaVendorAdapter);
         lef.setPackagesToScan(
-                "com.tentelemed.archipel.gam.infrastructure.persistence.model"
-                , "com.tentelemed.archipel.invoicing.infrastructure.persistence.model"
+                "com.tentelemed.archipel.gam.infrastructure.model"
+                , "com.tentelemed.archipel.invoicing.infrastructure.model"
                 , "com.tentelemed.archipel.security.infrastructure.model"
+                , "com.tentelemed.archipel.medicalcenter.infrastructure.model"
         );
         lef.getJpaPropertyMap().put("hibernate.ejb.naming_strategy", "com.tentelemed.archipel.core.infrastructure.config.NamingStrategy");
         lef.afterPropertiesSet();

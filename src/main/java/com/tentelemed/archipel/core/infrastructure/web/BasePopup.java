@@ -27,11 +27,22 @@ import java.util.Map;
  * Date: 29/10/13
  * Time: 14:25
  */
-public abstract class BaseView<M extends BaseViewModel> extends CustomComponent implements View {
-    Logger log = LoggerFactory.getLogger(BaseView.class);
+public abstract class BasePopup<M extends BaseViewModel> extends Window implements View {
+    Logger log = LoggerFactory.getLogger(BasePopup.class);
 
     @Autowired
     protected VaadinMessageSource msg;
+
+    protected BasePopup() {
+    }
+
+    protected BasePopup(String caption) {
+        super(caption);
+    }
+
+    protected BasePopup(String caption, Component content) {
+        super(caption, content);
+    }
 
     public abstract M getModel();
 

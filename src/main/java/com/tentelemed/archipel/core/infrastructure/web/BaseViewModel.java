@@ -4,9 +4,11 @@ import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.medicalcenter.infrastructure.web.UiMedicalCenterCreateView;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import ru.xpoft.vaadin.VaadinMessageSource;
 
 import javax.annotation.PostConstruct;
@@ -29,14 +32,11 @@ public abstract class BaseViewModel {
 
     protected static final Logger log = LoggerFactory.getLogger(BaseViewModel.class);
 
-    private BaseView view;
+    private View view;
 
-    @Autowired
-    @Qualifier("localBus")
-    EventBus eventBus;
-
-    @Autowired
-    protected VaadinMessageSource msg;
+    @Autowired ApplicationContext context;
+    @Autowired @Qualifier("localBus") EventBus eventBus;
+    @Autowired protected VaadinMessageSource msg;
 
     BeanFieldGroup<? extends BaseViewModel> binder;
     BeanFieldGroup<? extends BaseViewModel> unBufferedBinder;
@@ -53,6 +53,10 @@ public abstract class BaseViewModel {
     @PreDestroy
     public void _preDestroy() {
         eventBus.unregister(this);
+    }
+
+    protected <M extends View> M getView(Class<M> c) {
+        return context.getBean(c);
     }
 
     public void show(Throwable t) {
@@ -136,13 +140,23 @@ public abstract class BaseViewModel {
         onDomainEventReceived(event);
 
         // ensuite delegation a la vue
-        view.onDomainEventReceived(event);
+        if (view instanceof BaseView) {
+            ((BaseView)view).onDomainEventReceived(event);
+        } else {
+            ((BasePopup)view).onDomainEventReceived(event);
+        }
+    }
+
+    protected void close() {
+        if (view instanceof BasePopup) {
+            ((BasePopup)view).close();
+        }
     }
 
     protected void onDomainEventReceived(DomainEvent event) {
     }
 
-    public void register(BaseView view) {
+    public void register(View view) {
         this.view = view;
     }
 

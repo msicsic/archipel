@@ -19,7 +19,7 @@ public class MedicalCenterInfo extends BaseVO {
     @Valid PhoneNumber phone;
     @Valid PhoneNumber fax;
     String directorName;
-    @Valid Bank bank;
+    Bank bank;
     boolean emergenciesAvailable;
     boolean drugstoreAvailable;
     boolean privateRoomAvailable;
