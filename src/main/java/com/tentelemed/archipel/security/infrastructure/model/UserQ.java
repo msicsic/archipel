@@ -102,7 +102,7 @@ public class UserQ extends BaseEntityQ<UserId> {
         this.email = event.getEmail();
         this.firstName = event.getFirstName();
         this.lastName = event.getLastName();
-        this.id = event.getAggregateId().getId();
+        this.id = event.getId().getId();
         this.login = event.getCredentials().getLogin();
         this.password = event.getCredentials().getPassword();
     }

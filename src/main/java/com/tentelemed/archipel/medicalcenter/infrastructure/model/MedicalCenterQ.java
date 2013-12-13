@@ -1,8 +1,6 @@
 package com.tentelemed.archipel.medicalcenter.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.medicalcenter.domain.model.Bank;
-import com.tentelemed.archipel.medicalcenter.domain.model.BankId;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterType;
 
@@ -18,8 +16,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 public class MedicalCenterQ extends BaseEntityQ<MedicalCenterId> {
-    @NotNull @Size(min=3) String name;
-    @NotNull @Size(min=3) String ident;
+    @NotNull @Size(min = 3) String name;
+    @NotNull @Size(min = 3) String ident;
     @NotNull MedicalCenterType type;
     String siret;
     String street;

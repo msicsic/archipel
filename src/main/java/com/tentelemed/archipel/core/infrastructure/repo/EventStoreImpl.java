@@ -109,7 +109,7 @@ public class EventStoreImpl implements EventStore {
             try {
                 Method m = aggregate.getClass().getMethod("handle", new Class[]{event.getClass()});
                 if (event.isCreate()) {
-                    aggregate._setId(event.getAggregateId().getId());
+                    aggregate._setId(event.getId().getId());
                 }
                 m.invoke(aggregate, event);
             } catch (InvocationTargetException e) {
@@ -153,7 +153,7 @@ public class EventStoreImpl implements EventStore {
             //addEvent(event);
             Memento memento = MementoUtil.createMemento(event);
             String serial = MementoUtil.mementoToString(memento);
-            jdbcTemplate.update("insert into T_EVENTS values (?,?,?)", event.getAggregateId().getId(), serial, version++);
+            jdbcTemplate.update("insert into T_EVENTS values (?,?,?)", event.getId().getId(), serial, version++);
         }
 
         // propagation aux QueryManagers (pour maj des bdd de consultation)

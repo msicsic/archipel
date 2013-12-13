@@ -1,7 +1,9 @@
 package com.tentelemed.archipel.medicalcenter.application.service;
 
 import com.tentelemed.archipel.core.application.service.BaseQueryService;
+import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.medicalcenter.domain.interfaces.MedicalCenterRepository;
+import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,10 +23,13 @@ import java.util.List;
 public class MedicalCenterQueryService extends BaseQueryService {
 
     @Autowired
-    MedicalCenterRepository userRepository;
+    MedicalCenterRepository repo;
 
     public List<MedicalCenterQ> getAll() {
-        return userRepository.getAll();
+        return repo.getAll();
     }
 
+    public MedicalCenterQ getCenter(MedicalCenterId id) {
+        return repo.load(id);
+    }
 }

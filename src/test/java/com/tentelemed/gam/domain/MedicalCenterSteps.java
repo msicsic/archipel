@@ -40,7 +40,7 @@ public class MedicalCenterSteps {
         context.register(TestSpringConfiguration.class);
         context.refresh();
         EventRegistry registry = (EventRegistry) context.getBean("eventRegistry");
-        registry.addEntry(MedicalCenterRegistered.class, MedicalCenter.class);
+        registry.addEntry(MedicalCenterRegistered.class, MedicalCenter.class, null);
     }
 
     private EventStore getEventStore() {

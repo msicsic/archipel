@@ -44,7 +44,7 @@ public class TestEventStore implements EventStore {
     public <M extends EntityId> BaseAggregateRoot<M> get(M id) {
         BaseAggregateRoot<M> root = null;
         for (DomainEvent event : events) {
-            if (id.equals(event.getAggregateId())) {
+            if (id.equals(event.getId())) {
                 if (root == null) {
                     root = eventRegistry.newAggregateForEvent(event);
                 }

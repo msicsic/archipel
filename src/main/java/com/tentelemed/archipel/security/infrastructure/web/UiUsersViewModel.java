@@ -92,11 +92,11 @@ public class UiUsersViewModel extends BaseViewModel {
     @Subscribe
     public void handleEvent(UserDomainEvent event) {
         if (event.isDelete()) {
-            if (getSelectedUser() != null && Objects.equals(getSelectedUser().getId(), event.getAggregateId().getId())) {
+            if (getSelectedUser() != null && Objects.equals(getSelectedUser().getId(), event.getId().getId())) {
                 setSelectedUser(null);
             }
         } else if (event.isCreate() && getSelectedUser().getId() == null) {
-            setSelectedUser(userQuery.getUser(event.getAggregateId()));
+            setSelectedUser(userQuery.getUser(event.getId()));
         }
     }
 

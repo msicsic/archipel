@@ -3,6 +3,7 @@ package com.tentelemed.archipel.core.infrastructure.config;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.domain.model.Right;
 import com.tentelemed.archipel.security.domain.model.Role;
+import com.tentelemed.archipel.security.domain.model.RoleId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +44,9 @@ public class DbInit {
                 jdbcTemplate.update(
                         "create table T_AGGREGATE (c_aggregate_id INTEGER NOT NULL, c_type VARCHAR(128) NOT NULL, c_version INTEGER NOT NULL, PRIMARY KEY(c_aggregate_id), INDEX idx_version (c_version))"
                 );
-                Role role = service.registerRole("administrateur", Right.RIGHT_A);
+                RoleId role = service.registerRole("administrateur", Right.RIGHT_A);
                 for (int i = 0; i < 100; i++) {
-                    service.registerUser(role.getEntityId(), "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i);
+                    service.registerUser(role, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i);
                 }
             }
 

@@ -20,7 +20,7 @@ public class EventUtil {
         Class currentClass = event.getClass();
 
         // un event ne doit jamais avoir un id null
-        if (event.getAggregateId() == null) {
+        if (event.getId() == null) {
             throw new RuntimeException("Event must have non null ID : "+event.getClass().getSimpleName());
         }
 

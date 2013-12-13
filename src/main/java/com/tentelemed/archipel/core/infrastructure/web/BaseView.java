@@ -5,6 +5,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.MethodProperty;
 import com.vaadin.data.util.NestedMethodProperty2;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -19,6 +20,7 @@ import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -55,8 +57,31 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     }
 
     protected Label bind(Label field, String path) {
+        if (field.getCaption() == null) {
+            field.setCaption(field.getValue());
+        }
         getModel().getItem().addNestedProperty(path);
         field.setPropertyDataSource(getModel().getItem().getItemProperty(path));
+        final Class type = getModel().getItem().getItemProperty(path).getType();
+        if (type.isEnum()) {
+            field.setConverter(new Converter<String, Object>() {
+                @Override public Object convertToModel(String value, Class<?> targetType, Locale locale) throws ConversionException {
+                    return value == null ? null : Enum.valueOf(type, value);
+                }
+
+                @Override public String convertToPresentation(Object value, Class<? extends String> targetType, Locale locale) throws ConversionException {
+                    return value == null ? null : ((Enum)value).name();
+                }
+
+                @Override public Class<Object> getModelType() {
+                    return type;
+                }
+
+                @Override public Class<String> getPresentationType() {
+                    return String.class;
+                }
+            });
+        }
         field.setImmediate(true);
         return field;
     }

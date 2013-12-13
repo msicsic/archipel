@@ -1,5 +1,12 @@
 BUGS:
-- la mise à jour du login ne fonctionne pas
+- UiUsers : la mise à jour du login ne fonctionne pas -> normal car champ pas pris en compte par
+  la commande UserInfoUpdated
+- Gen : En fait il faut binder les champs editables sur une commande et pas sur un EntityQ
+  en effet les entityQ ne sont modifiables que par le mapping des Entités sur les EntityQ
+  Cela éviterait également les bugs comme decrit plus haut
+- UiCenterCreate : a la premiere tentative de creation plantage dans bdd car id deja utilisé
+- UiCenter : a la creation la combo ne se positionne pas correctement sur le nouveau site créé
+- UI : c'est tres moche il va falloir faire qq chose
 
 Avancement du projet (4/12/13)
 => socle technique :

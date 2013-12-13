@@ -4,11 +4,14 @@ import com.tentelemed.archipel.core.infrastructure.web.BasePopup;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.medicalcenter.application.service.MedicalCenterCommandService;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import javax.validation.Valid;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,24 +22,25 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 public class UiMedicalCenterCreateViewModel extends BaseViewModel {
-    private MedicalCenterQ medicalCenter;
+    private MedicalCenterCommandService.CmdRegister cmd = new MedicalCenterCommandService.CmdRegister();
 
     @Autowired MedicalCenterCommandService serviceWrite;
 
-    public MedicalCenterQ getMedicalCenter() {
-        if (medicalCenter == null) {
-            medicalCenter = new MedicalCenterQ();
-        }
-        return medicalCenter;
-    }
-
-    public void setMedicalCenter(MedicalCenterQ medicalCenter) {
-        this.medicalCenter = medicalCenter;
+    @Valid
+    public MedicalCenterCommandService.CmdRegister getCmd() {
+        return cmd;
     }
 
     public void action_createCenter()  {
-        serviceWrite.registerCenter(medicalCenter.getType(), medicalCenter.getName(), medicalCenter.getIdent());
-        close();
+        try {
+            commit();
+            boolean valid = getBinder().isValid();
+            System.err.println("valid : "+valid);
+            serviceWrite.execute(cmd);
+            close();
+        } catch (FieldGroup.CommitException e) {
+            show("Invalid data");
+        }
     }
 
     public void action_cancel() {

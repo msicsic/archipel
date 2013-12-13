@@ -9,10 +9,13 @@ import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.core.infrastructure.web.RootView;
 import com.tentelemed.archipel.medicalcenter.domain.event.MedicalCenterRegistered;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenter;
+import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
 import com.tentelemed.archipel.security.application.event.RoleRegistered;
 import com.tentelemed.archipel.security.application.event.UserRegistered;
 import com.tentelemed.archipel.security.domain.model.Role;
 import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
+import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import com.vaadin.ui.AbstractComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,9 +140,9 @@ public class CoreService extends BaseService {
     }
 
     private void _initEventRegistry() {
-        eventRegistry.addEntry(UserRegistered.class, User.class);
-        eventRegistry.addEntry(RoleRegistered.class, Role.class);
-        eventRegistry.addEntry(MedicalCenterRegistered.class, MedicalCenter.class);
+        eventRegistry.addEntry(UserRegistered.class, User.class, UserQ.class);
+        eventRegistry.addEntry(RoleRegistered.class, Role.class, RoleQ.class);
+        eventRegistry.addEntry(MedicalCenterRegistered.class, MedicalCenter.class, MedicalCenterQ.class);
     }
 
     public void initApplication() {

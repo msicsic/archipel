@@ -30,12 +30,12 @@ import java.util.*;
 @Transactional
 public class UserCommandService extends BaseCommandService {
 
-    public Role registerRole(String name, Right... rights) {
+    public RoleId registerRole(String name, Right... rights) {
         Role role = get(Role.class);
         return post(role, role.register(name, new HashSet<>(Arrays.asList(rights))));
     }
 
-    public User registerUser(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
+    public UserId registerUser(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
         // c'est une commande de creation d'agregat :
         // il faut donc instancier l'agregat puis lui attribuer un id
         User user = get(User.class);
@@ -51,7 +51,7 @@ public class UserCommandService extends BaseCommandService {
      * Rq : le login ne peut pas etre changé par ce biais
      */
     // TODO : controle de droits
-    public User updateUserInfo(UserId id, String firstName, String lastName, Date dob, String email) {
+    public UserId updateUserInfo(UserId id, String firstName, String lastName, Date dob, String email) {
         // chargement de l'agregat
         User user = (User) get(id);
 
@@ -67,7 +67,7 @@ public class UserCommandService extends BaseCommandService {
      * @param id
      * @precond l'utilisateur doit exister
      */
-    public User deleteUser(UserId id) {
+    public UserId deleteUser(UserId id) {
         User user = (User) get(id);
         List<DomainEvent> events = user.delete(id);
         return post(user, events);

@@ -18,10 +18,6 @@ public abstract class AbstractDomainEvent<M extends EntityId> implements DomainE
     }
 
     @Override
-    public M getAggregateId() {
-        return id;
-    }
-
     public M getId() {
         return id;
     }

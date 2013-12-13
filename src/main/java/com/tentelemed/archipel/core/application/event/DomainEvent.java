@@ -16,7 +16,7 @@ public interface DomainEvent<M extends EntityId> extends BuildingBlock {
 
     Type getCrudType();
 
-    M getAggregateId();
+    M getId();
 
     boolean isUpdate();
 

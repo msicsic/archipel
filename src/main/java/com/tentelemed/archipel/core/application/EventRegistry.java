@@ -2,6 +2,7 @@ package com.tentelemed.archipel.core.application;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,8 +22,9 @@ public class EventRegistry {
     private final static Logger log = LoggerFactory.getLogger(EventRegistry.class);
 
     Map<Class<? extends DomainEvent>, Class<? extends BaseAggregateRoot>> registry = new HashMap<>();
+    Map<Class<? extends DomainEvent>, Class<? extends BaseEntityQ>> registryQ = new HashMap<>();
 
-    public void addEntry(Class<? extends DomainEvent> eventClazz, Class<? extends BaseAggregateRoot> clazz) {
+    public void addEntry(Class<? extends DomainEvent> eventClazz, Class<? extends BaseAggregateRoot> clazz, Class<? extends BaseEntityQ> clazzQ) {
         DomainEvent event;
         try {
             Constructor c = eventClazz.getDeclaredConstructor();
@@ -36,10 +38,34 @@ public class EventRegistry {
             throw new RuntimeException("Only 'Create' events can be added to the registry");
         }
         registry.put(eventClazz, clazz);
+        registryQ.put(eventClazz, clazzQ);
     }
 
     public Class<? extends BaseAggregateRoot> getClassForEvent(DomainEvent event) {
         return registry.get(event.getClass());
+    }
+
+    public Class<? extends BaseEntityQ> getClassQForEvent(DomainEvent event) {
+        return registryQ.get(event.getClass());
+    }
+
+    public BaseEntityQ newEntityQ(DomainEvent event) {
+        Class c = registryQ.get(event.getClass());
+        if (c == null) {
+            throw new RuntimeException("No EntityQ class found for event : "+event.getClass().getSimpleName());
+        }
+        Constructor cst = null;
+        try {
+            cst = c.getDeclaredConstructor();
+            cst.setAccessible(true);
+            return (BaseEntityQ) c.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot instanciate EntityQ of class : "+c.getSimpleName());
+        } finally {
+            if (cst != null) {
+                cst.setAccessible(false);
+            }
+        }
     }
 
     public BaseAggregateRoot newAggregateForEvent(DomainEvent event) {
