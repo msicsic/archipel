@@ -78,7 +78,7 @@ public class EventStoreImpl implements EventStore {
 
     private synchronized Integer nextId() {
         initCount();
-        return (int)(count++);
+        return (int)(++count);
     }
 
     @Override

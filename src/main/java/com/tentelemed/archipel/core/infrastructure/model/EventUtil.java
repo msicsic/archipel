@@ -4,6 +4,7 @@ import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import org.apache.commons.beanutils.PropertyUtils;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -40,14 +41,22 @@ public class EventUtil {
                                 fieldValue = ((EntityId) fieldValue).getId();
                             }
                             String fieldName = field.getName();
-                            Field aggregateField = findField(entity, fieldName);
-                            //PropertyUtils.setProperty(entity, fieldName, fieldValue);
-                            if (aggregateField != null) {
-                                try {
-                                    aggregateField.setAccessible(true);
-                                    aggregateField.set(entity, fieldValue);
-                                } finally {
-                                    aggregateField.setAccessible(false);
+
+                            PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(entity, fieldName);
+                            if (desc != null && desc.getWriteMethod() != null) {
+                                // si un setter existe, on l'utilise
+                                PropertyUtils.setProperty(entity, fieldName, fieldValue);
+
+                            } else {
+                                // sinon on utilise directement l'attribut
+                                Field aggregateField = findField(entity, fieldName);
+                                if (aggregateField != null) {
+                                    try {
+                                        aggregateField.setAccessible(true);
+                                        aggregateField.set(entity, fieldValue);
+                                    } finally {
+                                        aggregateField.setAccessible(false);
+                                    }
                                 }
                             }
                         }

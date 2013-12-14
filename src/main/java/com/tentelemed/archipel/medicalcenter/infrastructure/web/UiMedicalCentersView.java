@@ -99,7 +99,6 @@ public class UiMedicalCentersView extends BaseView<UiMedicalCentersViewModel> {
         panelAddInfo.setContent(layoutAdd);
         grid.addComponent(panelAddInfo);
 
-
     }
 
     private void initCombo() {
