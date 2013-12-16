@@ -68,7 +68,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
             ClassNotFoundException {
         in.defaultReadObject();
 
-        initialize(instance.getClass(), propertyName);
+        initialize(instance, instance.getClass(), propertyName);
     }
 
     /**
@@ -82,7 +82,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
      */
     public NestedMethodProperty2(Object instance, String propertyName) {
         this.instance = instance;
-        initialize(instance.getClass(), propertyName);
+        initialize(instance, instance.getClass(), propertyName);
     }
 
     /**
@@ -95,7 +95,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
      */
     NestedMethodProperty2(Class<?> instanceClass, String propertyName) {
         instance = null;
-        initialize(instanceClass, propertyName);
+        initialize(instance, instanceClass, propertyName);
     }
 
     /**
@@ -106,7 +106,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
      * @param propertyName dot separated nested property name
      * @throws IllegalArgumentException if the property name is invalid
      */
-    private void initialize(Class<?> beanClass, String propertyName)
+    private void initialize(Object instance, Class<?> beanClass, String propertyName)
             throws IllegalArgumentException {
 
         List<Method> getMethods = new ArrayList<Method>();
@@ -115,12 +115,13 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
         Class<?> lastClass = beanClass;
 
         // first top-level property, then go deeper in a loop
-        Class<?> propertyClass = beanClass;
+        Class<?> propertyClass = instance != null ? instance.getClass() : beanClass;
         String[] simplePropertyNames = propertyName.split("\\.");
         if (propertyName.endsWith(".") || 0 == simplePropertyNames.length) {
             throw new IllegalArgumentException("Invalid property name '"
                     + propertyName + "'");
         }
+        Object currentInstance = instance;
         for (int i = 0; i < simplePropertyNames.length; i++) {
             String simplePropertyName = simplePropertyNames[i].trim();
             if (simplePropertyName.length() > 0) {
@@ -129,7 +130,18 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
                 try {
                     Method getter = MethodProperty.initGetterMethod(
                             simplePropertyName, propertyClass);
-                    propertyClass = getter.getReturnType();
+                    propertyClass = null;
+                    try {
+                        if (currentInstance != null) {
+                            currentInstance = getter.invoke(currentInstance);
+                            propertyClass = currentInstance.getClass();
+                        }
+                    } catch (Exception e) {
+                        //
+                    }
+                    if (propertyClass == null) {
+                        propertyClass = getter.getReturnType();
+                    }
                     getMethods.add(getter);
                 } catch (final java.lang.NoSuchMethodException e) {
                     throw new IllegalArgumentException("Bean property '"

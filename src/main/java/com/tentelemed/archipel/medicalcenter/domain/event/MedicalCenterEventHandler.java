@@ -12,4 +12,5 @@ public interface MedicalCenterEventHandler {
     void handle(MedicalCenterAdditionalInfoUpdated event);
     void handle(MedicalCenterRoomAdded event);
     void handle(MedicalCenterRoomRemoved event);
+    void handle(MedicalCenterDeleted event);
 }

@@ -57,6 +57,9 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
         return list(new MedicalCenterRoomRemoved(getEntityId(), room));
     }
 
+    public List<DomainEvent> delete() {
+        return list(new MedicalCenterDeleted(getEntityId()));
+    }
     // methodes utilitaires
 
     /**
@@ -94,7 +97,12 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
         rooms.remove(event.getRoomId());
     }
 
-    // GETTERS
+    @Override
+    public void handle(MedicalCenterDeleted event) {
+        // ras
+    }
+
+// GETTERS
 
     @Override
     protected Class<MedicalCenterId> getIdClass() {

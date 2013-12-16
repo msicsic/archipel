@@ -45,19 +45,8 @@ public class MedicalCenterCommandService extends BaseCommandService {
         @NotNull public MedicalCenterType type;
         @NotNull @Size(min = 3) public String name;
         @NotNull @Size(min = 3) public String ident;
-
-        public void setType(MedicalCenterType type) {
-            this.type = type;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public void setIdent(String ident) {
-            this.ident = ident;
-        }
     }
+    public static class CmdDelete extends Command<MedicalCenterId> { }
 
     private Validator validator;
 
@@ -84,7 +73,11 @@ public class MedicalCenterCommandService extends BaseCommandService {
         Method m;
         try {
             // vérifier si handle existe bien
-            m = getClass().getMethod("handle", command.getClass());
+            Class c = command.getClass();
+            while (c.getName().contains("$$") && c.getSuperclass() != null) {
+                c = c.getSuperclass();
+            }
+            m = getClass().getMethod("handle", c);
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Handle method not found for command : " + command.getClass().getSimpleName());
         }
@@ -102,25 +95,15 @@ public class MedicalCenterCommandService extends BaseCommandService {
         }
     }
 
-    public Object handle(CmdRegister command) {
+    public MedicalCenterId handle(CmdRegister command) {
         MedicalCenter center = get(MedicalCenter.class);
         List<DomainEvent> events = center.register(command.type, command.name, command.ident);
         return post(center, events);
     }
 
-    public CmdRegister cmdRegister() {
-        return new CmdRegister();
+    public MedicalCenterId handle(CmdDelete command) {
+        MedicalCenter center = get(MedicalCenter.class);
+        List<DomainEvent> events = center.delete();
+        return post(center, events);
     }
-
-//    public MedicalCenterId registerCenter(MedicalCenterType type, String name, String ident) {
-////        MedicalCenter center = get(MedicalCenter.class);
-////        List<DomainEvent> events = center.register(type, name, ident);
-////        return post(center, events);
-//        CmdRegister cmd = new CmdRegister();
-//        cmd.ident = ident;
-//        cmd.name = name;
-//        cmd.type = type;
-//        execute(command);
-//    }
-
 }

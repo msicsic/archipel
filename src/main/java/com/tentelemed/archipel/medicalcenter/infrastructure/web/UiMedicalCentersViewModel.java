@@ -54,7 +54,7 @@ public class UiMedicalCentersViewModel extends BaseViewModel {
     }
 
     public void action_deleteCenter() {
-        // TODO
+        // todo
     }
 
     public void action_editMain() {

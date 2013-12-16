@@ -37,6 +37,7 @@ public class BeanCreator {
 
         Class c = o.getClass();
         for (String fieldName : fieldNames.keySet()) {
+            Field field = fieldNames.get(fieldName);
             String getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
             try {
                 // si getter deja present, rien a faire
@@ -45,8 +46,16 @@ public class BeanCreator {
                 // no getter
                 //Type[] parameters = new Type[] { Type.getType(String.class) };
                 Type[] parameters = new Type[]{};
-                Field field = fieldNames.get(fieldName);
                 Signature signature = new Signature(getterName, Type.getType(field.getType()), parameters);
+                im.add(signature, null);
+            }
+            String setterName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+            try {
+                c.getMethod(setterName);
+            } catch (Exception e) {
+                // no setter
+                Type[] parameters = new Type[]{Type.getType(field.getType())};
+                Signature signature = new Signature(setterName, Type.VOID_TYPE, parameters);
                 im.add(signature, null);
             }
         }
@@ -70,14 +79,23 @@ public class BeanCreator {
                         fieldName = method.getName().substring(2);
                         fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
                     }
-                    //Employee employee = (Employee) obj;
                     for (Field field : o.getClass().getDeclaredFields()) {
                         if (field.getName().equals(fieldName)) {
                             field.setAccessible(true);
-                            return field.get(o);
+                            return field.get(obj);
                         }
                     }
 
+                    return null;
+                } else if (method.getName().startsWith("set")) {
+                    String fieldName = method.getName().substring(3);
+                    fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
+                    for (Field field : o.getClass().getDeclaredFields()) {
+                        if (field.getName().equals(fieldName)) {
+                            field.setAccessible(true);
+                            field.set(obj, args[0]);
+                        }
+                    }
                     return null;
                 } else {
                     return proxy.invokeSuper(obj, args);
