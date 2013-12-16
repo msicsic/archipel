@@ -46,24 +46,12 @@ public class MedicalCenterCommandService extends BaseCommandService {
         @NotNull @Size(min = 3) public String name;
         @NotNull @Size(min = 3) public String ident;
 
-        public MedicalCenterType getType() {
-            return type;
-        }
-
         public void setType(MedicalCenterType type) {
             this.type = type;
         }
 
-        public String getName() {
-            return name;
-        }
-
         public void setName(String name) {
             this.name = name;
-        }
-
-        public String getIdent() {
-            return ident;
         }
 
         public void setIdent(String ident) {

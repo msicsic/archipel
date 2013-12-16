@@ -124,4 +124,5 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
     public MedicalCenterInfo getInfo() {
         return info;
     }
+
 }

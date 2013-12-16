@@ -53,6 +53,7 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
         viewLayout.addComponent(menubar);
 
         childLayout = new VerticalLayout();
+        //childLayout.setMargin(true);
         viewLayout.addComponent(childLayout);
 
         for (final Module module : model.getModules()) {

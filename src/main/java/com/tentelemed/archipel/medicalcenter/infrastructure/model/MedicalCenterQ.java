@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.medicalcenter.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
+import com.tentelemed.archipel.medicalcenter.domain.model.Division;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterType;
 
@@ -31,6 +32,7 @@ public class MedicalCenterQ extends BaseEntityQ<MedicalCenterId> {
     boolean emergenciesAvailable;
     boolean drugstoreAvailable;
     boolean privateRoomAvailable;
+    //Division division;
 
     @Override
     protected Class<MedicalCenterId> getIdClass() {
@@ -156,4 +158,12 @@ public class MedicalCenterQ extends BaseEntityQ<MedicalCenterId> {
     public void setPrivateRoomAvailable(boolean privateRoomAvailable) {
         this.privateRoomAvailable = privateRoomAvailable;
     }
+
+    /*public Division getDivision() {
+        return division;
+    }
+
+    public void setDivision(Division division) {
+        this.division = division;
+    }*/
 }

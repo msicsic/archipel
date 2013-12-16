@@ -23,6 +23,8 @@ import org.springframework.stereotype.Component;
 public class UiMedicalCenterCreateView extends BasePopup<UiMedicalCenterCreateViewModel> {
 
     @Autowired UiMedicalCenterCreateViewModel model;
+    private Button bt1;
+    private Button bt2;
 
     public UiMedicalCenterCreateView() {
         super("Create Center");
@@ -37,12 +39,14 @@ public class UiMedicalCenterCreateView extends BasePopup<UiMedicalCenterCreateVi
     public void postConstruct() {
         //setImmediate(true);
         setModal(true);
+        setResizable(false);
 
-        setWidth("300px");
-        setHeight("320px");
+        setWidth("250px");
+        setHeight("250px");
         center();
 
         VerticalLayout grid = new VerticalLayout();
+        grid.setHeight("100%");
         FormLayout layout = new FormLayout();
 
         final ComboBox cb = new ComboBox("Type");
@@ -64,9 +68,18 @@ public class UiMedicalCenterCreateView extends BasePopup<UiMedicalCenterCreateVi
         layout.addComponent(bind(new TextField("Name"), "cmd.name"));
         layout.addComponent(bind(new TextField("Ident"), "cmd.ident"));
 
-        layout.addComponent(bind(new Button("Create Center"), "createCenter"));
-        layout.addComponent(bind(new Button("Cancel"), "cancel"));
+        HorizontalLayout btLayout = new HorizontalLayout();
+        btLayout.setSpacing(true);
+        bt1 = bind(new Button("Create Center"), "createCenter");
+        bt2 = bind(new Button("Cancel"), "cancel");
+        btLayout.addComponent(bt1);
+        btLayout.addComponent(bt2);
+
         grid.addComponent(layout);
+        //grid.setExpandRatio(layout, 1.0f);
+
+        grid.addComponent(btLayout);
+        grid.setComponentAlignment(btLayout, Alignment.BOTTOM_RIGHT);
 
         grid.setMargin(true);
         setContent(grid);

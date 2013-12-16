@@ -12,6 +12,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import ru.xpoft.vaadin.VaadinMessageSource;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -169,5 +173,41 @@ public abstract class BaseViewModel {
         }
     }
 
+    protected <M> List<M> sort(List<M> collection, Comparator<M> comp) {
+        Collections.sort(collection, comp);
+        return collection;
+    }
+
+    protected <M> List<M> sort(List<M> collection, final String property) {
+        Collections.sort(collection, new Comparator<M>() {
+            @Override
+            public int compare(M o1, M o2) {
+                try {
+                    Object val1 = PropertyUtils.getProperty(o1, property);
+                    Object val2 = PropertyUtils.getProperty(o2, property);
+                    if (val1 == null) {
+                        if (val2 == null) return 0;
+                        else return 1;
+                    }
+                    if (val2 == null) {
+                        return -1;
+                    }
+
+                    Comparable compa1 = o1.toString();
+                    Comparable compa2 = o2.toString();
+                    if (val1 instanceof Comparable && val2 instanceof Comparable<?>) {
+                        compa1 = (Comparable) val1;
+                        compa2 = (Comparable) val2;
+                    }
+
+                    return compa1.compareTo(compa2);
+                } catch (Exception e) {
+                    log.error(null, e);
+                    return 0;
+                }
+            }
+        });
+        return collection;
+    }
 
 }

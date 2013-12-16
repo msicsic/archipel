@@ -4,8 +4,8 @@ import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.medicalcenter.domain.event.MedicalCenterRegistered;
-import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenter;
-import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterType;
+import com.tentelemed.archipel.medicalcenter.domain.model.Division;
+import com.tentelemed.archipel.medicalcenter.domain.model.Sector;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
@@ -33,6 +33,8 @@ public class UiMedicalCentersView extends BaseView<UiMedicalCentersViewModel> {
         return model;
     }
 
+
+
     @Override
     public void postConstruct() {
         setSizeFull();
@@ -43,8 +45,113 @@ public class UiMedicalCentersView extends BaseView<UiMedicalCentersViewModel> {
         VerticalLayout grid = new VerticalLayout();
         panel.setContent(grid);
 
-        // Filters
+        // Selection centre
+        grid.addComponent(createSelectCenterPanel());
+
+        TabSheet tab = new TabSheet();
+
+        grid.addComponent(tab);
+
+        tab.addComponent(createMainInfoPanel());
+        tab.addComponent(createAddInfoPanel());
+        tab.addComponent(createServicesPanel());
+        tab.addComponent(createRoomsPanel());
+
+        grid.setMargin(true);
+        grid.setSpacing(true);
+
+    }
+
+    private com.vaadin.ui.Component createRoomsPanel() {
+        VerticalLayout vlayout = new VerticalLayout();
+        vlayout.setCaption("Rooms management");
+        return vlayout;
+    }
+
+    private com.vaadin.ui.Component createServicesPanel() {
+        VerticalLayout vlayout = new VerticalLayout();
+        vlayout.setCaption("Medical Center Structure");
+
+        Tree tree = new Tree();
+
+        /*Division div = model.getCurrentCenter().getDivision();
+
+        if (div == null) {
+            div = model.createDefaultDivision();
+        }
+        tree.addItem(div.getSectors());
+        for (Sector sector : div.getSectors()) {
+            // TODO
+        }
+
+         */
+        return vlayout;
+    }
+
+    private AbstractComponent createAddInfoPanel() {
+        //Panel panelAddInfo = new Panel("Additional info");
+        VerticalLayout vlayout = new VerticalLayout();
+        vlayout.setCaption("Additional info");
+        //panelAddInfo.setContent(vlayout);
+        FormLayout formLayout = new FormLayout();
+        formLayout.addComponent(bind(new Label("Siret"), "currentCenter.siret"));
+        formLayout.addComponent(bind(new Label("Street"), "currentCenter.street"));
+        formLayout.addComponent(bind(new Label("Town"), "currentCenter.town"));
+        formLayout.addComponent(bind(new Label("Postal Code"), "currentCenter.postalCode"));
+        formLayout.addComponent(bind(new Label("Country"), "currentCenter.countryISO"));
+        formLayout.addComponent(bind(new Label("Phone"), "currentCenter.phone"));
+        formLayout.addComponent(bind(new Label("Fax"), "currentCenter.fax"));
+        formLayout.addComponent(bind(new Label("Director"), "currentCenter.directorName"));
+        formLayout.addComponent(bind(new Label("Bank"), "currentCenter.bankCode"));
+        OptionGroup groupEmergencies = new OptionGroup("Emergencies ? ");
+        groupEmergencies.addItem("yes");
+        groupEmergencies.addItem("no");
+        formLayout.addComponent(groupEmergencies);
+        OptionGroup groupDrugStore = new OptionGroup("Pharmacy ? ");
+        groupDrugStore.addItem("yes");
+        groupDrugStore.addItem("no");
+        formLayout.addComponent(groupDrugStore);
+        OptionGroup groupPrivateRooms = new OptionGroup("Private rooms ? ");
+        groupPrivateRooms.addItem("yes");
+        groupPrivateRooms.addItem("no");
+        formLayout.addComponent(groupPrivateRooms);
+
+        vlayout.addComponent(formLayout);
+        Button btEdit = bind(new Button("edit"), "editAddInfo");
+        btEdit.setStyleName("small");
+        vlayout.addComponent(btEdit);
+
+        //return panelAddInfo;
+        return vlayout;
+    }
+
+    private AbstractComponent createMainInfoPanel() {
+        //Panel panelInfo = new Panel("Main info");
+        VerticalLayout vlayout = new VerticalLayout();
+        vlayout.setCaption("Main Info");
+        //panelInfo.setContent(vlayout);
+
+        FormLayout formLayout = new FormLayout();
+        formLayout.setSpacing(true);
+        formLayout.addComponent(bind(new Label("Type"), "currentCenter.type"));
+        formLayout.addComponent(bind(new Label("Name"), "currentCenter.name"));
+        formLayout.addComponent(bind(new Label("Ident"), "currentCenter.ident"));
+        vlayout.addComponent(formLayout);
+
+        HorizontalLayout btLayout = new HorizontalLayout();
+        Button bt1 = bind(new Button("edit"), "editMain");
+        bt1.setStyleName("small");
+        btLayout.addComponent(bt1);
+        vlayout.addComponent(btLayout);
+
+        //return panelInfo;
+        return vlayout;
+    }
+
+    private AbstractComponent createSelectCenterPanel() {
         HorizontalLayout panelFilters = new HorizontalLayout();
+        panelFilters.setSpacing(true);
+        //panelFilters.setMargin(true);
         panelFilters.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         combo = new ComboBox("Select Center");
         combo.setTextInputAllowed(false);
@@ -58,47 +165,14 @@ public class UiMedicalCentersView extends BaseView<UiMedicalCentersViewModel> {
             }
         });
         panelFilters.addComponent(combo);
-        panelFilters.addComponent(bind(new Button("create Center"),"createCenter"));
-        panelFilters.addComponent(bind(new Button("delete Center"),"deleteCenter"));
-        grid.addComponent(panelFilters);
-
-        Panel panelInfo = new Panel("Main info");
-        FormLayout layout = new FormLayout();
-        layout.addComponent(bind(new Label("Type"), "currentCenter.type"));
-        layout.addComponent(bind(new Label("Name"), "currentCenter.name"));
-        layout.addComponent(bind(new Label("Ident"), "currentCenter.ident"));
-        layout.addComponent(bind(new Button("edit"), "editMain"));
-        panelInfo.setContent(layout);
-        grid.addComponent(panelInfo);
-
-        Panel panelAddInfo = new Panel("Additional info");
-        FormLayout layoutAdd = new FormLayout();
-        layoutAdd.addComponent(bind(new Label("Siret"), "currentCenter.siret"));
-        layoutAdd.addComponent(bind(new Label("Street"), "currentCenter.street"));
-        layoutAdd.addComponent(bind(new Label("Town"), "currentCenter.town"));
-        layoutAdd.addComponent(bind(new Label("Postal Code"), "currentCenter.postalCode"));
-        layoutAdd.addComponent(bind(new Label("Country"), "currentCenter.countryISO"));
-        layoutAdd.addComponent(bind(new Label("Phone"), "currentCenter.phone"));
-        layoutAdd.addComponent(bind(new Label("Fax"), "currentCenter.fax"));
-        layoutAdd.addComponent(bind(new Label("Director"), "currentCenter.directorName"));
-        layoutAdd.addComponent(bind(new Label("Bank"), "currentCenter.bankCode"));
-        OptionGroup groupEmergencies = new OptionGroup("Emergencies ? ");
-        groupEmergencies.addItem("yes");
-        groupEmergencies.addItem("no");
-        layoutAdd.addComponent(groupEmergencies);
-        OptionGroup groupDrugStore = new OptionGroup("Pharmacy ? ");
-        groupDrugStore.addItem("yes");
-        groupDrugStore.addItem("no");
-        layoutAdd.addComponent(groupDrugStore);
-        OptionGroup groupPrivateRooms = new OptionGroup("Private rooms ? ");
-        groupPrivateRooms.addItem("yes");
-        groupPrivateRooms.addItem("no");
-        layoutAdd.addComponent(groupPrivateRooms);
-        layoutAdd.addComponent(bind(new Button("edit"), "editAddInfo"));
-
-        panelAddInfo.setContent(layoutAdd);
-        grid.addComponent(panelAddInfo);
-
+        panelFilters.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
+        Button btCreate = bind(new Button("create Center"), "createCenter");
+        btCreate.setStyleName("default");
+        panelFilters.addComponent(btCreate);
+        Button btDelete = bind(new Button("delete Center"), "deleteCenter");
+        btDelete.addStyleName("default");
+        panelFilters.addComponent(btDelete);
+        return panelFilters;
     }
 
     private void initCombo() {

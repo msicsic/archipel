@@ -56,6 +56,8 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
         setCompositionRoot(panel);
 
         VerticalLayout grid = new VerticalLayout();
+        grid.setSpacing(true);
+        grid.setMargin(true);
         panel.setContent(grid);
 
         // Filters...

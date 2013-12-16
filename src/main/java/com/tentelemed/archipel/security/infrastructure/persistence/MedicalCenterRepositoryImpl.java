@@ -55,11 +55,13 @@ public class MedicalCenterRepositoryImpl implements MedicalCenterRepository {
         return em.createQuery("select m from MedicalCenterQ m").getResultList();
     }
 
-    @Override public MedicalCenterQ load(MedicalCenterId id) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @Override
+    public MedicalCenterQ load(MedicalCenterId id) {
+        return em.find(MedicalCenterQ.class, id.getId());
     }
 
-    @Override public void deleteUser(MedicalCenterId id) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    @Override
+    public void deleteCenter(MedicalCenterId id) {
+        em.remove(load(id));
     }
 }

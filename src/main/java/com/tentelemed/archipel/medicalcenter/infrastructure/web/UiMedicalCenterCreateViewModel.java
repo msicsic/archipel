@@ -2,6 +2,7 @@ package com.tentelemed.archipel.medicalcenter.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BasePopup;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
+import com.tentelemed.archipel.medicalcenter.application.service.BeanCreator;
 import com.tentelemed.archipel.medicalcenter.application.service.MedicalCenterCommandService;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 @Component
 @Scope("prototype")
 public class UiMedicalCenterCreateViewModel extends BaseViewModel {
-    private MedicalCenterCommandService.CmdRegister cmd = new MedicalCenterCommandService.CmdRegister();
+    private MedicalCenterCommandService.CmdRegister cmd = BeanCreator.createBean(new MedicalCenterCommandService.CmdRegister());
 
     @Autowired MedicalCenterCommandService serviceWrite;
 

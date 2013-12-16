@@ -22,5 +22,5 @@ public interface MedicalCenterRepository {
 
     MedicalCenterQ load(MedicalCenterId id);
 
-    void deleteUser(MedicalCenterId id);
+    void deleteCenter(MedicalCenterId id);
 }

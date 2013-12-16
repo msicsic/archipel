@@ -70,6 +70,13 @@
             <artifactId>joda-time</artifactId>
         </dependency>
 
+        <!--CGLIB-->
+        <!--<dependency>-->
+            <!--<groupId>cglib</groupId>-->
+            <!--<artifactId>cglib</artifactId>-->
+            <!--<version>3.0</version>-->
+        <!--</dependency>-->
+
         <!-- JBehave -->
         <dependency>
             <groupId>org.jbehave</groupId>
