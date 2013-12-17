@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.medicalcenter.domain.event;
 
 
-import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenter;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterInfo;
 

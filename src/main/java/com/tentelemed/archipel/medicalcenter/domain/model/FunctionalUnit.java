@@ -49,7 +49,7 @@ public class FunctionalUnit extends BaseVO implements Location {
             return Arrays.asList("FU:" + code);
         }
         for (ActivityUnit unit : getUnits()) {
-            result.add("FU:" + code + "|" + "AU:"+unit.getCode());
+            result.add("FU:" + code + "|" + "AU:" + unit.getCode());
         }
         return result;
     }

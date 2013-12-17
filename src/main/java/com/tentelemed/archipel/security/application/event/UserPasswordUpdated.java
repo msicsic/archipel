@@ -11,7 +11,8 @@ import com.tentelemed.archipel.security.domain.model.UserId;
 public class UserPasswordUpdated extends UserDomainEvent {
     private String password;
 
-    UserPasswordUpdated() {}
+    UserPasswordUpdated() {
+    }
 
     public UserPasswordUpdated(UserId id, String newPassword) {
         super(id);

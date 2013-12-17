@@ -11,7 +11,8 @@ import com.tentelemed.archipel.core.domain.model.EntityId;
 public abstract class AbstractDomainEvent<M extends EntityId> implements DomainEvent<M> {
     private M id;
 
-    protected AbstractDomainEvent() {}
+    protected AbstractDomainEvent() {
+    }
 
     protected AbstractDomainEvent(M id) {
         this.id = id;

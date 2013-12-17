@@ -16,6 +16,9 @@ public class MedicalCenterMainInfoUpdated extends MedicalCenterDomainEvent {
     private String name;
     private String ident;
 
+    MedicalCenterMainInfoUpdated() {
+    }
+
     public MedicalCenterMainInfoUpdated(MedicalCenterId id, MedicalCenterType type, String name, String ident) {
         super(id);
         this.type = type;

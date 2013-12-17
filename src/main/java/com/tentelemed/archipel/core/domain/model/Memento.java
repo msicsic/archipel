@@ -27,7 +27,7 @@ public class Memento extends HashMap<String, Object> {
             constructor.setAccessible(true);
             return (BuildingBlock) constructor.newInstance();
         } catch (Exception e) {
-            throw new RuntimeException("You must declare a default constructor for Class : "+getType(), e);
+            throw new RuntimeException("You must declare a default constructor for Class : " + getType(), e);
         } finally {
             if (constructor != null) constructor.setAccessible(false);
         }

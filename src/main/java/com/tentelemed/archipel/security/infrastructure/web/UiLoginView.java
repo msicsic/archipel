@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
@@ -33,7 +31,6 @@ public class UiLoginView extends BaseView<UiLoginViewModel> {
         return model;
     }
 
-    @PostConstruct
     public void postConstruct() {
 
         setSizeFull();

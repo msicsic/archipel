@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.medicalcenter.domain.model;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.medicalcenter.domain.event.*;
 
@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,37 +27,37 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
 
 
     // COMMANDS
-    public List<DomainEvent> register(MedicalCenterType type, String name, String ident) {
+    public CmdRes register(MedicalCenterType type, String name, String ident) {
         validate("type", type);
         validate("name", name);
         validate("ident", ident);
-        return list(new MedicalCenterRegistered(getEntityId(), type, name, ident, createDefaultDivision()));
+        return result(new MedicalCenterRegistered(getEntityId(), type, name, ident, createDefaultDivision()));
     }
 
-    public List<DomainEvent> updateMainInfo(MedicalCenterType type, String name, String ident) {
+    public CmdRes updateMainInfo(MedicalCenterType type, String name, String ident) {
         validate("type", type);
         validate("name", name);
         validate("ident", ident);
-        return list(new MedicalCenterMainInfoUpdated(getEntityId(), type, name, ident));
+        return result(new MedicalCenterMainInfoUpdated(getEntityId(), type, name, ident));
     }
 
-    public List<DomainEvent> updateAdditionalInfo(MedicalCenterInfo info) {
+    public CmdRes updateAdditionalInfo(MedicalCenterInfo info) {
         validate("info", info);
-        return list(new MedicalCenterAdditionalInfoUpdated(getEntityId(), info));
+        return result(new MedicalCenterAdditionalInfoUpdated(getEntityId(), info));
     }
 
-    public List<DomainEvent> addRoom(RoomId room) {
+    public CmdRes addRoom(RoomId room) {
         // TODO : tester l'existance de la Room
-        return list(new MedicalCenterRoomAdded(getEntityId(), room));
+        return result(new MedicalCenterRoomAdded(getEntityId(), room));
     }
 
-    public List<DomainEvent> removeRoom(RoomId room) {
+    public CmdRes removeRoom(RoomId room) {
         // TODO : tester l'existance de la Room
-        return list(new MedicalCenterRoomRemoved(getEntityId(), room));
+        return result(new MedicalCenterRoomRemoved(getEntityId(), room));
     }
 
-    public List<DomainEvent> delete() {
-        return list(new MedicalCenterDeleted(getEntityId()));
+    public CmdRes delete() {
+        return result(new MedicalCenterDeleted(getEntityId()));
     }
     // methodes utilitaires
 

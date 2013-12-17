@@ -1,12 +1,18 @@
 package com.tentelemed.archipel.security.application.service;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.BaseCommandService;
+import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.application.service.Command;
 import com.tentelemed.archipel.security.domain.model.*;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
 
 /**
  * Dans cette implémentation, la couche Application joue ces roles :
@@ -30,78 +36,85 @@ import java.util.*;
 @Transactional
 public class UserCommandService extends BaseCommandService {
 
-    public RoleId registerRole(String name, Right... rights) {
+    public static class CmdRegisterRole extends Command<RoleId> {
+        @NotNull @Size(min = 3, max = 32) public String name;
+        @NotNull public Right[] rights;
+
+        public CmdRegisterRole(String name, Right... rights) {
+            this.name = name;
+            this.rights = rights;
+        }
+    }
+
+    public static class CmdDeleteRole extends Command<RoleId> {
+        public CmdDeleteRole(RoleId id) {
+            this.id = id;
+        }
+    }
+
+    public final static class CmdRegisterUser extends Command<UserId> {
+        @NotNull public RoleId roleId;
+        @NotNull public String firstName;
+        @NotNull public String lastName;
+        public Date dob;
+        @Email public String email;
+        @NotNull public String login;
+
+        public CmdRegisterUser() {
+        }
+
+        public CmdRegisterUser(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
+            this.roleId = roleId;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.dob = dob;
+            this.email = email;
+            this.login = login;
+        }
+    }
+
+    public static class CmdUpdateUserInfo extends Command<UserId> {
+        @NotNull public String firstName;
+        @NotNull public String lastName;
+        public Date dob;
+        @NotNull public String email;
+
+        public CmdUpdateUserInfo() {
+        }
+
+        public CmdUpdateUserInfo(UserId id, String firstName, String lastName, Date dob, String email) {
+            this.id = id;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.dob = dob;
+            this.email = email;
+        }
+    }
+
+    public static class CmdDeleteUser extends Command<UserId> {
+        public CmdDeleteUser(UserId id) {
+            this.id = id;
+        }
+    }
+
+    CmdRes handle(CmdRegisterRole cmd) {
         Role role = get(Role.class);
-        return post(role, role.register(name, new HashSet<>(Arrays.asList(rights))));
+        return role.register(cmd.name, new HashSet<>(Arrays.asList(cmd.rights)));
     }
 
-    public UserId registerUser(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
-        // c'est une commande de creation d'agregat :
-        // il faut donc instancier l'agregat puis lui attribuer un id
+    CmdRes handle(CmdRegisterUser cmd) {
         User user = get(User.class);
-        List<DomainEvent> events = user.register(roleId, firstName, lastName, dob, email, login);
-        return post(user, events);
+        return user.register(cmd.roleId, cmd.firstName, cmd.lastName, cmd.dob, cmd.email, cmd.login);
     }
 
-    /**
-     * @param id
-     * @precond user doit exister (son id ne doit pas etre null)
-     * <p/>
-     * Mise à jour des infos utilisateur
-     * Rq : le login ne peut pas etre changé par ce biais
-     */
-    // TODO : controle de droits
-    public UserId updateUserInfo(UserId id, String firstName, String lastName, Date dob, String email) {
-        // chargement de l'agregat
-        User user = (User) get(id);
-
-        // appel a la méthode métier et récuperation des evenements
-        // = application de la commande
-        List<DomainEvent> events = user.updateInfo(firstName, lastName, dob, email);
-
-        // traitement par l'EventStore puis propagation
-        return post(user, events);
+    CmdRes handle(CmdUpdateUserInfo cmd) {
+        User user = (User) get(cmd.id);
+        return user.updateInfo(cmd.firstName, cmd.lastName, cmd.dob, cmd.email);
     }
 
-    /**
-     * @param id
-     * @precond l'utilisateur doit exister
-     */
-    public UserId deleteUser(UserId id) {
-        User user = (User) get(id);
-        List<DomainEvent> events = user.delete(id);
-        return post(user, events);
+    CmdRes handle(CmdDeleteUser cmd) {
+        User user = (User) get(cmd.id);
+        return user.delete();
     }
 
-//    public void executeCommand(Command command) {
-//        UserId id = (UserId) command.getId();
-//
-//        User user;
-//        if (id == null) {
-//            user = get(User.class);
-//        } else {
-//            user = (User) get(id);
-//        }
-//        List<DomainEvent> events = handleCmd(user, command);
-//    }
-//
-//    private List<DomainEvent> handleCmd(BaseAggregateRoot aggregate, Command cmd) throws Throwable {
-//        Method m;
-//        try {
-//            m = getClass().getMethod("handle", new Class[] {aggregate.getClass(), cmd.getClass()});
-//        } catch (Exception e) {
-//            log.error("Commnand handler not found : "+cmd.getClass());
-//            throw e;
-//        }
-//        try {
-//            return (List<DomainEvent>) m.invoke(this, aggregate, cmd);
-//        } catch (InvocationTargetException e) {
-//            throw e.getTargetException();
-//        }
-//    }
-//
-//    // TODO : controle de droits
-//    public List<DomainEvent> handle(User user, CmdUpdateInfo cmd) {
-//        return user.updateInfo(cmd.getInfo());
-//    }
 }

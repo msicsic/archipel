@@ -26,7 +26,8 @@ public class UserRegistered extends UserDomainEvent {
     private Credentials credentials;
     private RoleId roleId;
 
-    UserRegistered() {}
+    UserRegistered() {
+    }
 
     public UserRegistered(UserId id, RoleId roleId, String firstName, String lastName, Date dob, String email, Credentials credentials) {
         super(id);

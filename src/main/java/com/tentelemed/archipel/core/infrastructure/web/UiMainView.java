@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +29,6 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
 
     @Autowired MainViewModel model;
 
-    @PostConstruct
     public void postConstruct() {
 
         // The view root layout
@@ -82,7 +80,7 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
     }
 
     @Override
-    protected void onRefresh() {
+    public void onRefresh() {
         for (Map.Entry<Module, MenuBar.MenuItem> entry : mapMenu.entrySet()) {
             entry.getValue().setEnabled(true);
         }
@@ -94,9 +92,9 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
         }
     }
 
-    public void showView(AbstractComponent view) {
+    public void showView(IView view) {
         childLayout.removeAllComponents();
-        childLayout.addComponent(view);
+        childLayout.addComponent((AbstractComponent) view);
     }
 
     @Override

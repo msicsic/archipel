@@ -43,4 +43,21 @@ public abstract class BaseEntityQ<I extends EntityId> {
         }
         return entityId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BaseEntityQ)) return false;
+
+        BaseEntityQ that = (BaseEntityQ) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Id;
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.Set;
 
 /**
@@ -33,10 +36,10 @@ public abstract class BaseEntity<B extends EntityId> implements BuildingBlock {
     protected <M> M validate(String property, M value) {
         try {
             Set violations = getValidator().validateValue(getClass(), property, value);
-            if (! violations.isEmpty()) {
+            if (!violations.isEmpty()) {
                 for (Object oviolation : violations) {
                     ConstraintViolation violation = (ConstraintViolation) oviolation;
-                    log.warn("constraint violation : "+getClass().getSimpleName()+"."+property+" "+violation.getMessage());
+                    log.warn("constraint violation : " + getClass().getSimpleName() + "." + property + " " + violation.getMessage());
                 }
                 throw new ConstraintViolationException(violations);
             }
@@ -52,7 +55,7 @@ public abstract class BaseEntity<B extends EntityId> implements BuildingBlock {
                 entityId = getIdClass().newInstance();
                 entityId.setId(id);
             } catch (InstantiationException | IllegalAccessException e) {
-                throw new RuntimeException("Cannot instanciate entityId : \""+getIdClass().getSimpleName()+"\", please provide an empty constructor");
+                throw new RuntimeException("Cannot instanciate entityId : \"" + getIdClass().getSimpleName() + "\", please provide an empty constructor");
             }
         }
         return entityId;
@@ -83,7 +86,7 @@ public abstract class BaseEntity<B extends EntityId> implements BuildingBlock {
 
     protected void validate() {
         Set violations = getValidator().validate(this);
-        if (! violations.isEmpty()) {
+        if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
 

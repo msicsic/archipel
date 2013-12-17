@@ -3,13 +3,13 @@ package com.tentelemed.gam.domain;
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -66,11 +66,11 @@ public class TestEventStore implements EventStore {
     }
 
     @Override
-    public void handleEvents(BaseAggregateRoot target, Collection<DomainEvent> events) {
-        for (DomainEvent event : events) {
-            handle(target, event, true);
+    public void handleEvents(CmdRes res) {
+        for (DomainEvent event : res.events) {
+            handle(res.aggregate, event, true);
             if (event.isCreate()) {
-                target._setId(count++);
+                res.aggregate._setId(count++);
             }
         }
     }

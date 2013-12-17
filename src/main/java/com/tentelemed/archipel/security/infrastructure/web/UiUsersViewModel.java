@@ -57,10 +57,10 @@ public class UiUsersViewModel extends BaseViewModel {
             if (getSelectedUser().getId() == null) {
                 UserQ u = getSelectedUser();
                 RoleQ role = userQuery.getAnyRole();
-                userCommand.registerUser(role.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail(), u.getLogin());
+                userCommand.execute(new UserCommandService.CmdRegisterUser(role.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail(), u.getLogin()));
             } else {
                 UserQ u = getSelectedUser();
-                userCommand.updateUserInfo(u.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail());
+                userCommand.execute(new UserCommandService.CmdUpdateUserInfo(u.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail()));
             }
             show("User committed");
         } catch (FieldGroup.CommitException e) {
@@ -80,7 +80,7 @@ public class UiUsersViewModel extends BaseViewModel {
         confirm("Confirm dialog", "Please confirm that you want to delete this User", new Runnable() {
             @Override
             public void run() {
-                userCommand.deleteUser(getSelectedUser().getEntityId());
+                userCommand.execute(new UserCommandService.CmdDeleteUser(getSelectedUser().getEntityId()));
             }
         });
     }

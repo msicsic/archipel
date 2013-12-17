@@ -3,9 +3,7 @@ package com.tentelemed.archipel.medicalcenter.infrastructure.web;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
-import com.tentelemed.archipel.medicalcenter.domain.event.MedicalCenterRegistered;
-import com.tentelemed.archipel.medicalcenter.domain.model.Division;
-import com.tentelemed.archipel.medicalcenter.domain.model.Sector;
+import com.tentelemed.archipel.medicalcenter.domain.event.MedicalCenterDomainEvent;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
@@ -32,8 +30,6 @@ public class UiMedicalCentersView extends BaseView<UiMedicalCentersViewModel> {
     public UiMedicalCentersViewModel getModel() {
         return model;
     }
-
-
 
     @Override
     public void postConstruct() {
@@ -94,15 +90,15 @@ public class UiMedicalCentersView extends BaseView<UiMedicalCentersViewModel> {
         vlayout.setCaption("Additional info");
         //panelAddInfo.setContent(vlayout);
         FormLayout formLayout = new FormLayout();
-        formLayout.addComponent(bind(new Label("Siret"), "currentCenter.siret"));
-        formLayout.addComponent(bind(new Label("Street"), "currentCenter.street"));
-        formLayout.addComponent(bind(new Label("Town"), "currentCenter.town"));
-        formLayout.addComponent(bind(new Label("Postal Code"), "currentCenter.postalCode"));
-        formLayout.addComponent(bind(new Label("Country"), "currentCenter.countryISO"));
-        formLayout.addComponent(bind(new Label("Phone"), "currentCenter.phone"));
-        formLayout.addComponent(bind(new Label("Fax"), "currentCenter.fax"));
-        formLayout.addComponent(bind(new Label("Director"), "currentCenter.directorName"));
-        formLayout.addComponent(bind(new Label("Bank"), "currentCenter.bankCode"));
+        formLayout.addComponent(bind(new Label("Siret"), "currentCenter.info.siret"));
+        formLayout.addComponent(bind(new Label("Street"), "currentCenter.info.address.street"));
+        formLayout.addComponent(bind(new Label("Town"), "currentCenter.info.address.town"));
+        formLayout.addComponent(bind(new Label("Postal Code"), "currentCenter.info.address.postalCode"));
+        formLayout.addComponent(bind(new Label("Country"), "currentCenter.info.address.country.isoCode"));
+        formLayout.addComponent(bind(new Label("Phone"), "currentCenter.info.phone"));
+        formLayout.addComponent(bind(new Label("Fax"), "currentCenter.info.fax"));
+        formLayout.addComponent(bind(new Label("Director"), "currentCenter.info.directorName"));
+        formLayout.addComponent(bind(new Label("Bank"), "currentCenter.info.bank.code"));
         OptionGroup groupEmergencies = new OptionGroup("Emergencies ? ");
         groupEmergencies.addItem("yes");
         groupEmergencies.addItem("no");
@@ -157,13 +153,6 @@ public class UiMedicalCentersView extends BaseView<UiMedicalCentersViewModel> {
         combo.setTextInputAllowed(false);
         combo.setImmediate(true);
         initCombo();
-        combo.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                model.setCurrentCenter((MedicalCenterQ) combo.getValue());
-                refreshUI();
-            }
-        });
         panelFilters.addComponent(combo);
         panelFilters.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
         Button btCreate = bind(new Button("create Center"), "createCenter");
@@ -176,18 +165,34 @@ public class UiMedicalCentersView extends BaseView<UiMedicalCentersViewModel> {
     }
 
     private void initCombo() {
+        combo.removeValueChangeListener(getListener());
         combo.removeAllItems();
         for (MedicalCenterQ center : model.getMedicalCenters()) {
             combo.addItem(center);
             combo.setItemCaption(center, center.getName());
         }
+        combo.addValueChangeListener(getListener());
+        combo.setValue(model.getCurrentCenter());
+    }
+
+    Property.ValueChangeListener listener;
+
+    private Property.ValueChangeListener getListener() {
+        if (listener == null) {
+            listener = new Property.ValueChangeListener() {
+                @Override public void valueChange(Property.ValueChangeEvent event) {
+                    model.setCurrentCenter((MedicalCenterQ) combo.getValue());
+                    refreshUI();
+                }
+            };
+        }
+        return listener;
     }
 
     @Override
-    protected void onDomainEventReceived(DomainEvent event) {
-        if (event instanceof MedicalCenterRegistered) {
+    public void onDomainEventReceived(DomainEvent event) {
+        if (event instanceof MedicalCenterDomainEvent) {
             initCombo();
-            combo.setValue(model.getCurrentCenter());
             refreshUI();
         }
     }

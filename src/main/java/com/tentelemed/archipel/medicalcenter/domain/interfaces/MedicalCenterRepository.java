@@ -2,9 +2,6 @@ package com.tentelemed.archipel.medicalcenter.domain.interfaces;
 
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
-import com.tentelemed.archipel.security.domain.model.UserId;
-import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
-import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 
 import java.util.List;
 

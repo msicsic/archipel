@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.domain.model;
 
 import com.google.common.base.Objects;
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.security.application.event.*;
@@ -11,8 +11,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,9 +26,9 @@ public class User extends BaseAggregateRoot<UserId> implements UserEventHandler 
     @NotNull @Valid Credentials credentials;
     @NotNull @Size(min = 2, max = 50) String firstName;
     @NotNull @Size(min = 2, max = 50) String lastName;
-    @Email String email = "default@mail.com";
+    @NotNull @Email String email = "default@mail.com";
     Date dob;
-    RoleId roleId;
+    @NotNull RoleId roleId;
 
     String generatePassword() {
         return "123456789";
@@ -39,37 +37,36 @@ public class User extends BaseAggregateRoot<UserId> implements UserEventHandler 
     // ********************* COMMANDS ****************************
     // ***********************************************************
 
-    public List<DomainEvent> register(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
+    public CmdRes register(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
         validate("firstName", firstName);
         validate("lastName", lastName);
         validate("dob", dob);
         validate("email", email);
         validate("login", login);
-        return list(new UserRegistered(getEntityId(), roleId, firstName, lastName, dob, email, new Credentials(login, generatePassword())));
+        return result(new UserRegistered(getEntityId(), roleId, firstName, lastName, dob, email, new Credentials(login, generatePassword())));
     }
 
-    public List<DomainEvent> delete(UserId id) {
-        validate("id", id);
-        return list(new UserDeleted(id));
+    public CmdRes delete() {
+        return result(new UserDeleted(getEntityId()));
     }
 
-    public List<DomainEvent> updateInfo(String firstName, String lastName, Date dob, String email) {
+    public CmdRes updateInfo(String firstName, String lastName, Date dob, String email) {
         validate("firstName", firstName);
         validate("lastName", lastName);
         validate("dob", dob);
         validate("email", email);
-        return list(new UserInfoUpdated(getEntityId(), firstName, lastName, dob, email));
+        return result(new UserInfoUpdated(getEntityId(), firstName, lastName, dob, email));
     }
 
-    public List<DomainEvent> changePassword(String old, String new1, String new2) throws ChangePasswordException {
+    public CmdRes changePassword(String old, String new1, String new2) throws ChangePasswordException {
         if (!Objects.equal(old, getPassword()) || !Objects.equal(new1, new2)) {
             throw new ChangePasswordException();
         }
-        return list(new UserPasswordUpdated(getEntityId(), new1));
+        return result(new UserPasswordUpdated(getEntityId(), new1));
     }
 
-    public List<DomainEvent> changeRole(RoleId roleId) {
-        return list(new UserRoleUpdated(getEntityId(), roleId));
+    public CmdRes changeRole(RoleId roleId) {
+        return result(new UserRoleUpdated(getEntityId(), roleId));
     }
 
 

@@ -19,7 +19,8 @@ public class Division extends BaseVO {
 
     @NotNull @Size(min = 1) Set<Sector> sectors = new HashSet<>();
 
-    Division() {}
+    Division() {
+    }
 
     public Division(Set<Sector> sectors) {
         // par default, MED est toujours present

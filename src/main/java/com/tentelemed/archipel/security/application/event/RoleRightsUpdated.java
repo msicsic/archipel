@@ -15,7 +15,8 @@ public class RoleRightsUpdated extends RoleDomainEvent {
 
     private Set<Right> rights;
 
-    RoleRightsUpdated() {}
+    RoleRightsUpdated() {
+    }
 
     public RoleRightsUpdated(RoleId id, Set<Right> rights) {
         super(id);

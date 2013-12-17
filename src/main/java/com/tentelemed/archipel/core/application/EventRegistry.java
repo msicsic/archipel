@@ -25,34 +25,32 @@ public class EventRegistry {
     Map<Class<? extends DomainEvent>, Class<? extends BaseEntityQ>> registryQ = new HashMap<>();
 
     public void addEntry(Class<? extends DomainEvent> eventClazz, Class<? extends BaseAggregateRoot> clazz, Class<? extends BaseEntityQ> clazzQ) {
-        DomainEvent event;
-        try {
-            Constructor c = eventClazz.getDeclaredConstructor();
-            c.setAccessible(true);
-            event = (DomainEvent) c.newInstance();
-        } catch (Exception e) {
-            log.error(null, e);
-            throw new RuntimeException("An empty constructor must be provided");
-        }
-        if (!event.isCreate()) {
-            throw new RuntimeException("Only 'Create' events can be added to the registry");
-        }
         registry.put(eventClazz, clazz);
         registryQ.put(eventClazz, clazzQ);
     }
 
     public Class<? extends BaseAggregateRoot> getClassForEvent(DomainEvent event) {
-        return registry.get(event.getClass());
+        for (Class<? extends DomainEvent> c : registry.keySet()) {
+            if (c.isInstance(event)) {
+                return registry.get(c);
+            }
+        }
+        return null;
     }
 
     public Class<? extends BaseEntityQ> getClassQForEvent(DomainEvent event) {
-        return registryQ.get(event.getClass());
+        for (Class<? extends DomainEvent> c : registryQ.keySet()) {
+            if (c.isInstance(event)) {
+                return registryQ.get(c);
+            }
+        }
+        return null;
     }
 
     public BaseEntityQ newEntityQ(DomainEvent event) {
-        Class c = registryQ.get(event.getClass());
+        Class c = getClassQForEvent(event);
         if (c == null) {
-            throw new RuntimeException("No EntityQ class found for event : "+event.getClass().getSimpleName());
+            throw new RuntimeException("No EntityQ class found for event : " + event.getClass().getSimpleName());
         }
         Constructor cst = null;
         try {
@@ -60,7 +58,7 @@ public class EventRegistry {
             cst.setAccessible(true);
             return (BaseEntityQ) c.newInstance();
         } catch (Exception e) {
-            throw new RuntimeException("Cannot instanciate EntityQ of class : "+c.getSimpleName());
+            throw new RuntimeException("Cannot instanciate EntityQ of class : " + c.getSimpleName());
         } finally {
             if (cst != null) {
                 cst.setAccessible(false);
@@ -69,9 +67,9 @@ public class EventRegistry {
     }
 
     public BaseAggregateRoot newAggregateForEvent(DomainEvent event) {
-        Class c = registry.get(event.getClass());
+        Class c = getClassForEvent(event);
         if (c == null) {
-            throw new RuntimeException("No aggregate class found for event : "+event.getClass().getSimpleName());
+            throw new RuntimeException("No aggregate class found for event : " + event.getClass().getSimpleName());
         }
         Constructor cst = null;
         try {
@@ -79,7 +77,7 @@ public class EventRegistry {
             cst.setAccessible(true);
             return (BaseAggregateRoot) c.newInstance();
         } catch (Exception e) {
-            throw new RuntimeException("Cannot instanciate aggregate of class : "+c.getSimpleName());
+            throw new RuntimeException("Cannot instanciate aggregate of class : " + c.getSimpleName());
         } finally {
             if (cst != null) {
                 cst.setAccessible(false);

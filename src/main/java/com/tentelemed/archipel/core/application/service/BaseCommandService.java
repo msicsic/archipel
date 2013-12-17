@@ -9,9 +9,16 @@ import com.tentelemed.archipel.core.domain.model.EntityId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,14 +35,14 @@ public class BaseCommandService {
     @Autowired
     EventBus eventBus;
 
-    protected <M extends EntityId, MM extends BaseAggregateRoot<M>> M post(MM target, Collection<DomainEvent> events) {
-        // application des evts sur l'agregat
-        eventStore.handleEvents(target, events);
-        return target.getEntityId();
+    //    protected <M extends EntityId, MM extends BaseAggregateRoot<M>> M post(MM target, Collection<DomainEvent> events) {
+    protected <M extends EntityId> M post(CmdRes res) {
+        eventStore.handleEvents(res);
+        return (M) res.aggregate.getEntityId();
     }
 
-    protected <I extends EntityId, M extends DomainEvent<I>> void post(BaseAggregateRoot<I> target, DomainEvent... events) {
-        post(target, Arrays.asList(events));
+    protected <I extends EntityId> void post(BaseAggregateRoot<I> target, DomainEvent... events) {
+        post(new CmdRes(target, Arrays.asList(events)));
     }
 
     protected void post(ApplicationEvent... events) {
@@ -51,4 +58,63 @@ public class BaseCommandService {
     protected <M extends BaseAggregateRoot> M get(Class<M> clazz) {
         return eventStore.get(clazz);
     }
+
+    private Validator validator;
+
+    protected Validator getValidator() {
+        if (validator == null) {
+            this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        }
+        return this.validator;
+    }
+
+    protected <M extends Command> M validate(M command) {
+        Set violations = getValidator().validate(command);
+        if (!violations.isEmpty()) {
+            for (Object oviolation : violations) {
+                ConstraintViolation violation = (ConstraintViolation) oviolation;
+                log.warn("constraint violation : " + command.getClass().getSimpleName() + "." + violation.getPropertyPath() + " " + violation.getMessage());
+            }
+            throw new ConstraintViolationException(violations);
+        }
+        return command;
+    }
+
+    @Transactional
+    public <ID extends EntityId> ID execute(Command<ID> command) {
+        Method m;
+        try {
+            // vérifier si handle existe bien
+            Class c = command.getClass();
+            while (c.getName().contains("$$") && c.getSuperclass() != null) {
+                c = c.getSuperclass();
+            }
+            m = getClass().getDeclaredMethod("handle", c);
+        } catch (NoSuchMethodException e) {
+            log.error(null, e);
+            throw new RuntimeException("Handle method not found for command : " + command.getClass().getSimpleName());
+        }
+
+        // valider la commande
+        validate(command);
+
+        try {
+            // executer la commande
+            m.setAccessible(true);
+            CmdRes result = (CmdRes) m.invoke(this, command);
+            return (ID) post(result);
+        } catch (InvocationTargetException e) {
+            log.error(null, e);
+            throw new RuntimeException("Error while executing command", e.getTargetException());
+        } catch (IllegalAccessException e) {
+            log.error(null, e);
+            throw new RuntimeException("Cannot execute handle on command : " + command.getClass().getSimpleName());
+        } finally {
+            if (m != null) {
+                m.setAccessible(false);
+            }
+        }
+    }
+
+
 }

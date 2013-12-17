@@ -1,9 +1,6 @@
 package com.tentelemed.archipel.medicalcenter.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BasePopup;
-import com.tentelemed.archipel.core.infrastructure.web.BaseView;
-import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
-import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterType;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
 import com.vaadin.data.Property;
@@ -23,11 +20,8 @@ import org.springframework.stereotype.Component;
 public class UiMedicalCenterCreateView extends BasePopup<UiMedicalCenterCreateViewModel> {
 
     @Autowired UiMedicalCenterCreateViewModel model;
-    private Button bt1;
-    private Button bt2;
 
     public UiMedicalCenterCreateView() {
-        super("Create Center");
     }
 
     @Override
@@ -37,7 +31,13 @@ public class UiMedicalCenterCreateView extends BasePopup<UiMedicalCenterCreateVi
 
     @Override
     public void postConstruct() {
-        //setImmediate(true);
+
+    }
+
+    @Override
+    public void onDisplay() {
+        setCaption(model.isEdit() ? "Edit Center" : "Create Center");
+
         setModal(true);
         setResizable(false);
 
@@ -58,20 +58,33 @@ public class UiMedicalCenterCreateView extends BasePopup<UiMedicalCenterCreateVi
         }
         cb.setTextInputAllowed(false);
         //cb.setBuffered(false);
+        if (model.isEdit()) {
+            cb.setValue(model.getCmdUpdate().type);
+        }
         cb.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                model.getCmd().type = ((MedicalCenterType) cb.getValue());
+                if (model.isEdit()) {
+                    model.getCmdUpdate().type = ((MedicalCenterType) cb.getValue());
+                } else {
+                    model.getCmdRegister().type = ((MedicalCenterType) cb.getValue());
+                }
+
             }
         });
         layout.addComponent(cb);
-        layout.addComponent(bind(new TextField("Name"), "cmd.name"));
-        layout.addComponent(bind(new TextField("Ident"), "cmd.ident"));
+        if (model.isEdit()) {
+            layout.addComponent(bind(new TextField("Name"), "cmdUpdate.name"));
+            layout.addComponent(bind(new TextField("Ident"), "cmdUpdate.ident"));
+        } else {
+            layout.addComponent(bind(new TextField("Name"), "cmdRegister.name"));
+            layout.addComponent(bind(new TextField("Ident"), "cmdRegister.ident"));
+        }
 
         HorizontalLayout btLayout = new HorizontalLayout();
         btLayout.setSpacing(true);
-        bt1 = bind(new Button("Create Center"), "createCenter");
-        bt2 = bind(new Button("Cancel"), "cancel");
+        Button bt1 = bind(new Button(model.isEdit() ? "Edit Center" : "Create Center"), "createCenter");
+        Button bt2 = bind(new Button("Cancel"), "cancel");
         btLayout.addComponent(bt1);
         btLayout.addComponent(bt2);
 
@@ -83,5 +96,11 @@ public class UiMedicalCenterCreateView extends BasePopup<UiMedicalCenterCreateVi
 
         grid.setMargin(true);
         setContent(grid);
+
+        //refreshUI();
+    }
+
+    public void setCenter(MedicalCenterQ center) {
+        model.setCenter(center);
     }
 }

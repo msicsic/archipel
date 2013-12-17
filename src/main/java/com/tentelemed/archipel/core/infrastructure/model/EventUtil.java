@@ -22,7 +22,7 @@ public class EventUtil {
 
         // un event ne doit jamais avoir un id null
         if (event.getId() == null) {
-            throw new RuntimeException("Event must have non null ID : "+event.getClass().getSimpleName());
+            throw new RuntimeException("Event must have non null ID : " + event.getClass().getSimpleName());
         }
 
         try {
@@ -33,7 +33,7 @@ public class EventUtil {
                 for (Field field : currentClass.getDeclaredFields()) {
                     try {
                         int mod = field.getModifiers();
-                        if (! Modifier.isTransient(mod)) {
+                        if (!Modifier.isTransient(mod)) {
                             field.setAccessible(true);
                             Object fieldValue = field.get(event);
                             if (fieldValue instanceof EntityId) {
@@ -61,7 +61,7 @@ public class EventUtil {
                             }
                         }
                     } catch (Exception e) {
-                        throw new RuntimeException("Can't copy field '" + field.getName()+"', aggregate : "+entity.getClass().getSimpleName()+", event : "+event.getClass().getSimpleName());
+                        throw new RuntimeException("Can't copy field '" + field.getName() + "', aggregate : " + entity.getClass().getSimpleName() + ", event : " + event.getClass().getSimpleName());
                     }
                 }
                 currentClass = currentClass.getSuperclass();

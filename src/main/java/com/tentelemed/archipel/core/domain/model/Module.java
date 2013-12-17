@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.domain.model;
 
-import com.vaadin.ui.AbstractComponent;
+import com.tentelemed.archipel.core.infrastructure.web.IView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,12 +9,12 @@ import com.vaadin.ui.AbstractComponent;
  * Time: 15:17
  */
 public class Module {
-    Class<? extends AbstractComponent> viewClass;
+    Class<? extends IView> viewClass;
     String name;
     boolean root;
     boolean login;
 
-    public Module(String name, Class<? extends AbstractComponent> viewClass) {
+    public Module(String name, Class<? extends IView> viewClass) {
         this.name = name;
         this.viewClass = viewClass;
     }
@@ -35,7 +35,7 @@ public class Module {
         this.login = login;
     }
 
-    public Class<? extends AbstractComponent> getViewClass() {
+    public Class<? extends IView> getViewClass() {
         return viewClass;
     }
 

@@ -34,7 +34,6 @@ public class BeanCreator {
             }
             currentClass = currentClass.getSuperclass();
         }
-
         Class c = o.getClass();
         for (String fieldName : fieldNames.keySet()) {
             Field field = fieldNames.get(fieldName);

@@ -17,7 +17,8 @@ public class Credentials extends BaseVO {
     @NotNull @Size(min = 5) String login;
     @NotNull @Size(min = 5) String password;
 
-    Credentials() {}
+    Credentials() {
+    }
 
     public Credentials(String login, String password) {
         this.login = validate("login", login);

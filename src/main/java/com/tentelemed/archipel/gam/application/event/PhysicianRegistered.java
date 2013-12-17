@@ -17,7 +17,8 @@ public class PhysicianRegistered extends AbstractDomainEvent<PhysicianId> {
     private String lastName;
     private Specialty specialty;
 
-    PhysicianRegistered() {}
+    PhysicianRegistered() {
+    }
 
     public PhysicianRegistered(PhysicianId id, String firstName, String lastName, Specialty specialty) {
         super(id);

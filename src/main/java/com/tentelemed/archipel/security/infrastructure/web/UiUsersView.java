@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Objects;
 
 /**
@@ -156,7 +155,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
     }
 
     @Override
-    protected void onRefresh() {
+    public void onRefresh() {
         // gestion des filtres
         container.removeAllContainerFilters();
         if (!Strings.isNullOrEmpty(getModel().getNameFilter())) {
@@ -176,7 +175,7 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
     }
 
     @Override
-    protected void onDomainEventReceived(DomainEvent event) {
+    public void onDomainEventReceived(DomainEvent event) {
         if (event instanceof UserDomainEvent) {
             if (event.isUpdate()) {
                 // rafraichir le contenu des cellules du tableau

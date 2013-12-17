@@ -17,7 +17,8 @@ public class UserInfoUpdated extends UserDomainEvent {
     private Date dob;
     private String email;
 
-    UserInfoUpdated() {}
+    UserInfoUpdated() {
+    }
 
     public UserInfoUpdated(UserId entityId, String firstName, String lastName, Date dob, String email) {
         super(entityId);

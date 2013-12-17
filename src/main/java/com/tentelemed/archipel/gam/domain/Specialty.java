@@ -13,7 +13,8 @@ import javax.validation.constraints.NotNull;
 public class Specialty extends BaseVO {
     @NotNull private String name;
 
-    Specialty() {}
+    Specialty() {
+    }
 
     public Specialty(String name) {
         //assertThat(name, notNullValue());

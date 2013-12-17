@@ -8,9 +8,14 @@ package com.tentelemed.archipel.medicalcenter.domain.event;
  */
 public interface MedicalCenterEventHandler {
     void handle(MedicalCenterRegistered event);
+
     void handle(MedicalCenterMainInfoUpdated event);
+
     void handle(MedicalCenterAdditionalInfoUpdated event);
+
     void handle(MedicalCenterRoomAdded event);
+
     void handle(MedicalCenterRoomRemoved event);
+
     void handle(MedicalCenterDeleted event);
 }

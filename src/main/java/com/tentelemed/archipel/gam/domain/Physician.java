@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.gam.domain;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.Address;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.PhoneNumber;
@@ -8,7 +8,6 @@ import com.tentelemed.archipel.gam.application.event.PhysicianInfoUpdated;
 import com.tentelemed.archipel.gam.application.event.PhysicianRegistered;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 
 /**
@@ -32,20 +31,20 @@ public class Physician extends BaseAggregateRoot<PhysicianId> {
 
     // COMMANDS
 
-    public List<DomainEvent> register(String firstName, String lastName, Specialty specialty) {
+    public CmdRes register(String firstName, String lastName, Specialty specialty) {
         validate("firstName", firstName);
         validate("lastName", lastName);
         validate("specialty", specialty);
-        return list(new PhysicianRegistered(getEntityId(), firstName, lastName, specialty));
+        return result(new PhysicianRegistered(getEntityId(), firstName, lastName, specialty));
     }
 
-    public List<DomainEvent> updateInfos(String firstName, String lastName, Address address, Specialty specialty, PhoneNumber phone) {
+    public CmdRes updateInfos(String firstName, String lastName, Address address, Specialty specialty, PhoneNumber phone) {
         validate("firstName", firstName);
         validate("lastName", lastName);
         validate("address", address);
         validate("specialty", specialty);
         validate("phone", phone);
-        return list(new PhysicianInfoUpdated(getEntityId(), firstName, lastName, address, specialty, phone));
+        return result(new PhysicianInfoUpdated(getEntityId(), firstName, lastName, address, specialty, phone));
     }
 
     // EVENTS

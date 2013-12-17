@@ -1,7 +1,8 @@
 package com.tentelemed.archipel.medicalcenter.domain.event;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.medicalcenter.domain.model.*;
+import com.tentelemed.archipel.medicalcenter.domain.model.Division;
+import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
+import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterType;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +17,8 @@ public class MedicalCenterRegistered extends MedicalCenterDomainEvent {
     protected String ident;
     protected Division division;
 
-    MedicalCenterRegistered() {}
+    MedicalCenterRegistered() {
+    }
 
     public MedicalCenterRegistered(MedicalCenterId id, MedicalCenterType type, String name, String ident, Division division) {
         super(id);

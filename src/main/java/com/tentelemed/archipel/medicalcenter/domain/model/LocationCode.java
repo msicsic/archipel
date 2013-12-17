@@ -13,7 +13,8 @@ import javax.validation.constraints.NotNull;
 public class LocationCode extends BaseVO {
     @NotNull String code;
 
-    LocationCode() {}
+    LocationCode() {
+    }
 
     public LocationCode(String code) {
         this.code = code;

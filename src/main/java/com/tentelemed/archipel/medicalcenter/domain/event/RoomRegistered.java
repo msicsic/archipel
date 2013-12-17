@@ -18,7 +18,8 @@ public class RoomRegistered extends RoomDomainEvent {
     private Set<Bed> beds;
     private LocationCode code;
 
-    RoomRegistered() {}
+    RoomRegistered() {
+    }
 
     public RoomRegistered(String name, boolean medical, LocationCode code, Set<Bed> beds) {
         this.name = name;

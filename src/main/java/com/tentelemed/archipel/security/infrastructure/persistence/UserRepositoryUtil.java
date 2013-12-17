@@ -20,9 +20,7 @@ public interface UserRepositoryUtil extends JpaRepository<UserQ, Integer> {
 
     List<UserQ> findByLastName(String lastName);
 
-    @Query(value = "select u from UserQ u where \nlower(u.lastName) like ('%' || lower(:name) ||'%')\nor lower(u.firstName) like ('%' || lower(:name) ||'%') ")
-    List<UserQ> findByName(@Param("name") String name);
+    @Query(value = "select u from UserQ u where \nlower(u.lastName) like ('%' || lower(:name) ||'%')\nor lower(u.firstName) like ('%' || lower(:name) ||'%') ") List<UserQ> findByName(@Param("name") String name);
 
-    @Query(value = "select u from UserQ u where u.login=:login")
-    UserQ findByLogin(@Param("login") String login);
+    @Query(value = "select u from UserQ u where u.login=:login") UserQ findByLogin(@Param("login") String login);
 }

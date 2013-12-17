@@ -4,7 +4,6 @@ import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.medicalcenter.infrastructure.web.UiMedicalCenterCreateView;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
@@ -22,6 +21,8 @@ import ru.xpoft.vaadin.VaadinMessageSource;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -36,7 +37,7 @@ public abstract class BaseViewModel {
 
     protected static final Logger log = LoggerFactory.getLogger(BaseViewModel.class);
 
-    private View view;
+    private IView view;
 
     @Autowired ApplicationContext context;
     @Autowired @Qualifier("localBus") EventBus eventBus;
@@ -59,8 +60,25 @@ public abstract class BaseViewModel {
         eventBus.unregister(this);
     }
 
+    public void onClose() {
+        eventBus.unregister(this);
+    }
+
     protected <M extends View> M getView(Class<M> c) {
         return context.getBean(c);
+    }
+
+    protected void show(BasePopup view) {
+        view.onDisplay();
+        UI.getCurrent().addWindow(view);
+    }
+
+    public void show(ConstraintViolationException e) {
+        String msg = "";
+        for (ConstraintViolation c : e.getConstraintViolations()) {
+            msg += "- '" + c.getPropertyPath() + "' " + c.getMessage() + "\n";
+        }
+        Notification.show(msg, Notification.Type.WARNING_MESSAGE);
     }
 
     public void show(Throwable t) {
@@ -144,23 +162,19 @@ public abstract class BaseViewModel {
         onDomainEventReceived(event);
 
         // ensuite delegation a la vue
-        if (view instanceof BaseView) {
-            ((BaseView)view).onDomainEventReceived(event);
-        } else {
-            ((BasePopup)view).onDomainEventReceived(event);
-        }
+        view.onDomainEventReceived(event);
     }
 
     protected void close() {
         if (view instanceof BasePopup) {
-            ((BasePopup)view).close();
+            ((BasePopup) view).close();
         }
     }
 
     protected void onDomainEventReceived(DomainEvent event) {
     }
 
-    public void register(View view) {
+    public void register(IView view) {
         this.view = view;
     }
 

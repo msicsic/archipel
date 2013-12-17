@@ -6,13 +6,11 @@ import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.core.application.service.EventHandler;
+import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.core.domain.model.Memento;
 import com.tentelemed.archipel.core.domain.model.MementoUtil;
-import com.tentelemed.archipel.security.application.event.UserRegistered;
-import com.tentelemed.archipel.security.domain.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +42,7 @@ public class EventStoreImpl implements EventStore {
     @Autowired @Qualifier("storeEventBus") EventBus storeEventBus;
     @Autowired EventRegistry eventRegistry;
 
-    @PostConstruct
-    void onConstruct() {
+    @PostConstruct void onConstruct() {
         storeEventBus.register(this);
     }
 
@@ -60,7 +57,7 @@ public class EventStoreImpl implements EventStore {
             return res;
         } catch (Exception e) {
             log.error(null, e);
-            throw new RuntimeException("Cannot instanciate Aggregate : "+c.getSimpleName());
+            throw new RuntimeException("Cannot instanciate Aggregate : " + c.getSimpleName());
         } finally {
             if (cst != null) {
                 cst.setAccessible(false);
@@ -78,7 +75,7 @@ public class EventStoreImpl implements EventStore {
 
     private synchronized Integer nextId() {
         initCount();
-        return (int)(++count);
+        return (int) (++count);
     }
 
     @Override
@@ -127,29 +124,29 @@ public class EventStoreImpl implements EventStore {
      * - Propage sur le bus du store (pour la partie Query)
      * - Propage sur le bus principal (pour les sous systemes)
      *
-     * @param target agregat deja modifié
-     * @param events les evts qui ont modifiés l'agregat
+     * @param res contient agregat deja modifié et les evts qui ont modifiés l'agregat
      */
     @Override
-    public void handleEvents(BaseAggregateRoot target, Collection<DomainEvent> events) {
+//    public void handleEvents(BaseAggregateRoot target, Collection<DomainEvent> events) {
+    public void handleEvents(CmdRes res) {
         // maj de l'agregat
         //Class<? extends BaseAggregateRoot> clazz = target.getClass();
         //EntityId id = target.getEntityId();
         // target = applyEvents(target, events);
 
         // recup de la derniere version
-        Long version = jdbcTemplate.queryForObject("select max(e.c_version) from T_EVENTS e where e.c_aggregate_id=?", Long.class, target.getEntityId().getId());
+        Long version = jdbcTemplate.queryForObject("select max(e.c_version) from T_EVENTS e where e.c_aggregate_id=?", Long.class, res.aggregate.getEntityId().getId());
         if (version == null) {
             // enregistrer l'agregat
             version = 0L;
-            jdbcTemplate.update("insert into T_AGGREGATE values (?,?,?)", target.getEntityId().getId(), target.getClass().getName(), version + events.size() - 1);
+            jdbcTemplate.update("insert into T_AGGREGATE values (?,?,?)", res.aggregate.getEntityId().getId(), res.aggregate.getClass().getName(), version + res.events.size() - 1);
         } else {
             version++;
-            jdbcTemplate.update("update T_AGGREGATE set c_version=? where c_aggregate_id=?", version + events.size() - 1, target.getEntityId().getId());
+            jdbcTemplate.update("update T_AGGREGATE set c_version=? where c_aggregate_id=?", version + res.events.size() - 1, res.aggregate.getEntityId().getId());
         }
 
         // ajout des evts dans le store
-        for (DomainEvent event : events) {
+        for (DomainEvent event : res.events) {
             //addEvent(event);
             Memento memento = MementoUtil.createMemento(event);
             String serial = MementoUtil.mementoToString(memento);
@@ -157,7 +154,7 @@ public class EventStoreImpl implements EventStore {
         }
 
         // propagation aux QueryManagers (pour maj des bdd de consultation)
-        for (DomainEvent event : events) {
+        for (DomainEvent event : res.events) {
             failed.set(Boolean.FALSE);
             storeEventBus.post(event);
             if (failed.get()) {
@@ -166,7 +163,7 @@ public class EventStoreImpl implements EventStore {
         }
 
         // propagation aux listeners d'evts (les autres modules principalement)
-        for (DomainEvent event : events) {
+        for (DomainEvent event : res.events) {
             eventBus.post(event);
         }
 

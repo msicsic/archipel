@@ -1,6 +1,5 @@
 package com.tentelemed.archipel.core.domain.model;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +18,7 @@ public class MementoUtil {
 
     /**
      * Creation d'un Memento à partir d'un Aggregate ou DomainEvent
+     *
      * @param model l'agregat à extraire
      * @return les données de l'agregat sous forme de Memento. Retourne également les sous objets
      */
@@ -109,6 +109,7 @@ public class MementoUtil {
 
     /**
      * Creation d'un nouvel aggregate à partir d'un Memento
+     *
      * @param memento
      * @return
      */
@@ -143,13 +144,13 @@ public class MementoUtil {
                     temp.add(_unMake(done, elem, null));
                 }
             } catch (Exception e) {
-                log.warn("Erreur bizarre...", e);
-                return new ArrayList();
+                log.warn("Cannot instanciate aggregate from Memento", e);
+                throw new RuntimeException(e);
             }
             coll.clear();
             coll.addAll(temp);
 
-        } else if (object instanceof Map && ! (object instanceof Memento)) {
+        } else if (object instanceof Map && !(object instanceof Memento)) {
             done.put(object, object);
             Map<Object, Object> map = (Map) object;
             Map<Object, Object> temp = new HashMap<>();

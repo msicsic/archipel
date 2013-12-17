@@ -24,20 +24,20 @@ public class UtcTimestampTypeDescriptor extends TimestampTypeDescriptor {
     private final static String dstTz = "UTC";
 
     public <X> ValueBinder<X> getBinder(final JavaTypeDescriptor<X> javaTypeDescriptor) {
-        return new BasicBinder<X>( javaTypeDescriptor, this ) {
+        return new BasicBinder<X>(javaTypeDescriptor, this) {
             @Override
             protected void doBind(PreparedStatement st, X value, int index, WrapperOptions options) throws SQLException {
                 Date converted = convert((Date) value);
-                st.setTimestamp( index, javaTypeDescriptor.unwrap((X) converted, Timestamp.class, options ));
+                st.setTimestamp(index, javaTypeDescriptor.unwrap((X) converted, Timestamp.class, options));
             }
         };
     }
 
     public <X> ValueExtractor<X> getExtractor(final JavaTypeDescriptor<X> javaTypeDescriptor) {
-        return new BasicExtractor<X>( javaTypeDescriptor, this ) {
+        return new BasicExtractor<X>(javaTypeDescriptor, this) {
             @Override
             protected X doExtract(ResultSet rs, String name, WrapperOptions options) throws SQLException {
-                return javaTypeDescriptor.wrap( unconvert(rs.getTimestamp( name )), options );
+                return javaTypeDescriptor.wrap(unconvert(rs.getTimestamp(name)), options);
             }
         };
     }

@@ -43,7 +43,7 @@ public class UiUsersViewModelTest {
         model.action_commit();
 
         // then
-        verify(service).updateUserInfo(user.getEntityId(), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail());
+        verify(service).execute(new UserCommandService.CmdUpdateUserInfo(user.getEntityId(), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail()));
         assertTrue(model.isCommited());
     }
 
@@ -58,7 +58,7 @@ public class UiUsersViewModelTest {
         model.action_delete();
 
         // then
-        verify(service).deleteUser(user.getEntityId());
+        verify(service).execute(new UserCommandService.CmdDeleteUser(user.getEntityId()));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class UiUsersViewModelTest {
         model.action_discard();
 
         // then
-        verify(service, never()).updateUserInfo(user.getEntityId(), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail());
+        verify(service, never()).execute(new UserCommandService.CmdUpdateUserInfo(user.getEntityId(), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail()));
         assertTrue(!model.isCommited());
         assertTrue(model.isDiscarded());
     }

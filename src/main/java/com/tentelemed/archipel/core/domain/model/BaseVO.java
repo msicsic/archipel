@@ -21,23 +21,11 @@ public abstract class BaseVO implements BuildingBlock {
 
     protected <M> M validate(String property, M value) {
         getValidator().validateValue(getClass(), property, value);
-        /*try {
-            PropertyUtils.setProperty(this, property, value);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }*/
         return value;
     }
 
     protected void validate() {
         getValidator().validate(this);
     }
-
-    /*@Override
-    public abstract boolean equals(Object obj);
-
-    @Override
-    public abstract int hashCode();*/
-
 
 }

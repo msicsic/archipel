@@ -8,6 +8,8 @@ package com.tentelemed.archipel.medicalcenter.domain.event;
  */
 public interface RoomEventHandler {
     void handle(RoomBedAdded event);
+
     void handle(RoomBedRemoved event);
+
     void handle(RoomRegistered event);
 }

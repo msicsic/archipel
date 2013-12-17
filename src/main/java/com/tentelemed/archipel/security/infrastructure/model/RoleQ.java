@@ -59,7 +59,7 @@ public class RoleQ extends BaseEntityQ<RoleId> {
         if (rights == null) return;
         String result = "";
         for (Right r : rights) {
-            result = result + r.getName()+"/"+r.getValue()+" ";
+            result = result + r.getName() + "/" + r.getValue() + " ";
         }
         rightString = result;
     }

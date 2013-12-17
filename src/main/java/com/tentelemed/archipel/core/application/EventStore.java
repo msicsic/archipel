@@ -1,10 +1,8 @@
 package com.tentelemed.archipel.core.application;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
-
-import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,6 +13,7 @@ import java.util.Collection;
 public interface EventStore {
     /**
      * Retourne un objet présent dans le store
+     *
      * @param id
      * @param <M>
      * @return
@@ -23,13 +22,15 @@ public interface EventStore {
 
     /**
      * Instancie un nouvel Aggregate et lui attribu un id
+     *
      * @param aggregateClass
      * @param <M>
      * @return
      */
     <M extends BaseAggregateRoot> M get(Class<M> aggregateClass);
 
-    void handleEvents(BaseAggregateRoot target, Collection<DomainEvent> events);
+    void handleEvents(CmdRes res);
+//    void handleEvents(BaseAggregateRoot target, Collection<DomainEvent> events);
 
     long getMaxAggregateId();
 }

@@ -29,10 +29,10 @@ public class ConfirmDialog extends Window {
             public void buttonClick(Button.ClickEvent event) {
                 try {
                     run.run();
+                    close(); // Close the sub-window
                 } catch (Throwable t) {
                     ConfirmDialog.this.bvm.show(t);
                 } finally {
-                    close(); // Close the sub-window
                 }
             }
         });

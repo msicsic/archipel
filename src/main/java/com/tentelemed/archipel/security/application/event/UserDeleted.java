@@ -10,7 +10,8 @@ import com.tentelemed.archipel.security.domain.model.UserId;
  */
 public class UserDeleted extends UserDomainEvent {
 
-    UserDeleted() {}
+    UserDeleted() {
+    }
 
     public UserDeleted(UserId id) {
         super(id);

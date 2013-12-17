@@ -14,7 +14,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class IPP extends BaseVO {
     private String value;
 
-    IPP() { }
+    IPP() {
+    }
 
     public IPP(String value) {
         assertThat(value, notNullValue());

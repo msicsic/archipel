@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.medicalcenter.application.service;
 
 import com.tentelemed.archipel.core.application.service.BaseQueryService;
-import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.medicalcenter.domain.interfaces.MedicalCenterRepository;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;

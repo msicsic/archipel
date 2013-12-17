@@ -1,9 +1,7 @@
 package com.tentelemed.archipel.medicalcenter.domain.event;
 
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
-import com.tentelemed.archipel.medicalcenter.domain.model.RoomId;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +10,8 @@ import com.tentelemed.archipel.medicalcenter.domain.model.RoomId;
  * Time: 14:53
  */
 public class MedicalCenterDeleted extends MedicalCenterDomainEvent {
-    MedicalCenterDeleted() {}
+    MedicalCenterDeleted() {
+    }
 
     @Override
     public Type getCrudType() {

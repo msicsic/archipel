@@ -21,7 +21,8 @@ public class RoleRegistered extends RoleDomainEvent {
     private String name;
     private Set<Right> rights;
 
-    RoleRegistered() {}
+    RoleRegistered() {
+    }
 
     public RoleRegistered(RoleId id, String name, Set<Right> rights) {
         super(id);

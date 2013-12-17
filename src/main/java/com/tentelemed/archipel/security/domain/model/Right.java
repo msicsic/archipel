@@ -17,7 +17,8 @@ public class Right extends BaseVO {
     @NotNull private String name;
     @NotNull private String value;
 
-    Right() {}
+    Right() {
+    }
 
     public Right(String name, String value) {
         this.name = validate("name", name);

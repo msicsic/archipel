@@ -20,16 +20,19 @@ public class Sector extends BaseVO implements Location {
         TECH, MEDTECH, ADMIN, MED
     }
 
-    @NotNull @Size(min=3) String name;
-    @NotNull @Size(min=3) String code;
+    @NotNull @Size(min = 3) String name;
+    @NotNull @Size(min = 3) String code;
     @NotNull Type type;
     List<Service> services = new ArrayList<>();
+
+    Sector() {
+    }
 
     public Sector(Type type, String name, String code, List<Service> services) {
         this.type = type;
         this.name = name;
         this.code = code;
-        this.services = services==null ? new ArrayList<Service>() : services;
+        this.services = services == null ? new ArrayList<Service>() : services;
         validate();
     }
 
@@ -38,7 +41,7 @@ public class Sector extends BaseVO implements Location {
         for (Service service : services) {
             List<String> scodes = service.getLocationStrings();
             for (String scode : scodes) {
-                result.add(new LocationCode("SEC:"+code+"|"+scode));
+                result.add(new LocationCode("SEC:" + code + "|" + scode));
             }
         }
         return result;

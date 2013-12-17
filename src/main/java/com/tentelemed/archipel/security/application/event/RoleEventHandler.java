@@ -8,5 +8,6 @@ package com.tentelemed.archipel.security.application.event;
  */
 public interface RoleEventHandler {
     void handle(RoleRegistered event);
+
     void handle(RoleRightsUpdated event);
 }

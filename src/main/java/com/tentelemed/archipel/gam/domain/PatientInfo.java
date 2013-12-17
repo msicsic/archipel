@@ -18,7 +18,8 @@ public class PatientInfo extends BaseVO {
     private PhoneNumber mobilePhone;
     private Email email;
 
-    PatientInfo() {}
+    PatientInfo() {
+    }
 
     public PatientInfo(Address address, Email email, PhoneNumber mainPhone, PhoneNumber mobilePhone) {
         this.address = validate("address", address);

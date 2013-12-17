@@ -12,7 +12,8 @@ import com.tentelemed.archipel.security.domain.model.UserId;
 public class UserRoleUpdated extends UserDomainEvent {
     private RoleId roleId;
 
-    public UserRoleUpdated() {}
+    public UserRoleUpdated() {
+    }
 
     public UserRoleUpdated(UserId id, RoleId roleId) {
         super(id);

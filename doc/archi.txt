@@ -1,4 +1,7 @@
 BUGS:
+- mise à jour des combos : le rafraichissement de la combo appelle le listener combo qui
+  met à jour le modele... Il faut trouver un moyen de ne pas appeler le listener de combo
+
 - UiUsers : la mise à jour du login ne fonctionne pas -> normal car champ pas pris en compte par
   la commande UserInfoUpdated
 - Gen : En fait il faut binder les champs editables sur une commande et pas sur un EntityQ

@@ -48,8 +48,8 @@ public class MyUI extends UI {
     @Autowired
     EventBus eventBus;
 
-    AbstractComponent mainView;
-    AbstractComponent loginView;
+    IView mainView;
+    IView loginView;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -83,19 +83,29 @@ public class MyUI extends UI {
         UI.getCurrent().getPage().setLocation("/");
     }
 
+    IView currentView;
+
     public void showView(String moduleId) {
         // recuperation du module
         Module module = coreService.getModule(moduleId);
         if (module.isRoot()) {
+            mainView.refreshUI();
             showView(mainView);
         } else {
-            AbstractComponent view = appContext.getBean(module.getViewClass());
+            IView view = appContext.getBean(module.getViewClass());
+            RootView rv = (RootView) mainView;
+            if (currentView != null) {
+                currentView.onClose();
+            }
+            view.onDisplay();
+            view.refreshUI();
+            currentView = view;
             ((RootView) mainView).showView(view);
         }
     }
 
-    private void showView(AbstractComponent view) {
-        this.setContent(view);
+    private void showView(IView view) {
+        this.setContent((AbstractComponent) view);
     }
 
     @Subscribe

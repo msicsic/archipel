@@ -19,12 +19,13 @@ public class Service extends BaseVO implements Location {
     @NotNull String code;
     List<FunctionalUnit> units = new ArrayList<>();
 
-    private Service() {}
+    private Service() {
+    }
 
     public Service(String name, String code, List<FunctionalUnit> units) {
         this.name = name;
         this.code = code;
-        this.units = units==null ? new ArrayList<FunctionalUnit>() : units;
+        this.units = units == null ? new ArrayList<FunctionalUnit>() : units;
         validate();
     }
 
@@ -45,11 +46,11 @@ public class Service extends BaseVO implements Location {
     public List<String> getLocationStrings() {
         List<String> result = new ArrayList<>();
         if (getUnits().isEmpty()) {
-            return Arrays.asList("SRV:"+code);
+            return Arrays.asList("SRV:" + code);
         }
         for (FunctionalUnit unit : getUnits()) {
             for (String ls : unit.getLocationStrings()) {
-                result.add("SRV:"+code+"|"+ls);
+                result.add("SRV:" + code + "|" + ls);
             }
         }
         return result;

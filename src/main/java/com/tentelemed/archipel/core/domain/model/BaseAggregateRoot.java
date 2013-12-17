@@ -1,11 +1,11 @@
 package com.tentelemed.archipel.core.domain.model;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.infrastructure.model.EventUtil;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,11 +22,11 @@ public abstract class BaseAggregateRoot<M extends EntityId> extends BaseEntity<M
      * @param events evts de modification d'etat
      * @return liste des evts passés en param
      */
-    protected List<DomainEvent> list(DomainEvent... events) {
+    protected CmdRes result(DomainEvent... events) {
         for (DomainEvent event : events) {
             handle(event);
         }
-        return Arrays.asList(events);
+        return new CmdRes(this, Arrays.asList(events));
     }
 
     public void _setId(Integer id) {
@@ -42,7 +42,7 @@ public abstract class BaseAggregateRoot<M extends EntityId> extends BaseEntity<M
             return event;
         } catch (Exception e) {
             log.error(null, e);
-            throw new RuntimeException("Cannot apply event on aggregate : "+event.getClass().getSimpleName());
+            throw new RuntimeException("Cannot apply event on aggregate : " + event.getClass().getSimpleName());
         }
     }
 

@@ -8,6 +8,7 @@ package com.tentelemed.archipel.medicalcenter.domain.model;
  */
 public interface Location {
     String getCode();
+
     String getName();
 
 }

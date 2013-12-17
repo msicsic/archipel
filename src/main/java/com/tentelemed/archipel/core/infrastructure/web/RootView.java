@@ -1,7 +1,5 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
-import com.vaadin.ui.AbstractComponent;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
@@ -10,5 +8,5 @@ import com.vaadin.ui.AbstractComponent;
  */
 public interface RootView {
 
-    void showView(AbstractComponent view);
+    void showView(IView view);
 }

@@ -1,13 +1,15 @@
 package com.tentelemed.archipel.security.domain.model;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.security.application.event.RoleEventHandler;
 import com.tentelemed.archipel.security.application.event.RoleRegistered;
 import com.tentelemed.archipel.security.application.event.RoleRightsUpdated;
 
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,13 +25,13 @@ public class Role extends BaseAggregateRoot<RoleId> implements RoleEventHandler 
     // *********** COMMANDS **********************
     // *********** COMMANDS **********************
 
-    public Collection<DomainEvent> register(String name, Set<Right> rights) {
+    public CmdRes register(String name, Set<Right> rights) {
         validate("name", name);
-        return list(new RoleRegistered(getEntityId(), name, rights));
+        return result(new RoleRegistered(getEntityId(), name, rights));
     }
 
-    public Collection<DomainEvent> updateRights(Set<Right> rights) {
-        return list(new RoleRightsUpdated(getEntityId(), rights));
+    public CmdRes updateRights(Set<Right> rights) {
+        return result(new RoleRightsUpdated(getEntityId(), rights));
     }
 
     // *********** EVENTS ************************

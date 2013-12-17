@@ -20,7 +20,8 @@ public class PhysicianInfoUpdated extends AbstractDomainEvent<PhysicianId> {
     private Specialty specialty;
     private PhoneNumber phone;
 
-    PhysicianInfoUpdated() {}
+    PhysicianInfoUpdated() {
+    }
 
     public PhysicianInfoUpdated(PhysicianId id, String firstName, String lastName, Address address, Specialty specialty, PhoneNumber phone) {
         super(id);

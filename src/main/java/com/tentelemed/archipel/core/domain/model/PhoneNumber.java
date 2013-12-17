@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.core.domain.model;
 
-import com.tentelemed.archipel.core.domain.model.BaseVO;
-
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -10,11 +9,13 @@ import javax.validation.constraints.NotNull;
  * Date: 29/11/13
  * Time: 16:36
  */
+@Embeddable
 public class PhoneNumber extends BaseVO {
     // TODO : verifier le format
     @NotNull private String value;
 
-    PhoneNumber() {}
+    PhoneNumber() {
+    }
 
     public PhoneNumber(String value) {
         this.value = validate("value", value);
