@@ -2,12 +2,10 @@ package com.tentelemed.archipel.medicalcenter.domain.model;
 
 import com.tentelemed.archipel.core.domain.model.Address;
 import com.tentelemed.archipel.core.domain.model.BaseVO;
-import com.tentelemed.archipel.core.domain.model.PhoneNumber;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -23,23 +21,23 @@ public class MedicalCenterInfo extends BaseVO {
     String phone;
     String fax;
     String directorName;
-    @Embedded Bank bank;
+    String bankCode;
     @Column(nullable = true) boolean emergenciesAvailable;
-    @Column(nullable = true) boolean drugstoreAvailable;
+    @Column(nullable = true) boolean pharmacyAvailable;
     @Column(nullable = true) boolean privateRoomAvailable;
 
     MedicalCenterInfo() {
     }
 
-    public MedicalCenterInfo(String siret, Address address, String phone, String fax, String directorName, Bank bank, boolean emergenciesAvailable, boolean drugstoreAvailable, boolean privateRoomAvailable) {
+    public MedicalCenterInfo(String siret, Address address, String phone, String fax, String directorName, String bankCode, boolean emergenciesAvailable, boolean pharmacyAvailable, boolean privateRoomAvailable) {
         this.siret = siret;
         this.address = address;
         this.phone = phone;
         this.fax = fax;
         this.directorName = directorName;
-        this.bank = bank;
+        this.bankCode = bankCode;
         this.emergenciesAvailable = emergenciesAvailable;
-        this.drugstoreAvailable = drugstoreAvailable;
+        this.pharmacyAvailable = pharmacyAvailable;
         this.privateRoomAvailable = privateRoomAvailable;
         validate();
     }
@@ -65,16 +63,16 @@ public class MedicalCenterInfo extends BaseVO {
         return directorName;
     }
 
-    public Bank getBank() {
-        return bank;
+    public String getBankCode() {
+        return bankCode;
     }
 
     public boolean isEmergenciesAvailable() {
         return emergenciesAvailable;
     }
 
-    public boolean isDrugstoreAvailable() {
-        return drugstoreAvailable;
+    public boolean isPharmacyAvailable() {
+        return pharmacyAvailable;
     }
 
     public boolean isPrivateRoomAvailable() {

@@ -1,5 +1,7 @@
 package com.tentelemed.archipel.medicalcenter.domain.interfaces;
 
+import com.tentelemed.archipel.core.domain.model.Country;
+import com.tentelemed.archipel.medicalcenter.domain.model.Bank;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
 
@@ -20,4 +22,8 @@ public interface MedicalCenterRepository {
     MedicalCenterQ load(MedicalCenterId id);
 
     void deleteCenter(MedicalCenterId id);
+
+    List<Country> getCountries();
+
+    List<Bank> getBanks();
 }

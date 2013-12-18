@@ -1,9 +1,12 @@
 package com.tentelemed.archipel.medicalcenter.infrastructure.web;
 
 import com.tentelemed.archipel.core.application.service.Command;
+import com.tentelemed.archipel.core.domain.model.Country;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.medicalcenter.application.service.BeanCreator;
 import com.tentelemed.archipel.medicalcenter.application.service.MedicalCenterCommandService;
+import com.tentelemed.archipel.medicalcenter.application.service.MedicalCenterQueryService;
+import com.tentelemed.archipel.medicalcenter.domain.model.Bank;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterInfo;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -13,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +29,7 @@ import javax.validation.Valid;
 public class UiMedicalCenterEditViewModel extends BaseViewModel {
     private MedicalCenterCommandService.CmdUpdateAdditionalInfo cmd = BeanCreator.createBean(new MedicalCenterCommandService.CmdUpdateAdditionalInfo());
     @Autowired MedicalCenterCommandService serviceWrite;
+    @Autowired MedicalCenterQueryService serviceRead;
 
     public void setCenter(MedicalCenterQ center) {
         if (center.getInfo() != null) {
@@ -42,7 +47,7 @@ public class UiMedicalCenterEditViewModel extends BaseViewModel {
         return cmd;
     }
 
-    public void action_save() {
+    public void action_confirm() {
         try {
             commit();
             boolean valid = getBinder().isValid();
@@ -57,5 +62,14 @@ public class UiMedicalCenterEditViewModel extends BaseViewModel {
     public void action_cancel() {
         close();
     }
+
+    public List<Country> getCountries() {
+        return serviceRead.getCountries();
+    }
+
+    public List<Bank> getBanks() {
+        return serviceRead.getBanks();
+    }
+
 
 }

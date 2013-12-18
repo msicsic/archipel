@@ -3,6 +3,8 @@ package com.tentelemed.archipel.medicalcenter.domain.model;
 import com.tentelemed.archipel.core.domain.model.BaseVO;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -11,10 +13,13 @@ import javax.validation.constraints.NotNull;
  * Date: 10/12/13
  * Time: 11:49
  */
-@Embeddable
+@Entity
 public class Bank extends BaseVO {
     @NotNull String bankName;
-    @NotNull String code;
+    @Id @NotNull String code;
+
+    Bank() {
+    }
 
     public Bank(String code, String name) {
         this.bankName = name;
@@ -27,5 +32,25 @@ public class Bank extends BaseVO {
 
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Bank)) return false;
+
+        Bank bank = (Bank) o;
+
+        if (!bankName.equals(bank.bankName)) return false;
+        if (!code.equals(bank.code)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = bankName.hashCode();
+        result = 31 * result + code.hashCode();
+        return result;
     }
 }

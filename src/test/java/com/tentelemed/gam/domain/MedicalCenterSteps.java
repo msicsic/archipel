@@ -89,11 +89,11 @@ public class MedicalCenterSteps {
 
     @When("the user update the additional infos")
     public void whenTheUserUpdateTheAdditionalInfos() {
-        Address address = new Address("street", "code", "Paris", new Country("FR"));
+        Address address = new Address("street", "code", "Paris", "FRA");
         String phone = "0155200800";
         String fax = "0155200800";
         Bank bank = new Bank("BNP", "BNP");
-        MedicalCenterInfo info = new MedicalCenterInfo("siret", address, phone, fax, "Dupont", bank, true, true, true);
+        MedicalCenterInfo info = new MedicalCenterInfo("siret", address, phone, fax, "Dupont", "BNP", true, true, true);
         center.updateAdditionalInfo(info);
     }
 

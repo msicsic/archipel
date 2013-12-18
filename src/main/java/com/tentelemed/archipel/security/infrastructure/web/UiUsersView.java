@@ -63,7 +63,9 @@ public class UiUsersView extends BaseView<UiUsersViewModel> {
         HorizontalLayout panelFilters = new HorizontalLayout();
         panelFilters.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         panelFilters.addComponent(new Label("Patient Name : "));
-        panelFilters.addComponent(bindFilter(new TextField(), "nameFilter"));
+        TextField field = new TextField();
+        field.addStyleName("search");
+        panelFilters.addComponent(bindFilter(field, "nameFilter"));
         panelFilters.setSpacing(true);
 
         // action buttons

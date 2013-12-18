@@ -94,23 +94,14 @@ public class UiMedicalCentersView extends BaseView<UiMedicalCentersViewModel> {
         formLayout.addComponent(bind(new Label("Street"), "currentCenter.info.address.street"));
         formLayout.addComponent(bind(new Label("Town"), "currentCenter.info.address.town"));
         formLayout.addComponent(bind(new Label("Postal Code"), "currentCenter.info.address.postalCode"));
-        formLayout.addComponent(bind(new Label("Country"), "currentCenter.info.address.country.isoCode"));
+        formLayout.addComponent(bind(new Label("Country"), "currentCenter.info.address.countryIso"));
         formLayout.addComponent(bind(new Label("Phone"), "currentCenter.info.phone"));
         formLayout.addComponent(bind(new Label("Fax"), "currentCenter.info.fax"));
         formLayout.addComponent(bind(new Label("Director"), "currentCenter.info.directorName"));
-        formLayout.addComponent(bind(new Label("Bank"), "currentCenter.info.bank.code"));
-        OptionGroup groupEmergencies = new OptionGroup("Emergencies ? ");
-        groupEmergencies.addItem("yes");
-        groupEmergencies.addItem("no");
-        formLayout.addComponent(groupEmergencies);
-        OptionGroup groupDrugStore = new OptionGroup("Pharmacy ? ");
-        groupDrugStore.addItem("yes");
-        groupDrugStore.addItem("no");
-        formLayout.addComponent(groupDrugStore);
-        OptionGroup groupPrivateRooms = new OptionGroup("Private rooms ? ");
-        groupPrivateRooms.addItem("yes");
-        groupPrivateRooms.addItem("no");
-        formLayout.addComponent(groupPrivateRooms);
+        formLayout.addComponent(bind(new Label("Bank"), "currentCenter.info.bankCode"));
+        formLayout.addComponent(bind(new Label("Emergencies ?"), "currentCenter.info.emergenciesAvailable"));
+        formLayout.addComponent(bind(new Label("Pharmacy ?"), "currentCenter.info.pharmacyAvailable"));
+        formLayout.addComponent(bind(new Label("Private rooms ?"), "currentCenter.info.privateRoomAvailable"));
 
         vlayout.addComponent(formLayout);
         Button btEdit = bind(new Button("edit"), "editAddInfo");

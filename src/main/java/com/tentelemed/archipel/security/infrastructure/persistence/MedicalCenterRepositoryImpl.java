@@ -1,6 +1,8 @@
 package com.tentelemed.archipel.security.infrastructure.persistence;
 
+import com.tentelemed.archipel.core.domain.model.Country;
 import com.tentelemed.archipel.medicalcenter.domain.interfaces.MedicalCenterRepository;
+import com.tentelemed.archipel.medicalcenter.domain.model.Bank;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
 import org.springframework.stereotype.Component;
@@ -33,6 +35,7 @@ import java.util.List;
  * Date: 07/11/13
  * Time: 11:48
  */
+@SuppressWarnings("unchecked")
 @Component("medicalCenterRepository")
 public class MedicalCenterRepositoryImpl implements MedicalCenterRepository {
 
@@ -58,5 +61,15 @@ public class MedicalCenterRepositoryImpl implements MedicalCenterRepository {
     @Override
     public void deleteCenter(MedicalCenterId id) {
         em.remove(load(id));
+    }
+
+    @Override
+    public List<Country> getCountries() {
+        return em.createQuery("select c from Country c").getResultList();
+    }
+
+    @Override
+    public List<Bank> getBanks() {
+        return em.createQuery("select c from Bank c").getResultList();
     }
 }

@@ -97,6 +97,12 @@
           <element id="library" level="project" name="Maven: cglib:cglib:3.0" />
           <element id="library" level="project" name="Maven: org.ow2.asm:asm:4.0" />
           <element id="library" level="project" name="Maven: de.codecentric:jbehave-junit-runner:1.0.2" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi:3.9" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.5" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi-ooxml:3.9" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi-ooxml-schemas:3.9" />
+          <element id="library" level="project" name="Maven: org.apache.xmlbeans:xmlbeans:2.3.0" />
+          <element id="library" level="project" name="Maven: stax:stax-api:1.0.1" />
         </element>
       </element>
       <element id="dir-copy" path="$PROJECT_DIR$/src/main/webapp" />

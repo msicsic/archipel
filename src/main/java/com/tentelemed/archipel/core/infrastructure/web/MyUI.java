@@ -29,6 +29,7 @@ import javax.annotation.PreDestroy;
 @Component
 @Scope("session")
 @Title("Login frame")
+//@Theme("chamelon")
 @Theme("mytheme")
 public class MyUI extends UI {
 

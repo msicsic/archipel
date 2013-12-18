@@ -51,11 +51,11 @@ public class MedicalCenterCommandService extends BaseCommandService {
         public String street;
         public String town;
         public String postalCode;
-        public Country country;
+        public String countryIso;
         public String phone;
         public String fax;
         public String directorName;
-        public Bank bank;
+        public String bankCode;
         public boolean emergenciesAvailable;
         public boolean drugstoreAvailable;
         public boolean privateRoomAvailable;
@@ -84,14 +84,14 @@ public class MedicalCenterCommandService extends BaseCommandService {
     }
 
     CmdRes handle(CmdUpdateAdditionalInfo cmd) {
-        Address address = new Address(cmd.street, cmd.postalCode, cmd.town, cmd.country);
+        Address address = new Address(cmd.street, cmd.postalCode, cmd.town, cmd.countryIso);
         MedicalCenterInfo info = new MedicalCenterInfo(
                 cmd.siret,
                 address,
                 cmd.phone,
                 cmd.fax,
                 cmd.directorName,
-                cmd.bank,
+                cmd.bankCode,
                 cmd.emergenciesAvailable,
                 cmd.drugstoreAvailable,
                 cmd.privateRoomAvailable

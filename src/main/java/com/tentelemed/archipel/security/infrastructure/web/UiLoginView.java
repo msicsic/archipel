@@ -37,31 +37,34 @@ public class UiLoginView extends BaseView<UiLoginViewModel> {
 
         // Create the user input field
         TextField user = new TextField(gt("login"));
-        user.setWidth("300px");
+        user.setStyleName("big");
+        user.setWidth("200px");
         user.setInputPrompt(gt("loginPrompt"));
         bind(user, "userName");
         //user.setInvalidAllowed(false);
 
         // Create the password input field
         PasswordField password = new PasswordField(gt("password"));
-        password.setWidth("300px");
+        password.setWidth("200px");
         password.setNullRepresentation("");
         bind(password, "password");
 
         // Create error message label
         Label error = new Label();
+        error.setStyleName("error");
         bind(error, "error");
 
         // Create login button
         Button loginButton = new Button(gt("loginBt"));
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        loginButton.setStyleName("default");
         bind(loginButton, "doLogin");
 
         // Add both to a panel
         VerticalLayout fields = new VerticalLayout(user, password, error, loginButton);
         fields.setCaption(gt("caption"));
         fields.setSpacing(true);
-        fields.setMargin(new MarginInfo(true, true, true, false));
+        fields.setMargin(new MarginInfo(true, false, false, false));
         fields.setSizeUndefined();
 
         // The view root layout
