@@ -28,20 +28,23 @@ public class Sector extends BaseVO implements Location {
     Sector() {
     }
 
-    public Sector(Type type, String name, String code, List<Service> services) {
+    public Sector(Type type, String name, String code) {
         this.type = type;
         this.name = name;
         this.code = code;
-        this.services = services == null ? new ArrayList<Service>() : services;
         validate();
     }
 
-    public Collection<LocationCode> getLocationCodes() {
-        List<LocationCode> result = new ArrayList<>();
+    public void addService(Service service) {
+        services.add(service);
+    }
+
+    public Collection<String> getLocationCodes() {
+        List<String> result = new ArrayList<>();
         for (Service service : services) {
             List<String> scodes = service.getLocationStrings();
             for (String scode : scodes) {
-                result.add(new LocationCode("SEC:" + code + "|" + scode));
+                result.add(new String("SEC:" + code + "|" + scode));
             }
         }
         return result;
@@ -51,6 +54,7 @@ public class Sector extends BaseVO implements Location {
         return name;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
@@ -65,5 +69,25 @@ public class Sector extends BaseVO implements Location {
 
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Sector)) return false;
+
+        Sector sector = (Sector) o;
+
+        if (!code.equals(sector.code)) return false;
+        if (type != sector.type) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = code.hashCode();
+        result = 31 * result + type.hashCode();
+        return result;
     }
 }

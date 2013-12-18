@@ -2,10 +2,7 @@ package com.tentelemed.archipel.medicalcenter.domain.model;
 
 import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
-import com.tentelemed.archipel.medicalcenter.domain.event.RoomBedAdded;
-import com.tentelemed.archipel.medicalcenter.domain.event.RoomBedRemoved;
-import com.tentelemed.archipel.medicalcenter.domain.event.RoomEventHandler;
-import com.tentelemed.archipel.medicalcenter.domain.event.RoomRegistered;
+import com.tentelemed.archipel.medicalcenter.domain.event.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -23,7 +20,7 @@ public class Room extends BaseAggregateRoot<RoomId> implements RoomEventHandler 
     @NotNull String name;
     boolean medical;
     @NotNull @Valid Set<Bed> beds = new HashSet<>();
-    @NotNull LocationCode locationCode;
+    @NotNull Location location;
 
     @Override
     protected Class<RoomId> getIdClass() {
@@ -31,11 +28,14 @@ public class Room extends BaseAggregateRoot<RoomId> implements RoomEventHandler 
     }
 
     // COMMANDS
-    public CmdRes register(String name, boolean medical, LocationCode code, Set<Bed> beds) {
-        if (!medical && (beds != null || beds.size() > 0)) {
-            throw new RuntimeException("cannot add beds to non medical room");
-        }
-        return result(new RoomRegistered(name, medical, code, beds));
+    public CmdRes register(String name, Location location) {
+        boolean medical = location.isMedical();
+        return result(new RoomRegistered(name, medical, location, new HashSet<Bed>()));
+    }
+
+    public CmdRes update(String name, Location location) {
+        boolean medical = location.isMedical();
+        return result(new RoomUpdated(name, medical, location));
     }
 
     public CmdRes addBed(Bed bed) {
@@ -64,8 +64,8 @@ public class Room extends BaseAggregateRoot<RoomId> implements RoomEventHandler 
 
     // GETTERS
 
-    public LocationCode getLocationCode() {
-        return locationCode;
+    public Location getLocation() {
+        return location;
     }
 
     public String getName() {
@@ -79,4 +79,5 @@ public class Room extends BaseAggregateRoot<RoomId> implements RoomEventHandler 
     public Set<Bed> getBeds() {
         return Collections.unmodifiableSet(beds);
     }
+
 }

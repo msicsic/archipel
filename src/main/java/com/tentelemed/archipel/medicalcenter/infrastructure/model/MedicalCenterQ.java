@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +25,7 @@ public class MedicalCenterQ extends BaseEntityQ<MedicalCenterId> {
     @NotNull @Size(min = 3) String ident;
     @NotNull MedicalCenterType type;
     @Valid @Embedded MedicalCenterInfo info;
+    List<LocationQ> sectors = new ArrayList<>();
 
     @Override
     protected Class<MedicalCenterId> getIdClass() {
@@ -59,5 +62,13 @@ public class MedicalCenterQ extends BaseEntityQ<MedicalCenterId> {
 
     public void setInfo(MedicalCenterInfo info) {
         this.info = info;
+    }
+
+    public List<LocationQ> getSectors() {
+        return sectors;
+    }
+
+    public void setSectors(List<LocationQ> sectors) {
+        this.sectors = sectors;
     }
 }

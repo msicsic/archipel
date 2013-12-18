@@ -18,15 +18,22 @@ public class FunctionalUnit extends BaseVO implements Location {
     @NotNull String name;
     @NotNull String code;
     List<ActivityUnit> units = new ArrayList<>();
+    @NotNull Service parent;
 
     private FunctionalUnit() {
     }
 
-    public FunctionalUnit(String name, String code, List<ActivityUnit> units) {
+    public FunctionalUnit(Service parent, String name, String code) {
+        this.parent = parent;
         this.name = name;
         this.code = code;
-        this.units = units;
+        this.parent = parent;
+        this.parent.addFunctionalUnit(this);
         validate();
+    }
+
+    public void addActivityUnit(ActivityUnit unit) {
+        units.add(unit);
     }
 
     @Override
@@ -37,6 +44,11 @@ public class FunctionalUnit extends BaseVO implements Location {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean isMedical() {
+        return parent.isMedical();
     }
 
     public List<ActivityUnit> getUnits() {
@@ -52,5 +64,22 @@ public class FunctionalUnit extends BaseVO implements Location {
             result.add("FU:" + code + "|" + "AU:" + unit.getCode());
         }
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FunctionalUnit)) return false;
+
+        FunctionalUnit that = (FunctionalUnit) o;
+
+        if (!code.equals(that.code)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return code.hashCode();
     }
 }

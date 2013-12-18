@@ -5,15 +5,14 @@ import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.medicalcenter.application.service.MedicalCenterCommandService;
 import com.tentelemed.archipel.medicalcenter.application.service.MedicalCenterQueryService;
 import com.tentelemed.archipel.medicalcenter.domain.event.MedicalCenterDomainEvent;
-import com.tentelemed.archipel.medicalcenter.domain.model.Division;
-import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
+import com.tentelemed.archipel.medicalcenter.domain.model.*;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
+import com.tentelemed.archipel.medicalcenter.infrastructure.model.RoomQ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +27,7 @@ public class UiMedicalCentersViewModel extends BaseViewModel {
     @Autowired MedicalCenterQueryService serviceRead;
     @Autowired MedicalCenterCommandService serviceWrite;
     MedicalCenterQ currentCenter;
+    private RoomQ selectedRoom;
 
     public List<MedicalCenterQ> getMedicalCenters() {
         return sort(serviceRead.getAll(), new Comparator<MedicalCenterQ>() {
@@ -70,6 +70,15 @@ public class UiMedicalCentersViewModel extends BaseViewModel {
         show(view);
     }
 
+    public void action_createRoom() {
+        UiRoomCreateView view = getView(UiRoomCreateView.class);
+        show(view);
+    }
+
+    public void action_deleteRoom() {
+        // TODO
+    }
+
     public boolean isEditMainEnabled() {
         return getCurrentCenter() != null;
     }
@@ -93,6 +102,34 @@ public class UiMedicalCentersViewModel extends BaseViewModel {
     }
 
     public Division createDefaultDivision() {
-        return null;
+        Set<Sector> sectors = new HashSet<>();
+        Sector sector = new Sector(Sector.Type.MED, "Consultations", "CNS");
+        Service service1 = new Service(sector, "Generaliste", "CGEN");
+        Service service2 = new Service(sector, "Ophtalmo", "COPH");
+        FunctionalUnit fu1 = new FunctionalUnit(service1, "FU1", "FU1");
+        FunctionalUnit fu2 = new FunctionalUnit(service1, "FU2", "FU2");
+
+        sectors.add(sector);
+        Division div = new Division(sectors);
+        return div;
+    }
+
+    public List<RoomQ> getRooms() {
+        return serviceRead.getRooms(getCurrentCenter());
+    }
+
+    public void setSelectedRoom(RoomQ room) {
+        this.selectedRoom = room;
+    }
+
+    public RoomQ getSelectedRoom() {
+        return selectedRoom;
+    }
+
+    public void createService(Sector sector) {
+        // popup d'edition
+        UiMedicalServiceCreateServiceView view = getView(UiMedicalServiceCreateServiceView.class);
+        view.getModel().setSector(currentCenter, sector);
+        show(view);
     }
 }

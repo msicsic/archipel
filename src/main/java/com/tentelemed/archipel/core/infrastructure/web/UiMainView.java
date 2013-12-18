@@ -30,17 +30,14 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
     @Autowired MainViewModel model;
 
     public void postConstruct() {
-
         // The view root layout
         VerticalLayout viewLayout = new VerticalLayout();
         viewLayout.setSizeFull();
         viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
         setCompositionRoot(viewLayout);
-
         // Create a menu bar
         MenuBar menubar = new MenuBar();
         menubar.setSizeFull();
-
         VerticalLayout imageLayout = new VerticalLayout();
         Image image = new Image(null, new ClassResource("/gemed.jpg"));
         imageLayout.setStyleName("black-bg");
@@ -53,7 +50,8 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
         childLayout = new VerticalLayout();
         //childLayout.setMargin(true);
         viewLayout.addComponent(childLayout);
-
+//        viewLayout.setHeight("100%");
+        childLayout.setSizeFull();
         for (final Module module : model.getModules()) {
             MenuBar.MenuItem item = menubar.addItem(getName(module.getName()), null, new MenuBar.Command() {
                 @Override

@@ -17,21 +17,36 @@ import java.util.List;
 public class Service extends BaseVO implements Location {
     @NotNull String name;
     @NotNull String code;
+    @NotNull Sector parent;
     List<FunctionalUnit> units = new ArrayList<>();
 
     private Service() {
     }
 
-    public Service(String name, String code, List<FunctionalUnit> units) {
+    public Service(Sector parent, String name, String code) {
         this.name = name;
         this.code = code;
-        this.units = units == null ? new ArrayList<FunctionalUnit>() : units;
+        this.parent = parent;
+        this.parent.addService(this);
         validate();
+    }
+
+    public void addFunctionalUnit(FunctionalUnit unit) {
+        units.add(unit);
+    }
+
+    @Override
+    public boolean isMedical() {
+        return parent.isMedical();
     }
 
     @Override
     public String getCode() {
         return code;
+    }
+
+    public Sector getParent() {
+        return parent;
     }
 
     @Override
@@ -54,5 +69,22 @@ public class Service extends BaseVO implements Location {
             }
         }
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Service)) return false;
+
+        Service service = (Service) o;
+
+        if (!code.equals(service.code)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return code.hashCode();
     }
 }

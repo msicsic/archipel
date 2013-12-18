@@ -20,22 +20,22 @@ public class DivisionTest {
     @Test
     public void testLocationCode() throws Exception {
         // Given
-        List<Service> services = new ArrayList<>();
-        List<FunctionalUnit> units = new ArrayList<>();
         Set<Sector> sectors = new HashSet<>();
-        units.add(new FunctionalUnit("unit1", "UNIT1", new ArrayList<ActivityUnit>()));
-        services.add(new Service("Generaliste", "GEN", units));
-        services.add(new Service("Ophtalmo", "OPH", new ArrayList<FunctionalUnit>()));
-        Sector sector = new Sector(Sector.Type.MED, "consultation", "CONSULT", services);
+        Sector sector = new Sector(Sector.Type.MED, "Consultations", "CNS");
+        Service service1 = new Service(sector, "Generaliste", "CGEN");
+        Service service2 = new Service(sector, "Ophtalmo", "COPH");
+        FunctionalUnit fu1 = new FunctionalUnit(service1, "FU1", "FU1");
+        FunctionalUnit fu2 = new FunctionalUnit(service1, "FU2", "FU2");
         sectors.add(sector);
         Division division = new Division(sectors);
 
         // When
-        List<LocationCode> codes = division.getLocationCodes();
+        List<String> codes = division.getLocationCodes();
 
         // Then
-        assertThat(codes.size(), equalTo(2));
-        assertThat(codes.get(0).getCode(), equalTo("SEC:CONSULT|SRV:GEN|FU:UNIT1"));
-        assertThat(codes.get(1).getCode(), equalTo("SEC:CONSULT|SRV:OPH"));
+        assertThat(codes.size(), equalTo(3));
+        assertThat(codes.get(0), equalTo("SEC:CNS|SRV:CGEN|FU:FU1"));
+        assertThat(codes.get(1), equalTo("SEC:CNS|SRV:CGEN|FU:FU2"));
+        assertThat(codes.get(2), equalTo("SEC:CNS|SRV:COPH"));
     }
 }

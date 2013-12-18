@@ -7,8 +7,10 @@ package com.tentelemed.archipel.medicalcenter.domain.model;
  * Time: 13:22
  */
 public interface Location {
+
     String getCode();
 
     String getName();
 
+    boolean isMedical();
 }

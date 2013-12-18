@@ -5,6 +5,7 @@ import com.tentelemed.archipel.medicalcenter.domain.interfaces.MedicalCenterRepo
 import com.tentelemed.archipel.medicalcenter.domain.model.Bank;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
+import com.tentelemed.archipel.medicalcenter.infrastructure.model.RoomQ;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -71,5 +72,10 @@ public class MedicalCenterRepositoryImpl implements MedicalCenterRepository {
     @Override
     public List<Bank> getBanks() {
         return em.createQuery("select c from Bank c").getResultList();
+    }
+
+    @Override
+    public List<RoomQ> getRooms(MedicalCenterQ center) {
+        return em.createQuery("select c from RoomQ c").getResultList();
     }
 }

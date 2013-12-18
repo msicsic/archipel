@@ -6,6 +6,7 @@ import com.tentelemed.archipel.medicalcenter.domain.interfaces.MedicalCenterRepo
 import com.tentelemed.archipel.medicalcenter.domain.model.Bank;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
+import com.tentelemed.archipel.medicalcenter.infrastructure.model.RoomQ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,5 +43,9 @@ public class MedicalCenterQueryService extends BaseQueryService {
 
     public List<Bank> getBanks() {
         return repo.getBanks();
+    }
+
+    public List<RoomQ> getRooms(MedicalCenterQ center) {
+        return repo.getRooms(center);
     }
 }

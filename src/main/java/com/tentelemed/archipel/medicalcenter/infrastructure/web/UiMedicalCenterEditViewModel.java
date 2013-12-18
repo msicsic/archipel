@@ -38,6 +38,10 @@ public class UiMedicalCenterEditViewModel extends BaseViewModel {
             } catch (Exception e) {
                 log.error(null, e);
             }
+            cmd.street = center.getInfo().getAddress().getStreet();
+            cmd.town = center.getInfo().getAddress().getTown();
+            cmd.postalCode = center.getInfo().getAddress().getPostalCode();
+            cmd.countryIso = center.getInfo().getAddress().getCountryIso();
         }
         cmd.id = center.getEntityId();
     }

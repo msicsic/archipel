@@ -14,6 +14,9 @@ public class MedicalCenterAdditionalInfoUpdated extends MedicalCenterDomainEvent
 
     private MedicalCenterInfo info;
 
+    MedicalCenterAdditionalInfoUpdated() {
+    }
+
     public MedicalCenterAdditionalInfoUpdated(MedicalCenterId id, MedicalCenterInfo info) {
         super(id);
         this.info = info;

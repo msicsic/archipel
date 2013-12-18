@@ -4,6 +4,7 @@ import com.tentelemed.archipel.core.domain.model.Country;
 import com.tentelemed.archipel.medicalcenter.domain.model.Bank;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenterId;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
+import com.tentelemed.archipel.medicalcenter.infrastructure.model.RoomQ;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface MedicalCenterRepository {
     List<Country> getCountries();
 
     List<Bank> getBanks();
+
+    List<RoomQ> getRooms(MedicalCenterQ center);
 }

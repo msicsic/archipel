@@ -59,6 +59,23 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
     public CmdRes delete() {
         return result(new MedicalCenterDeleted(getEntityId()));
     }
+
+    public CmdRes createService(String sectorCode, String code, String name) {
+        Sector found = null;
+        for (Sector sector : division.getSectors()) {
+            if (sector.getCode().equals(sectorCode)) {
+                found = sector;
+            }
+        }
+        if (found == null) {
+            throw new RuntimeException("Sector not found");
+        } else {
+            Service service = new Service(found, name, code);
+            return result(new MedicalCenterServiceAdded(getEntityId(), service));
+        }
+    }
+
+
     // methodes utilitaires
 
     /**
@@ -66,11 +83,19 @@ public class MedicalCenter extends BaseAggregateRoot<MedicalCenterId> implements
      */
     private Division createDefaultDivision() {
         Set<Sector> sectors = new HashSet<>();
-        sectors.add(new Sector(Sector.Type.MED, "Default", "UNDEF", null));
+        sectors.add(new Sector(Sector.Type.MED, "Default", new String("UNDEF")));
         return new Division(sectors);
     }
 
     // EVENTS
+
+
+    @Override
+    public void handle(MedicalCenterServiceAdded event) {
+        Service service = event.getService();
+        service.getParent().addService(service);
+    }
+
     @Override
     public void handle(MedicalCenterRegistered event) {
         apply(event);

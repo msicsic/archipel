@@ -5,6 +5,7 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.MethodProperty;
 import com.vaadin.data.util.NestedMethodProperty2;
 import com.vaadin.data.util.converter.Converter;
+import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
@@ -56,7 +57,12 @@ public class BaseViewHelper<M extends BaseViewModel> {
             field.setCaption(field.getValue());
         }
         model.getItem().addNestedProperty(path);
-        field.setPropertyDataSource(model.getItem().getItemProperty(path));
+        Property property = model.getItem().getItemProperty(path);
+        if (boolean.class.isAssignableFrom(property.getType())) {
+            // TODO : convertir en Yes/No
+            //field.setConverter(new StringToBooleanConverter());
+        }
+        field.setPropertyDataSource(property);
         final Class type = model.getItem().getItemProperty(path).getType();
         if (type.isEnum()) {
             field.setConverter(new Converter<String, Object>() {

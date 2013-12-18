@@ -8,8 +8,11 @@ import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.core.infrastructure.web.RootView;
 import com.tentelemed.archipel.medicalcenter.domain.event.MedicalCenterDomainEvent;
+import com.tentelemed.archipel.medicalcenter.domain.event.RoomDomainEvent;
 import com.tentelemed.archipel.medicalcenter.domain.model.MedicalCenter;
+import com.tentelemed.archipel.medicalcenter.domain.model.Room;
 import com.tentelemed.archipel.medicalcenter.infrastructure.model.MedicalCenterQ;
+import com.tentelemed.archipel.medicalcenter.infrastructure.model.RoomQ;
 import com.tentelemed.archipel.security.application.event.RoleDomainEvent;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.domain.model.Role;
@@ -143,6 +146,7 @@ public class CoreService extends BaseService {
         eventRegistry.addEntry(UserDomainEvent.class, User.class, UserQ.class);
         eventRegistry.addEntry(RoleDomainEvent.class, Role.class, RoleQ.class);
         eventRegistry.addEntry(MedicalCenterDomainEvent.class, MedicalCenter.class, MedicalCenterQ.class);
+        eventRegistry.addEntry(RoomDomainEvent.class, Room.class, RoomQ.class);
     }
 
     public void initApplication() {

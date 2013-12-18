@@ -38,8 +38,8 @@ public class Division extends BaseVO {
         return false;
     }
 
-    public List<LocationCode> getLocationCodes() {
-        List<LocationCode> result = new ArrayList<>();
+    public List<String> getLocationCodes() {
+        List<String> result = new ArrayList<>();
         for (Sector sector : sectors) {
             result.addAll(sector.getLocationCodes());
         }

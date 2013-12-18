@@ -30,6 +30,11 @@ public class UiMedicalCenterEditView extends BasePopup<UiMedicalCenterEditViewMo
 
     @Override
     public void postConstruct() {
+
+    }
+
+    @Override
+    public void onDisplay() {
         setCaption("Edit Center Info");
 
         setModal(true);
@@ -55,14 +60,15 @@ public class UiMedicalCenterEditView extends BasePopup<UiMedicalCenterEditViewMo
         formLayout.addComponent(bind(new TextField("Postal Code"), "cmd.postalCode"));
         final ComboBox cb = new ComboBox("Country");
         for (Country country : model.getCountries()) {
-            cb.addItem(country);
-            cb.setItemCaption(country, country.getName());
+            cb.addItem(country.getIsoCode());
+            cb.setItemCaption(country.getIsoCode(), country.getName());
         }
+        cb.setValue(model.getCmd().countryIso);
         cb.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                Country country = (Country) cb.getValue();
-                model.getCmd().countryIso = country.getIsoCode();
+                String countryIso = (String) cb.getValue();
+                model.getCmd().countryIso = countryIso;
             }
         });
         formLayout.addComponent(cb);
@@ -71,22 +77,25 @@ public class UiMedicalCenterEditView extends BasePopup<UiMedicalCenterEditViewMo
         formLayout.addComponent(bind(new TextField("Director"), "cmd.directorName"));
         final ComboBox cbBank = new ComboBox("Banks");
         for (Bank bank : model.getBanks()) {
-            cbBank.addItem(bank);
-            cbBank.setItemCaption(bank, bank.getBankName());
+            cbBank.addItem(bank.getCode());
+            cbBank.setItemCaption(bank.getCode(), bank.getBankName());
         }
+        cbBank.setValue(model.getCmd().bankCode);
         cbBank.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                Bank bank = (Bank) cbBank.getValue();
-                model.getCmd().bankCode = bank.getCode();
+                String bankCode = (String) cbBank.getValue();
+                model.getCmd().bankCode = bankCode;
             }
         });
         formLayout.addComponent(cbBank);
 
         OptionGroup groupEmergencies = new OptionGroup("Emergencies ? ");
         groupEmergencies.addStyleName("display: inline-block");
-        groupEmergencies.addItem("yes");
-        groupEmergencies.addItem("no");
+        groupEmergencies.addItem(Boolean.TRUE);
+        groupEmergencies.setItemCaption(Boolean.TRUE, "Yes");
+        groupEmergencies.addItem(Boolean.FALSE);
+        groupEmergencies.setItemCaption(Boolean.FALSE, "No");
         formLayout.addComponent(groupEmergencies);
         OptionGroup groupDrugStore = new OptionGroup("Pharmacy ? ");
         groupDrugStore.addItem("yes");

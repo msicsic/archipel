@@ -4,12 +4,9 @@ import com.tentelemed.archipel.core.application.service.BaseCommandService;
 import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.application.service.Command;
 import com.tentelemed.archipel.core.domain.model.Address;
-import com.tentelemed.archipel.core.domain.model.Country;
-import com.tentelemed.archipel.core.domain.model.PhoneNumber;
 import com.tentelemed.archipel.medicalcenter.domain.model.*;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,6 +30,23 @@ import javax.validation.constraints.Size;
  */
 @Component
 public class MedicalCenterCommandService extends BaseCommandService {
+
+    public static class CmdCreateService extends Command<MedicalCenterId> {
+        @NotNull public String sectorCode;
+        @NotNull public String code;
+        @NotNull public String name;
+    }
+
+    public static class CmdCreateRoom extends Command<RoomId> {
+        @NotNull public String name;
+        @NotNull public Location location;
+    }
+
+    public static class CmdUpdateRoom extends Command<RoomId> {
+        @NotNull public String name;
+        public boolean medical;
+        @NotNull public Location location;
+    }
 
     public static class CmdRegister extends Command<MedicalCenterId> {
         @NotNull public MedicalCenterType type;
@@ -67,6 +81,15 @@ public class MedicalCenterCommandService extends BaseCommandService {
         }
     }
 
+    CmdRes handle(CmdCreateService cmd) {
+        MedicalCenter center = (MedicalCenter) get(cmd.id);
+        return center.createService(cmd.sectorCode, cmd.code, cmd.name);
+    }
+
+    CmdRes handle(CmdCreateRoom cmd) {
+        Room room = get(Room.class);
+        return room.register(cmd.name, cmd.location);
+    }
 
     CmdRes handle(CmdRegister cmd) {
         MedicalCenter center = get(MedicalCenter.class);
