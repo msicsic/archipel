@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
-import com.tentelemed.archipel.security.infrastructure.web.UiLoginView;
+import com.tentelemed.archipel.security.infrastructure.web.UiLogin;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
@@ -44,7 +44,7 @@ public class ErrorView extends Panel implements View {
         layout.addComponent(new Button(msg.getMessage("main.go_back"), new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                Page.getCurrent().setUriFragment("!" + UiLoginView.NAME);
+                Page.getCurrent().setUriFragment("!" + UiLogin.NAME);
             }
         }));
         setContent(layout);

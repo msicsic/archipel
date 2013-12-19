@@ -9,7 +9,6 @@ import com.tentelemed.archipel.core.domain.model.EntityId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -80,8 +79,8 @@ public class BaseCommandService {
         return command;
     }
 
-    @Transactional
-    public <ID extends EntityId> ID execute(Command<ID> command) {
+    // Rq : @Transactional n'a pas d'effet sur les methodes non 'public' (à moins de passer par AspectJ)
+    protected <ID extends EntityId> ID _execute(Command<ID> command) {
         Method m;
         try {
             // vérifier si handle existe bien

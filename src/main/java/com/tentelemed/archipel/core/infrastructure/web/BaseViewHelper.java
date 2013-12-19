@@ -5,7 +5,6 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.MethodProperty;
 import com.vaadin.data.util.NestedMethodProperty2;
 import com.vaadin.data.util.converter.Converter;
-import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;

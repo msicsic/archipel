@@ -1,7 +1,9 @@
 package com.tentelemed.archipel.core.infrastructure.config;
 
 import com.tentelemed.archipel.core.domain.model.Country;
-import com.tentelemed.archipel.medicalcenter.domain.model.Bank;
+import com.tentelemed.archipel.site.domain.model.Bank;
+import com.tentelemed.archipel.security.application.command.CmdCreateRole;
+import com.tentelemed.archipel.security.application.command.CmdCreateUser;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.domain.model.Right;
 import com.tentelemed.archipel.security.domain.model.RoleId;
@@ -60,9 +62,9 @@ public class DbInit {
                 jdbcTemplate.update(
                         "create table T_AGGREGATE (c_aggregate_id INTEGER NOT NULL, c_type VARCHAR(128) NOT NULL, c_version INTEGER NOT NULL, PRIMARY KEY(c_aggregate_id), INDEX idx_version (c_version))"
                 );
-                RoleId role = service.execute(new UserCommandService.CmdRegisterRole("administrateur", Right.RIGHT_A));
+                RoleId role = service.execute(new CmdCreateRole("administrateur", Right.RIGHT_A));
                 for (int i = 0; i < 100; i++) {
-                    service.execute(new UserCommandService.CmdRegisterUser(role, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i));
+                    service.execute(new CmdCreateUser(role, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i));
                 }
             }
 
@@ -88,7 +90,7 @@ public class DbInit {
                     em.persist(country);
                     em.flush();
                 } catch (Exception e) {
-                    log.error("Cant save Country : "+iso);
+                    log.error("Cant save Country : " + iso);
                 }
             }
 

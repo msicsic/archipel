@@ -1,7 +1,9 @@
 TODO :
-- L'objet Division n'est pas vraiment utile, rapatrier les Sector dans MedicalCenter
-  qui doit donc effectuer les controles de cohérence (code unique dans hierarchie)
-- Les Sector, Service, FU, AU doivent etre des Entity et non des VO
+- Les aggregats doivent pouvoir attribuer un ID local pour les entités contenues
+- Les ID des Entity étant locaux, ils ne doivent pas necessairement suivre un format strict
+  Il vaut au contraire mieux choisir un ID métier
+  Il faut donc reporter la gestion des ID dans le AggregateRoot au lieu de Entity
+
 - Coté persistance, utilisation d'une classe générique LocationQ
 - Affectuer les controles de referencement lors modif code ou suppression
 - Gestion de la desactivation (afficher en gris ?)

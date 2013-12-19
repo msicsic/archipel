@@ -154,7 +154,7 @@ public class SpringConfiguration {
                 "com.tentelemed.archipel"
 //                , "com.tentelemed.archipel.invoicing.infrastructure.model"
 //                , "com.tentelemed.archipel.security.infrastructure.model"
-//                , "com.tentelemed.archipel.medicalcenter.infrastructure.model"
+//                , "com.tentelemed.archipel.site.infrastructure.model"
         );
         lef.getJpaPropertyMap().put("hibernate.ejb.naming_strategy", "com.tentelemed.archipel.core.infrastructure.config.NamingStrategy");
         lef.afterPropertiesSet();

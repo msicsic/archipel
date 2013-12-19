@@ -134,6 +134,9 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
                     try {
                         if (currentInstance != null) {
                             currentInstance = getter.invoke(currentInstance);
+                            /*if (currentInstance != null && currentInstance instanceof Command) {
+                                currentInstance = BeanCreator.createBean(currentInstance);
+                            }*/
                             propertyClass = currentInstance.getClass();
                         }
                     } catch (Exception e) {
