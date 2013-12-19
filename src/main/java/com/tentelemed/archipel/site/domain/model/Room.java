@@ -16,7 +16,7 @@ import java.util.Set;
  * Date: 10/12/13
  * Time: 12:11
  */
-public class Room extends BaseAggregateRoot<RoomId> implements RoomEventHandler {
+public class Room extends BaseAggregateRoot<RoomId> {
     @NotNull String name;
     boolean medical;
     @NotNull @Valid Set<Bed> beds = new HashSet<>();
@@ -30,36 +30,43 @@ public class Room extends BaseAggregateRoot<RoomId> implements RoomEventHandler 
     // COMMANDS
     public CmdRes register(String name, Location location) {
         boolean medical = location.isMedical();
-        return result(new RoomRegistered(name, medical, location, new HashSet<Bed>()));
+        return _result(handle(new RoomRegistered(name, medical, location, new HashSet<Bed>())));
     }
 
     public CmdRes update(String name, Location location) {
         boolean medical = location.isMedical();
-        return result(new RoomUpdated(name, medical, location));
+        return _result(handle(new RoomUpdated(name, medical, location)));
     }
 
     public CmdRes addBed(Bed bed) {
         if (!isMedical()) {
             throw new RuntimeException("cannot add beds to non medical room");
         }
-        return result(new RoomBedAdded(bed));
+        return _result(handle(new RoomBedAdded(bed)));
     }
 
     public CmdRes removeBed(Bed bed) {
-        return result(new RoomBedRemoved(bed));
+        return _result(handle(new RoomBedRemoved(bed)));
     }
 
     // EVENTS
-    public void handle(RoomRegistered event) {
-        apply(event);
+    public RoomRegistered handle(RoomRegistered event) {
+        return apply(event);
     }
 
-    public void handle(RoomBedAdded event) {
+    public RoomBedAdded handle(RoomBedAdded event) {
         this.beds.add(event.getBed());
+        return handled(event);
     }
 
-    public void handle(RoomBedRemoved event) {
+    public RoomBedRemoved handle(RoomBedRemoved event) {
         this.beds.remove(event.getBed());
+        return handled(event);
+    }
+
+    public RoomUpdated handle(RoomUpdated event) {
+        // TODO
+        return null;
     }
 
     // GETTERS

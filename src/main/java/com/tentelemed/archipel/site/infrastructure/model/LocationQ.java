@@ -1,8 +1,6 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
-import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.site.domain.model.Sector;
-import com.tentelemed.archipel.site.domain.model.SectorId;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

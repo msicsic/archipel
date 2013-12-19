@@ -3,7 +3,7 @@ package com.tentelemed.archipel.core.application.service;
 import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.ApplicationEvent;
 import com.tentelemed.archipel.core.application.EventStore;
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public abstract class BaseCommandService {
         return (M) res.aggregate.getEntityId();
     }
 
-    protected <I extends EntityId> void post(BaseAggregateRoot<I> target, DomainEvent... events) {
+    protected <I extends EntityId> void post(BaseAggregateRoot<I> target, AbstractDomainEvent... events) {
         post(new CmdRes(target, Arrays.asList(events)));
     }
 
@@ -131,7 +131,6 @@ public abstract class BaseCommandService {
             throw new RuntimeException("Error while running command : " + command.getClass().getSimpleName());
         }
     }
-
 
 
 }

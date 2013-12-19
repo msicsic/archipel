@@ -1,14 +1,10 @@
 package com.tentelemed.archipel.site.infrastructure.web;
 
-import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.site.application.command.CmdCreateService;
 import com.tentelemed.archipel.site.application.service.SiteCommandService;
-import com.tentelemed.archipel.site.domain.model.Sector;
-import com.tentelemed.archipel.site.domain.model.SectorId;
 import com.tentelemed.archipel.site.domain.model.SiteId;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

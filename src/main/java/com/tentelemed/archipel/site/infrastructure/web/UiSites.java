@@ -29,6 +29,7 @@ public class UiSites extends BaseView<UiSitesModel> {
 
     @Autowired UiSitesModel model;
     private ComboBox combo;
+    private VerticalLayout sectorsPanel;
 
     @Override
     public UiSitesModel getModel() {
@@ -58,7 +59,7 @@ public class UiSites extends BaseView<UiSitesModel> {
 
         tab.addComponent(createMainInfoPanel());
         tab.addComponent(createAddInfoPanel());
-        tab.addComponent(createServicesPanel());
+        tab.addComponent(createSectorsPanel());
         tab.addComponent(createRoomsPanel());
         tab.addComponent(createEquipmentsPanel());
 
@@ -131,9 +132,12 @@ public class UiSites extends BaseView<UiSitesModel> {
         return vlayout;
     }
 
-    private com.vaadin.ui.Component createServicesPanel() {
-        VerticalLayout vlayout = new VerticalLayout();
-        vlayout.setCaption("Medical Center Departments");
+    private com.vaadin.ui.Component createSectorsPanel() {
+        if (sectorsPanel == null) {
+            sectorsPanel = new VerticalLayout();
+            sectorsPanel.setCaption("Medical Center Departments");
+        }
+        sectorsPanel.removeAllComponents();
 
         TreeTable treeTable = new TreeTable();
         treeTable.removeAllItems();
@@ -187,8 +191,8 @@ public class UiSites extends BaseView<UiSitesModel> {
                 treeTable.setCollapsed(item, false);
         }
         treeTable.refreshRowCache();
-        vlayout.addComponent(treeTable);
-        return vlayout;
+        sectorsPanel.addComponent(treeTable);
+        return sectorsPanel;
     }
 
     private AbstractComponent createActionPanel(final LocationQ loc) {
@@ -300,6 +304,7 @@ public class UiSites extends BaseView<UiSitesModel> {
             listener = new Property.ValueChangeListener() {
                 @Override public void valueChange(Property.ValueChangeEvent event) {
                     model.setCurrentSite((SiteQ) combo.getValue());
+                    createSectorsPanel();
                     refreshUI();
                 }
             };

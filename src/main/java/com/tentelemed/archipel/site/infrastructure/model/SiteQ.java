@@ -6,10 +6,7 @@ import com.tentelemed.archipel.site.domain.model.SiteId;
 import com.tentelemed.archipel.site.domain.model.SiteInfo;
 import com.tentelemed.archipel.site.domain.model.SiteType;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,7 +25,7 @@ public class SiteQ extends BaseEntityQ<SiteId> {
     @NotNull @Size(min = 3) String ident;
     @NotNull SiteType type;
     @Valid @Embedded SiteInfo info;
-    @NotNull @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) Set<LocationQ> sectors = new HashSet<>();
+    @NotNull @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER) Set<LocationQ> sectors = new HashSet<>();
 
     @Override
     protected Class<SiteId> getIdClass() {

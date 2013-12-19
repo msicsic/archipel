@@ -18,7 +18,7 @@ import java.util.Date;
  * Date: 21/10/13
  * Time: 16:45
  */
-public class User extends BaseAggregateRoot<UserId> implements UserEventHandler {
+public class User extends BaseAggregateRoot<UserId> {
 
     public static class ChangePasswordException extends DomainException {
     }
@@ -43,11 +43,11 @@ public class User extends BaseAggregateRoot<UserId> implements UserEventHandler 
         validate("dob", dob);
         validate("email", email);
         validate("login", login);
-        return result(new UserRegistered(getEntityId(), roleId, firstName, lastName, dob, email, new Credentials(login, generatePassword())));
+        return _result(handle(new UserRegistered(getEntityId(), roleId, firstName, lastName, dob, email, new Credentials(login, generatePassword()))));
     }
 
     public CmdRes delete() {
-        return result(new UserDeleted(getEntityId()));
+        return _result(handle(new UserDeleted(getEntityId())));
     }
 
     public CmdRes updateInfo(String firstName, String lastName, Date dob, String email) {
@@ -55,49 +55,55 @@ public class User extends BaseAggregateRoot<UserId> implements UserEventHandler 
         validate("lastName", lastName);
         validate("dob", dob);
         validate("email", email);
-        return result(new UserInfoUpdated(getEntityId(), firstName, lastName, dob, email));
+        return _result(handle(new UserInfoUpdated(getEntityId(), firstName, lastName, dob, email)));
     }
 
     public CmdRes changePassword(String old, String new1, String new2) throws ChangePasswordException {
         if (!Objects.equal(old, getPassword()) || !Objects.equal(new1, new2)) {
             throw new ChangePasswordException();
         }
-        return result(new UserPasswordUpdated(getEntityId(), new1));
+        return _result(handle(new UserPasswordUpdated(getEntityId(), new1)));
     }
 
     public CmdRes changeRole(RoleId roleId) {
-        return result(new UserRoleUpdated(getEntityId(), roleId));
+        return _result(handle(new UserRoleUpdated(getEntityId(), roleId)));
     }
 
 
     // ********************* EVENTS ******************************
     // ***********************************************************
 
-    public void handle(UserDeleted event) {
+    public UserDeleted handle(UserDeleted event) {
+        // ras
+        return null;
     }
 
-    public void handle(UserRegistered event) {
+    public UserRegistered handle(UserRegistered event) {
         this.roleId = event.getRoleId();
         this.firstName = event.getFirstName();
         this.lastName = event.getLastName();
         this.dob = event.getDob();
         this.email = event.getEmail();
         this.credentials = event.getCredentials();
+        return handled(event);
     }
 
-    public void handle(UserInfoUpdated event) {
+    public UserInfoUpdated handle(UserInfoUpdated event) {
         this.firstName = event.getFirstName();
         this.lastName = event.getLastName();
         this.dob = event.getDob();
         this.email = event.getEmail();
+        return handled(event);
     }
 
-    public void handle(UserPasswordUpdated event) {
+    public UserPasswordUpdated handle(UserPasswordUpdated event) {
         this.credentials = new Credentials(credentials.getLogin(), event.getPassword());
+        return handled(event);
     }
 
-    public void handle(UserRoleUpdated event) {
+    public UserRoleUpdated handle(UserRoleUpdated event) {
         this.roleId = event.getRoleId();
+        return handled(event);
     }
 
     // ********************* ACCESSORS ***************************

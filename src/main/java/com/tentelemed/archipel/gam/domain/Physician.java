@@ -35,7 +35,7 @@ public class Physician extends BaseAggregateRoot<PhysicianId> {
         validate("firstName", firstName);
         validate("lastName", lastName);
         validate("specialty", specialty);
-        return result(new PhysicianRegistered(getEntityId(), firstName, lastName, specialty));
+        return _result(handle(new PhysicianRegistered(getEntityId(), firstName, lastName, specialty)));
     }
 
     public CmdRes updateInfos(String firstName, String lastName, Address address, Specialty specialty, PhoneNumber phone) {
@@ -44,23 +44,25 @@ public class Physician extends BaseAggregateRoot<PhysicianId> {
         validate("address", address);
         validate("specialty", specialty);
         validate("phone", phone);
-        return result(new PhysicianInfoUpdated(getEntityId(), firstName, lastName, address, specialty, phone));
+        return _result(handle(new PhysicianInfoUpdated(getEntityId(), firstName, lastName, address, specialty, phone)));
     }
 
     // EVENTS
 
-    public void handle(PhysicianRegistered event) {
+    public PhysicianRegistered handle(PhysicianRegistered event) {
         this.firstName = event.getFirstName();
         this.lastName = event.getLastName();
         this.specialty = event.getSpecialty();
+        return handled(event);
     }
 
-    public void handle(PhysicianInfoUpdated evt) {
-        this.firstName = evt.getFirstName();
-        this.lastName = evt.getLastName();
-        this.address = evt.getAddress();
-        this.specialty = evt.getSpecialty();
-        this.phone = evt.getPhone();
+    public PhysicianInfoUpdated handle(PhysicianInfoUpdated event) {
+        this.firstName = event.getFirstName();
+        this.lastName = event.getLastName();
+        this.address = event.getAddress();
+        this.specialty = event.getSpecialty();
+        this.phone = event.getPhone();
+        return handled(event);
     }
 
     // GETTERS

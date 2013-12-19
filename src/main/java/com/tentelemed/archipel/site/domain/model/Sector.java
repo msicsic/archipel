@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.site.domain.model;
 
 import com.tentelemed.archipel.core.domain.model.BaseEntity;
-import com.tentelemed.archipel.core.domain.model.BaseVO;
 
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -16,21 +16,20 @@ import java.util.List;
  * Date: 10/12/13
  * Time: 11:57
  */
-public class Sector extends BaseEntity<SectorId> implements Location {
+public class Sector extends BaseEntity implements Location {
     public static enum Type {
         TECH, MEDTECH, ADMIN, MED
     }
 
     @NotNull @Size(min = 3) String name;
-    @NotNull @Size(min = 3) String code;
+    @Id @NotNull @Size(min = 3) String code;
     @NotNull Type type;
     List<Service> services = new ArrayList<>();
 
     Sector() {
     }
 
-    public Sector(SectorId id, Type type, String name, String code) {
-        this.id = id.getId();
+    public Sector(Type type, String name, String code) {
         this.type = type;
         this.name = name;
         this.code = code;
@@ -71,11 +70,6 @@ public class Sector extends BaseEntity<SectorId> implements Location {
 
     public Type getType() {
         return type;
-    }
-
-    @Override
-    protected Class<SectorId> getIdClass() {
-        return SectorId.class;
     }
 
     @Override

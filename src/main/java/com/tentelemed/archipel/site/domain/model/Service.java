@@ -3,6 +3,7 @@ package com.tentelemed.archipel.site.domain.model;
 import com.tentelemed.archipel.core.domain.model.BaseEntity;
 import com.tentelemed.archipel.core.domain.model.BaseVO;
 
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,9 +16,9 @@ import java.util.List;
  * Date: 10/12/13
  * Time: 13:26
  */
-public class Service extends BaseEntity<ServiceId> implements Location {
+public class Service extends BaseEntity implements Location {
     @NotNull String name;
-    @NotNull String code;
+    @Id @NotNull String code;
     @NotNull Sector parent;
     List<FunctionalUnit> units = new ArrayList<>();
 
@@ -70,11 +71,6 @@ public class Service extends BaseEntity<ServiceId> implements Location {
             }
         }
         return result;
-    }
-
-    @Override
-    protected Class<ServiceId> getIdClass() {
-        return ServiceId.class;
     }
 
     @Override

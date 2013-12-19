@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.application.service;
 
+import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 
@@ -12,11 +13,11 @@ import java.util.List;
  * Time: 11:01
  */
 public class CmdRes {
-    public CmdRes(BaseAggregateRoot aggregate, List<DomainEvent> events) {
+    public CmdRes(BaseAggregateRoot aggregate, List<AbstractDomainEvent> events) {
         this.aggregate = aggregate;
         this.events = events;
     }
 
-    public List<DomainEvent> events;
+    public List<AbstractDomainEvent> events;
     public BaseAggregateRoot aggregate;
 }

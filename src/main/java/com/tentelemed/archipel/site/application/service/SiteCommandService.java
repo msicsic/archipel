@@ -2,10 +2,8 @@ package com.tentelemed.archipel.site.application.service;
 
 import com.tentelemed.archipel.core.application.service.BaseCommandService;
 import com.tentelemed.archipel.core.application.service.CmdRes;
-import com.tentelemed.archipel.core.application.service.Command;
 import com.tentelemed.archipel.core.application.service.CommandHandler;
 import com.tentelemed.archipel.core.domain.model.Address;
-import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.site.application.command.*;
 import com.tentelemed.archipel.site.domain.model.*;
 import org.springframework.stereotype.Component;
@@ -58,7 +56,7 @@ public class SiteCommandService extends BaseCommandService {
             @Override
             public CmdRes handle(CmdCreateService command) {
                 Site center = (Site) get(cmd.id);
-                return center.createService(cmd.sectorId, cmd.code, cmd.name);
+                return center.createService(cmd.sectorCode, cmd.code, cmd.name);
             }
         });
     }
@@ -125,7 +123,6 @@ public class SiteCommandService extends BaseCommandService {
             }
         });
     }
-
 
 
 }
