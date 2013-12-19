@@ -110,9 +110,9 @@ public class Site extends BaseAggregateRoot<SiteId> {
 
     public SiteRegistered handle(SiteRegistered event) {
         apply(event);
-        LocationQ sector = event.getDefaultSector();
-        // Sector sector = new Sector();
-        // TODO : creation d'un Sector, mais changer d'abord les ID d'Entity
+        LocationQ sectorQ = event.getDefaultSector();
+        Sector sector = new Sector(sectorQ.getSectorType(), sectorQ.getName(), sectorQ.getCode());
+        sectors.add(sector);
         return handled(event);
     }
 

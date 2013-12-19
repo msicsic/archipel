@@ -72,10 +72,10 @@ public class SiteQ extends BaseEntityQ<SiteId> {
         this.sectors = sectors;
     }
 
-//    public void handleEvent(SiteRegistered event) {
-//        this.ident = event.getIdent();
-//        this.name = event.getName();
-//        this.type = event.getType();
-//        this.sectors = event.getSectors();
-//    }
+    public void applyEvent(SiteRegistered event) {
+        this.ident = event.getIdent();
+        this.name = event.getName();
+        this.type = event.getType();
+        this.sectors.add(event.getDefaultSector());
+    }
 }
