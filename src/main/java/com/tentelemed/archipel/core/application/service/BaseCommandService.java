@@ -25,7 +25,7 @@ import java.util.Set;
  * Date: 15/11/13
  * Time: 16:31
  */
-public class BaseCommandService {
+public abstract class BaseCommandService {
     protected final static Logger log = LoggerFactory.getLogger(BaseCommandService.class);
 
     @Autowired
@@ -79,8 +79,9 @@ public class BaseCommandService {
         return command;
     }
 
+
     // Rq : @Transactional n'a pas d'effet sur les methodes non 'public' (à moins de passer par AspectJ)
-    protected <ID extends EntityId> ID _execute(Command<ID> command) {
+    protected <ID extends EntityId> ID _execute2(Command<ID> command) {
         Method m;
         try {
             // vérifier si handle existe bien
@@ -114,6 +115,23 @@ public class BaseCommandService {
             }
         }
     }
+
+    // Rq : @Transactional n'a pas d'effet sur les methodes non 'public' (à moins de passer par AspectJ)
+    protected <ID extends EntityId> ID _execute(Command<ID> command, CommandHandler ch) {
+
+        // valider la commande
+        validate(command);
+
+        try {
+            // executer la commande
+            CmdRes result = ch.handle(command);
+            return (ID) post(result);
+        } catch (Exception e) {
+            log.error(null, e);
+            throw new RuntimeException("Error while running command : " + command.getClass().getSimpleName());
+        }
+    }
+
 
 
 }
