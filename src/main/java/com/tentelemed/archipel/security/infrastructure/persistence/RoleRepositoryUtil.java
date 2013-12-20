@@ -12,6 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Date: 22/10/13
  * Time: 12:20
  */
-public interface RoleRepositoryUtil extends JpaRepository<RoleQ, String> {
+public interface RoleRepositoryUtil extends JpaRepository<RoleQ, Integer> {
 
 }

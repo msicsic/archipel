@@ -18,6 +18,10 @@ import java.lang.reflect.Modifier;
 public class EventUtil {
 
     public static void applyEvent(Object entity, DomainEvent event) {
+        applyEvent(entity, event, false);
+    }
+
+    public static void applyEvent(Object entity, DomainEvent event, boolean allowAutomatic) {
         Class currentClass = event.getClass();
 
         // un event ne doit jamais avoir un id null
@@ -26,9 +30,13 @@ public class EventUtil {
         }
 
         try {
-            Method method = entity.getClass().getMethod("applyEvent", event.getClass());
+            Method method = entity.getClass().getDeclaredMethod("applyEvent", event.getClass());
+            method.setAccessible(true);
             method.invoke(entity, event);
         } catch (Exception e2) {
+            if (! allowAutomatic) {
+                throw new RuntimeException("No 'applyEvent' method present in entity '"+entity.getClass().getSimpleName()+"' for event '"+event.getClass().getSimpleName()+"'");
+            }
             while (currentClass != null) {
                 for (Field field : currentClass.getDeclaredFields()) {
                     try {

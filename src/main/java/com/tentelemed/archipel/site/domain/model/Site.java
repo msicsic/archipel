@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.site.domain.model;
 
-import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
 import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.site.domain.event.*;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 
@@ -61,6 +61,9 @@ public class Site extends BaseAggregateRoot<SiteId> {
     }
 
     public CmdRes createService(String sectorCode, String code, String name) {
+        if (getSectorCodes().contains(code)) {
+            throw new DomainException("This code is allready used !");
+        }
         Sector found = null;
         for (Sector sector : sectors) {
             if (sector.getCode().equals(sectorCode)) {
@@ -68,7 +71,7 @@ public class Site extends BaseAggregateRoot<SiteId> {
             }
         }
         if (found == null) {
-            throw new RuntimeException("Sector not found");
+            throw new DomainException("Sector not found");
         } else {
             return _result(handle(new SiteServiceAdded(getEntityId(), sectorCode, code, name)));
         }
@@ -76,12 +79,41 @@ public class Site extends BaseAggregateRoot<SiteId> {
 
     public CmdRes createSector(Sector.Type type, String code, String name) {
         // le type ne doit pas deja etre présent
+        if (getSectorCodes().contains(code)) {
+            throw new DomainException("This code is allready used !");
+        }
         for (Sector s : sectors) {
             if (s.getType() == type) {
-                throw new RuntimeException("This type of Sector is already present");
+                throw new DomainException("This type of Sector is already present");
             }
         }
         return _result(handle(new SiteSectorAdded(getEntityId(), type, code, name)));
+    }
+
+    private Set<String> getSectorCodes() {
+        Set<String> codes = new HashSet<>();
+        for (Sector sector : sectors) {
+            codes.add(sector.code);
+            for (Service service : sector.getServices()) {
+                codes.add(service.code);
+                for (FunctionalUnit fu : service.getUnits()) {
+                    codes.add(fu.code);
+                    for (ActivityUnit au : fu.getUnits()) {
+                        codes.add(au.code);
+                    }
+                }
+            }
+        }
+        return codes;
+    }
+
+    public CmdRes deleteSector(String sectorCode) {
+        for (Sector sector : sectors) {
+            if (sector.getCode().equals(sectorCode)) {
+                return _result(handle(new SiteSectorDeleted(getEntityId(), sectorCode)));
+            }
+        }
+        throw new DomainException("this SectorCode is not present in this Site");
     }
 
     // methodes utilitaires
@@ -96,13 +128,23 @@ public class Site extends BaseAggregateRoot<SiteId> {
 
     // EVENTS
 
-    public SiteSectorAdded handle(SiteSectorAdded event) {
+    SiteSectorDeleted handle(SiteSectorDeleted event) {
+        for (Sector sector : sectors) {
+            if (sector.getCode().equals(event.getSectorCode())) {
+                sectors.remove(sector);
+                break;
+            }
+        }
+        return handled(event);
+    }
+
+    SiteSectorAdded handle(SiteSectorAdded event) {
         Sector sector = new Sector(event.getSectorType(), event.getSectorName(), event.getSectorCode());
         sectors.add(sector);
         return handled(event);
     }
 
-    public SiteServiceAdded handle(SiteServiceAdded event) {
+    SiteServiceAdded handle(SiteServiceAdded event) {
         for (Sector sector : sectors) {
             if (sector.getCode().equals(event.getParent())) {
                 new Service(sector, event.getName(), event.getCode());
@@ -111,7 +153,7 @@ public class Site extends BaseAggregateRoot<SiteId> {
         return handled(event);
     }
 
-    public SiteRegistered handle(SiteRegistered event) {
+    SiteRegistered handle(SiteRegistered event) {
         apply(event);
         LocationQ sectorQ = event.getDefaultSector();
         Sector sector = new Sector(sectorQ.getSectorType(), sectorQ.getName(), sectorQ.getCode());
@@ -119,25 +161,25 @@ public class Site extends BaseAggregateRoot<SiteId> {
         return handled(event);
     }
 
-    public SiteMainInfoUpdated handle(SiteMainInfoUpdated event) {
+    SiteMainInfoUpdated handle(SiteMainInfoUpdated event) {
         return apply(event);
     }
 
-    public SiteAdditionalInfoUpdated handle(SiteAdditionalInfoUpdated event) {
+    SiteAdditionalInfoUpdated handle(SiteAdditionalInfoUpdated event) {
         return apply(event);
     }
 
-    public SiteRoomAdded handle(SiteRoomAdded event) {
+    SiteRoomAdded handle(SiteRoomAdded event) {
         rooms.add(event.getRoomId());
         return handled(event);
     }
 
-    public SiteRoomRemoved handle(SiteRoomRemoved event) {
+    SiteRoomRemoved handle(SiteRoomRemoved event) {
         rooms.remove(event.getRoomId());
         return handled(event);
     }
 
-    public SiteDeleted handle(SiteDeleted event) {
+    SiteDeleted handle(SiteDeleted event) {
         // ras
         return event;
     }

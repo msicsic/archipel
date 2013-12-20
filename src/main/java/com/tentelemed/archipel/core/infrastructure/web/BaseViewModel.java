@@ -4,6 +4,7 @@ import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.site.application.service.BeanCreator;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -49,6 +50,11 @@ public abstract class BaseViewModel {
     NestingBeanItem item;
     boolean commited = false;
     boolean discarded = false;
+    String module;
+
+    public void setModule(String name) {
+        this.module = name;
+    }
 
     @PostConstruct
     public void _postConstruct() {
@@ -74,7 +80,12 @@ public abstract class BaseViewModel {
     }
 
     protected void show(BasePopup view) {
-        view.onDisplay();
+        view.setModule(module);
+        if (! view.isDisplayed()) {
+            view.onDisplay();
+            view.setDisplayed();
+        }
+        view.refreshUI();
         UI.getCurrent().addWindow(view);
     }
 
@@ -83,6 +94,11 @@ public abstract class BaseViewModel {
         for (ConstraintViolation c : e.getConstraintViolations()) {
             msg += "- '" + c.getPropertyPath() + "' " + c.getMessage() + "\n";
         }
+        Notification.show(msg, Notification.Type.WARNING_MESSAGE);
+    }
+
+    public void show(DomainException e) {
+        String msg = e.getMessage();
         Notification.show(msg, Notification.Type.WARNING_MESSAGE);
     }
 
@@ -229,4 +245,7 @@ public abstract class BaseViewModel {
         return collection;
     }
 
+    public String getModule() {
+        return module;
+    }
 }

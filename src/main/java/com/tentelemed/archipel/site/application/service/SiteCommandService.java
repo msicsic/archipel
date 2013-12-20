@@ -31,70 +31,80 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SiteCommandService extends BaseCommandService {
 
-    public RoomId execute(final CmdCreateRoom cmd) {
+    public SiteId execute(CmdDeleteSector cmd) {
+        return _execute(cmd, new CommandHandler<CmdDeleteSector>() {
+            @Override
+            public CmdRes handle(CmdDeleteSector command) {
+                Site site = (Site) get(command.id);
+                return site.deleteSector(command.code);
+            }
+        });
+    }
+
+    public RoomId execute(CmdCreateRoom cmd) {
         return _execute(cmd, new CommandHandler<CmdCreateRoom>() {
             @Override
-            public CmdRes handle(CmdCreateRoom command) {
+            public CmdRes handle(CmdCreateRoom cmd) {
                 Room room = get(Room.class);
                 return room.register(cmd.name, cmd.location);
             }
         });
     }
 
-    public RoomId execute(final CmdUpdateRoom cmd) {
+    public RoomId execute(CmdUpdateRoom cmd) {
         return _execute(cmd, new CommandHandler<CmdCreateRoom>() {
             @Override
-            public CmdRes handle(CmdCreateRoom command) {
+            public CmdRes handle(CmdCreateRoom cmd) {
                 // TODO
                 return null;
             }
         });
     }
 
-    public SiteId execute(final CmdCreateService cmd) {
+    public SiteId execute(CmdCreateService cmd) {
         return _execute(cmd, new CommandHandler<CmdCreateService>() {
             @Override
-            public CmdRes handle(CmdCreateService command) {
+            public CmdRes handle(CmdCreateService cmd) {
                 Site center = (Site) get(cmd.id);
                 return center.createService(cmd.sectorCode, cmd.code, cmd.name);
             }
         });
     }
 
-    public SiteId execute(final CmdDeleteSite cmd) {
+    public SiteId execute(CmdDeleteSite cmd) {
         return _execute(cmd, new CommandHandler<CmdDeleteSite>() {
             @Override
-            public CmdRes handle(CmdDeleteSite command) {
+            public CmdRes handle(CmdDeleteSite cmd) {
                 Site center = (Site) get(cmd.id);
                 return center.delete();
             }
         });
     }
 
-    public SiteId execute(final CmdCreateSite cmd) {
+    public SiteId execute(CmdCreateSite cmd) {
         return _execute(cmd, new CommandHandler<CmdCreateSite>() {
             @Override
-            public CmdRes handle(CmdCreateSite command) {
+            public CmdRes handle(CmdCreateSite cmd) {
                 Site center = get(Site.class);
                 return center.register(cmd.type, cmd.name, cmd.ident);
             }
         });
     }
 
-    public SiteId execute(final CmdUpdateSite cmd) {
+    public SiteId execute(CmdUpdateSite cmd) {
         return _execute(cmd, new CommandHandler<CmdUpdateSite>() {
             @Override
-            public CmdRes handle(CmdUpdateSite command) {
+            public CmdRes handle(CmdUpdateSite cmd) {
                 Site center = (Site) get(cmd.id);
                 return center.updateMainInfo(cmd.type, cmd.name, cmd.ident);
             }
         });
     }
 
-    public SiteId execute(final CmdUpdateAdditionalInfo cmd) {
+    public SiteId execute(CmdUpdateAdditionalInfo cmd) {
         return _execute(cmd, new CommandHandler<CmdUpdateAdditionalInfo>() {
             @Override
-            public CmdRes handle(CmdUpdateAdditionalInfo command) {
+            public CmdRes handle(CmdUpdateAdditionalInfo cmd) {
                 Address address = new Address(cmd.street, cmd.postalCode, cmd.town, cmd.countryIso);
                 SiteInfo info = new SiteInfo(
                         cmd.siret,
@@ -114,10 +124,10 @@ public class SiteCommandService extends BaseCommandService {
         });
     }
 
-    public SiteId execute(final CmdCreateSector cmd) {
+    public SiteId execute(CmdCreateSector cmd) {
         return _execute(cmd, new CommandHandler<CmdCreateSector>() {
             @Override
-            public CmdRes handle(CmdCreateSector command) {
+            public CmdRes handle(CmdCreateSector cmd) {
                 Site site = (Site) get(cmd.id);
                 return site.createSector(cmd.type, cmd.code, cmd.name);
             }

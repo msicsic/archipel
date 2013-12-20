@@ -1,13 +1,16 @@
 package com.tentelemed.archipel.security.infrastructure.shiro;
 
 import com.tentelemed.archipel.security.application.service.UserQueryService;
+import com.tentelemed.archipel.security.domain.model.Right;
 import com.tentelemed.archipel.security.domain.model.User;
+import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,32 +52,28 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Set<String> roles = new HashSet<>();
-        Set<Permission> permissions = new HashSet<>();
-        Collection<User> principalsList = principals.byType(User.class);
+        Collection<String> principalsList = principals.byType(String.class);
 
         if (principalsList.isEmpty()) {
             throw new AuthorizationException("Empty principals list!");
         }
         //LOADING STUFF FOR PRINCIPAL
-        for (User userPrincipal : principalsList) {
-            //User user = repo.findByLogin(userPrincipal.getLogin());
+        Set<String> perms = new HashSet<>();
+        for (String login : principalsList) {
+            UserQ user = getRepository().findByLogin(login);
 
-            /*Set<Role> userRoles	= user.getRoles();
-            for (Role r : userRoles) {
-                roles.add(r.getName());
-                Set<WildcardPermission> userPermissions	= r.getPermissions();
-                for (WildcardPermission permission : userPermissions) {
-                    if (!permissions.contains(permission)) {
-                        permissions.add(permission);
-                    }
-                }
-            }*/
+            RoleQ role = getRepository().getRoleForUser(user.getEntityId());
+            roles.add(role.getName());
+            //Set<WildcardPermission> userPermissions	= r.getPermissions();
+            for (Right r : role.getRights()) {
+                perms.add(r.getValue());
+            }
         }
         //THIS IS THE MAIN CODE YOU NEED TO DO !!!!
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
         info.setRoles(roles); //fill in roles
-        info.setObjectPermissions(permissions); //add permisions (MUST IMPLEMENT SHIRO PERMISSION INTERFACE)
-
+        //info.setObjectPermissions(permissions); //add permisions (MUST IMPLEMENT SHIRO PERMISSION INTERFACE)
+        info.setStringPermissions(perms);
         return info;
     }
 }

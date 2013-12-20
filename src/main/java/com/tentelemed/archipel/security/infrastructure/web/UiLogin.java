@@ -31,7 +31,7 @@ public class UiLogin extends BaseView<UiLoginModel> {
         return model;
     }
 
-    public void postConstruct() {
+    public void onDisplay() {
 
         setSizeFull();
 

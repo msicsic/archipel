@@ -34,7 +34,7 @@ public class PersistenceHandler {
             object = em.find(eventRegistry.getClassQForEvent(event), event.getId().getId());
         }
         if (event.isCreate() || event.isUpdate()) {
-            EventUtil.applyEvent(object, event);
+            EventUtil.applyEvent(object, event, false);
             em.persist(object);
         } else {
             em.remove(object);

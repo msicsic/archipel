@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.security.application.event.UserRegistered;
+import com.tentelemed.archipel.security.application.event.*;
 import com.tentelemed.archipel.security.domain.model.RoleId;
 import com.tentelemed.archipel.security.domain.model.UserId;
 import org.hibernate.validator.constraints.Email;
@@ -26,8 +26,8 @@ public class UserQ extends BaseEntityQ<UserId> {
     @Temporal(TemporalType.TIME) Date dob;
     @Email String email = "default@mail.com";
     @NotNull String login;
-    String password;
-    RoleId roleId;
+    @NotNull String password;
+    @NotNull RoleId roleId;
 
     public UserQ() {
     }
@@ -97,7 +97,26 @@ public class UserQ extends BaseEntityQ<UserId> {
         this.roleId = roleId;
     }
 
-    public void applyEvent(UserRegistered event) {
+    void applyEvent(UserDeleted event) {
+        // ras
+    }
+
+    void applyEvent(UserInfoUpdated event) {
+        firstName = event.getFirstName();
+        lastName = event.getLastName();
+        dob = event.getDob();
+        email = event.getEmail();
+    }
+
+    void applyEvent(UserPasswordUpdated event) {
+        password = event.getPassword();
+    }
+
+    void applyEvent(UserRoleUpdated event) {
+        roleId = event.getRoleId();
+    }
+
+    void applyEvent(UserRegistered event) {
         this.dob = event.getDob();
         this.email = event.getEmail();
         this.firstName = event.getFirstName();
@@ -105,5 +124,6 @@ public class UserQ extends BaseEntityQ<UserId> {
         this.id = event.getId().getId();
         this.login = event.getCredentials().getLogin();
         this.password = event.getCredentials().getPassword();
+        this.roleId = event.getRoleId();
     }
 }

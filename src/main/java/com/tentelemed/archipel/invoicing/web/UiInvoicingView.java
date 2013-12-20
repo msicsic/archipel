@@ -32,7 +32,7 @@ public class UiInvoicingView extends BaseView<UiInvoicingViewModel> {
         return model;
     }
 
-    public void postConstruct() {
+    public void onDisplay() {
 
         setSizeFull();
 

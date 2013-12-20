@@ -42,7 +42,7 @@ public class UiSites extends BaseView<UiSitesModel> {
     }
 
     @Override
-    public void postConstruct() {
+    public void onDisplay() {
         setSizeFull();
         setHeight("100%");
         Panel panel = new Panel("Medical Centers administration");
@@ -168,7 +168,7 @@ public class UiSites extends BaseView<UiSitesModel> {
                 Item item = treeTable.addItem(sector);
                 item.getItemProperty("name").setValue(sector.getName());
                 item.getItemProperty("code").setValue(sector.getCode());
-                item.getItemProperty("type").setValue("Sector " + sector.getType().name());
+                item.getItemProperty("type").setValue("Sector (" + sector.getSectorType().name()+")");
                 item.getItemProperty("action").setValue(createActionPanel(sector));
                 for (LocationQ service : sector.getChildren()) {
                     item = treeTable.addItem(service);
@@ -210,7 +210,7 @@ public class UiSites extends BaseView<UiSitesModel> {
             Button btAddService = new Button("Add Service");
             btAddService.addStyleName("small");
 
-            if (loc.getSectorType() == Sector.Type.MED) {
+            if (loc.getSectorType() == Sector.Type.MED && model.getCurrentSite().getRemainingSectorTypes().size()>0 ) {
                 Button btAddSector = new Button("Add Sector");
                 btAddSector.addStyleName("small");
                 layout.addComponent(btAddSector);
@@ -220,15 +220,14 @@ public class UiSites extends BaseView<UiSitesModel> {
                         model.createSector();
                     }
                 });
-            } else {
+            } else if (loc.getSectorType() != Sector.Type.MED) {
                 Button btDeleteSector = new Button("Delete Sector");
                 btDeleteSector.addStyleName("small");
                 layout.addComponent(btDeleteSector);
                 btDeleteSector.addClickListener(new Button.ClickListener() {
                     @Override
                     public void buttonClick(Button.ClickEvent event) {
-                       // TODO
-                       // model.deleteSector(loc);
+                       model.deleteSector(loc);
                     }
                 });
             }
@@ -307,10 +306,12 @@ public class UiSites extends BaseView<UiSitesModel> {
         panelFilters.addComponent(combo);
         panelFilters.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
         Button btCreate = bind(new Button("create Center"), "createCenter");
-        btCreate.setStyleName("default");
+        btCreate.addStyleName("default");
+        btCreate.setVisible(isPermitted("create"));
         panelFilters.addComponent(btCreate);
         Button btDelete = bind(new Button("delete Center"), "deleteCenter");
         btDelete.addStyleName("default");
+        btDelete.setVisible(isPermitted("delete"));
         panelFilters.addComponent(btDelete);
         return panelFilters;
     }

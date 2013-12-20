@@ -32,7 +32,7 @@ public class UiGamView extends BaseView<UiGamViewModel> {
         return model;
     }
 
-    public void postConstruct() {
+    public void onDisplay() {
 
         setSizeFull();
 

@@ -90,6 +90,10 @@ public class MyUI extends UI {
         // recuperation du module
         Module module = coreService.getModule(moduleId);
         if (module.isRoot()) {
+            if (! mainView.isDisplayed()) {
+                mainView.onDisplay();
+                mainView.setDisplayed();
+            }
             mainView.refreshUI();
             showView(mainView);
         } else {
@@ -98,7 +102,11 @@ public class MyUI extends UI {
             if (currentView != null) {
                 currentView.onClose();
             }
-            view.onDisplay();
+            view.setModule(moduleId);
+            if (! view.isDisplayed()) {
+                view.onDisplay();
+                view.setDisplayed();
+            }
             view.refreshUI();
             currentView = view;
             ((RootView) mainView).showView(view);
@@ -106,6 +114,11 @@ public class MyUI extends UI {
     }
 
     private void showView(IView view) {
+        if (! view.isDisplayed()) {
+            view.onDisplay();
+            view.setDisplayed();
+        }
+        view.refreshUI();
         this.setContent((AbstractComponent) view);
     }
 

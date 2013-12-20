@@ -46,7 +46,7 @@ public class UiUsers extends BaseView<UiUsersModel> {
     }
 
     @Override
-    public void postConstruct() {
+    public void onDisplay() {
 
         setSizeFull();
 

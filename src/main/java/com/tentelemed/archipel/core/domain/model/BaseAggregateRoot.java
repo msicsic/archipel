@@ -97,7 +97,7 @@ public abstract class BaseAggregateRoot<B extends EntityId> extends BaseEntity {
     }
 
     protected <E extends AbstractDomainEvent> E apply(E event) {
-        EventUtil.applyEvent(this, event);
+        EventUtil.applyEvent(this, event, true);
         return handled(event);
     }
 

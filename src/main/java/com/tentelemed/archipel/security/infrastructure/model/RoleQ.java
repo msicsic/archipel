@@ -1,6 +1,10 @@
 package com.tentelemed.archipel.security.infrastructure.model;
 
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
+import com.tentelemed.archipel.security.application.event.RoleRegistered;
+import com.tentelemed.archipel.security.application.event.RoleRightsUpdated;
 import com.tentelemed.archipel.security.domain.model.Right;
 import com.tentelemed.archipel.security.domain.model.RoleId;
 
@@ -9,6 +13,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,6 +53,15 @@ public class RoleQ extends BaseEntityQ<RoleId> {
     }
 
     public Set<Right> getRights() {
+        if (rights == null) {
+            rights = new HashSet<>();
+            for (String r : Splitter.on(" ").split(rightString)) {
+                if (Strings.isNullOrEmpty(r)) continue;
+                List<String> values = Splitter.on("/").splitToList(r);
+                Right right = new Right(values.get(0), values.get(1));
+                rights.add(right);
+            }
+        }
         return Collections.unmodifiableSet(rights);
     }
 
@@ -69,5 +84,15 @@ public class RoleQ extends BaseEntityQ<RoleId> {
         this.rights = null;
     }
 
+    void applyEvent(RoleRegistered event) {
+        id = event.getId().getId();
+        name = event.getName();
+        setRights(event.getRights());
+
+    }
+
+    void applyEvent(RoleRightsUpdated event) {
+        setRights(event.getRights());
+    }
 
 }

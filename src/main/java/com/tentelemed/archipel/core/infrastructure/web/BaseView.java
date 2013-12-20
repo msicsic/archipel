@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -21,6 +22,11 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     protected static Logger log = LoggerFactory.getLogger(BaseView.class);
     BaseViewHelper<M> helper;
     @Autowired protected VaadinMessageSource msg;
+    @Autowired protected UserQueryService userService;
+
+    public void setModule(String name) {
+        getModel().setModule(name);
+    }
 
     public abstract M getModel();
 
@@ -30,6 +36,16 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
 
     @Override
     public void onDisplay() {
+    }
+
+    boolean displayed;
+    @Override
+    public void setDisplayed() {
+        displayed = true;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
     }
 
     @Override
@@ -106,9 +122,13 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
         postConstruct();
     }
 
-    public abstract void postConstruct();
+    public void postConstruct() {}
 
     public void onDomainEventReceived(DomainEvent event) {
 
+    }
+
+    protected boolean isPermitted(String action) {
+        return userService.isPermitted(getModel().getModule()+":"+action);
     }
 }

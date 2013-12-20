@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
  * Time: 02:01
  */
 public class Right extends BaseVO {
-    public final static Right RIGHT_A = new Right("A", "*:*:*");
-    public final static Right RIGHT_B = new Right("B", "*");
+    public final static Right RIGHT_A = new Right("admin", "*:*:*");
+    public final static Right RIGHT_B = new Right("users", "sites:show,create:*");
 
     @NotNull private String name;
     @NotNull private String value;

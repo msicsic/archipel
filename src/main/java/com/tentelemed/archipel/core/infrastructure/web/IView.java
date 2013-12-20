@@ -11,6 +11,8 @@ import com.vaadin.navigator.View;
  */
 public interface IView<M extends BaseViewModel> extends View {
 
+    void setModule(String name);
+
     M getModel();
 
     /**
@@ -22,6 +24,10 @@ public interface IView<M extends BaseViewModel> extends View {
      * On first display only
      */
     void onDisplay();
+
+    void setDisplayed();
+
+    boolean isDisplayed();
 
     void onClose();
 

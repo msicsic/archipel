@@ -104,10 +104,11 @@ public class EventStoreImpl implements EventStore {
                 return null;
             }
             try {
-                Method m = aggregate.getClass().getMethod("handle", new Class[]{event.getClass()});
+                Method m = aggregate.getClass().getDeclaredMethod("handle", new Class[]{event.getClass()});
                 if (event.isCreate()) {
                     aggregate._setId(event.getId().getId());
                 }
+                m.setAccessible(true);
                 m.invoke(aggregate, event);
             } catch (InvocationTargetException e) {
                 throw new RuntimeException((e.getTargetException()));

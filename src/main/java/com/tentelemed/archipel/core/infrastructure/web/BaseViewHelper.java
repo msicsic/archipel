@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
+import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.MethodProperty;
@@ -219,6 +220,8 @@ public class BaseViewHelper<M extends BaseViewModel> {
             Throwable t = e.getTargetException();
             if (t instanceof ConstraintViolationException) {
                 model.show((ConstraintViolationException) t);
+            } else if (t instanceof DomainException) {
+                model.show((DomainException) t);
             } else {
                 model.show(t);
                 log.error(null, e);

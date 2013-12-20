@@ -1,5 +1,9 @@
 TODO :
 
+- gestion des droits
+* les methodes "handle" des BO doivent etre privées
+
+
 - Affectuer les controles de referencement lors modif code ou suppression
 - Gestion de la desactivation (afficher en gris ?)
 

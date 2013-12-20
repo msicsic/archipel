@@ -45,6 +45,8 @@ public class UiSiteCreateSector extends BasePopup<UiSiteCreateSectorModel> {
         FormLayout layout = new FormLayout();
 
         final ComboBox cb = new ComboBox("Type");
+        cb.setTextInputAllowed(false);
+        cb.setInputPrompt("select type");
         for (Sector.Type type : model.getCurrentSite().getRemainingSectorTypes()) {
             cb.addItem(type);
         }

@@ -3,6 +3,9 @@ package com.tentelemed.archipel.core.infrastructure.web;
 import com.google.common.base.Objects;
 import com.tentelemed.archipel.core.application.service.CoreService;
 import com.tentelemed.archipel.core.domain.model.Module;
+import com.tentelemed.archipel.security.application.service.UserQueryService;
+import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
+import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,8 +24,8 @@ public class MainViewModel extends BaseViewModel {
 
     Module selectedModule;
 
-    @Autowired
-    CoreService service;
+    @Autowired CoreService service;
+    @Autowired UserQueryService userService;
 
     public List<Module> getModules() {
         return service.findNonRootModules();
@@ -43,4 +46,17 @@ public class MainViewModel extends BaseViewModel {
         return selectedModule;
     }
 
+    public String getUserInfo() {
+        UserQ user = userService.getCurrentUser();
+        if (user == null) return "???";
+        return user.getFullName()+" ("+userService.getRoleForUser(user.getEntityId()).getName()+")";
+    }
+
+    public RoleQ getCurrentUserRole() {
+        return userService.getCurrentUserRole();
+    }
+
+    public boolean isPermitted(String moduleId) {
+        return userService.isPermitted(moduleId+":show");
+    }
 }

@@ -45,6 +45,28 @@ public class UserQueryService extends BaseQueryService {
         return userRepository.getAllUsers();
     }
 
+    public UserQ getCurrentUser() {
+        Subject currentUser = SecurityUtils.getSubject();
+        if (! currentUser.isAuthenticated()) return null;
+        String login = (String) currentUser.getPrincipal();
+        return findByLogin(login);
+    }
+
+    public RoleQ getRoleForUser(UserId userId) {
+        UserQ user = getUser(userId);
+        return userRepository.getFindRole(user.getRoleId());
+    }
+
+    public RoleQ getCurrentUserRole() {
+        return getRoleForUser(getCurrentUser().getEntityId());
+    }
+
+    public boolean isPermitted(String right) {
+        Subject currentUser = SecurityUtils.getSubject();
+        if (! currentUser.isAuthenticated()) return false;
+        return currentUser.isPermitted(right);
+    }
+
     public void doLogin(String login, String password) throws AuthenticationException {
         UsernamePasswordToken token = new UsernamePasswordToken(login, password);
         Subject currentUser = SecurityUtils.getSubject();
@@ -71,4 +93,5 @@ public class UserQueryService extends BaseQueryService {
         if (roles.isEmpty()) return null;
         return roles.get(0);
     }
+
 }

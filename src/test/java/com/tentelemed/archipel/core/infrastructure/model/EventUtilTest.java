@@ -26,7 +26,7 @@ public class EventUtilTest {
         TestUserRegistered event = new TestUserRegistered(new TestUserId(11), "Paul", "Durand", new Date(), "login", "password", role);
 
         // When
-        EventUtil.applyEvent(user, event);
+        EventUtil.applyEvent(user, event, true);
 
         // Then
         assertThat(user.getFirstName(), equalTo(event.getFirstName()));

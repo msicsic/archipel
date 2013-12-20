@@ -44,6 +44,16 @@ public abstract class BasePopup<M extends BaseViewModel> extends Window implemen
     public void onDisplay() {
     }
 
+    boolean displayed;
+    @Override
+    public void setDisplayed() {
+        displayed = true;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
     public abstract M getModel();
 
     @Override
@@ -123,5 +133,10 @@ public abstract class BasePopup<M extends BaseViewModel> extends Window implemen
 
     public void onDomainEventReceived(DomainEvent event) {
 
+    }
+
+    @Override
+    public void setModule(String name) {
+        getModel().setModule(name);
     }
 }

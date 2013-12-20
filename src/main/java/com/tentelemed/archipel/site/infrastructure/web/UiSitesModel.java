@@ -2,6 +2,7 @@ package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
+import com.tentelemed.archipel.site.application.command.CmdDeleteSector;
 import com.tentelemed.archipel.site.application.command.CmdDeleteSite;
 import com.tentelemed.archipel.site.application.service.SiteCommandService;
 import com.tentelemed.archipel.site.application.service.SiteQueryService;
@@ -140,5 +141,14 @@ public class UiSitesModel extends BaseViewModel {
         UiSiteCreateSector view = getView(UiSiteCreateSector.class);
         view.getModel().setCurrentSite(currentSite);
         show(view);
+    }
+
+    public void deleteSector(final LocationQ loc) {
+        confirm("Delete Sector", "Do you really want to delete this sector (cannot be undone) ?", new Runnable() {
+            @Override
+            public void run() {
+                serviceWrite.execute(new CmdDeleteSector(currentSite.getEntityId(), loc.getCode()));
+            }
+        });
     }
 }

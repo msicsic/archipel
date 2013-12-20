@@ -62,9 +62,10 @@ public class DbInit {
                 jdbcTemplate.update(
                         "create table T_AGGREGATE (c_aggregate_id INTEGER NOT NULL, c_type VARCHAR(128) NOT NULL, c_version INTEGER NOT NULL, PRIMARY KEY(c_aggregate_id), INDEX idx_version (c_version))"
                 );
-                RoleId role = service.execute(new CmdCreateRole("administrateur", Right.RIGHT_A));
+                RoleId role1 = service.execute(new CmdCreateRole("administrateur", Right.RIGHT_A));
+                RoleId role2 = service.execute(new CmdCreateRole("user", Right.RIGHT_B));
                 for (int i = 0; i < 100; i++) {
-                    service.execute(new CmdCreateUser(role, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i));
+                    service.execute(new CmdCreateUser(i%2==0?role1:role2, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i));
                 }
             }
 

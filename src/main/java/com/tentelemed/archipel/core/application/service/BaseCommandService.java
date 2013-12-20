@@ -126,6 +126,8 @@ public abstract class BaseCommandService {
             // executer la commande
             CmdRes result = ch.handle(command);
             return (ID) post(result);
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             log.error(null, e);
             throw new RuntimeException("Error while running command : " + command.getClass().getSimpleName());

@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.tentelemed.archipel.core.domain.model.Module;
+import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.vaadin.server.ClassResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
@@ -28,13 +29,16 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
     VerticalLayout childLayout;
 
     @Autowired MainViewModel model;
+    private Label labelUser;
 
-    public void postConstruct() {
+    public void onDisplay() {
         // The view root layout
         VerticalLayout viewLayout = new VerticalLayout();
+        viewLayout.setStyleName("black-bg");
         viewLayout.setSizeFull();
         viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
         setCompositionRoot(viewLayout);
+        setStyleName("black-bg");
         // Create a menu bar
         MenuBar menubar = new MenuBar();
         menubar.setSizeFull();
@@ -44,13 +48,23 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
         imageLayout.addComponent(image);
         imageLayout.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
 
+        //HorizontalLayout loginInfo = new HorizontalLayout();
+        labelUser = new Label();
+        labelUser.setSizeUndefined();
+        labelUser.addStyleName("black-bg");
+        labelUser.addStyleName("white-text");
+        HorizontalLayout userLayout = new HorizontalLayout();
+        userLayout.setWidth("100%");
+        userLayout.setStyleName("black-bg");
+        userLayout.addComponent(labelUser);
+        userLayout.setComponentAlignment(labelUser, Alignment.MIDDLE_RIGHT);
+
         viewLayout.addComponent(imageLayout);
+        viewLayout.addComponent(userLayout);
         viewLayout.addComponent(menubar);
 
         childLayout = new VerticalLayout();
-        //childLayout.setMargin(true);
         viewLayout.addComponent(childLayout);
-//        viewLayout.setHeight("100%");
         childLayout.setSizeFull();
         for (final Module module : model.getModules()) {
             MenuBar.MenuItem item = menubar.addItem(getName(module.getName()), null, new MenuBar.Command() {
@@ -81,6 +95,8 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
     public void onRefresh() {
         for (Map.Entry<Module, MenuBar.MenuItem> entry : mapMenu.entrySet()) {
             entry.getValue().setEnabled(true);
+            boolean showModule = model.isPermitted(entry.getKey().getName());
+            entry.getValue().setVisible(showModule);
         }
 
         Module module = model.getSelectedModule();
@@ -88,6 +104,7 @@ public class UiMainView extends BaseView<MainViewModel> implements RootView {
             MenuBar.MenuItem item = mapMenu.get(module);
             item.setEnabled(false);
         }
+        labelUser.setValue(getModel().getUserInfo());
     }
 
     public void showView(IView view) {
