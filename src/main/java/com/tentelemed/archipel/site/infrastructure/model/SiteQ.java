@@ -2,6 +2,9 @@ package com.tentelemed.archipel.site.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
 import com.tentelemed.archipel.site.domain.event.SiteRegistered;
+import com.tentelemed.archipel.site.domain.event.SiteSectorAdded;
+import com.tentelemed.archipel.site.domain.event.SiteServiceAdded;
+import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.domain.model.SiteId;
 import com.tentelemed.archipel.site.domain.model.SiteInfo;
 import com.tentelemed.archipel.site.domain.model.SiteType;
@@ -10,8 +13,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -73,9 +75,33 @@ public class SiteQ extends BaseEntityQ<SiteId> {
     }
 
     public void applyEvent(SiteRegistered event) {
+        this.id = event.getId().getId();
         this.ident = event.getIdent();
         this.name = event.getName();
         this.type = event.getType();
         this.sectors.add(event.getDefaultSector());
+    }
+
+    public void applyEvent(SiteServiceAdded event) {
+        for (LocationQ sector : getSectors()) {
+            if (event.getParent().equals(sector.getCode())) {
+                LocationQ service = new LocationQ(LocationQ.Type.SERVICE, event.getName(), event.getCode());
+                sector.addChild(service);
+            }
+        }
+    }
+
+    public void applyEvent(SiteSectorAdded event) {
+        LocationQ sector = new LocationQ(LocationQ.Type.SECTOR, event.getSectorName(), event.getSectorCode());
+        sector.setSectorType(event.getSectorType());
+        sectors.add(sector);
+    }
+
+    public List<Sector.Type> getRemainingSectorTypes() {
+        List<Sector.Type> types = new ArrayList<>(Arrays.asList(Sector.Type.values()));
+        for (LocationQ sector : sectors) {
+            types.remove(sector.getSectorType());
+        }
+        return types;
     }
 }

@@ -4,6 +4,7 @@ import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.site.domain.event.SiteDomainEvent;
+import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
@@ -14,6 +15,10 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -157,7 +162,9 @@ public class UiSites extends BaseView<UiSitesModel> {
         treeTable.setSelectable(true);
 
         if (model.getCurrentSite() != null) {
-            for (LocationQ sector : model.getCurrentSite().getSectors()) {
+            List<LocationQ> sectors = new ArrayList<>(model.getCurrentSite().getSectors());
+            Collections.sort(sectors);
+            for (LocationQ sector : sectors) {
                 Item item = treeTable.addItem(sector);
                 item.getItemProperty("name").setValue(sector.getName());
                 item.getItemProperty("code").setValue(sector.getCode());
@@ -202,8 +209,30 @@ public class UiSites extends BaseView<UiSitesModel> {
             layout.setSpacing(true);
             Button btAddService = new Button("Add Service");
             btAddService.addStyleName("small");
-            layout.addComponent(btAddService);
 
+            if (loc.getSectorType() == Sector.Type.MED) {
+                Button btAddSector = new Button("Add Sector");
+                btAddSector.addStyleName("small");
+                layout.addComponent(btAddSector);
+                btAddSector.addClickListener(new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(Button.ClickEvent event) {
+                        model.createSector();
+                    }
+                });
+            } else {
+                Button btDeleteSector = new Button("Delete Sector");
+                btDeleteSector.addStyleName("small");
+                layout.addComponent(btDeleteSector);
+                btDeleteSector.addClickListener(new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(Button.ClickEvent event) {
+                       // TODO
+                       // model.deleteSector(loc);
+                    }
+                });
+            }
+            layout.addComponent(btAddService);
             btAddService.addClickListener(new Button.ClickListener() {
                 @Override
                 public void buttonClick(Button.ClickEvent event) {

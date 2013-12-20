@@ -11,17 +11,29 @@ import com.tentelemed.archipel.site.domain.model.Service;
  * Time: 14:53
  */
 public class SiteServiceAdded extends SiteDomainEvent {
-    Service service;
+    String parent;
+    String name;
+    String code;
 
-    SiteServiceAdded() {
+    public SiteServiceAdded() {
     }
 
-    public SiteServiceAdded(SiteId id, Service service) {
+    public SiteServiceAdded(SiteId id, String parent, String code, String name) {
         super(id);
-        this.service = service;
+        this.parent = parent;
+        this.name = name;
+        this.code = code;
     }
 
-    public Service getService() {
-        return service;
+    public String getParent() {
+        return parent;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCode() {
+        return code;
     }
 }

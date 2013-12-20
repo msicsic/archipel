@@ -114,10 +114,10 @@ public class SiteCommandService extends BaseCommandService {
         });
     }
 
-    public SiteId execute(final CmdAddSector cmd) {
-        return _execute(cmd, new CommandHandler<CmdAddSector>() {
+    public SiteId execute(final CmdCreateSector cmd) {
+        return _execute(cmd, new CommandHandler<CmdCreateSector>() {
             @Override
-            public CmdRes handle(CmdAddSector command) {
+            public CmdRes handle(CmdCreateSector command) {
                 Site site = (Site) get(cmd.id);
                 return site.createSector(cmd.type, cmd.code, cmd.name);
             }

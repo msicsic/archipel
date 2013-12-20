@@ -135,4 +135,10 @@ public class UiSitesModel extends BaseViewModel {
         view.getModel().setSector(currentSite.getEntityId(), sector);
         show(view);
     }
+
+    public void createSector() {
+        UiSiteCreateSector view = getView(UiSiteCreateSector.class);
+        view.getModel().setCurrentSite(currentSite);
+        show(view);
+    }
 }

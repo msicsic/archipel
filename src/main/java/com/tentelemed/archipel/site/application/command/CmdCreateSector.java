@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
  * Date: 18/12/13
  * Time: 21:36
  */
-public class CmdAddSector extends Command<SiteId> {
+public class CmdCreateSector extends Command<SiteId> {
     @NotNull public Sector.Type type;
     @NotNull @Size(min = 3) public String name;
     @NotNull @Size(min = 3) public String code;

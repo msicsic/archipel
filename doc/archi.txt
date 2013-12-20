@@ -1,18 +1,14 @@
 TODO :
-- Les aggregats doivent pouvoir attribuer un ID local pour les entités contenues
-- Les ID des Entity étant locaux, ils ne doivent pas necessairement suivre un format strict
-  Il vaut au contraire mieux choisir un ID métier
-  Il faut donc reporter la gestion des ID dans le AggregateRoot au lieu de Entity
 
-- Coté persistance, utilisation d'une classe générique LocationQ
 - Affectuer les controles de referencement lors modif code ou suppression
 - Gestion de la desactivation (afficher en gris ?)
-- Gestion du découpage par default (seul le Sector MED)
-- Gestion de l'ajout des Sector : 4 possibles seulement et de type différents
 
 - Gestion des droits : acces aux modules possible ou non en fonction d'un droit
 
 BUGS :
+- comment assurer que les objets read sont bien mis à jour par les evts ? il arrive souvent que ca ne soit pas le cas
+  et il y a alors une desynchro entre write et read
+
 - mise à jour des combos : le rafraichissement de la combo appelle le listener combo qui
   met à jour le modele... Il faut trouver un moyen de ne pas appeler le listener de combo
 
@@ -30,6 +26,10 @@ Avancement du projet (4/12/13)
  - CQRS/Event sourcing quasi fini (manque la gestion des snapshots)
  - hibernate en place
  - tout est en synchrone pour le moment (commandes et events, ansi que maj bdd de lecture)
+
+- Les ID des Entity étant locaux, ils ne doivent pas necessairement suivre un format strict
+  Il vaut au contraire mieux choisir un ID métier
+  Il faut donc reporter la gestion des ID dans le AggregateRoot au lieu de Entity
 
 TODO (Tests) :
 * creation d'un Memento à partir d'un Aggregate

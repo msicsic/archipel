@@ -70,8 +70,7 @@ public class Site extends BaseAggregateRoot<SiteId> {
         if (found == null) {
             throw new RuntimeException("Sector not found");
         } else {
-            Service service = new Service(found, name, code);
-            return _result(handle(new SiteServiceAdded(getEntityId(), service)));
+            return _result(handle(new SiteServiceAdded(getEntityId(), sectorCode, code, name)));
         }
     }
 
@@ -82,7 +81,7 @@ public class Site extends BaseAggregateRoot<SiteId> {
                 throw new RuntimeException("This type of Sector is already present");
             }
         }
-        return _result(handle(new SiteSectorAdded(getEntityId(), code, name)));
+        return _result(handle(new SiteSectorAdded(getEntityId(), type, code, name)));
     }
 
     // methodes utilitaires
@@ -98,13 +97,17 @@ public class Site extends BaseAggregateRoot<SiteId> {
     // EVENTS
 
     public SiteSectorAdded handle(SiteSectorAdded event) {
-        // TODO
-        return null;
+        Sector sector = new Sector(event.getSectorType(), event.getSectorName(), event.getSectorCode());
+        sectors.add(sector);
+        return handled(event);
     }
 
     public SiteServiceAdded handle(SiteServiceAdded event) {
-        Service service = event.getService();
-        service.getParent().addService(service);
+        for (Sector sector : sectors) {
+            if (sector.getCode().equals(event.getParent())) {
+                new Service(sector, event.getName(), event.getCode());
+            }
+        }
         return handled(event);
     }
 
@@ -136,7 +139,7 @@ public class Site extends BaseAggregateRoot<SiteId> {
 
     public SiteDeleted handle(SiteDeleted event) {
         // ras
-        return null;
+        return event;
     }
 
 // GETTERS

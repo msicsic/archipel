@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.site.domain.event;
 
 
+import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.domain.model.SiteId;
 
 /**
@@ -10,14 +11,16 @@ import com.tentelemed.archipel.site.domain.model.SiteId;
  * Time: 14:53
  */
 public class SiteSectorAdded extends SiteDomainEvent {
+    Sector.Type sectorType;
     String sectorCode;
     String sectorName;
 
     SiteSectorAdded() {
     }
 
-    public SiteSectorAdded(SiteId id, String sectorCode, String sectorName) {
+    public SiteSectorAdded(SiteId id, Sector.Type type, String sectorCode, String sectorName) {
         super(id);
+        this.sectorType = type;
         this.sectorCode = sectorCode;
         this.sectorName = sectorName;
     }
@@ -28,5 +31,9 @@ public class SiteSectorAdded extends SiteDomainEvent {
 
     public String getSectorName() {
         return sectorName;
+    }
+
+    public Sector.Type getSectorType() {
+        return sectorType;
     }
 }

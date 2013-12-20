@@ -1,10 +1,12 @@
 package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
+import com.tentelemed.archipel.site.application.command.CmdCreateSector;
 import com.tentelemed.archipel.site.application.command.CmdCreateService;
 import com.tentelemed.archipel.site.application.service.SiteCommandService;
 import com.tentelemed.archipel.site.domain.model.SiteId;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
+import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -20,24 +22,23 @@ import javax.validation.Valid;
  */
 @Component
 @Scope("prototype")
-public class UiSiteCreateServiceModel extends BaseViewModel {
+public class UiSiteCreateSectorModel extends BaseViewModel {
     @Autowired SiteCommandService serviceWrite;
     private LocationQ sector;
-    private CmdCreateService cmd = beanify(new CmdCreateService());
+    private SiteQ currentSite;
+    private CmdCreateSector cmd = beanify(new CmdCreateSector());
 
     @Valid
-    public CmdCreateService getCmd() {
+    public CmdCreateSector getCmd() {
         return cmd;
+    }
+
+    public SiteQ getCurrentSite() {
+        return currentSite;
     }
 
     public LocationQ getSector() {
         return sector;
-    }
-
-    public void setSector(SiteId centerId, LocationQ sector) {
-        this.sector = sector;
-        cmd.id = centerId;
-        cmd.sectorCode = sector.getCode();
     }
 
     public void action_create() {
@@ -52,5 +53,10 @@ public class UiSiteCreateServiceModel extends BaseViewModel {
 
     public void action_cancel() {
         close();
+    }
+
+    public void setCurrentSite(SiteQ currentSite) {
+        this.currentSite = currentSite;
+        this.cmd.id = currentSite.getEntityId();
     }
 }
