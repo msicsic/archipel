@@ -14,7 +14,7 @@ import java.util.Date;
  * Date: 18/12/13
  * Time: 21:42
  */
-public final class CmdCreateUser extends Command<UserId> {
+public final class CmdUserCreate extends Command<UserId> {
     @NotNull public RoleId roleId;
     @NotNull public String firstName;
     @NotNull public String lastName;
@@ -22,10 +22,10 @@ public final class CmdCreateUser extends Command<UserId> {
     @Email public String email;
     @NotNull public String login;
 
-    public CmdCreateUser() {
+    public CmdUserCreate() {
     }
 
-    public CmdCreateUser(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
+    public CmdUserCreate(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
         this.roleId = roleId;
         this.firstName = firstName;
         this.lastName = lastName;

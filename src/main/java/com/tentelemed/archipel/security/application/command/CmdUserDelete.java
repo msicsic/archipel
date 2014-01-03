@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.application.command;
 
 import com.tentelemed.archipel.core.application.service.Command;
-import com.tentelemed.archipel.security.domain.model.RoleId;
+import com.tentelemed.archipel.security.domain.model.UserId;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,8 +9,8 @@ import com.tentelemed.archipel.security.domain.model.RoleId;
  * Date: 18/12/13
  * Time: 21:42
  */
-public class CmdDeleteRole extends Command<RoleId> {
-    public CmdDeleteRole(RoleId id) {
+public class CmdUserDelete extends Command<UserId> {
+    public CmdUserDelete(UserId id) {
         this.id = id;
     }
 }

@@ -103,28 +103,85 @@ public class SiteQ extends BaseEntityQ<SiteId> {
         // TODO
     }*/
 
-    void applyEvent(SiteSectorDeleted event) {
-        for (LocationQ sector : sectors) {
-            if (sector.getCode().equals(event.getSectorCode())) {
-                sectors.remove(sector);
-                break;
+    boolean addLocation(int currentLevel, int goalLevel, LocationQ parent, Set<LocationQ> locations, LocationQ location) {
+        if (currentLevel == goalLevel) {
+            if (parent == null) {
+                if (location.getParent() != null) {
+                    throw new RuntimeException("ERROR");
+                }
+                // racine = sector
+                locations.add(location);
+            } else {
+                if (parent.getCode().equals(location.getParent().getCode())) {
+                    parent.addChild(location);
+                    return true;
+                }
+            }
+        } else {
+            for (LocationQ loc : locations) {
+                boolean added = addLocation(currentLevel + 1, goalLevel, loc, loc.getChildren(), location);
+                if (added) {
+                    return true;
+                }
             }
         }
+        return false;
+    }
+
+    boolean removeLocation(int currentLevel, int goalLevel, Set<LocationQ> locations, String locationCode) {
+        if (currentLevel == goalLevel) {
+            for (LocationQ loc : locations) {
+                if (loc.getCode().equals(locationCode)) {
+                    locations.remove(loc);
+                    return true;
+                }
+            }
+        } else {
+            for (LocationQ loc : locations) {
+                boolean res = removeLocation(currentLevel + 1, goalLevel, loc.getChildren(), locationCode);
+                if (res) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     void applyEvent(SiteServiceAdded event) {
-        for (LocationQ sector : getSectors()) {
-            if (event.getParent().equals(sector.getCode())) {
-                LocationQ service = new LocationQ(LocationQ.Type.SERVICE, event.getName(), event.getCode());
-                sector.addChild(service);
-            }
-        }
+        LocationQ service = new LocationQ(event.getId(), LocationQ.Type.SERVICE, event.getName(), event.getCode());
+        addLocation(0, 1, null, sectors, service);
+    }
+
+    void applyEvent(SiteServiceDeleted event) {
+        removeLocation(0, 1, sectors, event.getServiceCode());
     }
 
     void applyEvent(SiteSectorAdded event) {
-        LocationQ sector = new LocationQ(LocationQ.Type.SECTOR, event.getSectorName(), event.getSectorCode());
+        LocationQ sector = new LocationQ(event.getId(), LocationQ.Type.SECTOR, event.getSectorName(), event.getSectorCode());
         sector.setSectorType(event.getSectorType());
-        sectors.add(sector);
+        addLocation(0, 0, null, sectors, sector);
+    }
+
+    void applyEvent(SiteSectorDeleted event) {
+        removeLocation(0, 0, sectors, event.getSectorCode());
+    }
+
+    void applyEvent(SiteFunctionalUnitAdded event) {
+        LocationQ location = new LocationQ(event.getId(), LocationQ.Type.FU, event.getName(), event.getCode());
+        addLocation(0, 2, null, sectors, location);
+    }
+
+    void applyEvent(SiteFunctionalUnitDeleted event) {
+        removeLocation(0, 2, sectors, event.getCode());
+    }
+
+    void applyEvent(SiteActivityUnitAdded event) {
+        LocationQ location = new LocationQ(event.getId(), LocationQ.Type.FU, event.getName(), event.getCode());
+        addLocation(0, 3, null, sectors, location);
+    }
+
+    void applyEvent(SiteActivityUnitDeleted event) {
+        removeLocation(0, 3, sectors, event.getCode());
     }
 
     public List<Sector.Type> getRemainingSectorTypes() {

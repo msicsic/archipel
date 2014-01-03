@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.site.domain.model;
 
-import com.tentelemed.archipel.core.domain.model.BaseVO;
+import com.tentelemed.archipel.core.domain.model.BaseEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
  * Date: 10/12/13
  * Time: 13:26
  */
-public class FunctionalUnit extends BaseVO implements Location {
+public class FunctionalUnit extends BaseEntity implements Location {
     @NotNull String name;
     @NotNull String code;
     List<ActivityUnit> units = new ArrayList<>();
@@ -34,6 +34,10 @@ public class FunctionalUnit extends BaseVO implements Location {
 
     public void addActivityUnit(ActivityUnit unit) {
         units.add(unit);
+    }
+
+    public void remove(ActivityUnit au) {
+        units.remove(au);
     }
 
     @Override

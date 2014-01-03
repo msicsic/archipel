@@ -28,4 +28,6 @@ public interface UserRepository {
     List<RoleQ> getRoles();
 
     RoleQ getFindRole(RoleId roleId);
+
+    RoleQ save(RoleQ role);
 }

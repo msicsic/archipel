@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
+import com.tentelemed.archipel.security.application.command.*;
 import com.tentelemed.archipel.security.application.event.*;
 import org.hibernate.validator.constraints.Email;
 
@@ -18,7 +19,7 @@ import java.util.Date;
  * Date: 21/10/13
  * Time: 16:45
  */
-public class User extends BaseAggregateRoot<UserId> {
+public class User extends BaseAggregateRoot<UserId> implements CmdHandlerUser {
 
     public static class ChangePasswordException extends DomainException {
     }
@@ -37,48 +38,52 @@ public class User extends BaseAggregateRoot<UserId> {
     // ********************* COMMANDS ****************************
     // ***********************************************************
 
-    public CmdRes register(RoleId roleId, String firstName, String lastName, Date dob, String email, String login) {
-        validate("firstName", firstName);
-        validate("lastName", lastName);
-        validate("dob", dob);
-        validate("email", email);
-        validate("login", login);
-        return _result(handle(new UserRegistered(getEntityId(), roleId, firstName, lastName, dob, email, new Credentials(login, generatePassword()))));
+    @Override
+    public CmdRes execute(CmdUserCreate cmd) {
+        validate("firstName", cmd.firstName);
+        validate("lastName", cmd.lastName);
+        validate("dob", cmd.dob);
+        validate("email", cmd.email);
+        validate("login", cmd.login);
+        return _result(handle(new UserRegistered(getEntityId(), cmd.roleId, cmd.firstName, cmd.lastName, cmd.dob, cmd.email, new Credentials(cmd.login, generatePassword()))));
     }
 
-    public CmdRes delete() {
+    @Override
+    public CmdRes execute(CmdUserDelete cmd) {
         return _result(handle(new UserDeleted(getEntityId())));
     }
 
-    public CmdRes updateInfo(String firstName, String lastName, Date dob, String email) {
-        validate("firstName", firstName);
-        validate("lastName", lastName);
-        validate("dob", dob);
-        validate("email", email);
-        return _result(handle(new UserInfoUpdated(getEntityId(), firstName, lastName, dob, email)));
+    @Override
+    public CmdRes execute(CmdUserUpdateInfo cmd) {
+        validate("firstName", cmd.firstName);
+        validate("lastName", cmd.lastName);
+        validate("dob", cmd.dob);
+        validate("email", cmd.email);
+        return _result(handle(new UserInfoUpdated(getEntityId(), cmd.firstName, cmd.lastName, cmd.dob, cmd.email)));
     }
 
-    public CmdRes changePassword(String old, String new1, String new2) throws ChangePasswordException {
-        if (!Objects.equal(old, getPassword()) || !Objects.equal(new1, new2)) {
+    @Override
+    public CmdRes execute(CmdUserChangePassword cmd) throws ChangePasswordException {
+        if (!Objects.equal(cmd.old, getPassword()) || !Objects.equal(cmd.new1, cmd.new2)) {
             throw new ChangePasswordException();
         }
-        return _result(handle(new UserPasswordUpdated(getEntityId(), new1)));
+        return _result(handle(new UserPasswordUpdated(getEntityId(), cmd.new1)));
     }
 
-    public CmdRes changeRole(RoleId roleId) {
+    /*public CmdRes changeRole(RoleId roleId) {
         return _result(handle(new UserRoleUpdated(getEntityId(), roleId)));
-    }
+    }*/
 
 
     // ********************* EVENTS ******************************
     // ***********************************************************
 
-    public UserDeleted handle(UserDeleted event) {
+    UserDeleted handle(UserDeleted event) {
         // ras
         return null;
     }
 
-    public UserRegistered handle(UserRegistered event) {
+    UserRegistered handle(UserRegistered event) {
         this.roleId = event.getRoleId();
         this.firstName = event.getFirstName();
         this.lastName = event.getLastName();
@@ -88,7 +93,7 @@ public class User extends BaseAggregateRoot<UserId> {
         return handled(event);
     }
 
-    public UserInfoUpdated handle(UserInfoUpdated event) {
+    UserInfoUpdated handle(UserInfoUpdated event) {
         this.firstName = event.getFirstName();
         this.lastName = event.getLastName();
         this.dob = event.getDob();
@@ -96,12 +101,12 @@ public class User extends BaseAggregateRoot<UserId> {
         return handled(event);
     }
 
-    public UserPasswordUpdated handle(UserPasswordUpdated event) {
+    UserPasswordUpdated handle(UserPasswordUpdated event) {
         this.credentials = new Credentials(credentials.getLogin(), event.getPassword());
         return handled(event);
     }
 
-    public UserRoleUpdated handle(UserRoleUpdated event) {
+    UserRoleUpdated handle(UserRoleUpdated event) {
         this.roleId = event.getRoleId();
         return handled(event);
     }

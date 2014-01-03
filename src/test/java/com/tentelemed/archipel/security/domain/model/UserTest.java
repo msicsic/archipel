@@ -2,6 +2,9 @@ package com.tentelemed.archipel.security.domain.model;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.security.application.command.CmdUserChangePassword;
+import com.tentelemed.archipel.security.application.command.CmdUserCreate;
+import com.tentelemed.archipel.security.application.command.CmdUserUpdateInfo;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +42,10 @@ public class UserTest {
     public void testUpdateInfo() throws Exception {
         User user = new User();
         Date date = new Date();
-        user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1");
-        user.updateInfo("firstName", "lastName", date, "email99@mail.com");
+        CmdUserCreate cmd1 = new CmdUserCreate(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1");
+        user.execute(cmd1);
+        CmdUserUpdateInfo cmd2 = new CmdUserUpdateInfo(null, "firstName", "lastName", date, "email99@mail.com");
+        user.execute(cmd2);
         assertEquals(user.getFirstName(), "firstName");
         assertEquals(user.getLastName(), "lastName");
         assertEquals(user.getEmail(), "email99@mail.com");
@@ -50,7 +55,7 @@ public class UserTest {
     @Test
     public void testCreateUser() throws Exception {
         User user = new User();
-        user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1");
+        user.execute(new CmdUserCreate(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
         assertEquals(user.getFirstName(), "firstName");
         assertEquals(user.getLastName(), "lastName");
         assertEquals(user.getLogin(), "login1");
@@ -59,22 +64,22 @@ public class UserTest {
     @Test(expected = User.ChangePasswordException.class)
     public void testChangePasswordWithBadOldPwd() throws Exception {
         User user = new User();
-        user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1");
-        user.changePassword("wrongold", "aaa", "aaa");
+        user.execute(new CmdUserCreate(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
+        user.execute(new CmdUserChangePassword(null, "wrongold", "aaa", "aaa"));
     }
 
     @Test
     public void testChangePasswordOk() throws Exception {
         User user = new User();
-        user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1");
+        user.execute(new CmdUserCreate(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
         String password = user.getPassword();
-        user.changePassword(password, "newPass1", "newPass1");
+        user.execute(new CmdUserChangePassword(null, password, "newPass1", "newPass1"));
     }
 
     @Test(expected = User.ChangePasswordException.class)
     public void testChangePasswordBadNewPwd() throws Exception {
         User user = new User();
-        user.register(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1");
-        user.changePassword("password", "newPass1", "newPass99");
+        user.execute(new CmdUserCreate(new RoleId(1), "firstName", "lastName", new Date(), "mail@mail.com", "login1"));
+        user.execute(new CmdUserChangePassword(null, "password", "newPass1", "newPass99"));
     }
 }

@@ -3,9 +3,8 @@ package com.tentelemed.archipel.site.application.service;
 import com.tentelemed.archipel.core.application.service.BaseCommandService;
 import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.application.service.CommandHandler;
-import com.tentelemed.archipel.core.domain.model.Address;
 import com.tentelemed.archipel.site.application.command.*;
-import com.tentelemed.archipel.site.domain.model.*;
+import com.tentelemed.archipel.site.domain.model.Site;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,107 +28,114 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Transactional
-public class SiteCommandService extends BaseCommandService {
+public class SiteCommandService extends BaseCommandService implements CmdHandlerSite {
 
-    public SiteId execute(CmdDeleteSector cmd) {
-        return _execute(cmd, new CommandHandler<CmdDeleteSector>() {
+    @Override
+    public CmdRes execute(CmdSiteDeleteSector cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteDeleteSector>() {
             @Override
-            public CmdRes handle(CmdDeleteSector command) {
+            public CmdRes handle(CmdSiteDeleteSector command) {
                 Site site = (Site) get(command.id);
-                return site.deleteSector(command.code);
+                return site.execute(command);
             }
         });
     }
 
-    public RoomId execute(CmdCreateRoom cmd) {
-        return _execute(cmd, new CommandHandler<CmdCreateRoom>() {
+    /*public CmdRes execute(CmdSiteCreateRoom cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteCreateRoom>() {
             @Override
-            public CmdRes handle(CmdCreateRoom cmd) {
+            public CmdRes handle(CmdSiteCreateRoom cmd) {
                 Room room = get(Room.class);
-                return room.register(cmd.name, cmd.location);
+                return room(cmd.name, cmd.location);
             }
         });
     }
 
-    public RoomId execute(CmdUpdateRoom cmd) {
-        return _execute(cmd, new CommandHandler<CmdCreateRoom>() {
+    public CmdRes execute(CmdSiteUpdateRoom cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteCreateRoom>() {
             @Override
-            public CmdRes handle(CmdCreateRoom cmd) {
+            public CmdRes handle(CmdSiteCreateRoom cmd) {
                 // TODO
                 return null;
             }
         });
-    }
+    } */
 
-    public SiteId execute(CmdCreateService cmd) {
-        return _execute(cmd, new CommandHandler<CmdCreateService>() {
+    // TODO : simpleExec(cmd) qui fait le traitement de base : validate, get(id), aggregate.execute(cmd), post()
+
+    @Override
+    public CmdRes execute(CmdSiteCreateService cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteCreateService>() {
             @Override
-            public CmdRes handle(CmdCreateService cmd) {
+            public CmdRes handle(CmdSiteCreateService cmd) {
                 Site center = (Site) get(cmd.id);
-                return center.createService(cmd.sectorCode, cmd.code, cmd.name);
+                return center.execute(cmd);
             }
         });
     }
 
-    public SiteId execute(CmdDeleteSite cmd) {
-        return _execute(cmd, new CommandHandler<CmdDeleteSite>() {
+    @Override
+    public CmdRes execute(CmdSiteDeleteService cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteDeleteService>() {
             @Override
-            public CmdRes handle(CmdDeleteSite cmd) {
-                Site center = (Site) get(cmd.id);
-                return center.delete();
+            public CmdRes handle(CmdSiteDeleteService command) {
+                Site site = (Site) get(command.id);
+                return site.execute(command);
             }
         });
     }
 
-    public SiteId execute(CmdCreateSite cmd) {
-        return _execute(cmd, new CommandHandler<CmdCreateSite>() {
+    @Override
+    public CmdRes execute(CmdSiteDelete cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteDelete>() {
             @Override
-            public CmdRes handle(CmdCreateSite cmd) {
+            public CmdRes handle(CmdSiteDelete cmd) {
+                Site center = (Site) get(cmd.id);
+                return center.execute(cmd);
+            }
+        });
+    }
+
+    @Override
+    public CmdRes execute(CmdSiteCreate cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteCreate>() {
+            @Override
+            public CmdRes handle(CmdSiteCreate cmd) {
                 Site center = get(Site.class);
-                return center.register(cmd.type, cmd.name, cmd.ident);
+                return center.execute(cmd);
             }
         });
     }
 
-    public SiteId execute(CmdUpdateSite cmd) {
-        return _execute(cmd, new CommandHandler<CmdUpdateSite>() {
+    @Override
+    public CmdRes execute(CmdSiteUpdate cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteUpdate>() {
             @Override
-            public CmdRes handle(CmdUpdateSite cmd) {
+            public CmdRes handle(CmdSiteUpdate cmd) {
                 Site center = (Site) get(cmd.id);
-                return center.updateMainInfo(cmd.type, cmd.name, cmd.ident);
+                return center.execute(cmd);
             }
         });
     }
 
-    public SiteId execute(CmdUpdateAdditionalInfo cmd) {
-        return _execute(cmd, new CommandHandler<CmdUpdateAdditionalInfo>() {
+    @Override
+    public CmdRes execute(CmdSiteUpdateAdditionalInfo cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteUpdateAdditionalInfo>() {
             @Override
-            public CmdRes handle(CmdUpdateAdditionalInfo cmd) {
-                Address address = new Address(cmd.street, cmd.postalCode, cmd.town, cmd.countryIso);
-                SiteInfo info = new SiteInfo(
-                        cmd.siret,
-                        address,
-                        cmd.phone,
-                        cmd.fax,
-                        cmd.directorName,
-                        cmd.bankCode,
-                        cmd.emergenciesAvailable,
-                        cmd.drugstoreAvailable,
-                        cmd.privateRoomAvailable
-                );
-
+            public CmdRes handle(CmdSiteUpdateAdditionalInfo cmd) {
                 Site center = (Site) get(cmd.id);
-                return center.updateAdditionalInfo(info);
+                return center.execute(cmd);
             }
         });
     }
 
-    public SiteId execute(CmdCreateSector cmd) {
-        return _execute(cmd, new CommandHandler<CmdCreateSector>() {
+    @Override
+    public CmdRes execute(CmdSiteCreateSector cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteCreateSector>() {
             @Override
-            public CmdRes handle(CmdCreateSector cmd) {
+            public CmdRes handle(CmdSiteCreateSector cmd) {
                 Site site = (Site) get(cmd.id);
-                return site.createSector(cmd.type, cmd.code, cmd.name);
+                return site.execute(cmd);
             }
         });
     }

@@ -2,19 +2,12 @@ package com.tentelemed.archipel.security.application.service;
 
 import com.tentelemed.archipel.core.application.service.BaseCommandService;
 import com.tentelemed.archipel.core.application.service.CmdRes;
-import com.tentelemed.archipel.core.application.service.Command;
 import com.tentelemed.archipel.core.application.service.CommandHandler;
-import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.security.application.command.*;
 import com.tentelemed.archipel.security.domain.model.Role;
-import com.tentelemed.archipel.security.domain.model.RoleId;
 import com.tentelemed.archipel.security.domain.model.User;
-import com.tentelemed.archipel.security.domain.model.UserId;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
-import java.util.HashSet;
 
 /**
  * Dans cette implémentation, la couche Application joue ces roles :
@@ -36,54 +29,65 @@ import java.util.HashSet;
  */
 @Component
 @Transactional
-public class UserCommandService extends BaseCommandService {
+public class UserCommandService extends BaseCommandService implements CmdHandlerRole, CmdHandlerUser {
 
-    public RoleId execute(final CmdDeleteRole cmd) {
-        return _execute(cmd, new CommandHandler<CmdDeleteRole>() {
+    public CmdRes execute(CmdRoleDelete cmd) {
+        return _execute(cmd, new CommandHandler<CmdRoleDelete>() {
             @Override
-            public CmdRes handle(CmdDeleteRole command) {
+            public CmdRes handle(CmdRoleDelete cmd) {
                 // TODO
                 return null;
             }
         });
     }
 
-    public RoleId execute(final CmdCreateRole cmd) {
-        return _execute(cmd, new CommandHandler<CmdCreateRole>() {
+    @Override
+    public CmdRes execute(CmdRoleUpdateRights cmd) {
+        return _execute(cmd, new CommandHandler<CmdRoleUpdateRights>() {
             @Override
-            public CmdRes handle(CmdCreateRole command) {
+            public CmdRes handle(CmdRoleUpdateRights cmd) {
+                Role role = (Role) get(cmd.id);
+                return role.execute(cmd);
+            }
+        });
+    }
+
+    public CmdRes execute(CmdRoleCreate cmd) {
+        return _execute(cmd, new CommandHandler<CmdRoleCreate>() {
+            @Override
+            public CmdRes handle(CmdRoleCreate cmd) {
                 Role role = get(Role.class);
-                return role.register(cmd.name, new HashSet<>(Arrays.asList(cmd.rights)));
+                return role.execute(cmd);
             }
         });
     }
 
-    public UserId execute(final CmdDeleteUser cmd) {
-        return _execute(cmd, new CommandHandler<CmdDeleteUser>() {
+    public CmdRes execute(CmdUserDelete cmd) {
+        return _execute(cmd, new CommandHandler<CmdUserDelete>() {
             @Override
-            public CmdRes handle(CmdDeleteUser command) {
+            public CmdRes handle(CmdUserDelete cmd) {
                 User user = (User) get(cmd.id);
-                return user.delete();
+                return user.execute(cmd);
             }
         });
     }
 
-    public UserId execute(final CmdCreateUser cmd) {
-        return _execute(cmd, new CommandHandler<CmdCreateUser>() {
+    public CmdRes execute(CmdUserCreate cmd) {
+        return _execute(cmd, new CommandHandler<CmdUserCreate>() {
             @Override
-            public CmdRes handle(CmdCreateUser command) {
+            public CmdRes handle(CmdUserCreate cmd) {
                 User user = get(User.class);
-                return user.register(cmd.roleId, cmd.firstName, cmd.lastName, cmd.dob, cmd.email, cmd.login);
+                return user.execute(cmd);
             }
         });
     }
 
-    public UserId execute(final CmdUpdateUserInfo cmd) {
-        return _execute(cmd, new CommandHandler<CmdUpdateUserInfo>() {
+    public CmdRes execute(CmdUserUpdateInfo cmd) {
+        return _execute(cmd, new CommandHandler<CmdUserUpdateInfo>() {
             @Override
-            public CmdRes handle(CmdUpdateUserInfo command) {
+            public CmdRes handle(CmdUserUpdateInfo cmd) {
                 User user = (User) get(cmd.id);
-                return user.updateInfo(cmd.firstName, cmd.lastName, cmd.dob, cmd.email);
+                return user.execute(cmd);
             }
         });
     }

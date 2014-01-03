@@ -2,7 +2,6 @@ package com.tentelemed.archipel.site.domain.model;
 
 import com.tentelemed.archipel.core.domain.model.BaseEntity;
 
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -17,12 +16,13 @@ import java.util.List;
  * Time: 11:57
  */
 public class Sector extends BaseEntity implements Location {
+
     public static enum Type {
         TECH, MEDTECH, ADMIN, MED
     }
 
     @NotNull @Size(min = 3) String name;
-    @Id @NotNull @Size(min = 3) String code;
+    @NotNull @Size(min = 3) String code;
     @NotNull Type type;
     List<Service> services = new ArrayList<>();
 
@@ -38,6 +38,10 @@ public class Sector extends BaseEntity implements Location {
 
     public void addService(Service service) {
         services.add(service);
+    }
+
+    public void remove(Service service) {
+        services.remove(service);
     }
 
     public Collection<String> getLocationCodes() {

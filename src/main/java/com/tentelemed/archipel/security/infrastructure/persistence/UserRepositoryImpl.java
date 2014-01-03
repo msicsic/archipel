@@ -77,4 +77,9 @@ public class UserRepositoryImpl implements UserRepository {
     public RoleQ getFindRole(RoleId roleId) {
         return roleRepo.findOne(roleId.getId());
     }
+
+    @Override
+    public RoleQ save(RoleQ role) {
+        return roleRepo.save(role);
+    }
 }

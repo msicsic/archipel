@@ -3,9 +3,9 @@ package com.tentelemed.archipel.security.infrastructure.web;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.service.EventHandler;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
-import com.tentelemed.archipel.security.application.command.CmdCreateUser;
-import com.tentelemed.archipel.security.application.command.CmdDeleteUser;
-import com.tentelemed.archipel.security.application.command.CmdUpdateUserInfo;
+import com.tentelemed.archipel.security.application.command.CmdUserCreate;
+import com.tentelemed.archipel.security.application.command.CmdUserDelete;
+import com.tentelemed.archipel.security.application.command.CmdUserUpdateInfo;
 import com.tentelemed.archipel.security.application.event.UserDomainEvent;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
@@ -60,10 +60,10 @@ public class UiUsersModel extends BaseViewModel {
             if (getSelectedUser().getId() == null) {
                 UserQ u = getSelectedUser();
                 RoleQ role = userQuery.getAnyRole();
-                userCommand.execute(new CmdCreateUser(role.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail(), u.getLogin()));
+                userCommand.execute(new CmdUserCreate(role.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail(), u.getLogin()));
             } else {
                 UserQ u = getSelectedUser();
-                userCommand.execute(new CmdUpdateUserInfo(u.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail()));
+                userCommand.execute(new CmdUserUpdateInfo(u.getEntityId(), u.getFirstName(), u.getLastName(), u.getDob(), u.getEmail()));
             }
             show("User committed");
         } catch (FieldGroup.CommitException e) {
@@ -83,7 +83,7 @@ public class UiUsersModel extends BaseViewModel {
         confirm("Confirm dialog", "Please confirm that you want to delete this User", new Runnable() {
             @Override
             public void run() {
-                userCommand.execute(new CmdDeleteUser(getSelectedUser().getEntityId()));
+                userCommand.execute(new CmdUserDelete(getSelectedUser().getEntityId()));
             }
         });
     }

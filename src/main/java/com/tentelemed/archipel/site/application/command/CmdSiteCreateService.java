@@ -5,7 +5,7 @@ import com.tentelemed.archipel.site.domain.model.SiteId;
 
 import javax.validation.constraints.NotNull;
 
-public class CmdCreateService extends Command<SiteId> {
+public class CmdSiteCreateService extends Command<SiteId> {
     @NotNull public String sectorCode;
     @NotNull public String code;
     @NotNull public String name;

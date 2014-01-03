@@ -9,5 +9,5 @@ import com.tentelemed.archipel.core.domain.model.EntityId;
  * Time: 12:20
  */
 public interface CommandHandler<CMD extends Command> {
-    CmdRes handle(CMD command);
+    CmdRes handle(CMD cmd);
 }

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * Date: 18/12/13
  * Time: 21:36
  */
-public class CmdUpdateAdditionalInfo extends Command<SiteId> {
+public class CmdSiteUpdateAdditionalInfo extends Command<SiteId> {
     @NotNull public String siret;
     public String street;
     public String town;

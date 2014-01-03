@@ -3,7 +3,7 @@ TODO :
 - gestion des droits
 * les methodes "handle" des BO doivent etre privées
 
-
+- Pour simplifier les services, il faudrait faire de l'AOP au lieu de passer par un CommandHandler
 - Affectuer les controles de referencement lors modif code ou suppression
 - Gestion de la desactivation (afficher en gris ?)
 
@@ -46,9 +46,32 @@ TODO (Tests) :
 * EntityQUtil.applyEvents
 / PersistenceHandler.handle(*)
 
+GUIDE DEV :
+=> Ajout nouvelle commande :
+- Creer la classe Commande
+- L'ajouter dans le CmdHandler correspondant
+- Creer les classes Event
+- Completer les TU du service
+=> Ajout nouvel Event :
+- Creer la classe Event
+- l'ajouter dans le EventHandler correspondant
+- completer le TU de l'objet de lecture
 
 DDD :
 Regles à retenir :
+- Les services chargent les objets necessaires à l'execution d'une commande avant d'appeler
+  la methode sur l'agregat concerné par le traitement. La commande contient les ID des objets
+  necessaires, alors que la méthode de traitement contient les objets hydratés. Il n'est donc pas
+  possible de traiter directement la commande dans les objets metiers (a moins de donner acces
+  au repository à l'agregat)
+  Il est également possible de stocker des données temporaires dans la commande (par le service)
+  pour que l'agregat puisse ensuite les recuperer
+  Cela simplifierait l'utilisation : passer la cmd directement a l'agregat, declarer un handler de cmd
+  implementé par le service, l'agregat et le TU
+
+- pour le moment les agregat n'implementent pas le eventHandler pour ne pas rendre publique
+  les methodes de traitement d'evt. Il faudra voir a l'usage si c'est viable
+
 - Utilisation systématique de VO (Value Object) pour tous les attributs typés, afin de
   - valider les valeurs
   - typer plus fortement que "String"

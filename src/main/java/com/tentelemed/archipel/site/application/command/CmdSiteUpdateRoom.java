@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Date: 18/12/13
  * Time: 21:36
  */
-public class CmdUpdateRoom extends Command<RoomId> {
+public class CmdSiteUpdateRoom extends Command<RoomId> {
     @NotNull public String name;
     public boolean medical;
     @NotNull public Location location;

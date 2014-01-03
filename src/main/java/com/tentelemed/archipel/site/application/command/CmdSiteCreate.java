@@ -13,9 +13,17 @@ import javax.validation.constraints.Size;
  * Date: 18/12/13
  * Time: 21:36
  */
-public class CmdCreateSite extends Command<SiteId> {
+public class CmdSiteCreate extends Command<SiteId> {
     @NotNull public SiteType type;
     @NotNull @Size(min = 3) public String name;
     @NotNull @Size(min = 3) public String ident;
 
+    public CmdSiteCreate() {
+    }
+
+    public CmdSiteCreate(SiteType type, String name, String ident) {
+        this.type = type;
+        this.name = name;
+        this.ident = ident;
+    }
 }

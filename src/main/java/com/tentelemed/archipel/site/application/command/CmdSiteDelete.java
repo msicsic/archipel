@@ -9,8 +9,8 @@ import com.tentelemed.archipel.site.domain.model.SiteId;
  * Date: 18/12/13
  * Time: 21:37
  */
-public class CmdDeleteSite extends Command<SiteId> {
-    public CmdDeleteSite(SiteId id) {
+public class CmdSiteDelete extends Command<SiteId> {
+    public CmdSiteDelete(SiteId id) {
         super(id);
     }
 }

@@ -44,9 +44,9 @@ public class SiteRepositoryImpl implements SiteRepository {
     EntityManager em;
 
     @Override
-    public SiteQ save(SiteQ user) {
-        em.persist(user);
-        return user;
+    public SiteQ save(SiteQ site) {
+        em.persist(site);
+        return site;
     }
 
     @Override

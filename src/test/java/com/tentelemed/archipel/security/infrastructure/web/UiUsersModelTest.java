@@ -1,8 +1,9 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
-import com.tentelemed.archipel.security.application.command.CmdDeleteUser;
-import com.tentelemed.archipel.security.application.command.CmdUpdateUserInfo;
+import com.tentelemed.archipel.security.application.command.CmdUserDelete;
+import com.tentelemed.archipel.security.application.command.CmdUserUpdateInfo;
 import com.tentelemed.archipel.security.application.service.UserCommandService;
+import com.tentelemed.archipel.security.domain.model.UserId;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -45,7 +47,7 @@ public class UiUsersModelTest {
         model.action_commit();
 
         // then
-        verify(service).execute(new CmdUpdateUserInfo(user.getEntityId(), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail()));
+        verify(service).execute(new CmdUserUpdateInfo(any(UserId.class), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail()));
         assertTrue(model.isCommited());
     }
 
@@ -60,7 +62,7 @@ public class UiUsersModelTest {
         model.action_delete();
 
         // then
-        verify(service).execute(new CmdDeleteUser(user.getEntityId()));
+        verify(service).execute(new CmdUserDelete(any(UserId.class)));
     }
 
     @Test
@@ -74,7 +76,7 @@ public class UiUsersModelTest {
         model.action_discard();
 
         // then
-        verify(service, never()).execute(new CmdUpdateUserInfo(user.getEntityId(), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail()));
+        verify(service, never()).execute(new CmdUserUpdateInfo(user.getEntityId(), user.getFirstName(), user.getLastName(), user.getDob(), user.getEmail()));
         assertTrue(!model.isCommited());
         assertTrue(model.isDiscarded());
     }

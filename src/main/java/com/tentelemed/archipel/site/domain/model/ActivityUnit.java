@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.site.domain.model;
 
-import com.tentelemed.archipel.core.domain.model.BaseVO;
+import com.tentelemed.archipel.core.domain.model.BaseEntity;
 
 import javax.validation.constraints.NotNull;
 
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * Date: 10/12/13
  * Time: 13:26
  */
-public class ActivityUnit extends BaseVO implements Location {
+public class ActivityUnit extends BaseEntity implements Location {
     @NotNull String name;
     @NotNull String code;
     @NotNull FunctionalUnit parent;

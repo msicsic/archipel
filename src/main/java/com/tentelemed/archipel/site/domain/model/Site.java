@@ -1,8 +1,10 @@
 package com.tentelemed.archipel.site.domain.model;
 
 import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.domain.model.Address;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
+import com.tentelemed.archipel.site.application.command.*;
 import com.tentelemed.archipel.site.domain.event.*;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 
@@ -16,7 +18,7 @@ import java.util.*;
  * Date: 10/12/13
  * Time: 11:40
  */
-public class Site extends BaseAggregateRoot<SiteId> {
+public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
 
     @NotNull SiteType type;
     @NotNull String name;
@@ -26,69 +28,175 @@ public class Site extends BaseAggregateRoot<SiteId> {
     @Valid Set<Sector> sectors = new HashSet<>();
 
     // COMMANDS
-    public CmdRes register(SiteType type, String name, String ident) {
-        validate("type", type);
-        validate("name", name);
-        validate("ident", ident);
-        LocationQ sector = new LocationQ(LocationQ.Type.SECTOR, "Default", "MED");
-        return _result(handle(new SiteRegistered(getEntityId(), type, name, ident, sector)));
+    @Override
+    public CmdRes execute(CmdSiteCreate cmd) {
+        validate("type", cmd.type);
+        validate("name", cmd.name);
+        validate("ident", cmd.ident);
+        LocationQ sector = new LocationQ(getEntityId(), LocationQ.Type.SECTOR, "Default", "MED");
+        return _result(handle(new SiteRegistered(getEntityId(), cmd.type, cmd.name, cmd.ident, sector)));
     }
 
-    public CmdRes updateMainInfo(SiteType type, String name, String ident) {
-        validate("type", type);
-        validate("name", name);
-        validate("ident", ident);
-        return _result(handle(new SiteMainInfoUpdated(getEntityId(), type, name, ident)));
+    @Override
+    public CmdRes execute(CmdSiteUpdate cmd) {
+        validate("type", cmd.type);
+        validate("name", cmd.name);
+        validate("ident", cmd.ident);
+        return _result(handle(new SiteMainInfoUpdated(getEntityId(), cmd.type, cmd.name, cmd.ident)));
     }
 
-    public CmdRes updateAdditionalInfo(SiteInfo info) {
+    @Override
+    public CmdRes execute(CmdSiteUpdateAdditionalInfo cmd) {
+        Address address = new Address(cmd.street, cmd.postalCode, cmd.town, cmd.countryIso);
+        SiteInfo info = new SiteInfo(
+                cmd.siret,
+                address,
+                cmd.phone,
+                cmd.fax,
+                cmd.directorName,
+                cmd.bankCode,
+                cmd.emergenciesAvailable,
+                cmd.drugstoreAvailable,
+                cmd.privateRoomAvailable
+        );
         validate("info", info);
         return _result(handle(new SiteAdditionalInfoUpdated(getEntityId(), info)));
     }
 
-    public CmdRes addRoom(RoomId room) {
-        // TODO : tester l'existance de la Room
-        return _result(handle(new SiteRoomAdded(getEntityId(), room)));
-    }
-
-    public CmdRes removeRoom(RoomId room) {
-        // TODO : tester l'existance de la Room
-        return _result(handle(new SiteRoomRemoved(getEntityId(), room)));
-    }
-
-    public CmdRes delete() {
+    @Override
+    public CmdRes execute(CmdSiteDelete cmd) {
         return _result(handle(new SiteDeleted(getEntityId())));
     }
 
-    public CmdRes createService(String sectorCode, String code, String name) {
+    public CmdRes createFunctionalUnit(String serviceCode, String code, String name) {
         if (getSectorCodes().contains(code)) {
+            throw new DomainException("This code is allready used !");
+        }
+        Service found = null;
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                if (service.getCode().equals(serviceCode)) {
+                    found = service;
+                    break;
+                }
+            }
+        }
+        if (found == null) {
+            throw new DomainException("Service not found");
+        } else {
+            return _result(handle(new SiteFunctionalUnitAdded(getEntityId(), serviceCode, code, name)));
+        }
+    }
+
+    public CmdRes createActivityUnit(String parentCode, String code, String name) {
+        if (getSectorCodes().contains(code)) {
+            throw new DomainException("This code is allready used !");
+        }
+        Service found = null;
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                for (FunctionalUnit unit : service.getUnits()) {
+                    if (unit.getCode().equals(parentCode)) {
+                        found = service;
+                        break;
+                    }
+                }
+            }
+        }
+        if (found == null) {
+            throw new DomainException("FunctionalUnit not found");
+        } else {
+            return _result(handle(new SiteActivityUnitAdded(getEntityId(), parentCode, code, name)));
+        }
+    }
+
+    @Override
+    public CmdRes execute(CmdSiteCreateService cmd) {
+        if (getSectorCodes().contains(cmd.code)) {
             throw new DomainException("This code is allready used !");
         }
         Sector found = null;
         for (Sector sector : sectors) {
-            if (sector.getCode().equals(sectorCode)) {
+            if (sector.getCode().equals(cmd.sectorCode)) {
                 found = sector;
+                break;
             }
         }
         if (found == null) {
             throw new DomainException("Sector not found");
         } else {
-            return _result(handle(new SiteServiceAdded(getEntityId(), sectorCode, code, name)));
+            return _result(handle(new SiteServiceAdded(getEntityId(), cmd.sectorCode, cmd.code, cmd.name)));
         }
     }
 
-    public CmdRes createSector(Sector.Type type, String code, String name) {
+    @Override
+    public CmdRes execute(CmdSiteCreateSector cmd) {
         // le type ne doit pas deja etre présent
-        if (getSectorCodes().contains(code)) {
+        if (getSectorCodes().contains(cmd.code)) {
             throw new DomainException("This code is allready used !");
         }
         for (Sector s : sectors) {
-            if (s.getType() == type) {
+            if (s.getType() == cmd.type) {
                 throw new DomainException("This type of Sector is already present");
             }
         }
-        return _result(handle(new SiteSectorAdded(getEntityId(), type, code, name)));
+        return _result(handle(new SiteSectorAdded(getEntityId(), cmd.type, cmd.code, cmd.name)));
     }
+
+    @Override
+    public CmdRes execute(CmdSiteDeleteSector cmd) {
+        for (Sector sector : sectors) {
+            if (sector.getCode().equals(cmd.code)) {
+                if (sector.getType().equals(Sector.Type.MED)) {
+                    throw new DomainException("Default sector (MED) cannot be deleted");
+                }
+                return _result(handle(new SiteSectorDeleted(getEntityId(), cmd.code)));
+            }
+        }
+        throw new DomainException("this SectorCode is not present in this Site");
+    }
+
+    @Override
+    public CmdRes execute(CmdSiteDeleteService cmd) {
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                if (service.getCode().equals(cmd.code)) {
+                    return _result(handle(new SiteServiceDeleted(getEntityId(), cmd.code)));
+                }
+            }
+        }
+        throw new DomainException("this SectorCode is not present in this Site");
+    }
+
+    public CmdRes deleteFunctionalUnit(String code) {
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                for (FunctionalUnit fu : service.getUnits()) {
+                    if (fu.getCode().equals(code)) {
+                        return _result(handle(new SiteFunctionalUnitDeleted(getEntityId(), code)));
+                    }
+                }
+            }
+        }
+        throw new DomainException("this ServiceCode is not present in this Site");
+    }
+
+    public CmdRes deleteActivityUnit(String code) {
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                for (FunctionalUnit fu : service.getUnits()) {
+                    for (ActivityUnit au : fu.getUnits()) {
+                        if (au.getCode().equals(code)) {
+                            return _result(handle(new SiteActivityUnitDeleted(getEntityId(), code)));
+                        }
+                    }
+                }
+            }
+        }
+        throw new DomainException("this FunctionalUnitCode is not present in this Site");
+    }
+
+    // methodes utilitaires
 
     private Set<String> getSectorCodes() {
         Set<String> codes = new HashSet<>();
@@ -107,17 +215,6 @@ public class Site extends BaseAggregateRoot<SiteId> {
         return codes;
     }
 
-    public CmdRes deleteSector(String sectorCode) {
-        for (Sector sector : sectors) {
-            if (sector.getCode().equals(sectorCode)) {
-                return _result(handle(new SiteSectorDeleted(getEntityId(), sectorCode)));
-            }
-        }
-        throw new DomainException("this SectorCode is not present in this Site");
-    }
-
-    // methodes utilitaires
-
     public List<String> getLocationCodes() {
         List<String> result = new ArrayList<>();
         for (Sector sector : sectors) {
@@ -127,6 +224,12 @@ public class Site extends BaseAggregateRoot<SiteId> {
     }
 
     // EVENTS
+
+    SiteSectorAdded handle(SiteSectorAdded event) {
+        Sector sector = new Sector(event.getSectorType(), event.getSectorName(), event.getSectorCode());
+        sectors.add(sector);
+        return handled(event);
+    }
 
     SiteSectorDeleted handle(SiteSectorDeleted event) {
         for (Sector sector : sectors) {
@@ -138,16 +241,76 @@ public class Site extends BaseAggregateRoot<SiteId> {
         return handled(event);
     }
 
-    SiteSectorAdded handle(SiteSectorAdded event) {
-        Sector sector = new Sector(event.getSectorType(), event.getSectorName(), event.getSectorCode());
-        sectors.add(sector);
-        return handled(event);
-    }
-
     SiteServiceAdded handle(SiteServiceAdded event) {
         for (Sector sector : sectors) {
             if (sector.getCode().equals(event.getParent())) {
                 new Service(sector, event.getName(), event.getCode());
+            }
+        }
+        return handled(event);
+    }
+
+    SiteServiceDeleted handle(SiteServiceDeleted event) {
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                if (service.getCode().equals(event.getServiceCode())) {
+                    sector.remove(service);
+                    break;
+                }
+            }
+        }
+        return handled(event);
+    }
+
+    SiteFunctionalUnitAdded handle(SiteFunctionalUnitAdded event) {
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                if (service.getCode().equals(event.getParent())) {
+                    new FunctionalUnit(service, event.getName(), event.getCode());
+                }
+            }
+        }
+        return handled(event);
+    }
+
+    SiteFunctionalUnitDeleted handle(SiteFunctionalUnitDeleted event) {
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                for (FunctionalUnit fu : service.getUnits()) {
+                    if (fu.getCode().equals(event.getCode())) {
+                        service.remove(fu);
+                        break;
+                    }
+                }
+            }
+        }
+        return handled(event);
+    }
+
+    SiteActivityUnitAdded handle(SiteActivityUnitAdded event) {
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                for (FunctionalUnit fu : service.getUnits()) {
+                    if (fu.getCode().equals(event.getParent())) {
+                        new ActivityUnit(fu, event.getName(), event.getCode());
+                    }
+                }
+            }
+        }
+        return handled(event);
+    }
+
+    SiteActivityUnitDeleted handle(SiteActivityUnitDeleted event) {
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                for (FunctionalUnit fu : service.getUnits()) {
+                    for (ActivityUnit au : fu.getUnits()) {
+                        if (au.getCode().equals(event.getCode())) {
+                            fu.remove(au);
+                            break;
+                        }
+                    }
+                }
             }
         }
         return handled(event);

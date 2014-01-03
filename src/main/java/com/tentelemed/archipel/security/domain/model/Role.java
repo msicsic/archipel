@@ -2,6 +2,11 @@ package com.tentelemed.archipel.security.domain.model;
 
 import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.security.application.command.CmdHandlerRole;
+import com.tentelemed.archipel.security.application.command.CmdRoleCreate;
+import com.tentelemed.archipel.security.application.command.CmdRoleDelete;
+import com.tentelemed.archipel.security.application.command.CmdRoleUpdateRights;
+import com.tentelemed.archipel.security.application.event.RoleDeleted;
 import com.tentelemed.archipel.security.application.event.RoleRegistered;
 import com.tentelemed.archipel.security.application.event.RoleRightsUpdated;
 
@@ -16,7 +21,7 @@ import java.util.Set;
  * Date: 01/12/13
  * Time: 02:01
  */
-public class Role extends BaseAggregateRoot<RoleId> {
+public class Role extends BaseAggregateRoot<RoleId> implements CmdHandlerRole {
     @NotNull private String name;
     @NotNull private Set<Right> rights = new HashSet<>();
 
@@ -24,26 +29,34 @@ public class Role extends BaseAggregateRoot<RoleId> {
     // *********** COMMANDS **********************
     // *********** COMMANDS **********************
 
-    public CmdRes register(String name, Set<Right> rights) {
-        validate("name", name);
-        return _result(handle(new RoleRegistered(getEntityId(), name, rights)));
+    public CmdRes execute(CmdRoleCreate cmd) {
+        validate("name", cmd.name);
+        return _result(handle(new RoleRegistered(getEntityId(), cmd.name, cmd.rights)));
     }
 
-    public CmdRes updateRights(Set<Right> rights) {
-        return _result(handle(new RoleRightsUpdated(getEntityId(), rights)));
+    public CmdRes execute(CmdRoleDelete cmd) {
+        return _result(handle(new RoleDeleted(getEntityId())));
+    }
+
+    public CmdRes execute(CmdRoleUpdateRights cmd) {
+        return _result(handle(new RoleRightsUpdated(getEntityId(), cmd.rights)));
     }
 
     // *********** EVENTS ************************
     // *********** EVENTS ************************
     // *********** EVENTS ************************
 
-    public RoleRegistered handle(RoleRegistered event) {
+    RoleDeleted handle(RoleDeleted roleDeleted) {
+        return handled(roleDeleted);
+    }
+
+    RoleRegistered handle(RoleRegistered event) {
         this.name = event.getName();
         this.rights = event.getRights();
         return handled(event);
     }
 
-    public RoleRightsUpdated handle(RoleRightsUpdated event) {
+    RoleRightsUpdated handle(RoleRightsUpdated event) {
         this.rights = event.getRights();
         return handled(event);
     }

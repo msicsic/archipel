@@ -2,7 +2,7 @@ package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.domain.model.Country;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
-import com.tentelemed.archipel.site.application.command.CmdUpdateAdditionalInfo;
+import com.tentelemed.archipel.site.application.command.CmdSiteUpdateAdditionalInfo;
 import com.tentelemed.archipel.site.application.service.SiteCommandService;
 import com.tentelemed.archipel.site.application.service.SiteQueryService;
 import com.tentelemed.archipel.site.domain.model.Bank;
@@ -25,7 +25,7 @@ import java.util.List;
 @Component
 @Scope("prototype")
 public class UiSiteEditModel extends BaseViewModel {
-    private CmdUpdateAdditionalInfo cmd = beanify(new CmdUpdateAdditionalInfo());
+    private CmdSiteUpdateAdditionalInfo cmd = beanify(new CmdSiteUpdateAdditionalInfo());
     @Autowired SiteCommandService serviceWrite;
     @Autowired SiteQueryService serviceRead;
 
@@ -45,7 +45,7 @@ public class UiSiteEditModel extends BaseViewModel {
     }
 
     @Valid
-    public CmdUpdateAdditionalInfo getCmd() {
+    public CmdSiteUpdateAdditionalInfo getCmd() {
         return cmd;
     }
 

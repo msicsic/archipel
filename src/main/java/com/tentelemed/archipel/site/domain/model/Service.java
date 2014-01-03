@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class Service extends BaseEntity implements Location {
     @NotNull String name;
-    @Id @NotNull String code;
+    @NotNull String code;
     @NotNull Sector parent;
     List<FunctionalUnit> units = new ArrayList<>();
 
@@ -35,6 +35,10 @@ public class Service extends BaseEntity implements Location {
 
     public void addFunctionalUnit(FunctionalUnit unit) {
         units.add(unit);
+    }
+
+    public void remove(FunctionalUnit fu) {
+        units.remove(fu);
     }
 
     @Override
@@ -89,4 +93,5 @@ public class Service extends BaseEntity implements Location {
     public int hashCode() {
         return code.hashCode();
     }
+
 }

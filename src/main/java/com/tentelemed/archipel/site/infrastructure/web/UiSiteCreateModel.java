@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
-import com.tentelemed.archipel.site.application.command.CmdCreateSite;
-import com.tentelemed.archipel.site.application.command.CmdUpdateSite;
+import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
+import com.tentelemed.archipel.site.application.command.CmdSiteUpdate;
 import com.tentelemed.archipel.site.application.service.SiteCommandService;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -21,8 +21,8 @@ import javax.validation.Valid;
 @Component
 @Scope("prototype")
 public class UiSiteCreateModel extends BaseViewModel {
-    private CmdCreateSite cmdCreate = beanify(new CmdCreateSite());
-    private CmdUpdateSite cmdUpdate = beanify(new CmdUpdateSite());
+    private CmdSiteCreate cmdCreate = beanify(new CmdSiteCreate());
+    private CmdSiteUpdate cmdUpdate = beanify(new CmdSiteUpdate());
     private boolean edit;
     @Autowired SiteCommandService serviceWrite;
 
@@ -40,12 +40,12 @@ public class UiSiteCreateModel extends BaseViewModel {
 
 
     @Valid
-    public CmdCreateSite getCmdCreate() {
+    public CmdSiteCreate getCmdCreate() {
         return cmdCreate;
     }
 
     @Valid
-    public CmdUpdateSite getCmdUpdate() {
+    public CmdSiteUpdate getCmdUpdate() {
         return cmdUpdate;
     }
 

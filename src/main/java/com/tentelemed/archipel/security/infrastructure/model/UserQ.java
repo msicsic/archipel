@@ -20,7 +20,7 @@ import java.util.Date;
  * Time: 01:13
  */
 @Entity
-public class UserQ extends BaseEntityQ<UserId> {
+public class UserQ extends BaseEntityQ<UserId> implements UserEventHandler {
     @NotNull @Size(min = 2, max = 50) String firstName;
     @NotNull @Size(min = 2, max = 50) String lastName;
     @Temporal(TemporalType.TIME) Date dob;
@@ -97,26 +97,26 @@ public class UserQ extends BaseEntityQ<UserId> {
         this.roleId = roleId;
     }
 
-    void applyEvent(UserDeleted event) {
+    public void handle(UserDeleted event) {
         // ras
     }
 
-    void applyEvent(UserInfoUpdated event) {
+    public void handle(UserInfoUpdated event) {
         firstName = event.getFirstName();
         lastName = event.getLastName();
         dob = event.getDob();
         email = event.getEmail();
     }
 
-    void applyEvent(UserPasswordUpdated event) {
+    public void handle(UserPasswordUpdated event) {
         password = event.getPassword();
     }
 
-    void applyEvent(UserRoleUpdated event) {
+    public void handle(UserRoleUpdated event) {
         roleId = event.getRoleId();
     }
 
-    void applyEvent(UserRegistered event) {
+    public void handle(UserRegistered event) {
         this.dob = event.getDob();
         this.email = event.getEmail();
         this.firstName = event.getFirstName();

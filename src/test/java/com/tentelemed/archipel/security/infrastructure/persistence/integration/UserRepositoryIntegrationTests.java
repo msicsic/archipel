@@ -6,6 +6,8 @@ import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
 import com.tentelemed.archipel.infrastructure.config.TestSpringConfiguration;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
+import com.tentelemed.archipel.security.domain.model.Right;
+import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +20,9 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
@@ -100,8 +104,21 @@ public class UserRepositoryIntegrationTests {
         assertEquals(users.size(), 0);
     }
 
+    RoleQ role = null;
+    private RoleQ getRole() {
+        if (role == null) {
+            role = new RoleQ();
+            role.setId(1111);
+            role.setName("admin");
+            role.setRights(new HashSet<>(Arrays.asList(new Right[]{Right.RIGHT_A})));
+            role = repository.save(role);
+        }
+        return role;
+    }
+
     private UserQ createUser(int i) {
         UserQ user = new UserQ();
+        user.setRoleId(getRole().getEntityId());
         user.setId(i);
         user.setDob(new Date());
         user.setLogin("login" + i);

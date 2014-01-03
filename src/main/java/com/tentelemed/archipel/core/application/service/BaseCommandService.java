@@ -117,7 +117,8 @@ public abstract class BaseCommandService {
     }
 
     // Rq : @Transactional n'a pas d'effet sur les methodes non 'public' (à moins de passer par AspectJ)
-    protected <ID extends EntityId> ID _execute(Command<ID> command, CommandHandler ch) {
+//    protected <ID extends EntityId> ID _execute(Command<ID> command, CommandHandler ch) {
+    protected <ID extends EntityId> CmdRes _execute(Command<ID> command, CommandHandler ch) {
 
         // valider la commande
         validate(command);
@@ -125,7 +126,9 @@ public abstract class BaseCommandService {
         try {
             // executer la commande
             CmdRes result = ch.handle(command);
-            return (ID) post(result);
+//            return (ID) post(result);
+            post(result);
+            return result;
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {

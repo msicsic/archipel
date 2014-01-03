@@ -6,6 +6,9 @@ import com.tentelemed.archipel.security.domain.model.RoleId;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,12 +16,12 @@ import javax.validation.constraints.Size;
  * Date: 18/12/13
  * Time: 21:42
  */
-public class CmdCreateRole extends Command<RoleId> {
+public class CmdRoleCreate extends Command<RoleId> {
     @NotNull @Size(min = 3, max = 32) public String name;
-    @NotNull public Right[] rights;
+    @NotNull public Set<Right> rights;
 
-    public CmdCreateRole(String name, Right... rights) {
+    public CmdRoleCreate(String name, Right... rights) {
         this.name = name;
-        this.rights = rights;
+        this.rights = new HashSet<>(Arrays.asList(rights));
     }
 }

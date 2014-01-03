@@ -1,11 +1,14 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
 import com.tentelemed.archipel.site.domain.model.Sector;
+import com.tentelemed.archipel.site.domain.model.SiteId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,17 +23,21 @@ public class LocationQ implements Comparable<LocationQ> {
         SECTOR, SERVICE, FU, AU
     }
 
-    @Id String code;
+    @Id @GeneratedValue Long id;
+    @NotNull SiteId siteId;
+    @NotNull String code;
     @NotNull Type type;
     @NotNull Sector.Type sectorType = Sector.Type.MED;
     @NotNull String name;
-    @NotNull @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER) List<LocationQ> children = new ArrayList<>();
+    @NotNull @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    Set<LocationQ> children = new HashSet<>();
     @ManyToOne LocationQ parent;
 
     public LocationQ() {
     }
 
-    public LocationQ(Type type, String name, String code) {
+    public LocationQ(SiteId siteId, Type type, String name, String code) {
+        this.siteId = siteId;
         this.type = type;
         this.name = name;
         this.code = code;
@@ -39,6 +46,22 @@ public class LocationQ implements Comparable<LocationQ> {
     public void addChild(LocationQ loc) {
         getChildren().add(loc);
         loc.setParent(this);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public SiteId getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(SiteId siteId) {
+        this.siteId = siteId;
     }
 
     public Type getType() {
@@ -65,11 +88,11 @@ public class LocationQ implements Comparable<LocationQ> {
         this.code = code;
     }
 
-    public List<LocationQ> getChildren() {
+    public Set<LocationQ> getChildren() {
         return children;
     }
 
-    public void setChildren(List<LocationQ> children) {
+    public void setChildren(Set<LocationQ> children) {
         this.children = children;
     }
 

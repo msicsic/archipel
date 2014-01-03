@@ -12,16 +12,16 @@ import java.util.Date;
  * Date: 18/12/13
  * Time: 21:42
  */
-public class CmdUpdateUserInfo extends Command<UserId> {
+public class CmdUserUpdateInfo extends Command<UserId> {
     @NotNull public String firstName;
     @NotNull public String lastName;
     public Date dob;
     @NotNull public String email;
 
-    public CmdUpdateUserInfo() {
+    public CmdUserUpdateInfo() {
     }
 
-    public CmdUpdateUserInfo(UserId id, String firstName, String lastName, Date dob, String email) {
+    public CmdUserUpdateInfo(UserId id, String firstName, String lastName, Date dob, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
