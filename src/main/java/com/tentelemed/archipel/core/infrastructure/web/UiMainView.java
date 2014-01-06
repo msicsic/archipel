@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.tentelemed.archipel.core.domain.model.Module;
-import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.vaadin.server.ClassResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;

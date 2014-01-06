@@ -1,9 +1,7 @@
 package com.tentelemed.archipel.site.domain.model;
 
 import com.tentelemed.archipel.core.domain.model.BaseEntity;
-import com.tentelemed.archipel.core.domain.model.BaseVO;
 
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;

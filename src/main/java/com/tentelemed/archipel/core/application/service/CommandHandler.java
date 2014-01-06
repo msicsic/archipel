@@ -1,7 +1,5 @@
 package com.tentelemed.archipel.core.application.service;
 
-import com.tentelemed.archipel.core.domain.model.EntityId;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Mael

@@ -4,7 +4,6 @@ import com.tentelemed.archipel.core.application.service.Command;
 import com.tentelemed.archipel.security.domain.model.UserId;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.

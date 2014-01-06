@@ -5,9 +5,7 @@ import com.tentelemed.archipel.site.domain.model.SiteId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,11 +34,12 @@ public class LocationQ implements Comparable<LocationQ> {
     public LocationQ() {
     }
 
-    public LocationQ(SiteId siteId, Type type, String name, String code) {
+    public LocationQ(SiteId siteId, Type type, String name, String code, LocationQ parent) {
         this.siteId = siteId;
         this.type = type;
         this.name = name;
         this.code = code;
+        this.parent = parent;
     }
 
     public void addChild(LocationQ loc) {

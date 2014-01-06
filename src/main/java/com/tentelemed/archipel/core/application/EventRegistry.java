@@ -23,10 +23,17 @@ public class EventRegistry {
 
     Map<Class<? extends DomainEvent>, Class<? extends BaseAggregateRoot>> registry = new HashMap<>();
     Map<Class<? extends DomainEvent>, Class<? extends BaseEntityQ>> registryQ = new HashMap<>();
+    Map<Class<? extends DomainEvent>, Class<?>> registryHandler = new HashMap<>();
 
-    public void addEntry(Class<? extends DomainEvent> eventClazz, Class<? extends BaseAggregateRoot> clazz, Class<? extends BaseEntityQ> clazzQ) {
+    public void addEntry(
+            Class<? extends DomainEvent> eventClazz,
+            Class<? extends BaseAggregateRoot> clazz, Class<? extends BaseEntityQ> clazzQ,
+            Class<?> evenHandlerClass
+
+    ) {
         registry.put(eventClazz, clazz);
         registryQ.put(eventClazz, clazzQ);
+        registryHandler.put(eventClazz, evenHandlerClass);
     }
 
     public Class<? extends BaseAggregateRoot> getClassForEvent(DomainEvent event) {
@@ -42,6 +49,15 @@ public class EventRegistry {
         for (Class<? extends DomainEvent> c : registryQ.keySet()) {
             if (c.isInstance(event)) {
                 return registryQ.get(c);
+            }
+        }
+        return null;
+    }
+
+    public Class<?> getHandlerClassForEvent(DomainEvent event) {
+        for (Class<? extends DomainEvent> c : registryHandler.keySet()) {
+            if (c.isInstance(event)) {
+                return registryHandler.get(c);
             }
         }
         return null;

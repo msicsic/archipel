@@ -1,5 +1,9 @@
 TODO :
 
+- La maj des ObjetQ devrait se faire dans un objet externe (mapper) car il est necessaire
+  de pouvoir accéder à JPA lors de l'application de l'evt (les infos completes ne sont pas
+  toutes présente dans l'evt en cours de traitement)
+
 - gestion des droits
 * les methodes "handle" des BO doivent etre privées
 

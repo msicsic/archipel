@@ -4,7 +4,7 @@ import com.google.common.base.Strings;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
-import com.tentelemed.archipel.security.application.event.UserDomainEvent;
+import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
@@ -178,7 +178,7 @@ public class UiUsers extends BaseView<UiUsersModel> {
 
     @Override
     public void onDomainEventReceived(DomainEvent event) {
-        if (event instanceof UserDomainEvent) {
+        if (event instanceof EvtUserDomainEvent) {
             if (event.isUpdate()) {
                 // rafraichir le contenu des cellules du tableau
                 table.refreshRowCache();

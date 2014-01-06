@@ -39,6 +39,7 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     }
 
     boolean displayed;
+
     @Override
     public void setDisplayed() {
         displayed = true;
@@ -122,13 +123,14 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
         postConstruct();
     }
 
-    public void postConstruct() {}
+    public void postConstruct() {
+    }
 
     public void onDomainEventReceived(DomainEvent event) {
 
     }
 
     protected boolean isPermitted(String action) {
-        return userService.isPermitted(getModel().getModule()+":"+action);
+        return userService.isPermitted(getModel().getModule() + ":" + action);
     }
 }

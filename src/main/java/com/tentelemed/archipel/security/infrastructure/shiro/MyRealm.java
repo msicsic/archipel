@@ -2,15 +2,12 @@ package com.tentelemed.archipel.security.infrastructure.shiro;
 
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.tentelemed.archipel.security.domain.model.Right;
-import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;

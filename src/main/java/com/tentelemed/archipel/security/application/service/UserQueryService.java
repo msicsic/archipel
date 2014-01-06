@@ -47,7 +47,7 @@ public class UserQueryService extends BaseQueryService {
 
     public UserQ getCurrentUser() {
         Subject currentUser = SecurityUtils.getSubject();
-        if (! currentUser.isAuthenticated()) return null;
+        if (!currentUser.isAuthenticated()) return null;
         String login = (String) currentUser.getPrincipal();
         return findByLogin(login);
     }
@@ -63,7 +63,7 @@ public class UserQueryService extends BaseQueryService {
 
     public boolean isPermitted(String right) {
         Subject currentUser = SecurityUtils.getSubject();
-        if (! currentUser.isAuthenticated()) return false;
+        if (!currentUser.isAuthenticated()) return false;
         return currentUser.isPermitted(right);
     }
 

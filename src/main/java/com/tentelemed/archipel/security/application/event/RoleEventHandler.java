@@ -7,7 +7,9 @@ package com.tentelemed.archipel.security.application.event;
  * Time: 14:52
  */
 public interface RoleEventHandler {
-    void handle(RoleRegistered event);
-    void handle(RoleDeleted event);
-    void handle(RoleRightsUpdated event);
+    void handle(EvtRoleRegistered event);
+
+    void handle(EvtRoleDeleted event);
+
+    void handle(EvtRoleRightsUpdated event);
 }

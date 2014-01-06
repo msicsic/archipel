@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.site.domain.event.RoomRegistered;
 import com.tentelemed.archipel.site.domain.model.Bed;
 import com.tentelemed.archipel.site.domain.model.RoomId;
 
@@ -67,10 +66,4 @@ public class RoomQ extends BaseEntityQ<RoomId> {
         return beds.size();
     }
 
-    public void applyEvent(RoomRegistered event) {
-        this.setLocationCode(event.getLocation().getCode());
-        this.setBeds(event.getBeds());
-        this.setMedical(event.isMedical());
-        this.setName(event.getName());
-    }
 }

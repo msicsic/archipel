@@ -18,7 +18,7 @@ import java.util.*;
  * Date: 10/12/13
  * Time: 11:40
  */
-public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
+public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
 
     @NotNull SiteType type;
     @NotNull String name;
@@ -33,8 +33,8 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         validate("type", cmd.type);
         validate("name", cmd.name);
         validate("ident", cmd.ident);
-        LocationQ sector = new LocationQ(getEntityId(), LocationQ.Type.SECTOR, "Default", "MED");
-        return _result(handle(new SiteRegistered(getEntityId(), cmd.type, cmd.name, cmd.ident, sector)));
+        LocationQ sector = new LocationQ(getEntityId(), LocationQ.Type.SECTOR, "Default", "MED", null);
+        return _result(handle(new EvtSiteRegistered(getEntityId(), cmd.type, cmd.name, cmd.ident, sector)));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         validate("type", cmd.type);
         validate("name", cmd.name);
         validate("ident", cmd.ident);
-        return _result(handle(new SiteMainInfoUpdated(getEntityId(), cmd.type, cmd.name, cmd.ident)));
+        return _result(handle(new EvtSiteMainInfoUpdated(getEntityId(), cmd.type, cmd.name, cmd.ident)));
     }
 
     @Override
@@ -60,12 +60,12 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
                 cmd.privateRoomAvailable
         );
         validate("info", info);
-        return _result(handle(new SiteAdditionalInfoUpdated(getEntityId(), info)));
+        return _result(handle(new EvtSiteAdditionalInfoUpdated(getEntityId(), info)));
     }
 
     @Override
     public CmdRes execute(CmdSiteDelete cmd) {
-        return _result(handle(new SiteDeleted(getEntityId())));
+        return _result(handle(new EvtSiteDeleted(getEntityId())));
     }
 
     public CmdRes createFunctionalUnit(String serviceCode, String code, String name) {
@@ -84,7 +84,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         if (found == null) {
             throw new DomainException("Service not found");
         } else {
-            return _result(handle(new SiteFunctionalUnitAdded(getEntityId(), serviceCode, code, name)));
+            return _result(handle(new EvtSiteFunctionalUnitAdded(getEntityId(), serviceCode, code, name)));
         }
     }
 
@@ -106,7 +106,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         if (found == null) {
             throw new DomainException("FunctionalUnit not found");
         } else {
-            return _result(handle(new SiteActivityUnitAdded(getEntityId(), parentCode, code, name)));
+            return _result(handle(new EvtSiteActivityUnitAdded(getEntityId(), parentCode, code, name)));
         }
     }
 
@@ -125,7 +125,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         if (found == null) {
             throw new DomainException("Sector not found");
         } else {
-            return _result(handle(new SiteServiceAdded(getEntityId(), cmd.sectorCode, cmd.code, cmd.name)));
+            return _result(handle(new EvtSiteServiceAdded(getEntityId(), cmd.sectorCode, cmd.code, cmd.name)));
         }
     }
 
@@ -140,7 +140,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
                 throw new DomainException("This type of Sector is already present");
             }
         }
-        return _result(handle(new SiteSectorAdded(getEntityId(), cmd.type, cmd.code, cmd.name)));
+        return _result(handle(new EvtSiteSectorAdded(getEntityId(), cmd.type, cmd.code, cmd.name)));
     }
 
     @Override
@@ -150,7 +150,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
                 if (sector.getType().equals(Sector.Type.MED)) {
                     throw new DomainException("Default sector (MED) cannot be deleted");
                 }
-                return _result(handle(new SiteSectorDeleted(getEntityId(), cmd.code)));
+                return _result(handle(new EvtSiteSectorDeleted(getEntityId(), cmd.code)));
             }
         }
         throw new DomainException("this SectorCode is not present in this Site");
@@ -161,7 +161,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         for (Sector sector : sectors) {
             for (Service service : sector.getServices()) {
                 if (service.getCode().equals(cmd.code)) {
-                    return _result(handle(new SiteServiceDeleted(getEntityId(), cmd.code)));
+                    return _result(handle(new EvtSiteServiceDeleted(getEntityId(), cmd.code)));
                 }
             }
         }
@@ -173,7 +173,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
             for (Service service : sector.getServices()) {
                 for (FunctionalUnit fu : service.getUnits()) {
                     if (fu.getCode().equals(code)) {
-                        return _result(handle(new SiteFunctionalUnitDeleted(getEntityId(), code)));
+                        return _result(handle(new EvtSiteFunctionalUnitDeleted(getEntityId(), code)));
                     }
                 }
             }
@@ -187,7 +187,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
                 for (FunctionalUnit fu : service.getUnits()) {
                     for (ActivityUnit au : fu.getUnits()) {
                         if (au.getCode().equals(code)) {
-                            return _result(handle(new SiteActivityUnitDeleted(getEntityId(), code)));
+                            return _result(handle(new EvtSiteActivityUnitDeleted(getEntityId(), code)));
                         }
                     }
                 }
@@ -225,13 +225,13 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
 
     // EVENTS
 
-    SiteSectorAdded handle(SiteSectorAdded event) {
+    EvtSiteSectorAdded handle(EvtSiteSectorAdded event) {
         Sector sector = new Sector(event.getSectorType(), event.getSectorName(), event.getSectorCode());
         sectors.add(sector);
         return handled(event);
     }
 
-    SiteSectorDeleted handle(SiteSectorDeleted event) {
+    EvtSiteSectorDeleted handle(EvtSiteSectorDeleted event) {
         for (Sector sector : sectors) {
             if (sector.getCode().equals(event.getSectorCode())) {
                 sectors.remove(sector);
@@ -241,7 +241,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         return handled(event);
     }
 
-    SiteServiceAdded handle(SiteServiceAdded event) {
+    EvtSiteServiceAdded handle(EvtSiteServiceAdded event) {
         for (Sector sector : sectors) {
             if (sector.getCode().equals(event.getParent())) {
                 new Service(sector, event.getName(), event.getCode());
@@ -250,7 +250,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         return handled(event);
     }
 
-    SiteServiceDeleted handle(SiteServiceDeleted event) {
+    EvtSiteServiceDeleted handle(EvtSiteServiceDeleted event) {
         for (Sector sector : sectors) {
             for (Service service : sector.getServices()) {
                 if (service.getCode().equals(event.getServiceCode())) {
@@ -262,7 +262,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         return handled(event);
     }
 
-    SiteFunctionalUnitAdded handle(SiteFunctionalUnitAdded event) {
+    EvtSiteFunctionalUnitAdded handle(EvtSiteFunctionalUnitAdded event) {
         for (Sector sector : sectors) {
             for (Service service : sector.getServices()) {
                 if (service.getCode().equals(event.getParent())) {
@@ -273,7 +273,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         return handled(event);
     }
 
-    SiteFunctionalUnitDeleted handle(SiteFunctionalUnitDeleted event) {
+    EvtSiteFunctionalUnitDeleted handle(EvtSiteFunctionalUnitDeleted event) {
         for (Sector sector : sectors) {
             for (Service service : sector.getServices()) {
                 for (FunctionalUnit fu : service.getUnits()) {
@@ -287,7 +287,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         return handled(event);
     }
 
-    SiteActivityUnitAdded handle(SiteActivityUnitAdded event) {
+    EvtSiteActivityUnitAdded handle(EvtSiteActivityUnitAdded event) {
         for (Sector sector : sectors) {
             for (Service service : sector.getServices()) {
                 for (FunctionalUnit fu : service.getUnits()) {
@@ -300,7 +300,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         return handled(event);
     }
 
-    SiteActivityUnitDeleted handle(SiteActivityUnitDeleted event) {
+    EvtSiteActivityUnitDeleted handle(EvtSiteActivityUnitDeleted event) {
         for (Sector sector : sectors) {
             for (Service service : sector.getServices()) {
                 for (FunctionalUnit fu : service.getUnits()) {
@@ -316,7 +316,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         return handled(event);
     }
 
-    SiteRegistered handle(SiteRegistered event) {
+    EvtSiteRegistered handle(EvtSiteRegistered event) {
         apply(event);
         LocationQ sectorQ = event.getDefaultSector();
         Sector sector = new Sector(sectorQ.getSectorType(), sectorQ.getName(), sectorQ.getCode());
@@ -324,25 +324,25 @@ public class Site extends BaseAggregateRoot<SiteId> implements CmdHandlerSite {
         return handled(event);
     }
 
-    SiteMainInfoUpdated handle(SiteMainInfoUpdated event) {
+    EvtSiteMainInfoUpdated handle(EvtSiteMainInfoUpdated event) {
         return apply(event);
     }
 
-    SiteAdditionalInfoUpdated handle(SiteAdditionalInfoUpdated event) {
+    EvtSiteAdditionalInfoUpdated handle(EvtSiteAdditionalInfoUpdated event) {
         return apply(event);
     }
 
-    SiteRoomAdded handle(SiteRoomAdded event) {
+    EvtSiteRoomAdded handle(EvtSiteRoomAdded event) {
         rooms.add(event.getRoomId());
         return handled(event);
     }
 
-    SiteRoomRemoved handle(SiteRoomRemoved event) {
+    EvtSiteRoomRemoved handle(EvtSiteRoomRemoved event) {
         rooms.remove(event.getRoomId());
         return handled(event);
     }
 
-    SiteDeleted handle(SiteDeleted event) {
+    EvtSiteDeleted handle(EvtSiteDeleted event) {
         // ras
         return event;
     }

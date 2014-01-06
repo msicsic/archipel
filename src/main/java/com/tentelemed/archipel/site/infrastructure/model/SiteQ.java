@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.site.domain.event.*;
 import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.domain.model.SiteId;
 import com.tentelemed.archipel.site.domain.model.SiteInfo;
@@ -72,34 +71,12 @@ public class SiteQ extends BaseEntityQ<SiteId> {
         this.sectors = sectors;
     }
 
-    void applyEvent(SiteRegistered event) {
-        this.id = event.getId().getId();
-        this.ident = event.getIdent();
-        this.name = event.getName();
-        this.type = event.getType();
-        this.sectors.add(event.getDefaultSector());
-    }
-
-    void applyEvent(SiteAdditionalInfoUpdated event) {
-        this.info = event.getInfo();
-    }
-
-    void applyEvent(SiteDeleted event) {
-        // ras
-    }
-
-    void applyEvent(SiteMainInfoUpdated event) {
-        this.name = event.getName();
-        this.type = event.getType();
-        this.ident = event.getIdent();
-    }
-
-    /*void applyEvent(SiteRoomAdded event) {
+    /*void applyEvent(EvtSiteRoomAdded event) {
         // TODO
 
     }
 
-    void applyEvent(SiteRoomRemoved event) {
+    void applyEvent(EvtSiteRoomRemoved event) {
         // TODO
     }*/
 
@@ -145,43 +122,6 @@ public class SiteQ extends BaseEntityQ<SiteId> {
             }
         }
         return false;
-    }
-
-    void applyEvent(SiteServiceAdded event) {
-        LocationQ service = new LocationQ(event.getId(), LocationQ.Type.SERVICE, event.getName(), event.getCode());
-        addLocation(0, 1, null, sectors, service);
-    }
-
-    void applyEvent(SiteServiceDeleted event) {
-        removeLocation(0, 1, sectors, event.getServiceCode());
-    }
-
-    void applyEvent(SiteSectorAdded event) {
-        LocationQ sector = new LocationQ(event.getId(), LocationQ.Type.SECTOR, event.getSectorName(), event.getSectorCode());
-        sector.setSectorType(event.getSectorType());
-        addLocation(0, 0, null, sectors, sector);
-    }
-
-    void applyEvent(SiteSectorDeleted event) {
-        removeLocation(0, 0, sectors, event.getSectorCode());
-    }
-
-    void applyEvent(SiteFunctionalUnitAdded event) {
-        LocationQ location = new LocationQ(event.getId(), LocationQ.Type.FU, event.getName(), event.getCode());
-        addLocation(0, 2, null, sectors, location);
-    }
-
-    void applyEvent(SiteFunctionalUnitDeleted event) {
-        removeLocation(0, 2, sectors, event.getCode());
-    }
-
-    void applyEvent(SiteActivityUnitAdded event) {
-        LocationQ location = new LocationQ(event.getId(), LocationQ.Type.FU, event.getName(), event.getCode());
-        addLocation(0, 3, null, sectors, location);
-    }
-
-    void applyEvent(SiteActivityUnitDeleted event) {
-        removeLocation(0, 3, sectors, event.getCode());
     }
 
     public List<Sector.Type> getRemainingSectorTypes() {

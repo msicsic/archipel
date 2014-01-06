@@ -19,7 +19,7 @@ import java.util.Date;
  * Date: 21/10/13
  * Time: 16:45
  */
-public class User extends BaseAggregateRoot<UserId> implements CmdHandlerUser {
+public class User extends BaseAggregateRoot<UserId> implements UserCmdHandler {
 
     public static class ChangePasswordException extends DomainException {
     }
@@ -45,12 +45,12 @@ public class User extends BaseAggregateRoot<UserId> implements CmdHandlerUser {
         validate("dob", cmd.dob);
         validate("email", cmd.email);
         validate("login", cmd.login);
-        return _result(handle(new UserRegistered(getEntityId(), cmd.roleId, cmd.firstName, cmd.lastName, cmd.dob, cmd.email, new Credentials(cmd.login, generatePassword()))));
+        return _result(handle(new EvtUserRegistered(getEntityId(), cmd.roleId, cmd.firstName, cmd.lastName, cmd.dob, cmd.email, new Credentials(cmd.login, generatePassword()))));
     }
 
     @Override
     public CmdRes execute(CmdUserDelete cmd) {
-        return _result(handle(new UserDeleted(getEntityId())));
+        return _result(handle(new EvtUserDeleted(getEntityId())));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class User extends BaseAggregateRoot<UserId> implements CmdHandlerUser {
         validate("lastName", cmd.lastName);
         validate("dob", cmd.dob);
         validate("email", cmd.email);
-        return _result(handle(new UserInfoUpdated(getEntityId(), cmd.firstName, cmd.lastName, cmd.dob, cmd.email)));
+        return _result(handle(new EvtUserInfoUpdated(getEntityId(), cmd.firstName, cmd.lastName, cmd.dob, cmd.email)));
     }
 
     @Override
@@ -67,23 +67,23 @@ public class User extends BaseAggregateRoot<UserId> implements CmdHandlerUser {
         if (!Objects.equal(cmd.old, getPassword()) || !Objects.equal(cmd.new1, cmd.new2)) {
             throw new ChangePasswordException();
         }
-        return _result(handle(new UserPasswordUpdated(getEntityId(), cmd.new1)));
+        return _result(handle(new EvtUserPasswordUpdated(getEntityId(), cmd.new1)));
     }
 
     /*public CmdRes changeRole(RoleId roleId) {
-        return _result(handle(new UserRoleUpdated(getEntityId(), roleId)));
+        return _result(handle(new EvtUserRoleUpdated(getEntityId(), roleId)));
     }*/
 
 
     // ********************* EVENTS ******************************
     // ***********************************************************
 
-    UserDeleted handle(UserDeleted event) {
+    EvtUserDeleted handle(EvtUserDeleted event) {
         // ras
         return null;
     }
 
-    UserRegistered handle(UserRegistered event) {
+    EvtUserRegistered handle(EvtUserRegistered event) {
         this.roleId = event.getRoleId();
         this.firstName = event.getFirstName();
         this.lastName = event.getLastName();
@@ -93,7 +93,7 @@ public class User extends BaseAggregateRoot<UserId> implements CmdHandlerUser {
         return handled(event);
     }
 
-    UserInfoUpdated handle(UserInfoUpdated event) {
+    EvtUserInfoUpdated handle(EvtUserInfoUpdated event) {
         this.firstName = event.getFirstName();
         this.lastName = event.getLastName();
         this.dob = event.getDob();
@@ -101,12 +101,12 @@ public class User extends BaseAggregateRoot<UserId> implements CmdHandlerUser {
         return handled(event);
     }
 
-    UserPasswordUpdated handle(UserPasswordUpdated event) {
+    EvtUserPasswordUpdated handle(EvtUserPasswordUpdated event) {
         this.credentials = new Credentials(credentials.getLogin(), event.getPassword());
         return handled(event);
     }
 
-    UserRoleUpdated handle(UserRoleUpdated event) {
+    EvtUserRoleUpdated handle(EvtUserRoleUpdated event) {
         this.roleId = event.getRoleId();
         return handled(event);
     }

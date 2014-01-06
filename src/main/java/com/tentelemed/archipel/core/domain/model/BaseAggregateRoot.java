@@ -72,8 +72,8 @@ public abstract class BaseAggregateRoot<B extends EntityId> extends BaseEntity {
             handle(event);
         }*/
         for (AbstractDomainEvent event : events) {
-            if (! event.processed) {
-                throw new RuntimeException("Only processed events can be returned by a command : "+event);
+            if (!event.processed) {
+                throw new RuntimeException("Only processed events can be returned by a command : " + event);
             }
         }
         return new CmdRes(this, Arrays.asList(events));
@@ -97,7 +97,7 @@ public abstract class BaseAggregateRoot<B extends EntityId> extends BaseEntity {
     }
 
     protected <E extends AbstractDomainEvent> E apply(E event) {
-        EventUtil.applyEvent(this, event, true);
+        EventUtil.autoApply(this, event);
         return handled(event);
     }
 

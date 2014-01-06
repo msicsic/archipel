@@ -2,7 +2,7 @@ package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreateSector;
-import com.tentelemed.archipel.site.application.service.SiteCommandService;
+import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @Component
 @Scope("prototype")
 public class UiSiteCreateSectorModel extends BaseViewModel {
-    @Autowired SiteCommandService serviceWrite;
+    @Autowired SiteCmdHandler serviceWrite;
     private LocationQ sector;
     private SiteQ currentSite;
     private CmdSiteCreateSector cmd = beanify(new CmdSiteCreateSector());

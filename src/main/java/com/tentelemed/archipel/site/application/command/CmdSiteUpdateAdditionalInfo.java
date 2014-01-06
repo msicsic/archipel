@@ -24,4 +24,6 @@ public class CmdSiteUpdateAdditionalInfo extends Command<SiteId> {
     public boolean emergenciesAvailable;
     public boolean drugstoreAvailable;
     public boolean privateRoomAvailable;
+
+
 }

@@ -2,15 +2,16 @@ package com.tentelemed.archipel.site.application.service;
 
 import com.tentelemed.archipel.core.application.service.BaseQueryService;
 import com.tentelemed.archipel.core.domain.model.Country;
-import com.tentelemed.archipel.site.domain.interfaces.SiteRepository;
 import com.tentelemed.archipel.site.domain.model.Bank;
 import com.tentelemed.archipel.site.domain.model.SiteId;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
+import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -24,26 +25,36 @@ import java.util.List;
 @Transactional
 public class SiteQueryService extends BaseQueryService {
 
-    @Autowired
-    SiteRepository repo;
+//    @Autowired
+//    SiteRepository repo;
+
+    @PersistenceContext
+    EntityManager em;
 
     public List<SiteQ> getAll() {
-        return repo.getAll();
+        return em.createQuery("select m from SiteQ m").getResultList();
     }
 
-    public SiteQ getCenter(SiteId id) {
-        return repo.load(id);
+    public SiteQ getSite(SiteId id) {
+        return em.find(SiteQ.class, id.getId());
     }
 
     public List<Country> getCountries() {
-        return repo.getCountries();
+        return em.createQuery("select c from Country c").getResultList();
     }
 
     public List<Bank> getBanks() {
-        return repo.getBanks();
+        return em.createQuery("select c from Bank c").getResultList();
     }
 
     public List<RoomQ> getRooms(SiteQ center) {
-        return repo.getRooms(center);
+        return em.createQuery("select c from RoomQ c").getResultList();
+    }
+
+    public LocationQ findLocation(SiteId siteId, String code) {
+        return (LocationQ) em.createQuery("select l from LocationQ l where l.code=:code and l.siteId=:siteId")
+                .setParameter("code", code)
+                .setParameter("siteId", siteId)
+                .getSingleResult();
     }
 }

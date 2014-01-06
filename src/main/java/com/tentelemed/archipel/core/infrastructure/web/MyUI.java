@@ -90,7 +90,7 @@ public class MyUI extends UI {
         // recuperation du module
         Module module = coreService.getModule(moduleId);
         if (module.isRoot()) {
-            if (! mainView.isDisplayed()) {
+            if (!mainView.isDisplayed()) {
                 mainView.onDisplay();
                 mainView.setDisplayed();
             }
@@ -103,7 +103,7 @@ public class MyUI extends UI {
                 currentView.onClose();
             }
             view.setModule(moduleId);
-            if (! view.isDisplayed()) {
+            if (!view.isDisplayed()) {
                 view.onDisplay();
                 view.setDisplayed();
             }
@@ -114,7 +114,7 @@ public class MyUI extends UI {
     }
 
     private void showView(IView view) {
-        if (! view.isDisplayed()) {
+        if (!view.isDisplayed()) {
             view.onDisplay();
             view.setDisplayed();
         }

@@ -3,10 +3,11 @@ package com.tentelemed.archipel.core.infrastructure.config;
 import com.tentelemed.archipel.core.domain.model.Country;
 import com.tentelemed.archipel.security.application.command.CmdRoleCreate;
 import com.tentelemed.archipel.security.application.command.CmdUserCreate;
-import com.tentelemed.archipel.site.domain.model.Bank;
-import com.tentelemed.archipel.security.application.service.UserCommandService;
+import com.tentelemed.archipel.security.application.command.RoleCmdHandler;
+import com.tentelemed.archipel.security.application.command.UserCmdHandler;
 import com.tentelemed.archipel.security.domain.model.Right;
 import com.tentelemed.archipel.security.domain.model.RoleId;
+import com.tentelemed.archipel.site.domain.model.Bank;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -36,8 +37,8 @@ import java.util.Date;
 public class DbInit {
     private final static Logger log = LoggerFactory.getLogger(DbInit.class);
 
-    @Autowired
-    UserCommandService service;
+    @Autowired RoleCmdHandler serviceRole;
+    @Autowired UserCmdHandler serviceUser;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -62,10 +63,10 @@ public class DbInit {
                 jdbcTemplate.update(
                         "create table T_AGGREGATE (c_aggregate_id INTEGER NOT NULL, c_type VARCHAR(128) NOT NULL, c_version INTEGER NOT NULL, PRIMARY KEY(c_aggregate_id), INDEX idx_version (c_version))"
                 );
-                RoleId role1 = (RoleId) service.execute(new CmdRoleCreate("administrateur", Right.RIGHT_A)).aggregate.getEntityId();
-                RoleId role2 = (RoleId) service.execute(new CmdRoleCreate("user", Right.RIGHT_B)).aggregate.getEntityId();
+                RoleId role1 = (RoleId) serviceRole.execute(new CmdRoleCreate("administrateur", Right.RIGHT_A)).aggregate.getEntityId();
+                RoleId role2 = (RoleId) serviceRole.execute(new CmdRoleCreate("user", Right.RIGHT_B)).aggregate.getEntityId();
                 for (int i = 0; i < 100; i++) {
-                    service.execute(new CmdUserCreate(i%2==0?role1:role2, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i));
+                    serviceUser.execute(new CmdUserCreate(i % 2 == 0 ? role1 : role2, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i));
                 }
             }
 

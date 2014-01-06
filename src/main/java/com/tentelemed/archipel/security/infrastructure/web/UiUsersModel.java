@@ -6,8 +6,8 @@ import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.security.application.command.CmdUserCreate;
 import com.tentelemed.archipel.security.application.command.CmdUserDelete;
 import com.tentelemed.archipel.security.application.command.CmdUserUpdateInfo;
-import com.tentelemed.archipel.security.application.event.UserDomainEvent;
-import com.tentelemed.archipel.security.application.service.UserCommandService;
+import com.tentelemed.archipel.security.application.command.UserCmdHandler;
+import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
@@ -33,7 +33,7 @@ import java.util.Objects;
 public class UiUsersModel extends BaseViewModel {
 
     @Autowired
-    UserCommandService userCommand;
+    UserCmdHandler userCommand;
 
     @Autowired
     UserQueryService userQuery;
@@ -93,7 +93,7 @@ public class UiUsersModel extends BaseViewModel {
     }
 
     @Subscribe
-    public void handleEvent(UserDomainEvent event) {
+    public void handleEvent(EvtUserDomainEvent event) {
         if (event.isDelete()) {
             if (getSelectedUser() != null && Objects.equals(getSelectedUser().getId(), event.getId().getId())) {
                 setSelectedUser(null);

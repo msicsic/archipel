@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.security.application.event.*;
 import com.tentelemed.archipel.security.domain.model.RoleId;
 import com.tentelemed.archipel.security.domain.model.UserId;
 import org.hibernate.validator.constraints.Email;
@@ -20,7 +19,7 @@ import java.util.Date;
  * Time: 01:13
  */
 @Entity
-public class UserQ extends BaseEntityQ<UserId> implements UserEventHandler {
+public class UserQ extends BaseEntityQ<UserId> {
     @NotNull @Size(min = 2, max = 50) String firstName;
     @NotNull @Size(min = 2, max = 50) String lastName;
     @Temporal(TemporalType.TIME) Date dob;
@@ -97,33 +96,4 @@ public class UserQ extends BaseEntityQ<UserId> implements UserEventHandler {
         this.roleId = roleId;
     }
 
-    public void handle(UserDeleted event) {
-        // ras
-    }
-
-    public void handle(UserInfoUpdated event) {
-        firstName = event.getFirstName();
-        lastName = event.getLastName();
-        dob = event.getDob();
-        email = event.getEmail();
-    }
-
-    public void handle(UserPasswordUpdated event) {
-        password = event.getPassword();
-    }
-
-    public void handle(UserRoleUpdated event) {
-        roleId = event.getRoleId();
-    }
-
-    public void handle(UserRegistered event) {
-        this.dob = event.getDob();
-        this.email = event.getEmail();
-        this.firstName = event.getFirstName();
-        this.lastName = event.getLastName();
-        this.id = event.getId().getId();
-        this.login = event.getCredentials().getLogin();
-        this.password = event.getCredentials().getPassword();
-        this.roleId = event.getRoleId();
-    }
 }

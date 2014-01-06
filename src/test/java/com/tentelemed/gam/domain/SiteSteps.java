@@ -4,7 +4,9 @@ import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
 import com.tentelemed.archipel.core.domain.model.*;
 import com.tentelemed.archipel.infrastructure.config.TestSpringConfiguration;
-import com.tentelemed.archipel.site.domain.event.SiteRegistered;
+import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
+import com.tentelemed.archipel.site.application.command.CmdSiteUpdateAdditionalInfo;
+import com.tentelemed.archipel.site.domain.event.EvtSiteRegistered;
 import com.tentelemed.archipel.site.domain.model.*;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -31,7 +33,7 @@ public class SiteSteps {
         context.register(TestSpringConfiguration.class);
         context.refresh();
         EventRegistry registry = (EventRegistry) context.getBean("eventRegistry");
-        registry.addEntry(SiteRegistered.class, Site.class, null);
+        registry.addEntry(EvtSiteRegistered.class, Site.class, null, null);
     }
 
     private EventStore getEventStore() {
@@ -45,7 +47,7 @@ public class SiteSteps {
     @When("the user register a new Site with name center1, type CHU, ident CTR1")
     public void whenTheUserRegisterANewMedicalCenterWithNameCenter1TypeCHUIdentCTR1() {
         center = getEventStore().get(Site.class);
-        center.register(SiteType.CHU, "center1", "CTR1");
+        center.execute(new CmdSiteCreate(SiteType.CHU, "center1", "CTR1"));
         System.err.println("hop");
     }
 
@@ -74,7 +76,7 @@ public class SiteSteps {
     @Given("a Site")
     public void givenAMedicalCenter() {
         center = getEventStore().get(Site.class);
-        center.register(SiteType.CHU, "center1", "CTR1");
+        center.execute(new CmdSiteCreate(SiteType.CHU, "center1", "CTR1"));
     }
 
     @When("the user update the additional infos")
@@ -84,7 +86,20 @@ public class SiteSteps {
         String fax = "0155200800";
         Bank bank = new Bank("BNP", "BNP");
         SiteInfo info = new SiteInfo("siret", address, phone, fax, "Dupont", "BNP", true, true, true);
-        center.updateAdditionalInfo(info);
+        CmdSiteUpdateAdditionalInfo cmd = new CmdSiteUpdateAdditionalInfo();
+        cmd.bankCode = "BNP";
+        cmd.countryIso = "FRA";
+        cmd.directorName = "Durant";
+        cmd.drugstoreAvailable = true;
+        cmd.emergenciesAvailable = true;
+        cmd.privateRoomAvailable = true;
+        cmd.fax = null;
+        cmd.phone = null;
+        cmd.postalCode = "75000";
+        cmd.siret = "FR123456";
+        cmd.street = "102 Vaillant";
+        cmd.town = "Paris";
+        center.execute(cmd);
     }
 
     @Then("the Site contains the modified data")

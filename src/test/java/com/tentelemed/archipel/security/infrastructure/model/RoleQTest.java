@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.security.infrastructure.model;
 
-import com.tentelemed.archipel.security.application.event.RoleEventHandler;
-import com.tentelemed.archipel.security.application.event.RoleRegistered;
-import com.tentelemed.archipel.security.application.event.RoleRightsUpdated;
+import com.tentelemed.archipel.security.application.event.*;
+import com.tentelemed.archipel.security.application.event.EvtRoleDeleted;
+import com.tentelemed.archipel.security.application.event.EvtRoleRightsUpdated;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,11 +27,17 @@ public class RoleQTest implements RoleEventHandler {
 
     @Test
     @Override
-    public void handle(RoleRegistered event) {
+    public void handle(EvtRoleRegistered event) {
         System.err.println("hop");
     }
 
-    @Override public void handle(RoleRightsUpdated event) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    @Override
+    public void handle(EvtRoleDeleted event) {
+        // TODO
+    }
+
+    @Override
+    public void handle(EvtRoleRightsUpdated event) {
+        // TODO
     }
 }

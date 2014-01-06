@@ -81,7 +81,7 @@ public abstract class BaseViewModel {
 
     protected void show(BasePopup view) {
         view.setModule(module);
-        if (! view.isDisplayed()) {
+        if (!view.isDisplayed()) {
             view.onDisplay();
             view.setDisplayed();
         }

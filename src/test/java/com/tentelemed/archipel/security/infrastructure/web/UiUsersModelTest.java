@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
+import com.tentelemed.archipel.security.application.command.UserCmdHandler;
 import com.tentelemed.archipel.security.application.command.CmdUserDelete;
 import com.tentelemed.archipel.security.application.command.CmdUserUpdateInfo;
-import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.domain.model.UserId;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.junit.Before;
@@ -28,7 +28,7 @@ public class UiUsersModelTest {
     UiUsersModel model;
 
     @Mock
-    UserCommandService service;
+    UserCmdHandler service;
 
     @Before
     public void setUp() {

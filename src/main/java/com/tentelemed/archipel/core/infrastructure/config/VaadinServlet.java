@@ -4,6 +4,9 @@ import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.service.CoreService;
 import com.tentelemed.archipel.core.infrastructure.web.MyUI;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -30,16 +33,23 @@ import javax.servlet.annotation.WebServlet;
         productionMode = false,
         ui = MyUI.class)
 public class VaadinServlet extends SpringVaadinServlet implements WebApplicationInitializer {
-
+    public final static Logger log = LoggerFactory.getLogger(VaadinServlet.class);
     private AnnotationConfigWebApplicationContext context;
 
     @Override
     public void init() throws ServletException {
         System.err.println("VaadinServlet.init");
+
     }
 
     @Override
     public void onStartup(ServletContext container) throws ServletException {
+        // Set up a simple configuration that logs on the console.
+        //BasicConfigurator.configure();
+        PropertyConfigurator.configure(getClass().getClassLoader().getResourceAsStream("log4j.properties"));
+
+        log.info("HOP");
+
         System.err.println("VaadinServlet.onStartup");
         // Create the 'root' Spring application context
         context = new AnnotationConfigWebApplicationContext();

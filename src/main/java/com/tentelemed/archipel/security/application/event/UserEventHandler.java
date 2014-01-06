@@ -7,9 +7,13 @@ package com.tentelemed.archipel.security.application.event;
  * Time: 15:21
  */
 public interface UserEventHandler {
-    void handle(UserDeleted event);
-    void handle(UserInfoUpdated event);
-    void handle(UserPasswordUpdated event);
-    void handle(UserRegistered event);
-    void handle(UserRoleUpdated event);
+    void handle(EvtUserDeleted event);
+
+    void handle(EvtUserInfoUpdated event);
+
+    void handle(EvtUserPasswordUpdated event);
+
+    void handle(EvtUserRegistered event);
+
+    void handle(EvtUserRoleUpdated event);
 }

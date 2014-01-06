@@ -7,18 +7,22 @@ import com.tentelemed.archipel.core.application.event.LogoutRequestEvent;
 import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.core.infrastructure.web.RootView;
-import com.tentelemed.archipel.site.domain.event.SiteDomainEvent;
-import com.tentelemed.archipel.site.domain.event.RoomDomainEvent;
-import com.tentelemed.archipel.site.domain.model.Room;
-import com.tentelemed.archipel.site.domain.model.Site;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
-import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
-import com.tentelemed.archipel.security.application.event.RoleDomainEvent;
-import com.tentelemed.archipel.security.application.event.UserDomainEvent;
+import com.tentelemed.archipel.security.application.event.EvtRoleDomainEvent;
+import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
+import com.tentelemed.archipel.security.application.event.RoleEventHandler;
+import com.tentelemed.archipel.security.application.event.UserEventHandler;
 import com.tentelemed.archipel.security.domain.model.Role;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
+import com.tentelemed.archipel.site.domain.event.EvtRoomDomainEvent;
+import com.tentelemed.archipel.site.domain.event.EvtSiteDomainEvent;
+import com.tentelemed.archipel.site.domain.event.RoomEventHandler;
+import com.tentelemed.archipel.site.domain.event.SiteEventHandler;
+import com.tentelemed.archipel.site.domain.model.Room;
+import com.tentelemed.archipel.site.domain.model.Site;
+import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
+import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.vaadin.ui.AbstractComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,10 +147,10 @@ public class CoreService extends BaseService {
     }
 
     private void _initEventRegistry() {
-        eventRegistry.addEntry(UserDomainEvent.class, User.class, UserQ.class);
-        eventRegistry.addEntry(RoleDomainEvent.class, Role.class, RoleQ.class);
-        eventRegistry.addEntry(SiteDomainEvent.class, Site.class, SiteQ.class);
-        eventRegistry.addEntry(RoomDomainEvent.class, Room.class, RoomQ.class);
+        eventRegistry.addEntry(EvtUserDomainEvent.class, User.class, UserQ.class, UserEventHandler.class);
+        eventRegistry.addEntry(EvtRoleDomainEvent.class, Role.class, RoleQ.class, RoleEventHandler.class);
+        eventRegistry.addEntry(EvtSiteDomainEvent.class, Site.class, SiteQ.class, SiteEventHandler.class);
+        eventRegistry.addEntry(EvtRoomDomainEvent.class, Room.class, RoomQ.class, RoomEventHandler.class);
     }
 
     public void initApplication() {

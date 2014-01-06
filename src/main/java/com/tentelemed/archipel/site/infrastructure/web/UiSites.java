@@ -3,7 +3,7 @@ package com.tentelemed.archipel.site.infrastructure.web;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
-import com.tentelemed.archipel.site.domain.event.SiteDomainEvent;
+import com.tentelemed.archipel.site.domain.event.EvtSiteDomainEvent;
 import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
@@ -168,7 +168,7 @@ public class UiSites extends BaseView<UiSitesModel> {
                 Item item = treeTable.addItem(sector);
                 item.getItemProperty("name").setValue(sector.getName());
                 item.getItemProperty("code").setValue(sector.getCode());
-                item.getItemProperty("type").setValue("Sector (" + sector.getSectorType().name()+")");
+                item.getItemProperty("type").setValue("Sector (" + sector.getSectorType().name() + ")");
                 item.getItemProperty("action").setValue(createActionPanel(sector));
                 for (LocationQ service : sector.getChildren()) {
                     item = treeTable.addItem(service);
@@ -210,7 +210,7 @@ public class UiSites extends BaseView<UiSitesModel> {
             Button btAddService = new Button("Add Service");
             btAddService.addStyleName("small");
 
-            if (loc.getSectorType() == Sector.Type.MED && model.getCurrentSite().getRemainingSectorTypes().size()>0 ) {
+            if (loc.getSectorType() == Sector.Type.MED && model.getCurrentSite().getRemainingSectorTypes().size() > 0) {
                 Button btAddSector = new Button("Add Sector");
                 btAddSector.addStyleName("small");
                 layout.addComponent(btAddSector);
@@ -227,7 +227,7 @@ public class UiSites extends BaseView<UiSitesModel> {
                 btDeleteSector.addClickListener(new Button.ClickListener() {
                     @Override
                     public void buttonClick(Button.ClickEvent event) {
-                       model.deleteSector(loc);
+                        model.deleteSector(loc);
                     }
                 });
             }
@@ -344,7 +344,7 @@ public class UiSites extends BaseView<UiSitesModel> {
 
     @Override
     public void onDomainEventReceived(DomainEvent event) {
-        if (event instanceof SiteDomainEvent) {
+        if (event instanceof EvtSiteDomainEvent) {
             initCombo();
             refreshUI();
         }

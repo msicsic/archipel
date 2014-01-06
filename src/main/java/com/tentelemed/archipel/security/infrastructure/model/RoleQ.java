@@ -3,10 +3,6 @@ package com.tentelemed.archipel.security.infrastructure.model;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.security.application.event.RoleDeleted;
-import com.tentelemed.archipel.security.application.event.RoleEventHandler;
-import com.tentelemed.archipel.security.application.event.RoleRegistered;
-import com.tentelemed.archipel.security.application.event.RoleRightsUpdated;
 import com.tentelemed.archipel.security.domain.model.Right;
 import com.tentelemed.archipel.security.domain.model.RoleId;
 
@@ -26,7 +22,7 @@ import java.util.Set;
  * Time: 01:13
  */
 @Entity
-public class RoleQ extends BaseEntityQ<RoleId> implements RoleEventHandler {
+public class RoleQ extends BaseEntityQ<RoleId> {
     @NotNull @Size(min = 2, max = 50) String name;
     @NotNull @Size(min = 2, max = 20000) String rightString = null;
     @Transient transient Set<Right> rights = null;
@@ -84,23 +80,6 @@ public class RoleQ extends BaseEntityQ<RoleId> implements RoleEventHandler {
     public void setRightString(String rightString) {
         this.rightString = rightString;
         this.rights = null;
-    }
-
-    @Override
-    public void handle(RoleRegistered event) {
-        id = event.getId().getId();
-        name = event.getName();
-        setRights(event.getRights());
-    }
-
-    @Override
-    public void handle(RoleDeleted event) {
-        // ras
-    }
-
-    @Override
-    public void handle(RoleRightsUpdated event) {
-        setRights(event.getRights());
     }
 
 }

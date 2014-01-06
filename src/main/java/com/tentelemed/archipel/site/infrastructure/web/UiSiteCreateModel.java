@@ -3,7 +3,7 @@ package com.tentelemed.archipel.site.infrastructure.web;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
 import com.tentelemed.archipel.site.application.command.CmdSiteUpdate;
-import com.tentelemed.archipel.site.application.service.SiteCommandService;
+import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class UiSiteCreateModel extends BaseViewModel {
     private CmdSiteCreate cmdCreate = beanify(new CmdSiteCreate());
     private CmdSiteUpdate cmdUpdate = beanify(new CmdSiteUpdate());
     private boolean edit;
-    @Autowired SiteCommandService serviceWrite;
+    @Autowired SiteCmdHandler serviceWrite;
 
     public boolean isEdit() {
         return edit;

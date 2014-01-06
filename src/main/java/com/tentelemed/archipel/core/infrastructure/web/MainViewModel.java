@@ -49,7 +49,7 @@ public class MainViewModel extends BaseViewModel {
     public String getUserInfo() {
         UserQ user = userService.getCurrentUser();
         if (user == null) return "???";
-        return user.getFullName()+" ("+userService.getRoleForUser(user.getEntityId()).getName()+")";
+        return user.getFullName() + " (" + userService.getRoleForUser(user.getEntityId()).getName() + ")";
     }
 
     public RoleQ getCurrentUserRole() {
@@ -57,6 +57,6 @@ public class MainViewModel extends BaseViewModel {
     }
 
     public boolean isPermitted(String moduleId) {
-        return userService.isPermitted(moduleId+":show");
+        return userService.isPermitted(moduleId + ":show");
     }
 }

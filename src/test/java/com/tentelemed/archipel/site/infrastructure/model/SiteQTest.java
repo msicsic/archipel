@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
-import com.tentelemed.archipel.site.domain.event.SiteRegistered;
-import com.tentelemed.archipel.site.domain.event.SiteSectorAdded;
+import com.tentelemed.archipel.site.domain.event.EvtSiteSectorAdded;
+import com.tentelemed.archipel.site.domain.event.EvtSiteRegistered;
 import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.domain.model.SiteId;
 import com.tentelemed.archipel.site.domain.model.SiteType;
@@ -29,8 +29,8 @@ public class SiteQTest {
 
     public void testSiteXXX() {
         SiteQ site = createSite();
-        SiteSectorAdded event = new SiteSectorAdded(site.getEntityId(), Sector.Type.ADMIN, "ADM", "Facturation");
-        site.applyEvent(event);
+        EvtSiteSectorAdded event = new EvtSiteSectorAdded(site.getEntityId(), Sector.Type.ADMIN, "ADM", "Facturation");
+        //site.handle(event);
         // TODO
     }
 
@@ -38,9 +38,9 @@ public class SiteQTest {
         SiteQ site = new SiteQ();
         SiteId id = new SiteId();
         id.setId(11);
-        LocationQ sector = new LocationQ(id, LocationQ.Type.SECTOR, "Sector1", "SE1");
-        SiteRegistered event = new SiteRegistered(id, SiteType.CHD, "Site1", "CH1", sector);
-        site.applyEvent(event);
+        LocationQ sector = new LocationQ(id, LocationQ.Type.SECTOR, "Sector1", "SE1", null);
+        EvtSiteRegistered event = new EvtSiteRegistered(id, SiteType.CHD, "Site1", "CH1", sector);
+        //site.handle(event);
         return site;
     }
 

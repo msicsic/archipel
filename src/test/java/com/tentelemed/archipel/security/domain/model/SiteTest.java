@@ -2,28 +2,20 @@ package com.tentelemed.archipel.security.domain.model;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.CmdRes;
-import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreateSector;
-import com.tentelemed.archipel.site.application.command.CmdSiteDelete;
 import com.tentelemed.archipel.site.application.command.CmdSiteDeleteSector;
-import com.tentelemed.archipel.site.domain.event.SiteRegistered;
-import com.tentelemed.archipel.site.domain.event.SiteSectorAdded;
-import com.tentelemed.archipel.site.domain.event.SiteSectorDeleted;
+import com.tentelemed.archipel.site.domain.event.EvtSiteRegistered;
+import com.tentelemed.archipel.site.domain.event.EvtSiteSectorAdded;
+import com.tentelemed.archipel.site.domain.event.EvtSiteSectorDeleted;
 import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.domain.model.Site;
 import com.tentelemed.archipel.site.domain.model.SiteType;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.List;
-
-import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -59,7 +51,7 @@ public class SiteTest {
         Sector sector = site.getSectors().iterator().next();
         assertThat(sector, notNullValue());
         assertThat(sector.getType(), equalTo(Sector.Type.MED));
-        assertThat(containsEvent(res, SiteRegistered.class), equalTo(true));
+        assertThat(containsEvent(res, EvtSiteRegistered.class), equalTo(true));
     }
 
     @Test
@@ -68,12 +60,13 @@ public class SiteTest {
         site._setId(0);
         site.execute(new CmdSiteCreate(SiteType.CHD, "Site1", "CHD"));
         CmdRes res = site.execute(new CmdSiteCreateSector(null, Sector.Type.ADMIN, "Facturation", "ADM"));
-        assertThat(containsEvent(res, SiteSectorAdded.class), equalTo(true));
+        assertThat(containsEvent(res, EvtSiteSectorAdded.class), equalTo(true));
         assertThat(site.getSectors().size(), equalTo(2));
     }
 
     /**
      * Le sector MED ne peut pas etre retiré
+     *
      * @throws Exception
      */
     @Test(expected = DomainException.class)
@@ -102,10 +95,10 @@ public class SiteTest {
     public void testCmdDeleteSectorOk() {
         Site site = new Site();
         site._setId(0);
-        site.register(SiteType.CHD, "Site1", "CHD");
-        site.createSector(Sector.Type.ADMIN, "ADM", "Facturation");
-        CmdRes res = site.deleteSector("ADM");
+        site.execute(new CmdSiteCreate(SiteType.CHD, "Site1", "CHD"));
+        site.execute(new CmdSiteCreateSector(null, Sector.Type.ADMIN, "ADM", "Facturation"));
+        CmdRes res = site.execute(new CmdSiteDeleteSector(null, "ADM"));
         assertThat(site.getSectors().size(), equalTo(1));
-        assertThat(containsEvent(res, SiteSectorDeleted.class), equalTo(true));
+        assertThat(containsEvent(res, EvtSiteSectorDeleted.class), equalTo(true));
     }
 }

@@ -29,8 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Transactional
-public class UserCommandService extends BaseCommandService implements CmdHandlerRole, CmdHandlerUser {
+public class UserCommandService extends BaseCommandService implements RoleCmdHandler, UserCmdHandler {
 
+    public UserCommandService() {
+        System.err.println("hop");
+    }
+
+    @Override
     public CmdRes execute(CmdRoleDelete cmd) {
         return _execute(cmd, new CommandHandler<CmdRoleDelete>() {
             @Override
@@ -52,6 +57,7 @@ public class UserCommandService extends BaseCommandService implements CmdHandler
         });
     }
 
+    @Override
     public CmdRes execute(CmdRoleCreate cmd) {
         return _execute(cmd, new CommandHandler<CmdRoleCreate>() {
             @Override
@@ -62,6 +68,7 @@ public class UserCommandService extends BaseCommandService implements CmdHandler
         });
     }
 
+    @Override
     public CmdRes execute(CmdUserDelete cmd) {
         return _execute(cmd, new CommandHandler<CmdUserDelete>() {
             @Override
@@ -72,6 +79,7 @@ public class UserCommandService extends BaseCommandService implements CmdHandler
         });
     }
 
+    @Override
     public CmdRes execute(CmdUserCreate cmd) {
         return _execute(cmd, new CommandHandler<CmdUserCreate>() {
             @Override
@@ -82,10 +90,22 @@ public class UserCommandService extends BaseCommandService implements CmdHandler
         });
     }
 
+    @Override
     public CmdRes execute(CmdUserUpdateInfo cmd) {
         return _execute(cmd, new CommandHandler<CmdUserUpdateInfo>() {
             @Override
             public CmdRes handle(CmdUserUpdateInfo cmd) {
+                User user = (User) get(cmd.id);
+                return user.execute(cmd);
+            }
+        });
+    }
+
+    @Override
+    public CmdRes execute(CmdUserChangePassword cmd) {
+        return _execute(cmd, new CommandHandler<CmdUserChangePassword>() {
+            @Override
+            public CmdRes handle(CmdUserChangePassword cmd) {
                 User user = (User) get(cmd.id);
                 return user.execute(cmd);
             }

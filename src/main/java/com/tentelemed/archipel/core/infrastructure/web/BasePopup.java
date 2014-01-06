@@ -45,6 +45,7 @@ public abstract class BasePopup<M extends BaseViewModel> extends Window implemen
     }
 
     boolean displayed;
+
     @Override
     public void setDisplayed() {
         displayed = true;

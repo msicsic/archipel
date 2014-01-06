@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Transactional
-public class SiteCommandService extends BaseCommandService implements CmdHandlerSite {
+public class SiteCommandService extends BaseCommandService implements SiteCmdHandler {
 
     @Override
     public CmdRes execute(CmdSiteDeleteSector cmd) {

@@ -3,12 +3,11 @@ package com.tentelemed.archipel.site.infrastructure.web;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreateRoom;
 import com.tentelemed.archipel.site.application.command.CmdSiteUpdateRoom;
-import com.tentelemed.archipel.site.application.service.SiteCommandService;
+import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
 import com.tentelemed.archipel.site.application.service.SiteQueryService;
 import com.tentelemed.archipel.site.domain.model.Location;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -28,7 +27,7 @@ public class UiRoomCreateModel extends BaseViewModel {
     private CmdSiteCreateRoom cmdCreate = beanify(new CmdSiteCreateRoom());
     private CmdSiteUpdateRoom cmdUpdate = beanify(new CmdSiteUpdateRoom());
     private boolean edit;
-    @Autowired SiteCommandService serviceWrite;
+    @Autowired SiteCmdHandler serviceWrite;
     @Autowired SiteQueryService serviceRead;
     private SiteQ currentCenter;
 

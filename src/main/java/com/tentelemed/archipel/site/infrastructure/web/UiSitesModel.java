@@ -4,13 +4,13 @@ import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.site.application.command.CmdSiteDelete;
 import com.tentelemed.archipel.site.application.command.CmdSiteDeleteSector;
-import com.tentelemed.archipel.site.application.service.SiteCommandService;
+import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
 import com.tentelemed.archipel.site.application.service.SiteQueryService;
-import com.tentelemed.archipel.site.domain.event.SiteDomainEvent;
-import com.tentelemed.archipel.site.domain.model.*;
+import com.tentelemed.archipel.site.domain.event.EvtSiteDomainEvent;
+import com.tentelemed.archipel.site.domain.model.SiteId;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
+import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ import java.util.List;
 public class UiSitesModel extends BaseViewModel {
 
     @Autowired SiteQueryService serviceRead;
-    @Autowired SiteCommandService serviceWrite;
+    @Autowired SiteCmdHandler serviceWrite;
     SiteQ currentSite;
     private RoomQ selectedRoom;
 
@@ -99,9 +99,9 @@ public class UiSitesModel extends BaseViewModel {
 
     @Override
     protected void onDomainEventReceived(DomainEvent event) {
-        if (event instanceof SiteDomainEvent) {
+        if (event instanceof EvtSiteDomainEvent) {
             // il faut recharcer la version à jour du modele
-            currentSite = serviceRead.getCenter((SiteId) event.getId());
+            currentSite = serviceRead.getSite((SiteId) event.getId());
         }
     }
 
