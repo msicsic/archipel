@@ -25,9 +25,6 @@ import java.util.List;
 @Transactional
 public class SiteQueryService extends BaseQueryService {
 
-//    @Autowired
-//    SiteRepository repo;
-
     @PersistenceContext
     EntityManager em;
 

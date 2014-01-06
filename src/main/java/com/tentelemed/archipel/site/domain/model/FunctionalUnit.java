@@ -3,6 +3,7 @@ package com.tentelemed.archipel.site.domain.model;
 import com.tentelemed.archipel.core.domain.model.BaseEntity;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class FunctionalUnit extends BaseEntity implements Location {
     @NotNull String name;
-    @NotNull String code;
+    @NotNull @Size(min=3, max=3) String code;
     List<ActivityUnit> units = new ArrayList<>();
     @NotNull Service parent;
 

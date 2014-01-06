@@ -22,7 +22,7 @@ public class Sector extends BaseEntity implements Location {
     }
 
     @NotNull @Size(min = 3) String name;
-    @NotNull @Size(min = 3) String code;
+    @NotNull @Size(min = 3, max=3) String code;
     @NotNull Type type;
     List<Service> services = new ArrayList<>();
 

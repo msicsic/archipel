@@ -69,6 +69,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
     }
 
     public CmdRes execute(CmdSiteCreateFunctionalUnit cmd) {
+        cmd.code = cmd.code.toUpperCase();
         if (getSectorCodes().contains(cmd.code)) {
             throw new DomainException("This code is allready used !");
         }
@@ -89,6 +90,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
     }
 
     public CmdRes execute(CmdSiteCreateActivityUnit cmd) {
+        cmd.code = cmd.code.toUpperCase();
         if (getSectorCodes().contains(cmd.code)) {
             throw new DomainException("This code is allready used !");
         }
@@ -112,6 +114,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
 
     @Override
     public CmdRes execute(CmdSiteCreateService cmd) {
+        cmd.code = cmd.code.toUpperCase();
         if (getSectorCodes().contains(cmd.code)) {
             throw new DomainException("This code is allready used !");
         }
@@ -131,6 +134,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
 
     @Override
     public CmdRes execute(CmdSiteCreateSector cmd) {
+        cmd.code = cmd.code.toUpperCase();
         // le type ne doit pas deja etre présent
         if (getSectorCodes().contains(cmd.code)) {
             throw new DomainException("This code is allready used !");

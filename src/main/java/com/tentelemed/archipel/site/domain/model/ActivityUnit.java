@@ -3,6 +3,7 @@ package com.tentelemed.archipel.site.domain.model;
 import com.tentelemed.archipel.core.domain.model.BaseEntity;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 public class ActivityUnit extends BaseEntity implements Location {
     @NotNull String name;
-    @NotNull String code;
+    @NotNull @Size(min=3, max=3) String code;
     @NotNull FunctionalUnit parent;
 
     ActivityUnit() {
