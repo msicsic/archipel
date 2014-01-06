@@ -68,14 +68,14 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
         return _result(handle(new EvtSiteDeleted(getEntityId())));
     }
 
-    public CmdRes createFunctionalUnit(String serviceCode, String code, String name) {
-        if (getSectorCodes().contains(code)) {
+    public CmdRes execute(CmdSiteCreateFunctionalUnit cmd) {
+        if (getSectorCodes().contains(cmd.code)) {
             throw new DomainException("This code is allready used !");
         }
         Service found = null;
         for (Sector sector : sectors) {
             for (Service service : sector.getServices()) {
-                if (service.getCode().equals(serviceCode)) {
+                if (service.getCode().equals(cmd.parent)) {
                     found = service;
                     break;
                 }
@@ -84,19 +84,19 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
         if (found == null) {
             throw new DomainException("Service not found");
         } else {
-            return _result(handle(new EvtSiteFunctionalUnitAdded(getEntityId(), serviceCode, code, name)));
+            return _result(handle(new EvtSiteFunctionalUnitAdded(getEntityId(), cmd.parent, cmd.code, cmd.name)));
         }
     }
 
-    public CmdRes createActivityUnit(String parentCode, String code, String name) {
-        if (getSectorCodes().contains(code)) {
+    public CmdRes execute(CmdSiteCreateActivityUnit cmd) {
+        if (getSectorCodes().contains(cmd.code)) {
             throw new DomainException("This code is allready used !");
         }
         Service found = null;
         for (Sector sector : sectors) {
             for (Service service : sector.getServices()) {
                 for (FunctionalUnit unit : service.getUnits()) {
-                    if (unit.getCode().equals(parentCode)) {
+                    if (unit.getCode().equals(cmd.parent)) {
                         found = service;
                         break;
                     }
@@ -106,7 +106,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
         if (found == null) {
             throw new DomainException("FunctionalUnit not found");
         } else {
-            return _result(handle(new EvtSiteActivityUnitAdded(getEntityId(), parentCode, code, name)));
+            return _result(handle(new EvtSiteActivityUnitAdded(getEntityId(), cmd.parent, cmd.code, cmd.name)));
         }
     }
 
@@ -168,32 +168,32 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
         throw new DomainException("this SectorCode is not present in this Site");
     }
 
-    public CmdRes deleteFunctionalUnit(String code) {
+    public CmdRes execute(CmdSiteDeleteFunctionalUnit cmd) {
         for (Sector sector : sectors) {
             for (Service service : sector.getServices()) {
                 for (FunctionalUnit fu : service.getUnits()) {
-                    if (fu.getCode().equals(code)) {
-                        return _result(handle(new EvtSiteFunctionalUnitDeleted(getEntityId(), code)));
-                    }
-                }
-            }
-        }
-        throw new DomainException("this ServiceCode is not present in this Site");
-    }
-
-    public CmdRes deleteActivityUnit(String code) {
-        for (Sector sector : sectors) {
-            for (Service service : sector.getServices()) {
-                for (FunctionalUnit fu : service.getUnits()) {
-                    for (ActivityUnit au : fu.getUnits()) {
-                        if (au.getCode().equals(code)) {
-                            return _result(handle(new EvtSiteActivityUnitDeleted(getEntityId(), code)));
-                        }
+                    if (fu.getCode().equals(cmd.code)) {
+                        return _result(handle(new EvtSiteFunctionalUnitDeleted(getEntityId(), cmd.code)));
                     }
                 }
             }
         }
         throw new DomainException("this FunctionalUnitCode is not present in this Site");
+    }
+
+    public CmdRes execute(CmdSiteDeleteActivityUnit cmd) {
+        for (Sector sector : sectors) {
+            for (Service service : sector.getServices()) {
+                for (FunctionalUnit fu : service.getUnits()) {
+                    for (ActivityUnit au : fu.getUnits()) {
+                        if (au.getCode().equals(cmd.code)) {
+                            return _result(handle(new EvtSiteActivityUnitDeleted(getEntityId(), cmd.code)));
+                        }
+                    }
+                }
+            }
+        }
+        throw new DomainException("this ActivityUnitCode is not present in this Site");
     }
 
     // methodes utilitaires

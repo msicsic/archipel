@@ -2,9 +2,7 @@ package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
-import com.tentelemed.archipel.site.application.command.CmdSiteDelete;
-import com.tentelemed.archipel.site.application.command.CmdSiteDeleteSector;
-import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
+import com.tentelemed.archipel.site.application.command.*;
 import com.tentelemed.archipel.site.application.service.SiteQueryService;
 import com.tentelemed.archipel.site.domain.event.EvtSiteDomainEvent;
 import com.tentelemed.archipel.site.domain.model.SiteId;
@@ -144,10 +142,49 @@ public class UiSitesModel extends BaseViewModel {
     }
 
     public void deleteSector(final LocationQ loc) {
-        confirm("Delete Sector", "Do you really want to delete this sector (cannot be undone) ?", new Runnable() {
+        confirm("Delete Sector", "Do you really want to delete this sector ? (cannot be undone)", new Runnable() {
             @Override
             public void run() {
                 serviceWrite.execute(new CmdSiteDeleteSector(currentSite.getEntityId(), loc.getCode()));
+            }
+        });
+    }
+
+    public void deleteService(final LocationQ loc) {
+        confirm("Delete Sector", "Do you really want to delete this service ? (cannot be undone)", new Runnable() {
+            @Override
+            public void run() {
+                serviceWrite.execute(new CmdSiteDeleteService(currentSite.getEntityId(), loc.getCode()));
+            }
+        });
+    }
+
+    public void createFunctionalUnit(LocationQ loc) {
+        UiSiteCreateFunctionalUnit view = getView(UiSiteCreateFunctionalUnit.class);
+        view.getModel().setSector(currentSite.getEntityId(), loc);
+        show(view);
+    }
+
+    public void deleteFunctionalUnit(final LocationQ loc) {
+        confirm("Delete Sector", "Do you really want to delete this functional unit ? (cannot be undone)", new Runnable() {
+            @Override
+            public void run() {
+                serviceWrite.execute(new CmdSiteDeleteFunctionalUnit(currentSite.getEntityId(), loc.getCode()));
+            }
+        });
+    }
+
+    public void createActivityUnit(final LocationQ loc) {
+        UiSiteCreateActivityUnit view = getView(UiSiteCreateActivityUnit.class);
+        view.getModel().setSector(currentSite.getEntityId(), loc);
+        show(view);
+    }
+
+    public void deleteActivityUnit(final LocationQ loc) {
+        confirm("Delete Sector", "Do you really want to delete this activity unit ? (cannot be undone)", new Runnable() {
+            @Override
+            public void run() {
+                serviceWrite.execute(new CmdSiteDeleteActivityUnit(currentSite.getEntityId(), loc.getCode()));
             }
         });
     }

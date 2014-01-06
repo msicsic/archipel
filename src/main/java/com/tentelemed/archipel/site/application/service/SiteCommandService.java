@@ -140,5 +140,52 @@ public class SiteCommandService extends BaseCommandService implements SiteCmdHan
         });
     }
 
+    @Override
+    public CmdRes execute(CmdSiteCreateFunctionalUnit cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteCreateFunctionalUnit>() {
+            @Override
+            public CmdRes handle(CmdSiteCreateFunctionalUnit command) {
+                Site site = (Site) get(command.id);
+                return site.execute(command);
+            }
+        });
+    }
+
+    @Override
+    public CmdRes execute(CmdSiteDeleteFunctionalUnit cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteDeleteFunctionalUnit>() {
+            @Override
+            public CmdRes handle(CmdSiteDeleteFunctionalUnit command) {
+                Site site = (Site) get(command.id);
+                return site.execute(command);
+            }
+        });
+    }
+
+    @Override
+    public CmdRes execute(CmdSiteCreateActivityUnit cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteCreateActivityUnit>() {
+            @Override
+            public CmdRes handle(CmdSiteCreateActivityUnit command) {
+                Site site = (Site) get(command.id);
+                return site.execute(command);
+            }
+        });
+    }
+
+
+    @Override
+    public CmdRes execute(CmdSiteDeleteActivityUnit cmd) {
+        return _execute(cmd, new CommandHandler<CmdSiteDeleteActivityUnit>() {
+            @Override
+            public CmdRes handle(CmdSiteDeleteActivityUnit command) {
+                Site site = (Site) get(command.id);
+                return site.execute(command);
+            }
+        });
+    }
+
+
+
 
 }

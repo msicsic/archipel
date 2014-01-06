@@ -175,18 +175,21 @@ public class UiSites extends BaseView<UiSitesModel> {
                     item.getItemProperty("name").setValue(service.getName());
                     item.getItemProperty("code").setValue(service.getCode());
                     item.getItemProperty("type").setValue("Service");
+                    item.getItemProperty("action").setValue(createActionPanel(service));
                     treeTable.setParent(service, sector);
                     for (LocationQ fu : service.getChildren()) {
                         item = treeTable.addItem(fu);
                         item.getItemProperty("name").setValue(fu.getName());
                         item.getItemProperty("code").setValue(fu.getCode());
                         item.getItemProperty("type").setValue("Functional Unit");
+                        item.getItemProperty("action").setValue(createActionPanel(fu));
                         treeTable.setParent(fu, service);
                         for (LocationQ au : fu.getChildren()) {
-                            item = treeTable.addItem(fu);
+                            item = treeTable.addItem(au);
                             item.getItemProperty("name").setValue(au.getName());
                             item.getItemProperty("code").setValue(au.getCode());
                             item.getItemProperty("type").setValue("Activity Unit");
+                            item.getItemProperty("action").setValue(createActionPanel(au));
                             treeTable.setParent(au, fu);
                         }
                     }
@@ -204,43 +207,87 @@ public class UiSites extends BaseView<UiSitesModel> {
 
     private AbstractComponent createActionPanel(final LocationQ loc) {
         if (loc == null) return null;
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setSpacing(true);
+        Button bt1 = null;
+        Button bt2 = null;
         if (loc.getType() == LocationQ.Type.SECTOR) {
-            HorizontalLayout layout = new HorizontalLayout();
-            layout.setSpacing(true);
-            Button btAddService = new Button("Add Service");
-            btAddService.addStyleName("small");
+            bt1 = new Button("Add Service");
+            bt1.addClickListener(new Button.ClickListener() {
+                @Override
+                public void buttonClick(Button.ClickEvent event) {
+                    model.createService(loc);
+                }
+            });
 
             if (loc.getSectorType() == Sector.Type.MED && model.getCurrentSite().getRemainingSectorTypes().size() > 0) {
-                Button btAddSector = new Button("Add Sector");
-                btAddSector.addStyleName("small");
-                layout.addComponent(btAddSector);
-                btAddSector.addClickListener(new Button.ClickListener() {
+                bt2 = new Button("Add Sector");
+                bt2.addClickListener(new Button.ClickListener() {
                     @Override
                     public void buttonClick(Button.ClickEvent event) {
                         model.createSector();
                     }
                 });
             } else if (loc.getSectorType() != Sector.Type.MED) {
-                Button btDeleteSector = new Button("Delete Sector");
-                btDeleteSector.addStyleName("small");
-                layout.addComponent(btDeleteSector);
-                btDeleteSector.addClickListener(new Button.ClickListener() {
+                bt2 = new Button("Delete Sector");
+                bt2.addClickListener(new Button.ClickListener() {
                     @Override
                     public void buttonClick(Button.ClickEvent event) {
                         model.deleteSector(loc);
                     }
                 });
             }
-            layout.addComponent(btAddService);
-            btAddService.addClickListener(new Button.ClickListener() {
+        } else if (loc.getType() == LocationQ.Type.SERVICE) {
+            bt1 = new Button("Delete Service");
+            bt1.addClickListener(new Button.ClickListener() {
                 @Override
                 public void buttonClick(Button.ClickEvent event) {
-                    model.createService(loc);
+                    model.deleteService(loc);
                 }
             });
-            return layout;
+            bt2 = new Button("Add F-Unit");
+            bt2.addClickListener(new Button.ClickListener() {
+                @Override
+                public void buttonClick(Button.ClickEvent event) {
+                    model.createFunctionalUnit(loc);
+                }
+            });
+
+        } else if (loc.getType() == LocationQ.Type.FU) {
+            bt1 = new Button("Delete F-Unit");
+            bt1.addClickListener(new Button.ClickListener() {
+                @Override
+                public void buttonClick(Button.ClickEvent event) {
+                    model.deleteFunctionalUnit(loc);
+                }
+            });
+            bt2 = new Button("Add A-Unit");
+            bt2.addClickListener(new Button.ClickListener() {
+                @Override
+                public void buttonClick(Button.ClickEvent event) {
+                    model.createActivityUnit(loc);
+                }
+            });
+
+        } else if (loc.getType() == LocationQ.Type.AU) {
+            bt1 = new Button("Delete A-Unit");
+            bt1.addClickListener(new Button.ClickListener() {
+                @Override
+                public void buttonClick(Button.ClickEvent event) {
+                    model.deleteActivityUnit(loc);
+                }
+            });
         }
-        return null;
+
+        if (bt1 != null) {
+            bt1.addStyleName("small");
+            layout.addComponent(bt1);
+        }
+        if (bt2 != null) {
+            bt2.addStyleName("small");
+            layout.addComponent(bt2);
+        }
+        return layout;
     }
 
     private AbstractComponent createAddInfoPanel() {

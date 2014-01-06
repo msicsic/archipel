@@ -65,7 +65,7 @@ public class SiteQEventHandler implements SiteEventHandler {
     @Override
     public void handle(EvtSiteActivityUnitAdded event) {
         LocationQ parent = siteService.findLocation(event.getId(), event.getParent());
-        LocationQ location = new LocationQ(event.getId(), LocationQ.Type.FU, event.getName(), event.getCode(), parent);
+        LocationQ location = new LocationQ(event.getId(), LocationQ.Type.AU, event.getName(), event.getCode(), parent);
         site.addLocation(0, 3, null, site.sectors, location);
     }
 

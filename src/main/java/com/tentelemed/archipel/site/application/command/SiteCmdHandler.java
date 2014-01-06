@@ -25,4 +25,12 @@ public interface SiteCmdHandler {
 
     CmdRes execute(CmdSiteDeleteService cmd);
 
+    CmdRes execute(CmdSiteDeleteActivityUnit cmd);
+
+    CmdRes execute(CmdSiteCreateActivityUnit cmd);
+
+    CmdRes execute(CmdSiteDeleteFunctionalUnit cmd);
+
+    CmdRes execute(CmdSiteCreateFunctionalUnit cmd);
+
 }
