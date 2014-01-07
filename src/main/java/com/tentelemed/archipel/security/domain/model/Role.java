@@ -31,7 +31,7 @@ public class Role extends BaseAggregateRoot<RoleId> implements RoleCmdHandler {
 
     public CmdRes execute(CmdRoleCreate cmd) {
         validate("name", cmd.name);
-        return _result(handle(new EvtRoleRegistered(getEntityId(), cmd.name, cmd.rights)));
+        return _result(handle(new EvtRoleRegistered(cmd.id, cmd.name, cmd.rights)));
     }
 
     public CmdRes execute(CmdRoleDelete cmd) {
@@ -51,6 +51,7 @@ public class Role extends BaseAggregateRoot<RoleId> implements RoleCmdHandler {
     }
 
     EvtRoleRegistered handle(EvtRoleRegistered event) {
+        this.id = event.getId().getId();
         this.name = event.getName();
         this.rights = event.getRights();
         return handled(event);

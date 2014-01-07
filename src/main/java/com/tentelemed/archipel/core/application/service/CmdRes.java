@@ -19,4 +19,13 @@ public class CmdRes {
 
     public List<AbstractDomainEvent> events;
     public BaseAggregateRoot aggregate;
+
+    public <C extends AbstractDomainEvent> C getEvent(Class<C> eventClass) {
+        for (AbstractDomainEvent event : events) {
+            if (eventClass.isInstance(event)) {
+                return (C) event;
+            }
+        }
+        return null;
+    }
 }

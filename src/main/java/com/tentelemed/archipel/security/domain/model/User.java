@@ -79,8 +79,7 @@ public class User extends BaseAggregateRoot<UserId> implements UserCmdHandler {
     // ***********************************************************
 
     EvtUserDeleted handle(EvtUserDeleted event) {
-        // ras
-        return null;
+        return handled(event);
     }
 
     EvtUserRegistered handle(EvtUserRegistered event) {

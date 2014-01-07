@@ -96,7 +96,7 @@ public class SiteTest {
         Site site = new Site();
         site._setId(0);
         site.execute(new CmdSiteCreate(SiteType.CHD, "Site1", "CHD"));
-        site.execute(new CmdSiteCreateSector(null, Sector.Type.ADMIN, "ADM", "Facturation"));
+        site.execute(new CmdSiteCreateSector(null, Sector.Type.ADMIN, "Facturation", "ADM"));
         CmdRes res = site.execute(new CmdSiteDeleteSector(null, "ADM"));
         assertThat(site.getSectors().size(), equalTo(1));
         assertThat(containsEvent(res, EvtSiteSectorDeleted.class), equalTo(true));

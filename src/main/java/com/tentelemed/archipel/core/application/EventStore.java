@@ -30,7 +30,6 @@ public interface EventStore {
     <M extends BaseAggregateRoot> M get(Class<M> aggregateClass);
 
     void handleEvents(CmdRes res);
-//    void handleEvents(BaseAggregateRoot target, Collection<DomainEvent> events);
 
     long getMaxAggregateId();
 }

@@ -40,7 +40,9 @@ public class SiteQTest {
         id.setId(11);
         LocationQ sector = new LocationQ(id, LocationQ.Type.SECTOR, "Sector1", "SE1", null);
         EvtSiteRegistered event = new EvtSiteRegistered(id, SiteType.CHD, "Site1", "CH1", sector);
-        //site.handle(event);
+        SiteQEventHandler handler = new SiteQEventHandler();
+        handler.setObject(site);
+        handler.handle(event);
         return site;
     }
 

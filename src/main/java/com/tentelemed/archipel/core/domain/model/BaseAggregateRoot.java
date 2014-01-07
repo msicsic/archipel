@@ -21,7 +21,7 @@ public abstract class BaseAggregateRoot<B extends EntityId> extends BaseEntity {
     private transient B entityId;
 
     public B getEntityId() {
-        if (entityId == null && id != null) {
+        if (entityId == null && id != null || entityId != null && entityId.getId() != id) {
             try {
                 entityId = getIdClass().newInstance();
                 entityId.setId(id);

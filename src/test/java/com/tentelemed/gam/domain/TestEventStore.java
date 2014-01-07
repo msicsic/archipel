@@ -1,13 +1,19 @@
 package com.tentelemed.gam.domain;
 
+import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
+import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
 import com.tentelemed.archipel.core.application.event.DomainEvent;
 import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
+import com.tentelemed.archipel.core.infrastructure.persistence.handler.PersistenceHandler;
+import com.tentelemed.archipel.core.infrastructure.persistence.handler.TestPersistenceHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +26,8 @@ import java.util.List;
  */
 public class TestEventStore implements EventStore {
     @Autowired EventRegistry eventRegistry;
+    @Autowired EventBus eventBus;
+    @Autowired TestPersistenceHandler pHandler;
 
     int count = 0;
     List<DomainEvent> events = new ArrayList<>();
@@ -28,9 +36,14 @@ public class TestEventStore implements EventStore {
         if (object == null) {
             throw new RuntimeException("cannot apply event on null instance !");
         }
+        if (event.isDelete()) return null;
         try {
-            Method method = object.getClass().getMethod("handle", event.getClass());
-            method.invoke(object, event);
+            Method m = object.getClass().getDeclaredMethod("handle", new Class[]{event.getClass()});
+            if (event.isCreate()) {
+                object._setId(event.getId().getId());
+            }
+            m.setAccessible(true);
+            m.invoke(object, event);
             if (isNew) {
                 events.add(event);
             }
@@ -55,28 +68,50 @@ public class TestEventStore implements EventStore {
     }
 
     @Override
-    public <M extends BaseAggregateRoot> M get(Class<M> aggregateClass) {
+    public <M extends BaseAggregateRoot> M get(Class<M> c) {
+        Constructor cst = null;
         try {
-            M res = aggregateClass.newInstance();
+            cst = c.getDeclaredConstructor();
+            cst.setAccessible(true);
+            M res = (M) cst.newInstance();
             res._setId(count++);
             return res;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Cannot instanciate Aggregate : " + c.getSimpleName());
+        } finally {
+            if (cst != null) {
+                cst.setAccessible(false);
+            }
         }
     }
 
     @Override
     public void handleEvents(CmdRes res) {
-        for (DomainEvent event : res.events) {
-            handle(res.aggregate, event, true);
-            if (event.isCreate()) {
-                res.aggregate._setId(count++);
+        // ajout des evts
+        events.addAll(res.events);
+
+        // propagation aux QueryManagers (pour maj des bdd de consultation)
+        for (AbstractDomainEvent event : res.events) {
+            try {
+                pHandler.handle(event);
+            } catch (Exception e) {
+                throw new RuntimeException("Event without persistence handler : " + event.getClass().getSimpleName());
             }
+        }
+
+        // propagation aux listeners d'evts (les autres modules principalement)
+        for (DomainEvent event : res.events) {
+            eventBus.post(event);
         }
     }
 
     @Override
     public long getMaxAggregateId() {
         return count;
+    }
+
+    public void clear() {
+        count = 0;
+        events.clear();
     }
 }

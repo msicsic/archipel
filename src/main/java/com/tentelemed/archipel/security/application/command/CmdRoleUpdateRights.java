@@ -18,7 +18,8 @@ import java.util.Set;
 public class CmdRoleUpdateRights extends Command<RoleId> {
     @NotNull public Set<Right> rights;
 
-    public CmdRoleUpdateRights(Right... rights) {
+    public CmdRoleUpdateRights(RoleId id, Right... rights) {
+        super(id);
         this.rights = new HashSet<>(Arrays.asList(rights));
     }
 }
