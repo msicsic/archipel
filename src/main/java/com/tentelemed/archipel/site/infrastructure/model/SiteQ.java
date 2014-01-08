@@ -131,4 +131,23 @@ public class SiteQ extends BaseEntityQ<SiteId> {
         }
         return types;
     }
+
+    public LocationQ findLocation(String parentCode) {
+        return _findLocation(sectors, parentCode);
+    }
+
+    private LocationQ _findLocation(Set<LocationQ> locations, String code) {
+        for (LocationQ loc : locations) {
+            if (loc.getCode().equals(code)) {
+                return loc;
+            }
+        }
+        for (LocationQ loc : locations) {
+            LocationQ found = _findLocation(loc.getChildren(), code);
+            if (found != null) {
+                return found;
+            }
+        }
+        return null;
+    }
 }

@@ -44,6 +44,9 @@ public class TestPersistenceHandler {
         }
         if (event.isCreate() || event.isUpdate()) {
             Class handlerClass = eventRegistry.getHandlerClassForEvent(event);
+            if (handlerClass == null) {
+                throw new RuntimeException("no handler class for event : "+event.getClass().getSimpleName());
+            }
             Object handler = context.getBean(handlerClass);
             Method m = handler.getClass().getMethod("setObject", Object.class);
             m.invoke(handler, object);

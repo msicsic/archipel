@@ -41,26 +41,6 @@ public class SiteCommandService extends BaseCommandService implements SiteCmdHan
         });
     }
 
-    /*public CmdRes execute(CmdSiteCreateRoom cmd) {
-        return _execute(cmd, new CommandHandler<CmdSiteCreateRoom>() {
-            @Override
-            public CmdRes handle(CmdSiteCreateRoom cmd) {
-                Room room = get(Room.class);
-                return room(cmd.name, cmd.location);
-            }
-        });
-    }
-
-    public CmdRes execute(CmdSiteUpdateRoom cmd) {
-        return _execute(cmd, new CommandHandler<CmdSiteCreateRoom>() {
-            @Override
-            public CmdRes handle(CmdSiteCreateRoom cmd) {
-                // TODO
-                return null;
-            }
-        });
-    } */
-
     // TODO : simpleExec(cmd) qui fait le traitement de base : validate, get(id), aggregate.execute(cmd), post()
 
     @Override

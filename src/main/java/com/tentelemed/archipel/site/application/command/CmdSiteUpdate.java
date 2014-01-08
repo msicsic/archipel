@@ -17,4 +17,14 @@ public class CmdSiteUpdate extends Command<SiteId> {
     @NotNull public SiteType type;
     @NotNull @Size(min = 3) public String name;
     @NotNull @Size(min = 3) public String ident;
+
+    public CmdSiteUpdate() {
+    }
+
+    public CmdSiteUpdate(SiteId id, SiteType type, String name, String ident) {
+        super(id);
+        this.type = type;
+        this.name = name;
+        this.ident = ident;
+    }
 }

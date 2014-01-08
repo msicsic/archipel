@@ -18,8 +18,6 @@ public class SiteQEventHandler implements SiteEventHandler {
 
     public SiteQ site;
 
-    @Autowired SiteQueryService siteService;
-
     public void setObject(Object object) {
         this.site = (SiteQ) object;
     }
@@ -27,7 +25,8 @@ public class SiteQEventHandler implements SiteEventHandler {
     @Override
     public void handle(EvtSiteServiceAdded event) {
         // retrouver le parent à partir de son code
-        LocationQ parent = siteService.findLocation(event.getId(), event.getParent());
+        //LocationQ parent = siteService.findLocation(event.getId(), event.getParent());
+        LocationQ parent = site.findLocation(event.getParent());
 
         LocationQ service = new LocationQ(event.getId(), LocationQ.Type.SERVICE, event.getName(), event.getCode(), parent);
         site.addLocation(0, 1, null, site.sectors, service);
@@ -52,7 +51,7 @@ public class SiteQEventHandler implements SiteEventHandler {
 
     @Override
     public void handle(EvtSiteFunctionalUnitAdded event) {
-        LocationQ parent = siteService.findLocation(event.getId(), event.getParent());
+        LocationQ parent = site.findLocation(event.getParent());
         LocationQ location = new LocationQ(event.getId(), LocationQ.Type.FU, event.getName(), event.getCode(), parent);
         site.addLocation(0, 2, null, site.sectors, location);
     }
@@ -64,7 +63,7 @@ public class SiteQEventHandler implements SiteEventHandler {
 
     @Override
     public void handle(EvtSiteActivityUnitAdded event) {
-        LocationQ parent = siteService.findLocation(event.getId(), event.getParent());
+        LocationQ parent = site.findLocation(event.getParent());
         LocationQ location = new LocationQ(event.getId(), LocationQ.Type.AU, event.getName(), event.getCode(), parent);
         site.addLocation(0, 3, null, site.sectors, location);
     }

@@ -9,6 +9,7 @@ import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
 import com.tentelemed.archipel.security.application.event.RoleEventHandler;
 import com.tentelemed.archipel.security.application.event.UserEventHandler;
 import com.tentelemed.archipel.security.domain.model.*;
+import com.tentelemed.archipel.security.domain.model.Role;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQEventHandler;
@@ -50,7 +51,7 @@ public class TestSpringConfiguration2 {
     public EventRegistry eventRegistry() {
         EventRegistry registry = new EventRegistry();
         registry.addEntry(EvtUserDomainEvent.class, User.class, UserQ.class, UserEventHandler.class);
-        registry.addEntry(EvtRoleDomainEvent.class, com.tentelemed.archipel.security.domain.model.Role.class, RoleQ.class, RoleEventHandler.class);
+        registry.addEntry(EvtRoleDomainEvent.class, Role.class, RoleQ.class, RoleEventHandler.class);
         registry.addEntry(EvtSiteDomainEvent.class, Site.class, SiteQ.class, SiteEventHandler.class);
         registry.addEntry(EvtRoomDomainEvent.class, Room.class, RoomQ.class, RoomEventHandler.class);
         return registry;

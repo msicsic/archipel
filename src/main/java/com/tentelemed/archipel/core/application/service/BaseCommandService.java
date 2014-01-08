@@ -126,7 +126,13 @@ public abstract class BaseCommandService {
         try {
             // executer la commande
             CmdRes result = ch.handle(command);
-//            return (ID) post(result);
+            if (result == null) {
+                throw new RuntimeException("Command result cannot be null : "+getClass().getSimpleName()+".execute("+command.getClass().getSimpleName()+")");
+            }
+
+            // l'agregat doit rester valide
+            result.aggregate.validate();
+
             post(result);
             return result;
         } catch (RuntimeException e) {

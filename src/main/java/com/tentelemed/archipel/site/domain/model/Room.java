@@ -2,6 +2,7 @@ package com.tentelemed.archipel.site.domain.model;
 
 import com.tentelemed.archipel.core.application.service.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.site.application.command.RoomCmdHandler;
 import com.tentelemed.archipel.site.domain.event.EvtRoomBedAdded;
 import com.tentelemed.archipel.site.domain.event.EvtRoomBedRemoved;
 import com.tentelemed.archipel.site.domain.event.EvtRoomRegistered;
@@ -19,7 +20,7 @@ import java.util.Set;
  * Date: 10/12/13
  * Time: 12:11
  */
-public class Room extends BaseAggregateRoot<RoomId> {
+public class Room extends BaseAggregateRoot<RoomId> implements RoomCmdHandler {
     @NotNull String name;
     boolean medical;
     @NotNull @Valid Set<Bed> beds = new HashSet<>();
@@ -33,7 +34,7 @@ public class Room extends BaseAggregateRoot<RoomId> {
     // COMMANDS
     public CmdRes register(String name, Location location) {
         boolean medical = location.isMedical();
-        return _result(handle(new EvtRoomRegistered(name, medical, location, new HashSet<Bed>())));
+        return _result(handle(new EvtRoomRegistered(getEntityId(), name, medical, location, new HashSet<Bed>())));
     }
 
     public CmdRes update(String name, Location location) {
@@ -53,21 +54,21 @@ public class Room extends BaseAggregateRoot<RoomId> {
     }
 
     // EVENTS
-    public EvtRoomRegistered handle(EvtRoomRegistered event) {
+    EvtRoomRegistered handle(EvtRoomRegistered event) {
         return apply(event);
     }
 
-    public EvtRoomBedAdded handle(EvtRoomBedAdded event) {
+    EvtRoomBedAdded handle(EvtRoomBedAdded event) {
         this.beds.add(event.getBed());
         return handled(event);
     }
 
-    public EvtRoomBedRemoved handle(EvtRoomBedRemoved event) {
+    EvtRoomBedRemoved handle(EvtRoomBedRemoved event) {
         this.beds.remove(event.getBed());
         return handled(event);
     }
 
-    public EvtRoomUpdated handle(EvtRoomUpdated event) {
+    EvtRoomUpdated handle(EvtRoomUpdated event) {
         // TODO
         return null;
     }

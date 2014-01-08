@@ -1,5 +1,7 @@
 package com.tentelemed.archipel.site.domain.model;
 
+import java.util.Set;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
@@ -13,4 +15,8 @@ public interface Location {
     String getName();
 
     boolean isMedical();
+
+    Set<? extends Location> getChildren();
+
+    Location getParent();
 }

@@ -40,8 +40,8 @@ public class UserCommandService extends BaseCommandService implements RoleCmdHan
         return _execute(cmd, new CommandHandler<CmdRoleDelete>() {
             @Override
             public CmdRes handle(CmdRoleDelete cmd) {
-                // TODO
-                return null;
+                Role role = (Role) get(cmd.id);
+                return role.execute(cmd);
             }
         });
     }

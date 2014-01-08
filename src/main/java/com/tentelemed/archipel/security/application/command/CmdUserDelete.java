@@ -10,6 +10,9 @@ import com.tentelemed.archipel.security.domain.model.UserId;
  * Time: 21:42
  */
 public class CmdUserDelete extends Command<UserId> {
+    public CmdUserDelete() {
+    }
+
     public CmdUserDelete(UserId id) {
         this.id = id;
     }

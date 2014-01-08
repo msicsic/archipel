@@ -4,10 +4,7 @@ import com.tentelemed.archipel.core.domain.model.BaseEntity;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +16,7 @@ public class Service extends BaseEntity implements Location {
     @NotNull String name;
     @NotNull @Size(min=3, max=3) String code;
     @NotNull Sector parent;
-    List<FunctionalUnit> units = new ArrayList<>();
+    Set<FunctionalUnit> units = new HashSet<>();
 
     private Service() {
     }
@@ -46,11 +43,16 @@ public class Service extends BaseEntity implements Location {
     }
 
     @Override
+    public Set<? extends Location> getChildren() {
+        return units;
+    }
+
+    @Override
     public String getCode() {
         return code;
     }
 
-    public Sector getParent() {
+    public Location getParent() {
         return parent;
     }
 
@@ -59,8 +61,8 @@ public class Service extends BaseEntity implements Location {
         return name;
     }
 
-    public List<FunctionalUnit> getUnits() {
-        return Collections.unmodifiableList(units);
+    public Set<FunctionalUnit> getUnits() {
+        return Collections.unmodifiableSet(units);
     }
 
     public List<String> getLocationStrings() {

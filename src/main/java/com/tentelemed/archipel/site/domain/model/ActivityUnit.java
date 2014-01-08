@@ -4,6 +4,8 @@ import com.tentelemed.archipel.core.domain.model.BaseEntity;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,6 +42,16 @@ public class ActivityUnit extends BaseEntity implements Location {
     @Override
     public boolean isMedical() {
         return parent.isMedical();
+    }
+
+    @Override
+    public Set<Location> getChildren() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public Location getParent() {
+        return parent;
     }
 
     @Override

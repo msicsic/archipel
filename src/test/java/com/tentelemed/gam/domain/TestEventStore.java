@@ -61,7 +61,7 @@ public class TestEventStore implements EventStore {
                 if (root == null) {
                     root = eventRegistry.newAggregateForEvent(event);
                 }
-                handle(root, event, false);
+                root = handle(root, event, false);
             }
         }
         return root;
@@ -94,8 +94,10 @@ public class TestEventStore implements EventStore {
         for (AbstractDomainEvent event : res.events) {
             try {
                 pHandler.handle(event);
+            } catch (RuntimeException e) {
+                throw e;
             } catch (Exception e) {
-                throw new RuntimeException("Event without persistence handler : " + event.getClass().getSimpleName());
+                throw new RuntimeException("Error in handler : " + event.getClass().getSimpleName());
             }
         }
 

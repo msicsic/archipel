@@ -9,6 +9,7 @@ import com.tentelemed.archipel.core.application.service.CmdRes;
  * Time: 16:49
  */
 public interface SiteCmdHandler {
+
     CmdRes execute(CmdSiteCreate cmd);
 
     CmdRes execute(CmdSiteDelete cmd);

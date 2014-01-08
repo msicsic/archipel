@@ -2,6 +2,7 @@ package com.tentelemed.archipel.site.domain.event;
 
 import com.tentelemed.archipel.site.domain.model.Bed;
 import com.tentelemed.archipel.site.domain.model.Location;
+import com.tentelemed.archipel.site.domain.model.RoomId;
 
 import java.util.Collections;
 import java.util.Set;
@@ -21,7 +22,8 @@ public class EvtRoomRegistered extends EvtRoomDomainEvent {
     EvtRoomRegistered() {
     }
 
-    public EvtRoomRegistered(String name, boolean medical, Location location, Set<Bed> beds) {
+    public EvtRoomRegistered(RoomId id, String name, boolean medical, Location location, Set<Bed> beds) {
+        super(id);
         this.name = name;
         this.medical = medical;
         this.beds = beds;

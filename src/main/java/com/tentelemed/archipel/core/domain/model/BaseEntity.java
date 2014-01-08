@@ -43,7 +43,7 @@ public abstract class BaseEntity implements BuildingBlock {
         }
     }
 
-    protected void validate() {
+    public void validate() {
         Set violations = getValidator().validate(this);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);

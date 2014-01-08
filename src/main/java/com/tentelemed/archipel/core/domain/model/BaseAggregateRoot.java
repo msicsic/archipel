@@ -71,8 +71,14 @@ public abstract class BaseAggregateRoot<B extends EntityId> extends BaseEntity {
         /*for (DomainEvent event : events) {
             handle(event);
         }*/
+        if (events == null || events.length == 0) {
+            throw new RuntimeException("'handle' must return at least one event : "+getClass().getSimpleName());
+        }
         for (AbstractDomainEvent event : events) {
-            if (!event.processed) {
+            if (event == null) {
+                throw new RuntimeException("'handle' cannot return null : "+getClass().getSimpleName());
+            }
+            if (! event.processed) {
                 throw new RuntimeException("Only processed events can be returned by a command : " + event);
             }
         }

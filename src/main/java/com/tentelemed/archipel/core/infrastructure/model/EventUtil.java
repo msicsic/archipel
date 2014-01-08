@@ -75,6 +75,10 @@ public class EventUtil {
             method.setAccessible(true);
             method.invoke(entity, event);
         } catch (InvocationTargetException e2) {
+            Throwable t = e2.getTargetException();
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException)t;
+            }
             throw new RuntimeException("Error in '" + entity.getClass().getSimpleName() + ".handle(" + event.getClass().getSimpleName() + ")' method", e2.getTargetException());
         } catch (Exception e2) {
             if (!allowAutomatic) {

@@ -9,4 +9,14 @@ public class CmdSiteCreateFunctionalUnit extends Command<SiteId> {
     @NotNull public String parent;
     @NotNull public String code;
     @NotNull public String name;
+
+    public CmdSiteCreateFunctionalUnit() {
+    }
+
+    public CmdSiteCreateFunctionalUnit(SiteId id, String parent, String code, String name) {
+        super(id);
+        this.parent = parent;
+        this.code = code;
+        this.name = name;
+    }
 }

@@ -3,12 +3,16 @@ TODO :
 - ATTENTION ! L'attribution des ID d'agregat ne semble pas fiable : si plusieurs appels simultanés
   il est possible que 2 agregats obtiennent la meme valeur (nextValue)
 
-- La maj des ObjetQ devrait se faire dans un objet externe (mapper) car il est necessaire
-  de pouvoir accéder à JPA lors de l'application de l'evt (les infos completes ne sont pas
-  toutes présente dans l'evt en cours de traitement)
+- Le CmdHandler ne devrait pas accéder au QueryService (comme c'est actuellement le cas pour les Sites)
+  Cela rend le test difficile
+  Probleme également pour les traitements asynchrones
 
 - gestion des droits
 * les methodes "handle" des BO doivent etre privées
+* La maj des ObjetQ devrait se faire dans un objet externe (mapper) car il est necessaire
+  de pouvoir accéder à JPA lors de l'application de l'evt (les infos completes ne sont pas
+  toutes présente dans l'evt en cours de traitement)
+
 
 - Pour simplifier les services, il faudrait faire de l'AOP au lieu de passer par un CommandHandler
 - Affectuer les controles de referencement lors modif code ou suppression

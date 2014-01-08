@@ -83,6 +83,11 @@ public class EventRegistry {
     }
 
     public BaseAggregateRoot newAggregateForEvent(DomainEvent event) {
+        // un evt qui instancie un agregat doit necessairement etre de type creation
+        if (! event.isCreate()) {
+            throw new RuntimeException("First event must be CreateEvent");
+        }
+
         Class c = getClassForEvent(event);
         if (c == null) {
             throw new RuntimeException("No aggregate class found for event : " + event.getClass().getSimpleName());

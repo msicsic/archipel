@@ -9,4 +9,10 @@ import com.tentelemed.archipel.core.domain.model.EntityId;
  * Time: 11:41
  */
 public class SiteId extends EntityId {
+    public SiteId() {
+    }
+
+    public SiteId(Integer id) {
+        super(id);
+    }
 }

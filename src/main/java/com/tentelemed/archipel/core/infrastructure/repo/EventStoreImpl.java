@@ -89,35 +89,36 @@ public class EventStoreImpl implements EventStore {
             events.add(event);
         }
 
-        DomainEvent firstEvent = events.get(0);
-        if (!(firstEvent.isCreate())) {
-            throw new RuntimeException("First event must be CreateEvent");
-        }
-        BaseAggregateRoot target = eventRegistry.newAggregateForEvent(firstEvent);
-        applyEvents(target, events);
+        BaseAggregateRoot target = applyEvents(events);
         return target;
     }
 
-    protected BaseAggregateRoot applyEvents(BaseAggregateRoot aggregate, Collection<? extends DomainEvent> events) {
+    protected BaseAggregateRoot applyEvents(Collection<? extends DomainEvent> events) {
+        BaseAggregateRoot target = null;
         for (DomainEvent event : events) {
             if (event.isDelete()) {
-                return null;
+                // un evtn delete efface l'agregat, mais il se peut que des evts ultérieurs
+                // ressucitent l'agregat (cas undo), il faut donc continuer le traitement
+                target = null;
+            }
+            if (target == null) {
+                target = eventRegistry.newAggregateForEvent(event);
             }
             try {
-                Method m = aggregate.getClass().getDeclaredMethod("handle", new Class[]{event.getClass()});
+                Method m = target.getClass().getDeclaredMethod("handle", new Class[]{event.getClass()});
                 if (event.isCreate()) {
-                    aggregate._setId(event.getId().getId());
+                    target._setId(event.getId().getId());
                 }
                 m.setAccessible(true);
-                m.invoke(aggregate, event);
+                m.invoke(target, event);
             } catch (InvocationTargetException e) {
                 throw new RuntimeException((e.getTargetException()));
             } catch (Exception e) {
-                log.error("Cant find event handler method : " + aggregate.getClass().getSimpleName() + "." + event.getClass().getSimpleName(), e);
+                log.error("Cant find event handler method : " + target.getClass().getSimpleName() + "." + event.getClass().getSimpleName(), e);
                 throw new RuntimeException(e);
             }
         }
-        return aggregate;
+        return target;
     }
 
     /**
