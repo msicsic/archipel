@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Date: 06/11/13
  * Time: 18:23
  */
-@Component
+//@Component
 @Transactional
 public class UserCommandService extends BaseCommandService implements RoleCmdHandler, UserCmdHandler {
 

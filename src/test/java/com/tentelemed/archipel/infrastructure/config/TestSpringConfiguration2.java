@@ -11,12 +11,10 @@ import com.tentelemed.archipel.security.application.event.EvtRoleDomainEvent;
 import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
 import com.tentelemed.archipel.security.application.event.RoleEventHandler;
 import com.tentelemed.archipel.security.application.event.UserEventHandler;
-import com.tentelemed.archipel.security.domain.model.*;
 import com.tentelemed.archipel.security.domain.model.Role;
+import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
-import com.tentelemed.archipel.security.infrastructure.model.UserQEventHandler;
-import com.tentelemed.archipel.security.infrastructure.shiro.MyRealm;
 import com.tentelemed.archipel.site.application.command.CmdRoomCreate;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
 import com.tentelemed.archipel.site.application.command.RoomCmdHandler;
@@ -30,20 +28,10 @@ import com.tentelemed.archipel.site.domain.model.Site;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.tentelemed.gam.domain.TestEventStore;
-import org.apache.shiro.realm.Realm;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
-import org.springframework.context.annotation.*;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import ru.xpoft.vaadin.VaadinMessageSource;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 /**
  * Created with IntelliJ IDEA.
@@ -69,21 +57,21 @@ public class TestSpringConfiguration2 {
         return registry;
     }
 
-//    @Bean
-//    public CommandServiceFactory commandServiceFactory() {
-//        return new CommandServiceFactory();
-//    }
-//
-//    @Bean
-//    public SiteCmdHandler siteCmdHandler() {
-//        return commandServiceFactory().createHandler(SiteCmdHandler.class);
-//    }
-//
-//    @Bean
-//    public RoomCmdHandler roomCmdHandler() {
-//        return commandServiceFactory().createHandler(RoomCmdHandler.class);
-//    }
-//
+    @Bean
+    public CommandServiceFactory commandServiceFactory() {
+        return new CommandServiceFactory();
+    }
+
+    @Bean
+    public SiteCmdHandler siteCmdHandler() {
+        return commandServiceFactory().create(SiteCmdHandler.class);
+    }
+
+    @Bean
+    public RoomCmdHandler roomCmdHandler() {
+        return commandServiceFactory().create(RoomCmdHandler.class);
+    }
+
     @Bean
     public TestPersistenceHandler persistenceHandler() {
         return new TestPersistenceHandler();

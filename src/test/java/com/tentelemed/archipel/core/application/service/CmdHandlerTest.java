@@ -31,10 +31,10 @@ public abstract class CmdHandlerTest {
         context = new AnnotationConfigWebApplicationContext();
         context.register(TestSpringConfiguration2.class);
 
-        context.register(UserCommandService.class);
+        //context.register(UserCommandService.class);
         context.register(UserQEventHandler.class);
         context.register(RoleQEventHandler.class);
-        context.register(SiteCommandService.class);
+        //context.register(SiteCommandService.class);
         context.register(SiteQEventHandler.class);
         context.register(RoomQEventHandler.class);
 
