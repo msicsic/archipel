@@ -94,7 +94,7 @@ public class UiSites extends BaseView<UiSitesModel> {
         container.addNestedContainerProperty("name");
         container.addNestedContainerProperty("medical");
         container.addNestedContainerProperty("nbBeds");
-        container.addNestedContainerProperty("locationCode");
+        container.addNestedContainerProperty("locationPath");
 
         // Use the login property as the item ID of the bean
         //container.setBeanIdProperty("entityId");
@@ -106,7 +106,7 @@ public class UiSites extends BaseView<UiSitesModel> {
         table.setColumnHeader("locationCode", "Location");
 
         // Have to set explicitly to hide the "equatorial" property
-        table.setVisibleColumns(new String[]{"name", "medical", "nbBeds", "locationCode"});
+        table.setVisibleColumns(new String[]{"name", "medical", "nbBeds", "locationPath"});
 
         container.addAll(getModel().getRooms());
 

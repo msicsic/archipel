@@ -79,7 +79,10 @@ public abstract class BaseAggregateRoot<B extends EntityId> extends BaseEntity {
                 throw new RuntimeException("'handle' cannot return null : "+getClass().getSimpleName());
             }
             if (! event.processed) {
-                throw new RuntimeException("Only processed events can be returned by a command : " + event);
+                throw new RuntimeException("Only processed events can be returned by a command : " + event.getClass().getSimpleName());
+            }
+            if (event.getId() == null) {
+                throw new RuntimeException("Event must have an non null id : "+event.getClass().getSimpleName());
             }
         }
         return new CmdRes(this, Arrays.asList(events));

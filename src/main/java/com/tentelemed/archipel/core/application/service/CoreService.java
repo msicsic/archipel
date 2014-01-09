@@ -7,6 +7,8 @@ import com.tentelemed.archipel.core.application.event.LogoutRequestEvent;
 import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.core.infrastructure.web.RootView;
+import com.tentelemed.archipel.security.application.command.CmdRoleCreate;
+import com.tentelemed.archipel.security.application.command.CmdUserCreate;
 import com.tentelemed.archipel.security.application.event.EvtRoleDomainEvent;
 import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
 import com.tentelemed.archipel.security.application.event.RoleEventHandler;
@@ -15,6 +17,8 @@ import com.tentelemed.archipel.security.domain.model.Role;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
+import com.tentelemed.archipel.site.application.command.CmdRoomCreate;
+import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
 import com.tentelemed.archipel.site.domain.event.EvtRoomDomainEvent;
 import com.tentelemed.archipel.site.domain.event.EvtSiteDomainEvent;
 import com.tentelemed.archipel.site.domain.event.RoomEventHandler;
@@ -151,6 +155,12 @@ public class CoreService extends BaseService {
         eventRegistry.addEntry(EvtRoleDomainEvent.class, Role.class, RoleQ.class, RoleEventHandler.class);
         eventRegistry.addEntry(EvtSiteDomainEvent.class, Site.class, SiteQ.class, SiteEventHandler.class);
         eventRegistry.addEntry(EvtRoomDomainEvent.class, Room.class, RoomQ.class, RoomEventHandler.class);
+
+        eventRegistry.addCmdEntry(CmdRoleCreate.class, Role.class);
+        eventRegistry.addCmdEntry(CmdUserCreate.class, User.class);
+        eventRegistry.addCmdEntry(CmdRoomCreate.class, Room.class);
+        eventRegistry.addCmdEntry(CmdSiteCreate.class, Site.class);
+
     }
 
     public void initApplication() {

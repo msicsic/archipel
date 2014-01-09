@@ -48,6 +48,11 @@ public class Service extends BaseEntity implements Location {
     }
 
     @Override
+    public String getPrefix() {
+        return "SRV";
+    }
+
+    @Override
     public String getCode() {
         return code;
     }
@@ -65,15 +70,11 @@ public class Service extends BaseEntity implements Location {
         return Collections.unmodifiableSet(units);
     }
 
-    public List<String> getLocationStrings() {
-        List<String> result = new ArrayList<>();
-        if (getUnits().isEmpty()) {
-            return Arrays.asList("SRV:" + code);
-        }
+    public List<LocationPath> getLocationPaths() {
+        List<LocationPath> result = new ArrayList<>();
+        result.add(getPath());
         for (FunctionalUnit unit : getUnits()) {
-            for (String ls : unit.getLocationStrings()) {
-                result.add("SRV:" + code + "|" + ls);
-            }
+            result.addAll(unit.getLocationPaths());
         }
         return result;
     }
@@ -95,4 +96,8 @@ public class Service extends BaseEntity implements Location {
         return code.hashCode();
     }
 
+    @Override
+    public LocationPath getPath() {
+        return new LocationPath(this);
+    }
 }

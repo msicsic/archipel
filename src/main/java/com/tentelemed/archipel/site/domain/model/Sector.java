@@ -41,13 +41,11 @@ public class Sector extends BaseEntity implements Location {
         services.remove(service);
     }
 
-    public Collection<String> getLocationCodes() {
-        List<String> result = new ArrayList<>();
+    public Collection<LocationPath> getLocationPaths() {
+        List<LocationPath> result = new ArrayList<>();
+        result.add(getPath());
         for (Service service : services) {
-            List<String> scodes = service.getLocationStrings();
-            for (String scode : scodes) {
-                result.add(new String("SEC:" + code + "|" + scode));
-            }
+            result.addAll(service.getLocationPaths());
         }
         return result;
     }
@@ -57,8 +55,18 @@ public class Sector extends BaseEntity implements Location {
     }
 
     @Override
+    public String getPrefix() {
+        return "SEC";
+    }
+
+    @Override
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public LocationPath getPath() {
+        return new LocationPath(this);
     }
 
     public boolean isMedical() {

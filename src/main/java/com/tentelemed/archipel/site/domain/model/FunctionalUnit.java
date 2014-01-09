@@ -39,8 +39,18 @@ public class FunctionalUnit extends BaseEntity implements Location {
     }
 
     @Override
+    public String getPrefix() {
+        return "FU";
+    }
+
+    @Override
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public LocationPath getPath() {
+        return new LocationPath(this);
     }
 
     @Override
@@ -67,13 +77,11 @@ public class FunctionalUnit extends BaseEntity implements Location {
         return Collections.unmodifiableSet(units);
     }
 
-    public List<String> getLocationStrings() {
-        List<String> result = new ArrayList<>();
-        if (getUnits().isEmpty()) {
-            return Arrays.asList("FU:" + code);
-        }
+    public List<LocationPath> getLocationPaths() {
+        List<LocationPath> result = new ArrayList<>();
+        result.add(getPath());
         for (ActivityUnit unit : getUnits()) {
-            result.add("FU:" + code + "|" + "AU:" + unit.getCode());
+            result.add(unit.getPath());
         }
         return result;
     }

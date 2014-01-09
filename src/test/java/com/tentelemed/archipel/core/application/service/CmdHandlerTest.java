@@ -7,6 +7,7 @@ import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQEventHandler;
 import com.tentelemed.archipel.security.infrastructure.model.UserQEventHandler;
 import com.tentelemed.archipel.site.application.service.SiteCommandService;
+import com.tentelemed.archipel.site.infrastructure.model.RoomQEventHandler;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQEventHandler;
 import com.tentelemed.gam.domain.TestEventStore;
 import org.junit.Before;
@@ -35,6 +36,7 @@ public abstract class CmdHandlerTest {
         context.register(RoleQEventHandler.class);
         context.register(SiteCommandService.class);
         context.register(SiteQEventHandler.class);
+        context.register(RoomQEventHandler.class);
 
         context.refresh();
     }

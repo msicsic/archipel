@@ -10,7 +10,11 @@ import java.util.Set;
  */
 public interface Location {
 
+    String getPrefix();
+
     String getCode();
+
+    LocationPath getPath();
 
     String getName();
 

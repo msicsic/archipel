@@ -30,6 +30,11 @@ public class ActivityUnit extends BaseEntity implements Location {
     }
 
     @Override
+    public String getPrefix() {
+        return "AU";
+    }
+
+    @Override
     public String getCode() {
         return code;
     }
@@ -69,5 +74,10 @@ public class ActivityUnit extends BaseEntity implements Location {
     @Override
     public int hashCode() {
         return code.hashCode();
+    }
+
+    @Override
+    public LocationPath getPath() {
+        return new LocationPath(this);
     }
 }

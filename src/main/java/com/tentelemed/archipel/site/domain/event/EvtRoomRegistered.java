@@ -1,8 +1,7 @@
 package com.tentelemed.archipel.site.domain.event;
 
-import com.tentelemed.archipel.site.domain.model.Bed;
-import com.tentelemed.archipel.site.domain.model.Location;
-import com.tentelemed.archipel.site.domain.model.RoomId;
+import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.site.domain.model.*;
 
 import java.util.Collections;
 import java.util.Set;
@@ -16,22 +15,27 @@ import java.util.Set;
 public class EvtRoomRegistered extends EvtRoomDomainEvent {
     private String name;
     private boolean medical;
-    private Set<Bed> beds;
-    private Location location;
+    private LocationPath locationPath;
+    private SiteId siteId;
 
     EvtRoomRegistered() {
     }
 
-    public EvtRoomRegistered(RoomId id, String name, boolean medical, Location location, Set<Bed> beds) {
+    public EvtRoomRegistered(RoomId id, SiteId siteId, String name, boolean medical, LocationPath locationPath) {
         super(id);
         this.name = name;
         this.medical = medical;
-        this.beds = beds;
-        this.location = location;
+        this.siteId = siteId;
+        this.locationPath = locationPath;
     }
 
-    public Location getLocation() {
-        return location;
+    @Override
+    public Type getCrudType() {
+        return Type.CREATE;
+    }
+
+    public SiteId getSiteId() {
+        return siteId;
     }
 
     public String getName() {
@@ -42,8 +46,7 @@ public class EvtRoomRegistered extends EvtRoomDomainEvent {
         return medical;
     }
 
-    public Set<Bed> getBeds() {
-        return Collections.unmodifiableSet(beds);
+    public LocationPath getLocationPath() {
+        return locationPath;
     }
-
 }

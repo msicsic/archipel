@@ -3,7 +3,9 @@ package com.tentelemed.archipel.site.infrastructure.model;
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
 import com.tentelemed.archipel.site.domain.model.Bed;
 import com.tentelemed.archipel.site.domain.model.RoomId;
+import com.tentelemed.archipel.site.domain.model.SiteId;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.validation.Valid;
@@ -22,8 +24,9 @@ import java.util.Set;
 public class RoomQ extends BaseEntityQ<RoomId> {
     @NotNull @Size(min = 2, max = 50) String name;
     boolean medical;
-    @NotNull @Valid @Embedded Set<Bed> beds = new HashSet<>();
-    @NotNull String locationCode;
+    @NotNull @Valid @ElementCollection Set<Bed> beds = new HashSet<>();
+    @NotNull String locationPath;
+    @NotNull SiteId siteId;
 
     @Override
     protected Class<RoomId> getIdClass() {
@@ -54,16 +57,23 @@ public class RoomQ extends BaseEntityQ<RoomId> {
         this.beds = beds;
     }
 
-    public String getLocationCode() {
-        return locationCode;
+    public String getLocationPath() {
+        return locationPath;
     }
 
-    public void setLocationCode(String locationCode) {
-        this.locationCode = locationCode;
+    public void setLocationPath(String locationPath) {
+        this.locationPath = locationPath;
     }
 
     public int getNbBeds() {
         return beds.size();
     }
 
+    public SiteId getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(SiteId siteId) {
+        this.siteId = siteId;
+    }
 }

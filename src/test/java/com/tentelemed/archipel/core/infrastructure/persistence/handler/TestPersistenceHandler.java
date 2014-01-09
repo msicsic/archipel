@@ -40,6 +40,12 @@ public class TestPersistenceHandler {
         if (event.isCreate()) {
             object = eventRegistry.newEntityQ(event);
         } else {
+            if (event.getId() == null) {
+                throw new RuntimeException("All events must have an non null ID : "+event.getClass().getSimpleName());
+            }
+            if (eventRegistry.getClassQForEvent(event) == null) {
+                throw new RuntimeException("No ClassQ found for event : "+event.getClass().getSimpleName());
+            }
             object = find(eventRegistry.getClassQForEvent(event), event.getId().getId());
         }
         if (event.isCreate() || event.isUpdate()) {

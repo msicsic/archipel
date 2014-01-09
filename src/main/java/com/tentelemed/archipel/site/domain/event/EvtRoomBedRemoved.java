@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.site.domain.event;
 
 import com.tentelemed.archipel.site.domain.model.Bed;
+import com.tentelemed.archipel.site.domain.model.RoomId;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +12,8 @@ import com.tentelemed.archipel.site.domain.model.Bed;
 public class EvtRoomBedRemoved extends EvtRoomDomainEvent {
     private Bed bed;
 
-    public EvtRoomBedRemoved(Bed bed) {
+    public EvtRoomBedRemoved(RoomId id, Bed bed) {
+        super(id);
         this.bed = bed;
     }
 

@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.application;
 
 import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.application.service.Command;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
 import org.slf4j.Logger;
@@ -24,6 +25,22 @@ public class EventRegistry {
     Map<Class<? extends DomainEvent>, Class<? extends BaseAggregateRoot>> registry = new HashMap<>();
     Map<Class<? extends DomainEvent>, Class<? extends BaseEntityQ>> registryQ = new HashMap<>();
     Map<Class<? extends DomainEvent>, Class<?>> registryHandler = new HashMap<>();
+
+    Map<Class<? extends Command>, Class<? extends BaseAggregateRoot>> mapCmd = new HashMap<>();
+
+
+
+    public void addCmdEntry(Class<? extends Command> cmdClass, Class<? extends BaseAggregateRoot> aggregateClass) {
+        mapCmd.put(cmdClass, aggregateClass);
+    }
+
+    public Class<? extends BaseAggregateRoot> getAggregateClassForCommand(Class<? extends Command> commandClass) {
+        return mapCmd.get(commandClass);
+    }
+
+    public Class<? extends BaseAggregateRoot> getAggregateClassForCommand(Command cmd) {
+        return mapCmd.get(cmd.getClass());
+    }
 
     public void addEntry(
             Class<? extends DomainEvent> eventClazz,

@@ -1,7 +1,8 @@
 TODO :
 
-- ATTENTION ! L'attribution des ID d'agregat ne semble pas fiable : si plusieurs appels simultanés
-  il est possible que 2 agregats obtiennent la meme valeur (nextValue)
+- Il faudrait tester les commandes avec une BDD mémoire pour valider que le mapping JPA fonctionne
+- Les implementations des CmdHandler (ex SiteCommandService) pourraient etre générés (les traitements sont
+  systématiques : chargement des agregats et delegation de la commande)
 
 - Le CmdHandler ne devrait pas accéder au QueryService (comme c'est actuellement le cas pour les Sites)
   Cela rend le test difficile

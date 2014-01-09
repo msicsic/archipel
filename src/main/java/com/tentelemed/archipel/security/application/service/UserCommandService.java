@@ -31,85 +31,39 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserCommandService extends BaseCommandService implements RoleCmdHandler, UserCmdHandler {
 
-    public UserCommandService() {
-        System.err.println("hop");
-    }
-
     @Override
     public CmdRes execute(CmdRoleDelete cmd) {
-        return _execute(cmd, new CommandHandler<CmdRoleDelete>() {
-            @Override
-            public CmdRes handle(CmdRoleDelete cmd) {
-                Role role = (Role) get(cmd.id);
-                return role.execute(cmd);
-            }
-        });
+        return genericExec(cmd);
     }
 
     @Override
     public CmdRes execute(CmdRoleUpdateRights cmd) {
-        return _execute(cmd, new CommandHandler<CmdRoleUpdateRights>() {
-            @Override
-            public CmdRes handle(CmdRoleUpdateRights cmd) {
-                Role role = (Role) get(cmd.id);
-                return role.execute(cmd);
-            }
-        });
+        return genericExec(cmd);
     }
 
     @Override
     public CmdRes execute(CmdRoleCreate cmd) {
-        return _execute(cmd, new CommandHandler<CmdRoleCreate>() {
-            @Override
-            public CmdRes handle(CmdRoleCreate cmd) {
-                Role role = get(Role.class);
-                return role.execute(cmd);
-            }
-        });
+        return genericExec(cmd);
     }
 
     @Override
     public CmdRes execute(CmdUserDelete cmd) {
-        return _execute(cmd, new CommandHandler<CmdUserDelete>() {
-            @Override
-            public CmdRes handle(CmdUserDelete cmd) {
-                User user = (User) get(cmd.id);
-                return user.execute(cmd);
-            }
-        });
+        return genericExec(cmd);
     }
 
     @Override
     public CmdRes execute(CmdUserCreate cmd) {
-        return _execute(cmd, new CommandHandler<CmdUserCreate>() {
-            @Override
-            public CmdRes handle(CmdUserCreate cmd) {
-                User user = get(User.class);
-                return user.execute(cmd);
-            }
-        });
+        return genericExec(cmd);
     }
 
     @Override
     public CmdRes execute(CmdUserUpdateInfo cmd) {
-        return _execute(cmd, new CommandHandler<CmdUserUpdateInfo>() {
-            @Override
-            public CmdRes handle(CmdUserUpdateInfo cmd) {
-                User user = (User) get(cmd.id);
-                return user.execute(cmd);
-            }
-        });
+        return genericExec(cmd);
     }
 
     @Override
     public CmdRes execute(CmdUserChangePassword cmd) {
-        return _execute(cmd, new CommandHandler<CmdUserChangePassword>() {
-            @Override
-            public CmdRes handle(CmdUserChangePassword cmd) {
-                User user = (User) get(cmd.id);
-                return user.execute(cmd);
-            }
-        });
+        return genericExec(cmd);
     }
 
 }

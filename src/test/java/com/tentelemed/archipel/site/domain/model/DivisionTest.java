@@ -27,7 +27,7 @@ public class DivisionTest {
         site.createSector(sector);
 
         // When
-        List<String> codes = division.getLocationCodes();
+        List<String> codes = division.getLocationPaths();
 
         // Then
         assertThat(codes.size(), equalTo(3));

@@ -71,7 +71,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
     @Override
     public CmdRes execute(CmdSiteCreateFunctionalUnit cmd) {
         cmd.code = cmd.code.toUpperCase();
-        if (getSectorCodes().contains(cmd.code)) throw new DomainException("This code is allready used !");
+        if (getLocationsCodes().contains(cmd.code)) throw new DomainException("This code is allready used !");
 
         Location found = findLocation(cmd.parent);
         if (found == null) throw new DomainException("Service not found");
@@ -82,7 +82,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
     @Override
     public CmdRes execute(CmdSiteCreateActivityUnit cmd) {
         cmd.code = cmd.code.toUpperCase();
-        if (getSectorCodes().contains(cmd.code)) throw new DomainException("This code is allready used !");
+        if (getLocationsCodes().contains(cmd.code)) throw new DomainException("This code is allready used !");
 
         Location found = findLocation(cmd.parent);
         if (found == null) throw new DomainException("FunctionalUnit not found");
@@ -93,7 +93,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
     @Override
     public CmdRes execute(CmdSiteCreateService cmd) {
         cmd.code = cmd.code.toUpperCase();
-        if (getSectorCodes().contains(cmd.code)) throw new DomainException("This code is allready used !");
+        if (getLocationsCodes().contains(cmd.code)) throw new DomainException("This code is allready used !");
 
         Location found = findLocation(cmd.sectorCode);
         if (found == null) throw new DomainException("Sector not found");
@@ -105,7 +105,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
     public CmdRes execute(CmdSiteCreateSector cmd) {
         cmd.code = cmd.code.toUpperCase();
         // le type ne doit pas deja etre présent
-        if (getSectorCodes().contains(cmd.code)) throw new DomainException("This code is allready used !");
+        if (getLocationsCodes().contains(cmd.code)) throw new DomainException("This code is allready used !");
 
         for (Sector s : sectors) {
             if (s.getType() == cmd.type) {
@@ -156,7 +156,11 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
 
     // methodes utilitaires
 
-    public Set<String> getSectorCodes() {
+    /**
+     * Liste des identifiants de Location
+     * @return
+     */
+    public Set<String> getLocationsCodes() {
         Set<String> codes = new HashSet<>();
         for (Sector sector : sectors) {
             codes.add(sector.code);
@@ -173,18 +177,24 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
         return codes;
     }
 
-    public List<String> getLocationCodes() {
-        List<String> result = new ArrayList<>();
+    public Location getLocationFromPath(LocationPath locationPath) {
+        int pos = locationPath.toString().lastIndexOf(":");
+        String code = locationPath.toString().substring(pos+1);
+        return findLocation(code);
+    }
+
+    public List<LocationPath> getLocationPaths() {
+        List<LocationPath> result = new ArrayList<>();
         for (Sector sector : sectors) {
-            result.addAll(sector.getLocationCodes());
+            result.addAll(sector.getLocationPaths());
         }
         return result;
     }
 
-    public Location findLocation(String locationCode) {
+    public Location findLocation(String locationPath) {
         Set<Location> locations = new HashSet<>();
         locations.addAll(sectors);
-        return _findLocation(locations, locationCode);
+        return _findLocation(locations, locationPath);
     }
 
     private Location _findLocation(Set<? extends Location> locations, String code) {
@@ -317,5 +327,4 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
     public SiteInfo getInfo() {
         return info;
     }
-
 }

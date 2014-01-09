@@ -21,20 +21,21 @@ public class RoomQEventHandler implements RoomEventHandler {
 
     @Override
     public void handle(EvtRoomBedAdded evt) {
-        // TODO
+        room.getBeds().add(evt.getBed());
     }
 
     @Override
     public void handle(EvtRoomBedRemoved evt) {
-        // TODO
+        room.getBeds().remove(evt.getBed());
     }
 
     @Override
     public void handle(EvtRoomRegistered event) {
-        room.setLocationCode(event.getLocation().getCode());
-        room.setBeds(event.getBeds());
-        room.setMedical(event.isMedical());
-        room.setName(event.getName());
+        room.setId(event.getId().getId());
+        room.medical = event.isMedical();
+        room.siteId = event.getSiteId();
+        room.name = event.getName();
+        room.locationPath = event.getLocationPath().toString();
     }
 
     @Override
