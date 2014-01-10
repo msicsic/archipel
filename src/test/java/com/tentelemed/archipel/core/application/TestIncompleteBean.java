@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.site.application.service;
+package com.tentelemed.archipel.core.application;
 
 /**
  * Created with IntelliJ IDEA.

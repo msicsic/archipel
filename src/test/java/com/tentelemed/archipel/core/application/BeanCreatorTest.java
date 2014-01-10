@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.site.application.service;
+package com.tentelemed.archipel.core.application;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -12,8 +12,8 @@ import static org.hamcrest.Matchers.notNullValue;
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
- * Date: 16/12/13
- * Time: 17:20
+ * Date: 10/01/14
+ * Time: 14:06
  */
 public class BeanCreatorTest {
     Logger log = LoggerFactory.getLogger(BeanCreatorTest.class);

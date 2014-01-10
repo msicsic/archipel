@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.security.application.service;
+package com.tentelemed.archipel.security.application.command;
 
 import com.tentelemed.archipel.core.application.service.CmdHandlerTest;
 import com.tentelemed.archipel.core.application.service.CmdRes;
@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
  * Date: 07/01/14
  * Time: 14:02
  */
-public class UserCommandServiceTest extends CmdHandlerTest {
+public class UserCmdHandlerTest extends CmdHandlerTest {
 
     UserCmdHandler userCmdHandler;
     RoleCmdHandler roleCmdHandler;

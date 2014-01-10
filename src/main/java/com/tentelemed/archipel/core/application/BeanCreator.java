@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.site.application.service;
+package com.tentelemed.archipel.core.application;
 
 import org.springframework.asm.Type;
 import org.springframework.cglib.core.Signature;

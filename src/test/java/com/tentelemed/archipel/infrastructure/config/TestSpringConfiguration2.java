@@ -7,6 +7,8 @@ import com.tentelemed.archipel.core.application.service.CommandServiceFactory;
 import com.tentelemed.archipel.core.infrastructure.persistence.handler.TestPersistenceHandler;
 import com.tentelemed.archipel.security.application.command.CmdRoleCreate;
 import com.tentelemed.archipel.security.application.command.CmdUserCreate;
+import com.tentelemed.archipel.security.application.command.RoleCmdHandler;
+import com.tentelemed.archipel.security.application.command.UserCmdHandler;
 import com.tentelemed.archipel.security.application.event.EvtRoleDomainEvent;
 import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
 import com.tentelemed.archipel.security.application.event.RoleEventHandler;
@@ -32,13 +34,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,8 +45,34 @@ import javax.sql.DataSource;
 public class TestSpringConfiguration2 {
 
     @Bean
+    public CommandServiceFactory commandServiceFactory() {
+        return new CommandServiceFactory();
+    }
+
+    @Bean
+    public SiteCmdHandler siteCmdHandler() {
+        return commandServiceFactory().create(SiteCmdHandler.class);
+    }
+
+    @Bean
+    public RoomCmdHandler roomCmdHandler() {
+        return commandServiceFactory().create(RoomCmdHandler.class);
+    }
+
+    @Bean
+    public UserCmdHandler userCmdHandler() {
+        return commandServiceFactory().create(UserCmdHandler.class);
+    }
+
+    @Bean
+    public RoleCmdHandler roleCmdHandler() {
+        return commandServiceFactory().create(RoleCmdHandler.class);
+    }
+
+    @Bean
     public EventRegistry eventRegistry() {
         EventRegistry registry = new EventRegistry();
+
         registry.addEntry(EvtUserDomainEvent.class, User.class, UserQ.class, UserEventHandler.class);
         registry.addEntry(EvtRoleDomainEvent.class, Role.class, RoleQ.class, RoleEventHandler.class);
         registry.addEntry(EvtSiteDomainEvent.class, Site.class, SiteQ.class, SiteEventHandler.class);
