@@ -2,11 +2,8 @@ package com.tentelemed.archipel.core.application.service;
 
 import com.tentelemed.archipel.core.infrastructure.persistence.handler.TestPersistenceHandler;
 import com.tentelemed.archipel.infrastructure.config.TestSpringConfiguration2;
-import com.tentelemed.archipel.security.application.command.UserCmdHandler;
-import com.tentelemed.archipel.security.application.service.UserCommandService;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQEventHandler;
 import com.tentelemed.archipel.security.infrastructure.model.UserQEventHandler;
-import com.tentelemed.archipel.site.application.service.SiteCommandService;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQEventHandler;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQEventHandler;
 import com.tentelemed.gam.domain.TestEventStore;
@@ -31,10 +28,8 @@ public abstract class CmdHandlerTest {
         context = new AnnotationConfigWebApplicationContext();
         context.register(TestSpringConfiguration2.class);
 
-        //context.register(UserCommandService.class);
         context.register(UserQEventHandler.class);
         context.register(RoleQEventHandler.class);
-        //context.register(SiteCommandService.class);
         context.register(SiteQEventHandler.class);
         context.register(RoomQEventHandler.class);
 

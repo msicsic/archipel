@@ -32,6 +32,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,21 +62,6 @@ public class TestSpringConfiguration2 {
         registry.addCmdEntry(CmdRoomCreate.class, Room.class);
         registry.addCmdEntry(CmdSiteCreate.class, Site.class);
         return registry;
-    }
-
-    @Bean
-    public CommandServiceFactory commandServiceFactory() {
-        return new CommandServiceFactory();
-    }
-
-    @Bean
-    public SiteCmdHandler siteCmdHandler() {
-        return commandServiceFactory().create(SiteCmdHandler.class);
-    }
-
-    @Bean
-    public RoomCmdHandler roomCmdHandler() {
-        return commandServiceFactory().create(RoomCmdHandler.class);
     }
 
     @Bean

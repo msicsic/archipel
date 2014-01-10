@@ -45,7 +45,11 @@ public class CommandServiceFactory {
 
     private TransactionTemplate getTxTemplate() {
         if (transactionManager == null) {
-            transactionManager = (PlatformTransactionManager) context.getBean("transactionManager");
+            try {
+                transactionManager = (PlatformTransactionManager) context.getBean(PlatformTransactionManager.class);
+            } catch (Exception e) {
+                return null;
+            }
         }
         if (transactionTemplate == null) {
             transactionTemplate = new TransactionTemplate(transactionManager);
@@ -59,17 +63,23 @@ public class CommandServiceFactory {
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                 if (method.getName().equals("execute")) {
                     final Command cmd = (Command) args[0];
-                    return getTxTemplate().execute(new TransactionCallback<Object>() {
+                    TransactionCallback callback = new TransactionCallback<Object>() {
                         @Override
                         public Object doInTransaction(TransactionStatus status) {
                             return genericExec(cmd);
                         }
-                    });
+                    };
+                    if (getTxTemplate() != null) {
+                        return getTxTemplate().execute(callback);
+                    } else {
+                        return callback.doInTransaction(null);
+                    }
+                } else {
+                    return method.invoke(this, args);
                 }
-                return method.invoke(this, args);
             }
         };
-        Object res = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {iFace}, handler);
+        Object res = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{iFace}, handler);
         return (M) res;
     }
 
@@ -82,13 +92,17 @@ public class CommandServiceFactory {
         BaseAggregateRoot aggregate;
         if (cmd.id == null) {
             Class<? extends BaseAggregateRoot> aggregateClass = registry.getAggregateClassForCommand(cmd);
+            if (aggregateClass == null) {
+                throw new RuntimeException("No Aggregate Class defined in registry for Create COMMAND : "+cmd.getClass().getSimpleName());
+            }
             aggregate = get(aggregateClass);
         } else {
             aggregate = get(cmd.id);
         }
         try {
             // parcourir les champs de type EntityId et les stocker dans la commande
-            Class c = cmd.getClass();
+            Class cmdClass = getRealClass(cmd.getClass());
+            Class c = cmdClass;
             while (c != null) {
                 for (Field field : c.getDeclaredFields()) {
                     if (field.getName().equals("id")) continue;
@@ -100,20 +114,20 @@ public class CommandServiceFactory {
                 }
                 c = c.getSuperclass();
             }
-            Method m = aggregate.getClass().getMethod("execute", cmd.getClass());
+            Method m = aggregate.getClass().getMethod("execute", cmdClass);
             CmdRes result = (CmdRes) m.invoke(aggregate, cmd);
 
             if (result == null) {
-                throw new RuntimeException("Command result cannot be null : " + getClass().getSimpleName() + ".execute(" + cmd.getClass().getSimpleName() + ")");
+                throw new RuntimeException("Command result cannot be null : " + getClass().getSimpleName() + ".execute(" + cmdClass.getSimpleName() + ")");
             }
 
             if (result.events == null || result.events.size() == 0) {
-                throw new RuntimeException(getClass().getSimpleName() + ".execute(" + cmd.getClass().getSimpleName() + ") must return at least one event");
+                throw new RuntimeException(getClass().getSimpleName() + ".execute(" + cmdClass.getSimpleName() + ") must return at least one event");
             }
 
             // si la commande n'a pas d'id (mode creation), le premier evt doit etre un create
             if (cmd.id == null && !result.events.get(0).isCreate()) {
-                throw new RuntimeException("Command " + cmd.getClass().getSimpleName() + " has null id and must return a CREATE event : " + result.events.get(0).getClass().getSimpleName());
+                throw new RuntimeException("Command " + cmdClass.getSimpleName() + " has null id and must return a CREATE event : " + result.events.get(0).getClass().getSimpleName());
             }
 
             // l'agregat doit rester valide
@@ -134,6 +148,12 @@ public class CommandServiceFactory {
         }
     }
 
+    private Class getRealClass(Class c) {
+        while (c != null && c.getName().contains("$$")) {
+            c = c.getSuperclass();
+        }
+        return c;
+    }
 
     //    protected <M extends EntityId, MM extends BaseAggregateRoot<M>> M post(MM target, Collection<DomainEvent> events) {
     protected <M extends EntityId> M post(CmdRes res) {

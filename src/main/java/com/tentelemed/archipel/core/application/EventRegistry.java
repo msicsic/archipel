@@ -39,7 +39,14 @@ public class EventRegistry {
     }
 
     public Class<? extends BaseAggregateRoot> getAggregateClassForCommand(Command cmd) {
-        return mapCmd.get(cmd.getClass());
+        return mapCmd.get(getRealClass(cmd.getClass()));
+    }
+
+    private Class getRealClass(Class c) {
+        while (c != null && c.getName().contains("$$")) {
+            c = c.getSuperclass();
+        }
+        return c;
     }
 
     public void addEntry(

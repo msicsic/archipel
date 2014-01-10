@@ -3,8 +3,13 @@ package com.tentelemed.archipel.core.infrastructure.config;
 import com.google.common.eventbus.EventBus;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.tentelemed.archipel.core.application.EventStore;
+import com.tentelemed.archipel.core.application.service.CommandServiceFactory;
 import com.tentelemed.archipel.core.infrastructure.repo.EventStoreImpl;
+import com.tentelemed.archipel.security.application.command.RoleCmdHandler;
+import com.tentelemed.archipel.security.application.command.UserCmdHandler;
 import com.tentelemed.archipel.security.infrastructure.shiro.MyRealm;
+import com.tentelemed.archipel.site.application.command.RoomCmdHandler;
+import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -38,6 +43,31 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @ComponentScan("com.tentelemed.archipel")
 public class SpringConfiguration {
+
+    @Bean
+    public CommandServiceFactory commandServiceFactory() {
+        return new CommandServiceFactory();
+    }
+
+    @Bean
+    public SiteCmdHandler siteCmdHandler() {
+        return commandServiceFactory().create(SiteCmdHandler.class);
+    }
+
+    @Bean
+    public RoomCmdHandler roomCmdHandler() {
+        return commandServiceFactory().create(RoomCmdHandler.class);
+    }
+
+    @Bean
+    public UserCmdHandler userCmdHandler() {
+        return commandServiceFactory().create(UserCmdHandler.class);
+    }
+
+    @Bean
+    public RoleCmdHandler roleCmdHandler() {
+        return commandServiceFactory().create(RoleCmdHandler.class);
+    }
 
     @Bean
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
