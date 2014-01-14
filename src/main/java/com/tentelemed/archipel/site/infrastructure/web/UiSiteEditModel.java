@@ -6,7 +6,7 @@ import com.tentelemed.archipel.site.application.command.CmdSiteUpdateAdditionalI
 import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
 import com.tentelemed.archipel.site.application.service.SiteQueryService;
 import com.tentelemed.archipel.site.domain.pub.Bank;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
+import com.tentelemed.archipel.site.domain.pub.SiteQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -11,7 +11,7 @@ import com.tentelemed.archipel.site.domain.pub.Bed;
 import com.tentelemed.archipel.site.domain.pub.LocationPath;
 import com.tentelemed.archipel.site.domain.pub.SiteId;
 import com.tentelemed.archipel.site.domain.pub.SiteType;
-import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
+import com.tentelemed.archipel.site.domain.pub.RoomQ;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -2,8 +2,8 @@ package com.tentelemed.archipel.security.infrastructure.shiro;
 
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.tentelemed.archipel.security.domain.pub.Right;
-import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
-import com.tentelemed.archipel.security.infrastructure.model.UserQ;
+import com.tentelemed.archipel.security.domain.pub.RoleQ;
+import com.tentelemed.archipel.security.domain.pub.UserQ;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;

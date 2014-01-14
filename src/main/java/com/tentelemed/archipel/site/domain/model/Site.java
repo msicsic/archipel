@@ -6,7 +6,7 @@ import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.site.application.command.*;
 import com.tentelemed.archipel.site.domain.pub.*;
-import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
+import com.tentelemed.archipel.site.domain.pub.LocationQ;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

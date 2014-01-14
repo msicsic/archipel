@@ -1,9 +1,6 @@
-package com.tentelemed.archipel.site.infrastructure.model;
+package com.tentelemed.archipel.site.domain.pub;
 
-import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.site.domain.pub.Bed;
-import com.tentelemed.archipel.site.domain.pub.RoomId;
-import com.tentelemed.archipel.site.domain.pub.SiteId;
+import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;

@@ -4,7 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.core.application.service.EventHandler;
-import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
+import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
 import com.tentelemed.archipel.core.infrastructure.model.EventUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

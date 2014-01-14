@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.infrastructure.model;
 
 import com.tentelemed.archipel.core.domain.model.TestUserId;
+import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;

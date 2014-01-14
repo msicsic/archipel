@@ -2,12 +2,7 @@ package com.tentelemed.archipel.security.infrastructure.model;
 
 import com.googlecode.zohhak.api.TestWith;
 import com.googlecode.zohhak.api.runners.ZohhakRunner;
-import com.tentelemed.archipel.security.domain.pub.EvtRoleDeleted;
-import com.tentelemed.archipel.security.domain.pub.EvtRoleRegistered;
-import com.tentelemed.archipel.security.domain.pub.EvtRoleRightsUpdated;
-import com.tentelemed.archipel.security.domain.pub.RoleEventHandler;
-import com.tentelemed.archipel.security.domain.pub.Right;
-import com.tentelemed.archipel.security.domain.pub.RoleId;
+import com.tentelemed.archipel.security.domain.pub.*;
 import org.junit.runner.RunWith;
 
 import java.util.HashSet;

@@ -4,8 +4,8 @@ import com.tentelemed.archipel.core.application.service.CmdHandlerTest;
 import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.security.domain.pub.*;
 import com.tentelemed.archipel.security.domain.model.*;
-import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
-import com.tentelemed.archipel.security.infrastructure.model.UserQ;
+import com.tentelemed.archipel.security.domain.pub.RoleQ;
+import com.tentelemed.archipel.security.domain.pub.UserQ;
 import org.junit.Before;
 import org.junit.Test;
 

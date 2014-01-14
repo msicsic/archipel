@@ -1,9 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.model;
 
-import com.tentelemed.archipel.security.domain.pub.EvtRoleDeleted;
-import com.tentelemed.archipel.security.domain.pub.EvtRoleRegistered;
-import com.tentelemed.archipel.security.domain.pub.EvtRoleRightsUpdated;
-import com.tentelemed.archipel.security.domain.pub.RoleEventHandler;
+import com.tentelemed.archipel.security.domain.pub.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +23,7 @@ public class RoleQEventHandler implements RoleEventHandler {
     @Override
     public void handle(EvtRoleRegistered event) {
         role.setId(event.getId().getId());
-        role.name = event.getName();
+        role.setName(event.getName());
         role.setRights(event.getRights());
     }
 

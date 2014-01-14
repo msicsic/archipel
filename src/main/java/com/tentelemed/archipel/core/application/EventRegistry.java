@@ -3,7 +3,7 @@ package com.tentelemed.archipel.core.application;
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
-import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
+import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

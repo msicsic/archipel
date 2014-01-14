@@ -27,32 +27,32 @@ public class UserQEventHandler implements UserEventHandler {
 
     @Override
     public void handle(EvtUserInfoUpdated event) {
-        user.firstName = event.getFirstName();
-        user.lastName = event.getLastName();
-        user.dob = event.getDob();
-        user.email = event.getEmail();
+        user.setFirstName(event.getFirstName());
+        user.setLastName(event.getLastName());
+        user.setDob(event.getDob());
+        user.setEmail(event.getEmail());
     }
 
     @Override
     public void handle(EvtUserPasswordUpdated event) {
-        user.password = event.getPassword();
+        user.setPassword(event.getPassword());
     }
 
     @Override
     public void handle(EvtUserRoleUpdated event) {
-        user.roleId = event.getRoleId();
+        user.setRoleId(event.getRoleId());
     }
 
     @Override
     public void handle(EvtUserRegistered event) {
         user.setId(event.getId().getId());
-        user.dob = event.getDob();
-        user.email = event.getEmail();
-        user.firstName = event.getFirstName();
-        user.lastName = event.getLastName();
-        user.login = event.getCredentials().getLogin();
-        user.password = event.getCredentials().getPassword();
-        user.roleId = event.getRoleId();
+        user.setDob(event.getDob());
+        user.setEmail(event.getEmail());
+        user.setFirstName(event.getFirstName());
+        user.setLastName(event.getLastName());
+        user.setLogin(event.getCredentials().getLogin());
+        user.setPassword(event.getCredentials().getPassword());
+        user.setRoleId(event.getRoleId());
     }
 
 

@@ -2,7 +2,7 @@ package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BasePopup;
 import com.tentelemed.archipel.site.domain.pub.Location;
-import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
+import com.tentelemed.archipel.site.domain.pub.RoomQ;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

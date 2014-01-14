@@ -2,8 +2,8 @@ package com.tentelemed.archipel.security.domain.interfaces;
 
 import com.tentelemed.archipel.security.domain.pub.RoleId;
 import com.tentelemed.archipel.security.domain.pub.UserId;
-import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
-import com.tentelemed.archipel.security.infrastructure.model.UserQ;
+import com.tentelemed.archipel.security.domain.pub.RoleQ;
+import com.tentelemed.archipel.security.domain.pub.UserQ;
 
 import java.util.List;
 

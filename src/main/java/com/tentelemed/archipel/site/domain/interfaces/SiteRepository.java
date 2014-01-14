@@ -3,8 +3,8 @@ package com.tentelemed.archipel.site.domain.interfaces;
 import com.tentelemed.archipel.core.domain.model.Country;
 import com.tentelemed.archipel.site.domain.pub.Bank;
 import com.tentelemed.archipel.site.domain.pub.SiteId;
-import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
+import com.tentelemed.archipel.site.domain.pub.RoomQ;
+import com.tentelemed.archipel.site.domain.pub.SiteQ;
 
 import java.util.List;
 

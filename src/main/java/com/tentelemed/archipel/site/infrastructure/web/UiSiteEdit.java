@@ -3,7 +3,7 @@ package com.tentelemed.archipel.site.infrastructure.web;
 import com.tentelemed.archipel.core.domain.model.Country;
 import com.tentelemed.archipel.core.infrastructure.web.BasePopup;
 import com.tentelemed.archipel.site.domain.pub.Bank;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
+import com.tentelemed.archipel.site.domain.pub.SiteQ;
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;

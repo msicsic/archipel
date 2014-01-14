@@ -27,57 +27,57 @@ public class SiteQEventHandler implements SiteEventHandler {
         LocationQ parent = site.findLocation(event.getParent());
 
         LocationQ service = new LocationQ(event.getId(), LocationQ.Type.SERVICE, event.getName(), event.getCode(), parent);
-        site.addLocation(0, 1, null, site.sectors, service);
+        site.addLocation(0, 1, null, site.getSectors(), service);
     }
 
     @Override
     public void handle(EvtSiteServiceDeleted event) {
-        site.removeLocation(0, 1, site.sectors, event.getServiceCode());
+        site.removeLocation(0, 1, site.getSectors(), event.getServiceCode());
     }
 
     @Override
     public void handle(EvtSiteSectorAdded event) {
         LocationQ sector = new LocationQ(event.getId(), LocationQ.Type.SECTOR, event.getSectorName(), event.getSectorCode(), null);
         sector.setSectorType(event.getSectorType());
-        site.addLocation(0, 0, null, site.sectors, sector);
+        site.addLocation(0, 0, null, site.getSectors(), sector);
     }
 
     @Override
     public void handle(EvtSiteSectorDeleted event) {
-        site.removeLocation(0, 0, site.sectors, event.getSectorCode());
+        site.removeLocation(0, 0, site.getSectors(), event.getSectorCode());
     }
 
     @Override
     public void handle(EvtSiteFunctionalUnitAdded event) {
         LocationQ parent = site.findLocation(event.getParent());
         LocationQ location = new LocationQ(event.getId(), LocationQ.Type.FU, event.getName(), event.getCode(), parent);
-        site.addLocation(0, 2, null, site.sectors, location);
+        site.addLocation(0, 2, null, site.getSectors(), location);
     }
 
     @Override
     public void handle(EvtSiteFunctionalUnitDeleted event) {
-        site.removeLocation(0, 2, site.sectors, event.getCode());
+        site.removeLocation(0, 2, site.getSectors(), event.getCode());
     }
 
     @Override
     public void handle(EvtSiteActivityUnitAdded event) {
         LocationQ parent = site.findLocation(event.getParent());
         LocationQ location = new LocationQ(event.getId(), LocationQ.Type.AU, event.getName(), event.getCode(), parent);
-        site.addLocation(0, 3, null, site.sectors, location);
+        site.addLocation(0, 3, null, site.getSectors(), location);
     }
 
     @Override
     public void handle(EvtSiteActivityUnitDeleted event) {
-        site.removeLocation(0, 3, site.sectors, event.getCode());
+        site.removeLocation(0, 3, site.getSectors(), event.getCode());
     }
 
     @Override
     public void handle(EvtSiteRegistered event) {
         site.setId(event.getId().getId());
-        site.ident = event.getIdent();
-        site.name = event.getName();
-        site.type = event.getType();
-        site.sectors.add(event.getDefaultSector());
+        site.setIdent(event.getIdent());
+        site.setName(event.getName());
+        site.setType(event.getType());
+        site.getSectors().add(event.getDefaultSector());
     }
 
     @Override
@@ -92,7 +92,7 @@ public class SiteQEventHandler implements SiteEventHandler {
 
     @Override
     public void handle(EvtSiteAdditionalInfoUpdated event) {
-        site.info = event.getInfo();
+        site.setInfo(event.getInfo());
     }
 
     @Override
@@ -102,9 +102,9 @@ public class SiteQEventHandler implements SiteEventHandler {
 
     @Override
     public void handle(EvtSiteMainInfoUpdated event) {
-        site.name = event.getName();
-        site.type = event.getType();
-        site.ident = event.getIdent();
+        site.setName(event.getName());
+        site.setType(event.getType());
+        site.setIdent(event.getIdent());
     }
 
 }

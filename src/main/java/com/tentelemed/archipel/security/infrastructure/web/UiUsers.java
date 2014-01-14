@@ -5,7 +5,7 @@ import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.security.domain.pub.EvtUserDomainEvent;
-import com.tentelemed.archipel.security.infrastructure.model.UserQ;
+import com.tentelemed.archipel.security.domain.pub.UserQ;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.filter.Or;

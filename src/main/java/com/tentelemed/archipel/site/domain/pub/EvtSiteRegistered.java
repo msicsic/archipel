@@ -1,7 +1,5 @@
 package com.tentelemed.archipel.site.domain.pub;
 
-import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Mael

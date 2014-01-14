@@ -32,10 +32,10 @@ public class RoomQEventHandler implements RoomEventHandler {
     @Override
     public void handle(EvtRoomRegistered event) {
         room.setId(event.getId().getId());
-        room.medical = event.isMedical();
-        room.siteId = event.getSiteId();
-        room.name = event.getName();
-        room.locationPath = event.getLocationPath().toString();
+        room.setMedical(event.isMedical());
+        room.setSiteId(event.getSiteId());
+        room.setName(event.getName());
+        room.setLocationPath(event.getLocationPath().toString());
     }
 
     @Override

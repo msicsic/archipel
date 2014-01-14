@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.persistence;
 
-import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
+import com.tentelemed.archipel.security.domain.pub.RoleQ;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

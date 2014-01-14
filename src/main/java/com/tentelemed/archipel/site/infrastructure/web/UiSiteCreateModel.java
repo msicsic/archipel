@@ -4,7 +4,7 @@ import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
 import com.tentelemed.archipel.site.application.command.CmdSiteUpdate;
 import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
-import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
+import com.tentelemed.archipel.site.domain.pub.SiteQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

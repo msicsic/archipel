@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.model;
 
+import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
 import com.tentelemed.archipel.security.domain.pub.RoleId;
 
 import javax.validation.constraints.NotNull;

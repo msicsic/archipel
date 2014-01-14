@@ -1,10 +1,7 @@
-package com.tentelemed.archipel.site.infrastructure.model;
+package com.tentelemed.archipel.site.domain.pub;
 
-import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
+import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
 import com.tentelemed.archipel.site.domain.model.Sector;
-import com.tentelemed.archipel.site.domain.pub.SiteId;
-import com.tentelemed.archipel.site.domain.pub.SiteInfo;
-import com.tentelemed.archipel.site.domain.pub.SiteType;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -80,7 +77,7 @@ public class SiteQ extends BaseEntityQ<SiteId> {
         // TODO
     }*/
 
-    boolean addLocation(int currentLevel, int goalLevel, LocationQ parent, Set<LocationQ> locations, LocationQ location) {
+    public boolean addLocation(int currentLevel, int goalLevel, LocationQ parent, Set<LocationQ> locations, LocationQ location) {
         if (currentLevel == goalLevel) {
             if (parent == null) {
                 if (location.getParent() != null) {
@@ -105,7 +102,7 @@ public class SiteQ extends BaseEntityQ<SiteId> {
         return false;
     }
 
-    boolean removeLocation(int currentLevel, int goalLevel, Set<LocationQ> locations, String locationCode) {
+    public boolean removeLocation(int currentLevel, int goalLevel, Set<LocationQ> locations, String locationCode) {
         if (currentLevel == goalLevel) {
             for (LocationQ loc : locations) {
                 if (loc.getCode().equals(locationCode)) {

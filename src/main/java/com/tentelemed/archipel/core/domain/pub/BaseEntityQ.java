@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.core.infrastructure.model;
+package com.tentelemed.archipel.core.domain.pub;
 
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import org.slf4j.Logger;
