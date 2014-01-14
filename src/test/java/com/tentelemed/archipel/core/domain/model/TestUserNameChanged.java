@@ -12,7 +12,8 @@ public class TestUserNameChanged extends AbstractDomainEvent<TestUserId> {
     private String firstName;
     private String lastName;
 
-    TestUserNameChanged() {}
+    TestUserNameChanged() {
+    }
 
     public TestUserNameChanged(String firstName, String lastName) {
         this.firstName = firstName;

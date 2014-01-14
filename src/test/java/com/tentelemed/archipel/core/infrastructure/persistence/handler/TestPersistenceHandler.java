@@ -2,8 +2,8 @@ package com.tentelemed.archipel.core.infrastructure.persistence.handler;
 
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.EventRegistry;
-import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.core.application.service.EventHandler;
+import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
 import com.tentelemed.archipel.core.infrastructure.model.EventUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,17 +40,17 @@ public class TestPersistenceHandler {
             object = eventRegistry.newEntityQ(event);
         } else {
             if (event.getId() == null) {
-                throw new RuntimeException("All events must have an non null ID : "+event.getClass().getSimpleName());
+                throw new RuntimeException("All events must have an non null ID : " + event.getClass().getSimpleName());
             }
             if (eventRegistry.getClassQForEvent(event) == null) {
-                throw new RuntimeException("No ClassQ found for event : "+event.getClass().getSimpleName());
+                throw new RuntimeException("No ClassQ found for event : " + event.getClass().getSimpleName());
             }
             object = find(eventRegistry.getClassQForEvent(event), event.getId().getId());
         }
         if (event.isCreate() || event.isUpdate()) {
             Class handlerClass = eventRegistry.getHandlerClassForEvent(event);
             if (handlerClass == null) {
-                throw new RuntimeException("no handler class for event : "+event.getClass().getSimpleName());
+                throw new RuntimeException("no handler class for event : " + event.getClass().getSimpleName());
             }
             Object handler = context.getBean(handlerClass);
             Method m = handler.getClass().getMethod("setObject", Object.class);

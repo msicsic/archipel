@@ -1,7 +1,9 @@
-package com.tentelemed.archipel.gam.domain;
+package com.tentelemed.archipel.gam.domain.model;
 
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.Country;
+import com.tentelemed.archipel.gam.domain.pub.PatientId;
+import com.tentelemed.archipel.gam.domain.pub.PatientInfo;
 import com.tentelemed.archipel.security.domain.pub.UserId;
 
 import javax.validation.Valid;
@@ -31,7 +33,7 @@ public class Patient extends BaseAggregateRoot<PatientId> {
     @NotNull @Size(min = 2, max = 50) String firstName2;
     @NotNull @Size(min = 2, max = 50) String lastName;
     boolean confidential;
-    @NotNull IPP IPP;
+    @NotNull com.tentelemed.archipel.gam.domain.pub.IPP IPP;
     @NotNull Sex sex;
     @NotNull Date birthDate;
     @Size(min = 2, max = 50) String birthName;

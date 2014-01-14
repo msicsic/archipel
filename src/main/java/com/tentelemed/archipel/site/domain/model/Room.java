@@ -7,10 +7,6 @@ import com.tentelemed.archipel.site.application.command.CmdRoomAddBed;
 import com.tentelemed.archipel.site.application.command.CmdRoomCreate;
 import com.tentelemed.archipel.site.application.command.CmdRoomRemoveBed;
 import com.tentelemed.archipel.site.application.command.RoomCmdHandler;
-import com.tentelemed.archipel.site.domain.pub.EvtRoomBedAdded;
-import com.tentelemed.archipel.site.domain.pub.EvtRoomBedRemoved;
-import com.tentelemed.archipel.site.domain.pub.EvtRoomRegistered;
-import com.tentelemed.archipel.site.domain.pub.EvtRoomUpdated;
 import com.tentelemed.archipel.site.domain.pub.*;
 
 import javax.validation.Valid;
@@ -45,16 +41,16 @@ public class Room extends BaseAggregateRoot<RoomId> implements RoomCmdHandler {
         }
         Location location = site.getLocationFromPath(cmd.locationPath);
         if (location == null) {
-            throw new DomainException("Location not found : "+cmd.locationPath);
+            throw new DomainException("Location not found : " + cmd.locationPath);
         }
-        if (cmd.medical && ! location.isMedical()) {
+        if (cmd.medical && !location.isMedical()) {
             throw new DomainException("Medical room must be in a medical location");
         }
         return _result(handle(new EvtRoomRegistered(getEntityId(), cmd.siteId, cmd.name, location.isMedical(), cmd.locationPath)));
     }
 
     public CmdRes execute(CmdRoomAddBed cmd) {
-        if (! isMedical()) {
+        if (!isMedical()) {
             throw new RuntimeException("cannot add beds to non medical room");
         }
         return _result(handle(new EvtRoomBedAdded(getEntityId(), cmd.bed)));

@@ -6,7 +6,6 @@ import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.site.application.command.*;
 import com.tentelemed.archipel.site.domain.pub.*;
-import com.tentelemed.archipel.site.domain.pub.LocationQ;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -75,7 +74,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
 
         Location found = findLocation(cmd.parent);
         if (found == null) throw new DomainException("Service not found");
-        if (! (found instanceof Service)) throw new DomainException("FunctionalUnit can only be added to a Service");
+        if (!(found instanceof Service)) throw new DomainException("FunctionalUnit can only be added to a Service");
         return _result(handle(new EvtSiteFunctionalUnitAdded(getEntityId(), cmd.parent, cmd.code, cmd.name)));
     }
 
@@ -86,7 +85,8 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
 
         Location found = findLocation(cmd.parent);
         if (found == null) throw new DomainException("FunctionalUnit not found");
-        if (! (found instanceof FunctionalUnit)) throw new DomainException("ActivityUnit must be added to a FunctionalUnit");
+        if (!(found instanceof FunctionalUnit))
+            throw new DomainException("ActivityUnit must be added to a FunctionalUnit");
         return _result(handle(new EvtSiteActivityUnitAdded(getEntityId(), cmd.parent, cmd.code, cmd.name)));
     }
 
@@ -97,7 +97,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
 
         Location found = findLocation(cmd.sectorCode);
         if (found == null) throw new DomainException("Sector not found");
-        if (! (found instanceof Sector)) throw new DomainException("Service must be added to Sector");
+        if (!(found instanceof Sector)) throw new DomainException("Service must be added to Sector");
         return _result(handle(new EvtSiteServiceAdded(getEntityId(), cmd.sectorCode, cmd.code, cmd.name)));
     }
 
@@ -119,9 +119,9 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
     public CmdRes execute(CmdSiteDeleteSector cmd) {
         Location location = findLocation(cmd.code);
         if (location == null) throw new DomainException("this SectorCode is not present in this Site");
-        if (! (location instanceof Sector)) throw new DomainException("Code to remove is not a Sector");
+        if (!(location instanceof Sector)) throw new DomainException("Code to remove is not a Sector");
         Sector sector = (Sector) location;
-        if (sector.getType().equals(Sector.Type.MED)) {
+        if (sector.getType().equals(SectorType.MED)) {
             throw new DomainException("Default sector (MED) cannot be deleted");
         }
         return _result(handle(new EvtSiteSectorDeleted(getEntityId(), cmd.code)));
@@ -158,6 +158,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
 
     /**
      * Liste des identifiants de Location
+     *
      * @return
      */
     public Set<String> getLocationsCodes() {
@@ -179,7 +180,7 @@ public class Site extends BaseAggregateRoot<SiteId> implements SiteCmdHandler {
 
     public Location getLocationFromPath(LocationPath locationPath) {
         int pos = locationPath.toString().lastIndexOf(":");
-        String code = locationPath.toString().substring(pos+1);
+        String code = locationPath.toString().substring(pos + 1);
         return findLocation(code);
     }
 

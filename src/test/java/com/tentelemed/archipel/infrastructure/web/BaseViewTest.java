@@ -18,7 +18,6 @@ import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 
 import static junit.framework.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -50,6 +49,7 @@ public abstract class BaseViewTest<M extends BaseView, MM extends BaseViewModel>
     }
 
     protected abstract M getView();
+
     protected abstract MM getViewModel();
 
     //@Test
@@ -67,9 +67,9 @@ public abstract class BaseViewTest<M extends BaseView, MM extends BaseViewModel>
                 // v�rifier que cette m�thode existe bien
                 try {
                     String propName = (String) id;
-                    log.info("("+getClass().getSimpleName()+") Testing path : "+propName);
+                    log.info("(" + getClass().getSimpleName() + ") Testing path : " + propName);
                     Method m = checkNestedProperty(getView().getModel().getClass(), propName);
-                    assertNotNull("path not found in model : "+propName, m);
+                    assertNotNull("path not found in model : " + propName, m);
                 } catch (Exception e) {
                     log.error(null, e);
                 }

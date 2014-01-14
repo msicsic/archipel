@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
 import com.tentelemed.archipel.site.domain.pub.*;
-import com.tentelemed.archipel.site.domain.model.Sector;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,7 +25,7 @@ public class SiteQTest {
 
     public void testSiteXXX() {
         SiteQ site = createSite();
-        EvtSiteSectorAdded event = new EvtSiteSectorAdded(site.getEntityId(), Sector.Type.ADMIN, "ADM", "Facturation");
+        EvtSiteSectorAdded event = new EvtSiteSectorAdded(site.getEntityId(), SectorType.ADMIN, "ADM", "Facturation");
         //site.handle(event);
         // TODO
     }

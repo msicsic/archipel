@@ -1,10 +1,10 @@
 package com.tentelemed.archipel.security.application.service;
 
-import com.tentelemed.archipel.core.domain.pub.LoginEvent;
 import com.tentelemed.archipel.core.application.service.BaseQueryService;
+import com.tentelemed.archipel.core.domain.pub.LoginEvent;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
-import com.tentelemed.archipel.security.domain.pub.UserId;
 import com.tentelemed.archipel.security.domain.pub.RoleQ;
+import com.tentelemed.archipel.security.domain.pub.UserId;
 import com.tentelemed.archipel.security.domain.pub.UserQ;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;

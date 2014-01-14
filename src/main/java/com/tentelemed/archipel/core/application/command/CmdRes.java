@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.core.application.command;
 
-import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 
 import java.util.List;
 

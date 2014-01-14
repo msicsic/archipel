@@ -3,9 +3,9 @@ package com.tentelemed.archipel.core.infrastructure.web;
 import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import com.tentelemed.archipel.core.domain.pub.DomainEvent;
-import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.core.application.BeanCreator;
+import com.tentelemed.archipel.core.domain.model.DomainException;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
@@ -248,7 +248,6 @@ public abstract class BaseViewModel {
     public String getModule() {
         return module;
     }
-
 
 
 }

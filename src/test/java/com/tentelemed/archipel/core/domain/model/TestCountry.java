@@ -9,7 +9,8 @@ package com.tentelemed.archipel.core.domain.model;
 public class TestCountry extends BaseVO {
     private String ISO;
 
-    private TestCountry() {}
+    private TestCountry() {
+    }
 
     public TestCountry(String ISO) {
         this.ISO = ISO;

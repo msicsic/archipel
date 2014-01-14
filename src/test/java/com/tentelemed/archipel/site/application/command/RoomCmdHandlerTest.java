@@ -1,17 +1,11 @@
 package com.tentelemed.archipel.site.application.command;
 
-import com.tentelemed.archipel.core.application.service.CmdHandlerTest;
 import com.tentelemed.archipel.core.application.command.CmdRes;
+import com.tentelemed.archipel.core.application.service.CmdHandlerTest;
 import com.tentelemed.archipel.core.domain.model.DomainException;
-import com.tentelemed.archipel.site.domain.pub.EvtRoomBedAdded;
-import com.tentelemed.archipel.site.domain.pub.EvtRoomBedRemoved;
-import com.tentelemed.archipel.site.domain.pub.EvtRoomRegistered;
-import com.tentelemed.archipel.site.domain.model.*;
-import com.tentelemed.archipel.site.domain.pub.Bed;
-import com.tentelemed.archipel.site.domain.pub.LocationPath;
-import com.tentelemed.archipel.site.domain.pub.SiteId;
-import com.tentelemed.archipel.site.domain.pub.SiteType;
-import com.tentelemed.archipel.site.domain.pub.RoomQ;
+import com.tentelemed.archipel.site.domain.model.Room;
+import com.tentelemed.archipel.site.domain.model.Site;
+import com.tentelemed.archipel.site.domain.pub.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +34,7 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdRoomCreate() {
         // Given (Site créé)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
         handler.execute(new CmdSiteCreateService(new SiteId(0), "ABC", "SV1", "ServiceName"));
         CmdRes res = handler.execute(new CmdSiteCreateFunctionalUnit(new SiteId(0), "SV1", "FU1", "FUName"));
         Site site = (Site) res.aggregate;
@@ -82,7 +76,7 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdRoomCreateBadMedical() {
         // Given (Site créé)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        CmdRes res = handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        CmdRes res = handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
         Site site = (Site) res.aggregate;
 
         // When

@@ -1,7 +1,6 @@
 package com.tentelemed.archipel.site.domain.pub;
 
 import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
-import com.tentelemed.archipel.site.domain.model.Sector;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -121,8 +120,8 @@ public class SiteQ extends BaseEntityQ<SiteId> {
         return false;
     }
 
-    public List<Sector.Type> getRemainingSectorTypes() {
-        List<Sector.Type> types = new ArrayList<>(Arrays.asList(Sector.Type.values()));
+    public List<SectorType> getRemainingSectorTypes() {
+        List<SectorType> types = new ArrayList<>(Arrays.asList(SectorType.values()));
         for (LocationQ sector : sectors) {
             types.remove(sector.getSectorType());
         }

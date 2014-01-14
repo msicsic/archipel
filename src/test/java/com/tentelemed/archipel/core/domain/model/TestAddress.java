@@ -11,7 +11,8 @@ public class TestAddress extends BaseVO {
     private String town;
     private TestCountry country;
 
-    private TestAddress() {}
+    private TestAddress() {
+    }
 
     public TestAddress(String street, String town, TestCountry country) {
         this.street = street;

@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.core.domain.model;
 
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
-import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.infrastructure.model.EventUtil;
 
 import java.lang.reflect.Method;
@@ -72,17 +72,17 @@ public abstract class BaseAggregateRoot<B extends EntityId> extends BaseEntity {
             handle(event);
         }*/
         if (events == null || events.length == 0) {
-            throw new RuntimeException("'handle' must return at least one event : "+getClass().getSimpleName());
+            throw new RuntimeException("'handle' must return at least one event : " + getClass().getSimpleName());
         }
         for (AbstractDomainEvent event : events) {
             if (event == null) {
-                throw new RuntimeException("'handle' cannot return null : "+getClass().getSimpleName());
+                throw new RuntimeException("'handle' cannot return null : " + getClass().getSimpleName());
             }
-            if (! event.processed) {
+            if (!event.processed) {
                 throw new RuntimeException("Only processed events can be returned by a command : " + event.getClass().getSimpleName());
             }
             if (event.getId() == null) {
-                throw new RuntimeException("Event must have an non null id : "+event.getClass().getSimpleName());
+                throw new RuntimeException("Event must have an non null id : " + event.getClass().getSimpleName());
             }
         }
         return new CmdRes(this, Arrays.asList(events));

@@ -1,8 +1,6 @@
 package com.tentelemed.archipel.site.domain.pub;
 
 
-import com.tentelemed.archipel.site.domain.model.Sector;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
@@ -10,14 +8,14 @@ import com.tentelemed.archipel.site.domain.model.Sector;
  * Time: 14:53
  */
 public class EvtSiteSectorAdded extends EvtSiteDomainEvent {
-    Sector.Type sectorType;
+    SectorType sectorType;
     String sectorCode;
     String sectorName;
 
     EvtSiteSectorAdded() {
     }
 
-    public EvtSiteSectorAdded(SiteId id, Sector.Type type, String sectorCode, String sectorName) {
+    public EvtSiteSectorAdded(SiteId id, SectorType type, String sectorCode, String sectorName) {
         super(id);
         this.sectorType = type;
         this.sectorCode = sectorCode;
@@ -32,7 +30,7 @@ public class EvtSiteSectorAdded extends EvtSiteDomainEvent {
         return sectorName;
     }
 
-    public Sector.Type getSectorType() {
+    public SectorType getSectorType() {
         return sectorType;
     }
 }

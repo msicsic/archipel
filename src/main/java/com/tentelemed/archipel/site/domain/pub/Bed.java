@@ -15,7 +15,8 @@ import javax.validation.constraints.NotNull;
 public class Bed extends BaseVO {
     @NotNull String name;
 
-    Bed() {}
+    Bed() {
+    }
 
     public Bed(String name) {
         this.name = name;

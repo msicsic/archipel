@@ -1,17 +1,14 @@
 package com.tentelemed.archipel.security.domain.model;
 
-import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.DomainException;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreateSector;
 import com.tentelemed.archipel.site.application.command.CmdSiteDeleteSector;
-import com.tentelemed.archipel.site.domain.pub.EvtSiteRegistered;
-import com.tentelemed.archipel.site.domain.pub.EvtSiteSectorAdded;
-import com.tentelemed.archipel.site.domain.pub.EvtSiteSectorDeleted;
 import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.domain.model.Site;
-import com.tentelemed.archipel.site.domain.pub.SiteType;
+import com.tentelemed.archipel.site.domain.pub.*;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +47,7 @@ public class SiteTest {
         assertThat(site.getSectors().size(), equalTo(1));
         Sector sector = site.getSectors().iterator().next();
         assertThat(sector, notNullValue());
-        assertThat(sector.getType(), equalTo(Sector.Type.MED));
+        assertThat(sector.getType(), equalTo(SectorType.MED));
         assertThat(containsEvent(res, EvtSiteRegistered.class), equalTo(true));
     }
 
@@ -59,7 +56,7 @@ public class SiteTest {
         Site site = new Site();
         site._setId(0);
         site.execute(new CmdSiteCreate(SiteType.CHD, "Site1", "CHD"));
-        CmdRes res = site.execute(new CmdSiteCreateSector(null, Sector.Type.ADMIN, "Facturation", "ADM"));
+        CmdRes res = site.execute(new CmdSiteCreateSector(null, SectorType.ADMIN, "Facturation", "ADM"));
         assertThat(containsEvent(res, EvtSiteSectorAdded.class), equalTo(true));
         assertThat(site.getSectors().size(), equalTo(2));
     }
@@ -96,7 +93,7 @@ public class SiteTest {
         Site site = new Site();
         site._setId(0);
         site.execute(new CmdSiteCreate(SiteType.CHD, "Site1", "CHD"));
-        site.execute(new CmdSiteCreateSector(null, Sector.Type.ADMIN, "Facturation", "ADM"));
+        site.execute(new CmdSiteCreateSector(null, SectorType.ADMIN, "Facturation", "ADM"));
         CmdRes res = site.execute(new CmdSiteDeleteSector(null, "ADM"));
         assertThat(site.getSectors().size(), equalTo(1));
         assertThat(containsEvent(res, EvtSiteSectorDeleted.class), equalTo(true));

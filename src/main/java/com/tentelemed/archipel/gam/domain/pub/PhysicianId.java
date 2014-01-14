@@ -1,4 +1,4 @@
-package com.tentelemed.archipel.gam.domain;
+package com.tentelemed.archipel.gam.domain.pub;
 
 import com.tentelemed.archipel.core.domain.model.EntityId;
 

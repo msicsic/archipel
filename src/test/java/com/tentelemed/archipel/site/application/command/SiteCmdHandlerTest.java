@@ -1,10 +1,9 @@
 package com.tentelemed.archipel.site.application.command;
 
-import com.tentelemed.archipel.core.application.service.CmdHandlerTest;
 import com.tentelemed.archipel.core.application.command.CmdRes;
+import com.tentelemed.archipel.core.application.service.CmdHandlerTest;
 import com.tentelemed.archipel.site.domain.model.*;
 import com.tentelemed.archipel.site.domain.pub.*;
-import com.tentelemed.archipel.site.domain.pub.SiteQ;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -151,7 +150,7 @@ public class SiteCmdHandlerTest extends CmdHandlerTest {
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
 
         // When
-        CmdRes res = handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        CmdRes res = handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
 
         // Then (evt levé)
         assertThat(res.getEvent(EvtSiteSectorAdded.class), notNullValue());
@@ -161,21 +160,21 @@ public class SiteCmdHandlerTest extends CmdHandlerTest {
         assertThat(site.findLocation("ABC"), notNullValue());
         assertThat(site.findLocation("ABC").getName(), equalTo("SectorTech"));
         assertThat(site.findLocation("ABC").getCode(), equalTo("ABC"));
-        assertThat(((Sector) site.findLocation("ABC")).getType(), equalTo(Sector.Type.TECH));
+        assertThat(((Sector) site.findLocation("ABC")).getType(), equalTo(SectorType.TECH));
 
         // Then (SiteQ modifié)
         SiteQ siteQ = pHandler.find(SiteQ.class, site.getEntityId().getId());
         assertThat(siteQ.findLocation("ABC"), notNullValue());
         assertThat(siteQ.findLocation("ABC").getName(), equalTo("SectorTech"));
         assertThat(siteQ.findLocation("ABC").getCode(), equalTo("ABC"));
-        assertThat(siteQ.findLocation("ABC").getSectorType(), equalTo(Sector.Type.TECH));
+        assertThat(siteQ.findLocation("ABC").getSectorType(), equalTo(SectorType.TECH));
     }
 
     @Test
     public void executeCmdSiteDeleteSector() {
         // Given (Site avec un second secteur ajouté)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
 
         // When
         CmdRes res = handler.execute(new CmdSiteDeleteSector(new SiteId(0), "ABC"));
@@ -196,7 +195,7 @@ public class SiteCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdSiteCreateService() {
         // Given (Site avec un second secteur ajouté)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
 
         // When
         CmdRes res = handler.execute(new CmdSiteCreateService(new SiteId(0), "ABC", "SRV", "ServiceName"));
@@ -222,7 +221,7 @@ public class SiteCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdSiteDeleteService() {
         // Given (Site avec un second service ajouté)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
         handler.execute(new CmdSiteCreateService(new SiteId(0), "ABC", "SRV", "ServiceName"));
 
         // When
@@ -244,7 +243,7 @@ public class SiteCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdSiteCreateFunctionalUnit() {
         // Given (Site avec un second service ajouté)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
         handler.execute(new CmdSiteCreateService(new SiteId(0), "ABC", "SRV", "ServiceName"));
 
         // When
@@ -271,7 +270,7 @@ public class SiteCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdSiteDeleteFunctionalUnit() {
         // Given (Site avec un second service ajouté)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
         handler.execute(new CmdSiteCreateService(new SiteId(0), "ABC", "SRV", "ServiceName"));
         handler.execute(new CmdSiteCreateFunctionalUnit(new SiteId(0), "SRV", "FU1", "FUName"));
 
@@ -295,7 +294,7 @@ public class SiteCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdSiteCreateActivityUnit() {
         // Given (Site avec un second service ajouté)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
         handler.execute(new CmdSiteCreateService(new SiteId(0), "ABC", "SRV", "ServiceName"));
         handler.execute(new CmdSiteCreateFunctionalUnit(new SiteId(0), "SRV", "FU1", "FUName"));
 
@@ -323,7 +322,7 @@ public class SiteCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdSiteDeleteActivityUnit() {
         // Given (Site avec un second service ajouté)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        handler.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.TECH, "SectorTech", "ABC"));
+        handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
         handler.execute(new CmdSiteCreateService(new SiteId(0), "ABC", "SRV", "ServiceName"));
         handler.execute(new CmdSiteCreateFunctionalUnit(new SiteId(0), "SRV", "FU1", "FUName"));
         handler.execute(new CmdSiteCreateActivityUnit(new SiteId(0), "FU1", "AU1", "AUName"));

@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.core.infrastructure.model;
 
-import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.EntityId;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import java.beans.PropertyDescriptor;
@@ -77,7 +77,7 @@ public class EventUtil {
         } catch (InvocationTargetException e2) {
             Throwable t = e2.getTargetException();
             if (t instanceof RuntimeException) {
-                throw (RuntimeException)t;
+                throw (RuntimeException) t;
             }
             throw new RuntimeException("Error in '" + entity.getClass().getSimpleName() + ".handle(" + event.getClass().getSimpleName() + ")' method", e2.getTargetException());
         } catch (Exception e2) {

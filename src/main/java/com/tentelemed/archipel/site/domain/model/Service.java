@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class Service extends BaseEntity implements Location {
     @NotNull String name;
-    @NotNull @Size(min=3, max=3) String code;
+    @NotNull @Size(min = 3, max = 3) String code;
     @NotNull Sector parent;
     Set<FunctionalUnit> units = new HashSet<>();
 

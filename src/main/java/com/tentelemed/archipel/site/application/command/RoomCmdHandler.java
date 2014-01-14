@@ -10,6 +10,8 @@ import com.tentelemed.archipel.core.application.command.CmdRes;
  */
 public interface RoomCmdHandler {
     CmdRes execute(CmdRoomCreate cmd);
+
     CmdRes execute(CmdRoomAddBed cmd);
+
     CmdRes execute(CmdRoomRemoveBed cmd);
 }

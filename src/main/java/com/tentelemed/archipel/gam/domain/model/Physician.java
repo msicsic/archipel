@@ -1,11 +1,13 @@
-package com.tentelemed.archipel.gam.domain;
+package com.tentelemed.archipel.gam.domain.model;
 
 import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.Address;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.PhoneNumber;
-import com.tentelemed.archipel.gam.application.event.PhysicianInfoUpdated;
-import com.tentelemed.archipel.gam.application.event.PhysicianRegistered;
+import com.tentelemed.archipel.gam.domain.pub.PhysicianId;
+import com.tentelemed.archipel.gam.domain.pub.PhysicianInfoUpdated;
+import com.tentelemed.archipel.gam.domain.pub.PhysicianRegistered;
+import com.tentelemed.archipel.gam.domain.pub.Specialty;
 
 import javax.validation.constraints.NotNull;
 

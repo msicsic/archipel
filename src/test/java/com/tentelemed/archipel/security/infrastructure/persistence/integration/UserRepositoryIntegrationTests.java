@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.security.infrastructure.persistence.integration;
 
 
-import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.infrastructure.config.TestSpringConfiguration;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.pub.Right;
@@ -104,6 +104,7 @@ public class UserRepositoryIntegrationTests {
     }
 
     RoleQ role = null;
+
     private RoleQ getRole() {
         if (role == null) {
             role = new RoleQ();

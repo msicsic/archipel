@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class ActivityUnit extends BaseEntity implements Location {
     @NotNull String name;
-    @NotNull @Size(min=3, max=3) String code;
+    @NotNull @Size(min = 3, max = 3) String code;
     @NotNull FunctionalUnit parent;
 
     ActivityUnit() {

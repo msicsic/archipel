@@ -1,9 +1,9 @@
 package com.tentelemed.archipel.core.application;
 
-import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,6 @@ public class EventRegistry {
     Map<Class<? extends DomainEvent>, Class<?>> registryHandler = new HashMap<>();
 
     Map<Class<? extends Command>, Class<? extends BaseAggregateRoot>> mapCmd = new HashMap<>();
-
 
 
     public void addCmdEntry(Class<? extends Command> cmdClass, Class<? extends BaseAggregateRoot> aggregateClass) {
@@ -108,7 +107,7 @@ public class EventRegistry {
 
     public BaseAggregateRoot newAggregateForEvent(DomainEvent event) {
         // un evt qui instancie un agregat doit necessairement etre de type creation
-        if (! event.isCreate()) {
+        if (!event.isCreate()) {
             throw new RuntimeException("First event must be CreateEvent");
         }
 

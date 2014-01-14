@@ -4,9 +4,9 @@ import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.ApplicationEvent;
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
-import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
+import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +93,7 @@ public class CommandServiceFactory {
         if (cmd.id == null) {
             Class<? extends BaseAggregateRoot> aggregateClass = registry.getAggregateClassForCommand(cmd);
             if (aggregateClass == null) {
-                throw new RuntimeException("No Aggregate Class defined in registry for Create COMMAND : "+cmd.getClass().getSimpleName());
+                throw new RuntimeException("No Aggregate Class defined in registry for Create COMMAND : " + cmd.getClass().getSimpleName());
             }
             aggregate = get(aggregateClass);
         } else {

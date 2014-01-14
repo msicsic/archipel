@@ -19,7 +19,8 @@ public class TestUserRegistered extends AbstractDomainEvent<TestUserId> {
     private String password;
     private TestRoleQ role;
 
-    TestUserRegistered() {}
+    TestUserRegistered() {
+    }
 
     public TestUserRegistered(TestUserId id, String firstName, String lastName, Date dob, String login, String password, TestRoleQ role) {
         super(id);

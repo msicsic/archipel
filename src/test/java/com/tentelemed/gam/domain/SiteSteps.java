@@ -2,15 +2,13 @@ package com.tentelemed.gam.domain;
 
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
-import com.tentelemed.archipel.core.domain.model.*;
+import com.tentelemed.archipel.core.domain.model.Address;
 import com.tentelemed.archipel.infrastructure.config.TestSpringConfiguration;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
 import com.tentelemed.archipel.site.application.command.CmdSiteUpdateAdditionalInfo;
-import com.tentelemed.archipel.site.domain.pub.EvtSiteRegistered;
-import com.tentelemed.archipel.site.domain.model.*;
-import com.tentelemed.archipel.site.domain.pub.Bank;
-import com.tentelemed.archipel.site.domain.pub.SiteInfo;
-import com.tentelemed.archipel.site.domain.pub.SiteType;
+import com.tentelemed.archipel.site.domain.model.Sector;
+import com.tentelemed.archipel.site.domain.model.Site;
+import com.tentelemed.archipel.site.domain.pub.*;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -66,7 +64,7 @@ public class SiteSteps {
         assertThat(center.getSectors().size(), equalTo(1));
         Sector sector = center.getSectors().iterator().next();
         assertThat(sector, notNullValue());
-        assertThat(sector.getType(), equalTo(Sector.Type.MED));
+        assertThat(sector.getType(), equalTo(SectorType.MED));
     }
 
     @Then("the new Site is available in the EventStore")
@@ -110,8 +108,6 @@ public class SiteSteps {
         assertThat(center.getInfo(), notNullValue());
         assertThat(center.getInfo().getAddress().getTown(), equalTo("Paris"));
     }
-
-
 
 
 }

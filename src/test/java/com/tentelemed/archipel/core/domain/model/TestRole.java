@@ -9,7 +9,8 @@ package com.tentelemed.archipel.core.domain.model;
 public class TestRole extends BaseVO {
     private String name;
 
-    private TestRole() {}
+    private TestRole() {
+    }
 
     public TestRole(String name) {
         this.name = name;

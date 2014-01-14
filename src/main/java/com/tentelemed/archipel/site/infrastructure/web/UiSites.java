@@ -3,11 +3,7 @@ package com.tentelemed.archipel.site.infrastructure.web;
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
-import com.tentelemed.archipel.site.domain.pub.EvtSiteDomainEvent;
-import com.tentelemed.archipel.site.domain.model.Sector;
-import com.tentelemed.archipel.site.domain.pub.LocationQ;
-import com.tentelemed.archipel.site.domain.pub.RoomQ;
-import com.tentelemed.archipel.site.domain.pub.SiteQ;
+import com.tentelemed.archipel.site.domain.pub.*;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
@@ -216,7 +212,7 @@ public class UiSites extends BaseView<UiSitesModel> {
                 }
             });
 
-            if (loc.getSectorType() == Sector.Type.MED && model.getCurrentSite().getRemainingSectorTypes().size() > 0) {
+            if (loc.getSectorType() == SectorType.MED && model.getCurrentSite().getRemainingSectorTypes().size() > 0) {
                 bt2 = new Button("Add Sector");
                 bt2.addClickListener(new Button.ClickListener() {
                     @Override
@@ -224,7 +220,7 @@ public class UiSites extends BaseView<UiSitesModel> {
                         model.createSector();
                     }
                 });
-            } else if (loc.getSectorType() != Sector.Type.MED) {
+            } else if (loc.getSectorType() != SectorType.MED) {
                 bt2 = new Button("Delete Sector");
                 bt2.addClickListener(new Button.ClickListener() {
                     @Override

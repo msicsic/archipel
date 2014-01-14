@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class FunctionalUnit extends BaseEntity implements Location {
     @NotNull String name;
-    @NotNull @Size(min=3, max=3) String code;
+    @NotNull @Size(min = 3, max = 3) String code;
     Set<ActivityUnit> units = new HashSet<>();
     @NotNull Service parent;
 

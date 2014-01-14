@@ -1,7 +1,5 @@
 package com.tentelemed.archipel.site.domain.pub;
 
-import com.tentelemed.archipel.site.domain.model.Sector;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -24,7 +22,7 @@ public class LocationQ implements Comparable<LocationQ> {
     @NotNull SiteId siteId;
     @NotNull String code;
     @NotNull Type type;
-    @NotNull Sector.Type sectorType = Sector.Type.MED;
+    @NotNull SectorType sectorType = SectorType.MED;
     @NotNull String name;
     @NotNull @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     Set<LocationQ> children = new HashSet<>();
@@ -102,11 +100,11 @@ public class LocationQ implements Comparable<LocationQ> {
         this.parent = parent;
     }
 
-    public Sector.Type getSectorType() {
+    public SectorType getSectorType() {
         return sectorType;
     }
 
-    public void setSectorType(Sector.Type sectorType) {
+    public void setSectorType(SectorType sectorType) {
         this.sectorType = sectorType;
     }
 

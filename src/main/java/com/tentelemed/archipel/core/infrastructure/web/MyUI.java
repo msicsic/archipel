@@ -2,9 +2,9 @@ package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import com.tentelemed.archipel.core.domain.pub.LoginEvent;
 import com.tentelemed.archipel.core.application.service.CoreService;
 import com.tentelemed.archipel.core.domain.model.Module;
+import com.tentelemed.archipel.core.domain.pub.LoginEvent;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;

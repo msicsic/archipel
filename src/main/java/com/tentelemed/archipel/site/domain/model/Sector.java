@@ -3,6 +3,7 @@ package com.tentelemed.archipel.site.domain.model;
 import com.tentelemed.archipel.core.domain.model.BaseEntity;
 import com.tentelemed.archipel.site.domain.pub.Location;
 import com.tentelemed.archipel.site.domain.pub.LocationPath;
+import com.tentelemed.archipel.site.domain.pub.SectorType;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,19 +17,15 @@ import java.util.*;
  */
 public class Sector extends BaseEntity implements Location {
 
-    public static enum Type {
-        TECH, MEDTECH, ADMIN, MED
-    }
-
     @NotNull @Size(min = 3) String name;
-    @NotNull @Size(min = 3, max=3) String code;
-    @NotNull Type type;
+    @NotNull @Size(min = 3, max = 3) String code;
+    @NotNull SectorType type;
     Set<Service> services = new HashSet<>();
 
     Sector() {
     }
 
-    public Sector(Type type, String name, String code) {
+    public Sector(SectorType type, String name, String code) {
         this.type = type;
         this.name = name;
         this.code = code;
@@ -72,7 +69,7 @@ public class Sector extends BaseEntity implements Location {
     }
 
     public boolean isMedical() {
-        return this.type == Type.MED;
+        return this.type == SectorType.MED;
     }
 
     @Override
@@ -89,7 +86,7 @@ public class Sector extends BaseEntity implements Location {
         return Collections.unmodifiableSet(services);
     }
 
-    public Type getType() {
+    public SectorType getType() {
         return type;
     }
 

@@ -1,7 +1,5 @@
 package com.tentelemed.archipel.core.domain.model;
 
-import com.tentelemed.archipel.security.domain.model.User;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +18,8 @@ public class TestUser extends BaseAggregateRoot<TestUserId> {
     private TestUser tutor;
     private List<TestUser> children = new ArrayList<>();
 
-    TestUser() {}
+    TestUser() {
+    }
 
     public TestUser(TestUserId id, TestRole role, String firstName, String lastName, String login) {
         this.id = id.getId();
@@ -76,7 +75,7 @@ public class TestUser extends BaseAggregateRoot<TestUserId> {
     }
 
     public void addChild(TestUser user) {
-        if (! children.contains(user)) {
+        if (!children.contains(user)) {
             children.add(user);
             user.setTutor(this);
         }

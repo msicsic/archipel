@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BasePopup;
-import com.tentelemed.archipel.site.domain.model.Sector;
+import com.tentelemed.archipel.site.domain.pub.SectorType;
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +47,12 @@ public class UiSiteCreateSector extends BasePopup<UiSiteCreateSectorModel> {
         final ComboBox cb = new ComboBox("Type");
         cb.setTextInputAllowed(false);
         cb.setInputPrompt("select type");
-        for (Sector.Type type : model.getCurrentSite().getRemainingSectorTypes()) {
+        for (SectorType type : model.getCurrentSite().getRemainingSectorTypes()) {
             cb.addItem(type);
         }
         cb.addValueChangeListener(new Property.ValueChangeListener() {
             @Override public void valueChange(Property.ValueChangeEvent event) {
-                model.getCmd().type = (Sector.Type) cb.getValue();
+                model.getCmd().type = (SectorType) cb.getValue();
             }
         });
         layout.addComponent(cb);

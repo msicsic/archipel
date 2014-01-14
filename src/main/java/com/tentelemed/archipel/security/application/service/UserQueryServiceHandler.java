@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.security.application.service;
 
 import com.google.common.eventbus.Subscribe;
-import com.tentelemed.archipel.core.domain.pub.LogoutRequestEvent;
 import com.tentelemed.archipel.core.application.service.EventHandler;
+import com.tentelemed.archipel.core.domain.pub.LogoutRequestEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

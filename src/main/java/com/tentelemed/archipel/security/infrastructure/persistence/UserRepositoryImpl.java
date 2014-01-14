@@ -2,8 +2,8 @@ package com.tentelemed.archipel.security.infrastructure.persistence;
 
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
 import com.tentelemed.archipel.security.domain.pub.RoleId;
-import com.tentelemed.archipel.security.domain.pub.UserId;
 import com.tentelemed.archipel.security.domain.pub.RoleQ;
+import com.tentelemed.archipel.security.domain.pub.UserId;
 import com.tentelemed.archipel.security.domain.pub.UserQ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

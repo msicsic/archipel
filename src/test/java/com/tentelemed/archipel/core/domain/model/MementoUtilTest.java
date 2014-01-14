@@ -47,15 +47,15 @@ public class MementoUtilTest {
         // then
         assertThat(memento, notNullValue());
         assertThat(memento.getType().getName(), equalTo(albert.getClass().getName()));
-        assertThat((int)memento.get("id"), equalTo(12));
-        assertThat((String)memento.get("lastName"), equalTo("Durand"));
+        assertThat((int) memento.get("id"), equalTo(12));
+        assertThat((String) memento.get("lastName"), equalTo("Durand"));
         Memento adr = (Memento) memento.get("address");
         assertThat(adr, notNullValue());
-        assertThat((String)adr.get("street"), equalTo("102 av Edouard Vaillant"));
+        assertThat((String) adr.get("street"), equalTo("102 av Edouard Vaillant"));
         assertThat(Collection.class.isAssignableFrom(memento.get("children").getClass()), equalTo(true));
-        assertThat(((List)memento.get("children")).size(), equalTo(2));
-        Memento child = (Memento) ((List)memento.get("children")).get(0);
-        assertThat((Memento)child.get("tutor"), equalTo(memento));
+        assertThat(((List) memento.get("children")).size(), equalTo(2));
+        Memento child = (Memento) ((List) memento.get("children")).get(0);
+        assertThat((Memento) child.get("tutor"), equalTo(memento));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class MementoUtilTest {
         // Then
         assertThat(memento, notNullValue());
         assertThat(memento.getType().getName(), equalTo(TestUserNameChanged.class.getName()));
-        assertThat((String)memento.get("firstName"), equalTo("Paul"));
+        assertThat((String) memento.get("firstName"), equalTo("Paul"));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class MementoUtilTest {
         // Then
         assertThat(res, notNullValue());
         assertThat(res.getClass().getName(), equalTo(TestUserNameChanged.class.getName()));
-        TestUserNameChanged newEvent = (TestUserNameChanged)res;
+        TestUserNameChanged newEvent = (TestUserNameChanged) res;
         assertThat(newEvent.getFirstName(), equalTo("Paul"));
         assertThat(newEvent.getLastName(), equalTo("Durand"));
     }
@@ -153,7 +153,7 @@ public class MementoUtilTest {
         assertThat(m2.getType(), equalTo(memento.getType()));
         assertThat(m2.get("id"), equalTo(memento.get("id")));
         assertThat(m2.get("firstName"), equalTo(memento.get("firstName")));
-        assertThat(((List)m2.get("children")).size(), equalTo(2));
+        assertThat(((List) m2.get("children")).size(), equalTo(2));
     }
 
 }

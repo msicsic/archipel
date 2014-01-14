@@ -1,17 +1,15 @@
 package com.tentelemed.archipel.site.domain.model;
 
 import com.tentelemed.archipel.site.application.command.*;
-import com.tentelemed.archipel.site.domain.pub.Location;
-import com.tentelemed.archipel.site.domain.pub.LocationPath;
-import com.tentelemed.archipel.site.domain.pub.SiteId;
-import com.tentelemed.archipel.site.domain.pub.SiteType;
+import com.tentelemed.archipel.site.domain.pub.*;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,7 +23,7 @@ public class SiteTest {
         Site site = new Site();
         site._setId(0);
         site.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "CH1"));
-        site.execute(new CmdSiteCreateSector(new SiteId(0), Sector.Type.ADMIN, "SecAdmin", "SC1"));
+        site.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.ADMIN, "SecAdmin", "SC1"));
         site.execute(new CmdSiteCreateService(new SiteId(0), "SC1", "SV1", "Service1"));
         site.execute(new CmdSiteCreateService(new SiteId(0), "SC1", "SV2", "Service2"));
         site.execute(new CmdSiteCreateFunctionalUnit(new SiteId(0), "SV1", "FU1", "Functional1"));

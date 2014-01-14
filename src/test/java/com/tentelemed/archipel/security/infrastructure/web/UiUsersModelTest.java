@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
-import com.tentelemed.archipel.security.application.command.UserCmdHandler;
 import com.tentelemed.archipel.security.application.command.CmdUserDelete;
 import com.tentelemed.archipel.security.application.command.CmdUserUpdateInfo;
+import com.tentelemed.archipel.security.application.command.UserCmdHandler;
 import com.tentelemed.archipel.security.domain.pub.UserId;
 import com.tentelemed.archipel.security.domain.pub.UserQ;
 import org.junit.Before;

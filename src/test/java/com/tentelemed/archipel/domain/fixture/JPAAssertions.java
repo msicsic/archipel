@@ -23,10 +23,10 @@ public class JPAAssertions {
             @Override
             public void execute(Connection connection) throws SQLException {
                 ResultSet columns = connection.getMetaData().getColumns(null, null, tableName.toUpperCase(), null);
-                while(columns.next()) {
-                    System.err.println("COLUMN : "+columns.getString(4));
+                while (columns.next()) {
+                    System.err.println("COLUMN : " + columns.getString(4));
                     if (columns.getString(4).toUpperCase().equals(columnName.toUpperCase())) {
-                        rc.found=true;
+                        rc.found = true;
                     }
                 }
             }
@@ -36,6 +36,7 @@ public class JPAAssertions {
             fail("Column [" + columnName + "] not found on table : " + tableName);
         }
     }
+
     public static void assertTableExists(EntityManager manager, final String name) {
         SessionImpl session = (SessionImpl) manager.unwrap(Session.class);
 
@@ -45,10 +46,10 @@ public class JPAAssertions {
             @Override
             public void execute(Connection connection) throws SQLException {
                 ResultSet tables = connection.getMetaData().getTables(null, null, "%", null);
-                while(tables.next()) {
-                    System.err.println("TABLE : "+tables.getString(3));
+                while (tables.next()) {
+                    System.err.println("TABLE : " + tables.getString(3));
                     if (tables.getString(3).toUpperCase().equals(name.toUpperCase())) {
-                        rc.found=true;
+                        rc.found = true;
                     }
                 }
             }
