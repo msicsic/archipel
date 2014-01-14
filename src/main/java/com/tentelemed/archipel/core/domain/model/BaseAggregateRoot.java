@@ -3,7 +3,7 @@ package com.tentelemed.archipel.core.domain.model;
 import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
-import com.tentelemed.archipel.core.infrastructure.model.EventUtil;
+import com.tentelemed.archipel.core.domain.pub.EventUtil;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

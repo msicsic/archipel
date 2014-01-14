@@ -2,6 +2,7 @@ package com.tentelemed.archipel.core.infrastructure.model;
 
 import com.tentelemed.archipel.core.domain.model.TestUserId;
 import com.tentelemed.archipel.core.domain.model.TestUserRegistered;
+import com.tentelemed.archipel.core.domain.pub.EventUtil;
 import org.junit.Test;
 
 import java.util.Date;
