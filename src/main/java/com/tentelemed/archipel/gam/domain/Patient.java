@@ -2,7 +2,7 @@ package com.tentelemed.archipel.gam.domain;
 
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.Country;
-import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.domain.pub.UserId;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

@@ -1,9 +1,9 @@
 package com.tentelemed.archipel.site.infrastructure.web;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
-import com.tentelemed.archipel.site.domain.event.EvtSiteDomainEvent;
+import com.tentelemed.archipel.site.domain.pub.EvtSiteDomainEvent;
 import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
@@ -96,9 +96,6 @@ public class UiSites extends BaseView<UiSitesModel> {
         container.addNestedContainerProperty("nbBeds");
         container.addNestedContainerProperty("locationPath");
 
-        // Use the login property as the item ID of the bean
-        //container.setBeanIdProperty("entityId");
-
         // Headers
         table.setColumnHeader("name", "Name");
         table.setColumnHeader("medical", "Medical Room");
@@ -147,7 +144,6 @@ public class UiSites extends BaseView<UiSitesModel> {
         TreeTable treeTable = new TreeTable();
         treeTable.removeAllItems();
         treeTable.setSizeFull();
-        //Container.Hierarchical ds = treeTable.getContainerDataSource();
         treeTable.addContainerProperty("name", String.class, "--");
         treeTable.addContainerProperty("type", String.class, "?");
         treeTable.addContainerProperty("code", String.class, "..");
@@ -291,10 +287,8 @@ public class UiSites extends BaseView<UiSitesModel> {
     }
 
     private AbstractComponent createAddInfoPanel() {
-        //Panel panelAddInfo = new Panel("Additional info");
         VerticalLayout vlayout = new VerticalLayout();
         vlayout.setCaption("Additional info");
-        //panelAddInfo.setContent(vlayout);
         FormLayout formLayout = new FormLayout();
         formLayout.addComponent(bind(new Label("Siret"), "currentSite.info.siret"));
         formLayout.addComponent(bind(new Label("Street"), "currentSite.info.address.street"));
@@ -319,10 +313,8 @@ public class UiSites extends BaseView<UiSitesModel> {
     }
 
     private AbstractComponent createMainInfoPanel() {
-        //Panel panelInfo = new Panel("Main info");
         VerticalLayout vlayout = new VerticalLayout();
         vlayout.setCaption("Main Info");
-        //panelInfo.setContent(vlayout);
 
         FormLayout formLayout = new FormLayout();
         formLayout.setSpacing(true);
@@ -337,14 +329,12 @@ public class UiSites extends BaseView<UiSitesModel> {
         btLayout.addComponent(bt1);
         vlayout.addComponent(btLayout);
 
-        //return panelInfo;
         return vlayout;
     }
 
     private AbstractComponent createSelectCenterPanel() {
         HorizontalLayout panelFilters = new HorizontalLayout();
         panelFilters.setSpacing(true);
-        //panelFilters.setMargin(true);
         panelFilters.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         combo = new ComboBox("Select Center");
         combo.setTextInputAllowed(false);

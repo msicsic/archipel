@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.model;
 
-import com.tentelemed.archipel.security.application.event.*;
+import com.tentelemed.archipel.security.domain.pub.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

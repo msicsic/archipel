@@ -5,8 +5,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
-import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.core.domain.model.Memento;
@@ -129,12 +129,7 @@ public class EventStoreImpl implements EventStore {
      * @param res contient agregat deja modifié et les evts qui ont modifiés l'agregat
      */
     @Override
-//    public void handleEvents(BaseAggregateRoot target, Collection<DomainEvent> events) {
     public void handleEvents(CmdRes res) {
-        // maj de l'agregat
-        //Class<? extends BaseAggregateRoot> clazz = target.getClass();
-        //EntityId id = target.getEntityId();
-        // target = applyEvents(target, events);
 
         // recup de la derniere version
         Long version = jdbcTemplate.queryForObject("select max(e.c_version) from T_EVENTS e where e.c_aggregate_id=?", Long.class, res.aggregate.getEntityId().getId());
@@ -149,7 +144,6 @@ public class EventStoreImpl implements EventStore {
 
         // ajout des evts dans le store
         for (DomainEvent event : res.events) {
-            //addEvent(event);
             Memento memento = MementoUtil.createMemento(event);
             String serial = MementoUtil.mementoToString(memento);
             jdbcTemplate.update("insert into T_EVENTS values (?,?,?)", event.getId().getId(), serial, version++);

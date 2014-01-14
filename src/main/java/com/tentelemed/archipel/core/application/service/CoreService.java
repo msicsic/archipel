@@ -3,26 +3,26 @@ package com.tentelemed.archipel.core.application.service;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.EventRegistry;
-import com.tentelemed.archipel.core.application.event.LogoutRequestEvent;
+import com.tentelemed.archipel.core.domain.pub.LogoutRequestEvent;
 import com.tentelemed.archipel.core.domain.model.Module;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
 import com.tentelemed.archipel.core.infrastructure.web.RootView;
 import com.tentelemed.archipel.security.application.command.CmdRoleCreate;
 import com.tentelemed.archipel.security.application.command.CmdUserCreate;
-import com.tentelemed.archipel.security.application.event.EvtRoleDomainEvent;
-import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
-import com.tentelemed.archipel.security.application.event.RoleEventHandler;
-import com.tentelemed.archipel.security.application.event.UserEventHandler;
+import com.tentelemed.archipel.security.domain.pub.EvtRoleDomainEvent;
+import com.tentelemed.archipel.security.domain.pub.EvtUserDomainEvent;
+import com.tentelemed.archipel.security.domain.pub.RoleEventHandler;
+import com.tentelemed.archipel.security.domain.pub.UserEventHandler;
 import com.tentelemed.archipel.security.domain.model.Role;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import com.tentelemed.archipel.site.application.command.CmdRoomCreate;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
-import com.tentelemed.archipel.site.domain.event.EvtRoomDomainEvent;
-import com.tentelemed.archipel.site.domain.event.EvtSiteDomainEvent;
-import com.tentelemed.archipel.site.domain.event.RoomEventHandler;
-import com.tentelemed.archipel.site.domain.event.SiteEventHandler;
+import com.tentelemed.archipel.site.domain.pub.EvtRoomDomainEvent;
+import com.tentelemed.archipel.site.domain.pub.EvtSiteDomainEvent;
+import com.tentelemed.archipel.site.domain.pub.RoomEventHandler;
+import com.tentelemed.archipel.site.domain.pub.SiteEventHandler;
 import com.tentelemed.archipel.site.domain.model.Room;
 import com.tentelemed.archipel.site.domain.model.Site;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
@@ -135,8 +135,7 @@ public class CoreService extends BaseService {
                 Scope scope = (Scope) c.getAnnotation(Scope.class);
                 boolean dontAdd = false;
                 if (scope != null) {
-                    if (Strings.isNullOrEmpty(scope.value()) || scope.value().equals(ConfigurableBeanFactory.SCOPE_SINGLETON)) {
-                    } else {
+                    if (!(Strings.isNullOrEmpty(scope.value()) || scope.value().equals(ConfigurableBeanFactory.SCOPE_SINGLETON))) {
                         dontAdd = true;
                     }
                 }

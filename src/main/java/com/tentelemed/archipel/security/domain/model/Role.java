@@ -1,14 +1,12 @@
 package com.tentelemed.archipel.security.domain.model;
 
-import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.security.application.command.CmdRoleCreate;
 import com.tentelemed.archipel.security.application.command.CmdRoleDelete;
 import com.tentelemed.archipel.security.application.command.CmdRoleUpdateRights;
 import com.tentelemed.archipel.security.application.command.RoleCmdHandler;
-import com.tentelemed.archipel.security.application.event.EvtRoleDeleted;
-import com.tentelemed.archipel.security.application.event.EvtRoleRegistered;
-import com.tentelemed.archipel.security.application.event.EvtRoleRightsUpdated;
+import com.tentelemed.archipel.security.domain.pub.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collections;

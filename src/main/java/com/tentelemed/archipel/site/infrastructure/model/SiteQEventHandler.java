@@ -1,8 +1,6 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
-import com.tentelemed.archipel.site.application.service.SiteQueryService;
-import com.tentelemed.archipel.site.domain.event.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tentelemed.archipel.site.domain.pub.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

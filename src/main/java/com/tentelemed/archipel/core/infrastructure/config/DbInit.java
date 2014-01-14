@@ -5,9 +5,9 @@ import com.tentelemed.archipel.security.application.command.CmdRoleCreate;
 import com.tentelemed.archipel.security.application.command.CmdUserCreate;
 import com.tentelemed.archipel.security.application.command.RoleCmdHandler;
 import com.tentelemed.archipel.security.application.command.UserCmdHandler;
-import com.tentelemed.archipel.security.domain.model.Right;
-import com.tentelemed.archipel.security.domain.model.RoleId;
-import com.tentelemed.archipel.site.domain.model.Bank;
+import com.tentelemed.archipel.security.domain.pub.Right;
+import com.tentelemed.archipel.security.domain.pub.RoleId;
+import com.tentelemed.archipel.site.domain.pub.Bank;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -47,8 +47,9 @@ public class DbInit {
     EntityManager em;
 
     public void initDb() {
-        try {
-            Connection conn = jdbcTemplate.getDataSource().getConnection();
+        try (
+                Connection conn = jdbcTemplate.getDataSource().getConnection()
+        ) {
             ResultSet tables = conn.getMetaData().getTables(conn.getCatalog(), null, "T_EVENTS", null);
             boolean created = tables.next();
             tables.close();
@@ -79,8 +80,9 @@ public class DbInit {
 
     @Transactional
     public void createCountries() {
-        try {
-            InputStream inp = getClass().getClassLoader().getResourceAsStream("01_Country_Code_Table.xls");
+        try (
+                InputStream inp = Thread.currentThread().getContextClassLoader().getResourceAsStream("01_Country_Code_Table.xls");
+        ) {
             Workbook wb = WorkbookFactory.create(inp);
             Sheet sheet = wb.getSheetAt(0);
 
@@ -103,8 +105,9 @@ public class DbInit {
 
     @Transactional
     public void createBanks() {
-        try {
-            InputStream inp = getClass().getClassLoader().getResourceAsStream("02_Bank_Table.xls");
+        try (
+                InputStream inp = Thread.currentThread().getContextClassLoader().getResourceAsStream("02_Bank_Table.xls");
+        ) {
             Workbook wb = WorkbookFactory.create(inp);
             Sheet sheet = wb.getSheetAt(0);
 

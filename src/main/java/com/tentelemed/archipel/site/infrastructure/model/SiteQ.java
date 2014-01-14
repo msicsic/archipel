@@ -2,9 +2,9 @@ package com.tentelemed.archipel.site.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
 import com.tentelemed.archipel.site.domain.model.Sector;
-import com.tentelemed.archipel.site.domain.model.SiteId;
-import com.tentelemed.archipel.site.domain.model.SiteInfo;
-import com.tentelemed.archipel.site.domain.model.SiteType;
+import com.tentelemed.archipel.site.domain.pub.SiteId;
+import com.tentelemed.archipel.site.domain.pub.SiteInfo;
+import com.tentelemed.archipel.site.domain.pub.SiteType;
 
 import javax.persistence.*;
 import javax.validation.Valid;

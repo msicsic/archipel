@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.domain.model;
 
-import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
+import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 
 /**
  * Created with IntelliJ IDEA.

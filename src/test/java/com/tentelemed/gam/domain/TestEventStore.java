@@ -3,15 +3,13 @@ package com.tentelemed.gam.domain;
 import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
-import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
-import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
-import com.tentelemed.archipel.core.infrastructure.persistence.handler.PersistenceHandler;
 import com.tentelemed.archipel.core.infrastructure.persistence.handler.TestPersistenceHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

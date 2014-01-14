@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.security.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.security.domain.model.RoleId;
-import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.domain.pub.RoleId;
+import com.tentelemed.archipel.security.domain.pub.UserId;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Entity;

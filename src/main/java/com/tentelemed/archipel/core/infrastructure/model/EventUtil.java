@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.model;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import org.apache.commons.beanutils.PropertyUtils;
 

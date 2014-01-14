@@ -3,8 +3,8 @@ package com.tentelemed.archipel.security.infrastructure.model;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.security.domain.model.Right;
-import com.tentelemed.archipel.security.domain.model.RoleId;
+import com.tentelemed.archipel.security.domain.pub.Right;
+import com.tentelemed.archipel.security.domain.pub.RoleId;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;

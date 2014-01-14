@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.gam.application.event;
 
-import com.tentelemed.archipel.core.application.event.AbstractDomainEvent;
+import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.gam.domain.PhysicianId;
 import com.tentelemed.archipel.gam.domain.Specialty;
 

@@ -1,11 +1,11 @@
 package com.tentelemed.archipel.site.domain.model;
 
-import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.Address;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.site.application.command.*;
-import com.tentelemed.archipel.site.domain.event.*;
+import com.tentelemed.archipel.site.domain.pub.*;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 
 import javax.validation.Valid;

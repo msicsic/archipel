@@ -1,9 +1,9 @@
 package com.tentelemed.archipel.security.infrastructure.model;
 
-import com.tentelemed.archipel.security.application.event.EvtRoleDeleted;
-import com.tentelemed.archipel.security.application.event.EvtRoleRegistered;
-import com.tentelemed.archipel.security.application.event.EvtRoleRightsUpdated;
-import com.tentelemed.archipel.security.application.event.RoleEventHandler;
+import com.tentelemed.archipel.security.domain.pub.EvtRoleDeleted;
+import com.tentelemed.archipel.security.domain.pub.EvtRoleRegistered;
+import com.tentelemed.archipel.security.domain.pub.EvtRoleRightsUpdated;
+import com.tentelemed.archipel.security.domain.pub.RoleEventHandler;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

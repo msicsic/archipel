@@ -1,10 +1,10 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
 import com.google.common.base.Strings;
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseView;
 import com.tentelemed.archipel.core.infrastructure.web.ModuleRoot;
-import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
+import com.tentelemed.archipel.security.domain.pub.EvtUserDomainEvent;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;

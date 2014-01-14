@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BasePopup;
-import com.tentelemed.archipel.site.domain.model.SiteType;
+import com.tentelemed.archipel.site.domain.pub.SiteType;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
@@ -40,7 +40,6 @@ public class UiSiteCreate extends BasePopup<UiSiteCreateModel> {
 
         setModal(true);
         setResizable(false);
-        //setImmediate(true);
 
         setWidth("250px");
         setHeight("250px");
@@ -58,7 +57,6 @@ public class UiSiteCreate extends BasePopup<UiSiteCreateModel> {
             cb.addItem(type);
         }
         cb.setTextInputAllowed(false);
-        //cb.setBuffered(false);
         if (model.isEdit()) {
             cb.setValue(model.getCmdUpdate().type);
         }
@@ -89,15 +87,12 @@ public class UiSiteCreate extends BasePopup<UiSiteCreateModel> {
         btLayout.addComponent(bt2);
 
         grid.addComponent(layout);
-        //grid.setExpandRatio(layout, 1.0f);
 
         grid.addComponent(btLayout);
         grid.setComponentAlignment(btLayout, Alignment.BOTTOM_RIGHT);
 
         grid.setMargin(true);
         setContent(grid);
-
-        //refreshUI();
     }
 
     public void setCenter(SiteQ center) {

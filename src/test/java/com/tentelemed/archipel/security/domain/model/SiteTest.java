@@ -1,17 +1,17 @@
 package com.tentelemed.archipel.security.domain.model;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreate;
 import com.tentelemed.archipel.site.application.command.CmdSiteCreateSector;
 import com.tentelemed.archipel.site.application.command.CmdSiteDeleteSector;
-import com.tentelemed.archipel.site.domain.event.EvtSiteRegistered;
-import com.tentelemed.archipel.site.domain.event.EvtSiteSectorAdded;
-import com.tentelemed.archipel.site.domain.event.EvtSiteSectorDeleted;
+import com.tentelemed.archipel.site.domain.pub.EvtSiteRegistered;
+import com.tentelemed.archipel.site.domain.pub.EvtSiteSectorAdded;
+import com.tentelemed.archipel.site.domain.pub.EvtSiteSectorDeleted;
 import com.tentelemed.archipel.site.domain.model.Sector;
 import com.tentelemed.archipel.site.domain.model.Site;
-import com.tentelemed.archipel.site.domain.model.SiteType;
+import com.tentelemed.archipel.site.domain.pub.SiteType;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

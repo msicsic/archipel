@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
 import com.tentelemed.archipel.site.domain.model.Sector;
-import com.tentelemed.archipel.site.domain.model.SiteId;
+import com.tentelemed.archipel.site.domain.pub.SiteId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

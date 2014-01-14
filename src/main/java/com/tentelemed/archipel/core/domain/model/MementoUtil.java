@@ -102,7 +102,6 @@ public class MementoUtil {
 
         } else {
             //il n'est pas necessaire de polluer le set Done
-            //done.put(new PMCapsuler(object), object);
             return object;
         }
     }
@@ -214,7 +213,6 @@ public class MementoUtil {
         XStream xstream = new XStream();
         xstream.setMode(XStream.ID_REFERENCES);
         xstream.alias("memento", Memento.class);
-        //xstream.useAttributeFor(Memento.class, "type");
         return xstream.toXML(memento);
     }
 

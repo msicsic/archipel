@@ -1,9 +1,9 @@
 package com.tentelemed.archipel.site.application.command;
 
 import com.tentelemed.archipel.core.application.service.CmdHandlerTest;
-import com.tentelemed.archipel.core.application.service.CmdRes;
-import com.tentelemed.archipel.site.domain.event.*;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.site.domain.model.*;
+import com.tentelemed.archipel.site.domain.pub.*;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import org.junit.Before;
 import org.junit.Test;

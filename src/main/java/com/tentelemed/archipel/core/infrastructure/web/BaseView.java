@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.navigator.ViewChangeListener;

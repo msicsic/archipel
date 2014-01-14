@@ -5,7 +5,7 @@ import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.site.application.command.CmdSiteUpdateAdditionalInfo;
 import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
 import com.tentelemed.archipel.site.application.service.SiteQueryService;
-import com.tentelemed.archipel.site.domain.model.Bank;
+import com.tentelemed.archipel.site.domain.pub.Bank;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import org.apache.commons.beanutils.BeanUtils;

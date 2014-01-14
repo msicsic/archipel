@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.site.application.command;
 
-import com.tentelemed.archipel.core.application.service.Command;
-import com.tentelemed.archipel.site.domain.model.Bed;
-import com.tentelemed.archipel.site.domain.model.RoomId;
+import com.tentelemed.archipel.core.application.command.Command;
+import com.tentelemed.archipel.site.domain.pub.Bed;
+import com.tentelemed.archipel.site.domain.pub.RoomId;
 
 /**
  * Created with IntelliJ IDEA.

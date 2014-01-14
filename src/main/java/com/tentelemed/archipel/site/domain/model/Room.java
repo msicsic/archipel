@@ -1,17 +1,17 @@
 package com.tentelemed.archipel.site.domain.model;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.site.application.command.CmdRoomAddBed;
 import com.tentelemed.archipel.site.application.command.CmdRoomCreate;
 import com.tentelemed.archipel.site.application.command.CmdRoomRemoveBed;
 import com.tentelemed.archipel.site.application.command.RoomCmdHandler;
-import com.tentelemed.archipel.site.domain.event.EvtRoomBedAdded;
-import com.tentelemed.archipel.site.domain.event.EvtRoomBedRemoved;
-import com.tentelemed.archipel.site.domain.event.EvtRoomRegistered;
-import com.tentelemed.archipel.site.domain.event.EvtRoomUpdated;
+import com.tentelemed.archipel.site.domain.pub.EvtRoomBedAdded;
+import com.tentelemed.archipel.site.domain.pub.EvtRoomBedRemoved;
+import com.tentelemed.archipel.site.domain.pub.EvtRoomRegistered;
+import com.tentelemed.archipel.site.domain.pub.EvtRoomUpdated;
+import com.tentelemed.archipel.site.domain.pub.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

@@ -3,7 +3,7 @@ package com.tentelemed.archipel.core.infrastructure.config;
 import com.google.common.eventbus.EventBus;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.tentelemed.archipel.core.application.EventStore;
-import com.tentelemed.archipel.core.application.service.CommandServiceFactory;
+import com.tentelemed.archipel.core.application.command.CommandServiceFactory;
 import com.tentelemed.archipel.core.infrastructure.repo.EventStoreImpl;
 import com.tentelemed.archipel.security.application.command.RoleCmdHandler;
 import com.tentelemed.archipel.security.application.command.UserCmdHandler;
@@ -73,19 +73,6 @@ public class SpringConfiguration {
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
-
-    /*@Bean
-    @DependsOn("lifecycleBeanPostProcessor")
-    DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-        return new DefaultAdvisorAutoProxyCreator();
-    }
-
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
-        AuthorizationAttributeSourceAdvisor b = new AuthorizationAttributeSourceAdvisor();
-        b.setSecurityManager(securityManager());
-        return b;
-    }  */
 
     @Bean
     public JdbcTemplate jdbcTemplate() {
@@ -159,8 +146,6 @@ public class SpringConfiguration {
         ds.setUser("root");
         ds.setPassword("root");
 
-        //ds.set
-
         return ds;
 
     }
@@ -171,7 +156,6 @@ public class SpringConfiguration {
         hibernateJpaVendorAdapter.setShowSql(true);
         hibernateJpaVendorAdapter.setGenerateDdl(true);
         hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
-//        hibernateJpaVendorAdapter.setDatabase(Database.H2);
         return hibernateJpaVendorAdapter;
     }
 
@@ -182,9 +166,6 @@ public class SpringConfiguration {
         lef.setJpaVendorAdapter(jpaVendorAdapter);
         lef.setPackagesToScan(
                 "com.tentelemed.archipel"
-//                , "com.tentelemed.archipel.invoicing.infrastructure.model"
-//                , "com.tentelemed.archipel.security.infrastructure.model"
-//                , "com.tentelemed.archipel.site.infrastructure.model"
         );
         lef.getJpaPropertyMap().put("hibernate.ejb.naming_strategy", "com.tentelemed.archipel.core.infrastructure.config.NamingStrategy");
         lef.afterPropertiesSet();

@@ -46,7 +46,7 @@ public class VaadinServlet extends SpringVaadinServlet implements WebApplication
     public void onStartup(ServletContext container) throws ServletException {
         // Set up a simple configuration that logs on the console.
         //BasicConfigurator.configure();
-        PropertyConfigurator.configure(getClass().getClassLoader().getResourceAsStream("log4j.properties"));
+        PropertyConfigurator.configure(Thread.currentThread().getContextClassLoader().getResourceAsStream("log4j.properties"));
 
         log.info("HOP");
 

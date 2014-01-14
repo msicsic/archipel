@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.application;
 
-import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 

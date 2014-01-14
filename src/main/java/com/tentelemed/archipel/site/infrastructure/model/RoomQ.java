@@ -1,12 +1,11 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
-import com.tentelemed.archipel.site.domain.model.Bed;
-import com.tentelemed.archipel.site.domain.model.RoomId;
-import com.tentelemed.archipel.site.domain.model.SiteId;
+import com.tentelemed.archipel.site.domain.pub.Bed;
+import com.tentelemed.archipel.site.domain.pub.RoomId;
+import com.tentelemed.archipel.site.domain.pub.SiteId;
 
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

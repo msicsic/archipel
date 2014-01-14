@@ -175,6 +175,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
             setMethod = lastClass.getMethod("set" + lastSimplePropertyName,
                     new Class[]{type});
         } catch (final NoSuchMethodException skipped) {
+            // ras
         }
 
         this.type = (Class<? extends T>) MethodProperty
@@ -210,7 +211,7 @@ public class NestedMethodProperty2<T> extends AbstractProperty<T> {
             return (T) object;
         } catch (final NullPointerException e) {
             return null;
-        } catch (final Throwable e) {
+        } catch (final Exception e) {
             throw new MethodException(this, e);
         }
     }

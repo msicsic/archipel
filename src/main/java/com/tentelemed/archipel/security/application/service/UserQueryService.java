@@ -1,9 +1,9 @@
 package com.tentelemed.archipel.security.application.service;
 
-import com.tentelemed.archipel.core.application.event.LoginEvent;
+import com.tentelemed.archipel.core.domain.pub.LoginEvent;
 import com.tentelemed.archipel.core.application.service.BaseQueryService;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
-import com.tentelemed.archipel.security.domain.model.UserId;
+import com.tentelemed.archipel.security.domain.pub.UserId;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.apache.shiro.SecurityUtils;

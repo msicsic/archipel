@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.vaadin.navigator.View;
 
 /**

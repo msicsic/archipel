@@ -2,8 +2,8 @@ package com.tentelemed.archipel.site.application.service;
 
 import com.tentelemed.archipel.core.application.service.BaseQueryService;
 import com.tentelemed.archipel.core.domain.model.Country;
-import com.tentelemed.archipel.site.domain.model.Bank;
-import com.tentelemed.archipel.site.domain.model.SiteId;
+import com.tentelemed.archipel.site.domain.pub.Bank;
+import com.tentelemed.archipel.site.domain.pub.SiteId;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;

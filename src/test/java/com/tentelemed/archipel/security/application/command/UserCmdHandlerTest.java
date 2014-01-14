@@ -1,9 +1,8 @@
 package com.tentelemed.archipel.security.application.command;
 
 import com.tentelemed.archipel.core.application.service.CmdHandlerTest;
-import com.tentelemed.archipel.core.application.service.CmdRes;
-import com.tentelemed.archipel.security.application.command.*;
-import com.tentelemed.archipel.security.application.event.*;
+import com.tentelemed.archipel.core.application.command.CmdRes;
+import com.tentelemed.archipel.security.domain.pub.*;
 import com.tentelemed.archipel.security.domain.model.*;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;

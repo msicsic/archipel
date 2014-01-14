@@ -1,6 +1,6 @@
 package com.tentelemed.archipel.site.application.command;
 
-import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 
 /**
  * Created with IntelliJ IDEA.

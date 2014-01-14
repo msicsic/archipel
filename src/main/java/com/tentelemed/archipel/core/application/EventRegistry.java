@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.core.application;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
-import com.tentelemed.archipel.core.application.service.Command;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
+import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.infrastructure.model.BaseEntityQ;
 import org.slf4j.Logger;

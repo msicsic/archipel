@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.application.command;
 
-import com.tentelemed.archipel.core.application.service.Command;
-import com.tentelemed.archipel.security.domain.model.RoleId;
+import com.tentelemed.archipel.core.application.command.Command;
+import com.tentelemed.archipel.security.domain.pub.RoleId;
 
 /**
  * Created with IntelliJ IDEA.

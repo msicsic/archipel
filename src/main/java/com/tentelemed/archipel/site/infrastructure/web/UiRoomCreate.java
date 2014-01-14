@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.site.infrastructure.web;
 
 import com.tentelemed.archipel.core.infrastructure.web.BasePopup;
-import com.tentelemed.archipel.site.domain.model.Location;
+import com.tentelemed.archipel.site.domain.pub.Location;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +74,6 @@ public class UiRoomCreate extends BasePopup<UiRoomCreateModel> {
 
         grid.setMargin(true);
         setContent(grid);
-
-        //refreshUI();
     }
 
     public void setRoom(RoomQ room) {

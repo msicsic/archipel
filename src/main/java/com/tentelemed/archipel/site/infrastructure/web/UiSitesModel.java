@@ -1,11 +1,11 @@
 package com.tentelemed.archipel.site.infrastructure.web;
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.site.application.command.*;
 import com.tentelemed.archipel.site.application.service.SiteQueryService;
-import com.tentelemed.archipel.site.domain.event.EvtSiteDomainEvent;
-import com.tentelemed.archipel.site.domain.model.SiteId;
+import com.tentelemed.archipel.site.domain.pub.EvtSiteDomainEvent;
+import com.tentelemed.archipel.site.domain.pub.SiteId;
 import com.tentelemed.archipel.site.infrastructure.model.LocationQ;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;

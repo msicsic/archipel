@@ -1,12 +1,11 @@
 package com.tentelemed.archipel.security.infrastructure.persistence.integration;
 
 
-import com.tentelemed.archipel.core.application.event.DomainEvent;
+import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
-import com.tentelemed.archipel.core.infrastructure.config.SpringConfiguration;
 import com.tentelemed.archipel.infrastructure.config.TestSpringConfiguration;
 import com.tentelemed.archipel.security.domain.interfaces.UserRepository;
-import com.tentelemed.archipel.security.domain.model.Right;
+import com.tentelemed.archipel.security.domain.pub.Right;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.junit.Test;

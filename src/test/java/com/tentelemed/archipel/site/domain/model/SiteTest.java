@@ -1,6 +1,10 @@
 package com.tentelemed.archipel.site.domain.model;
 
 import com.tentelemed.archipel.site.application.command.*;
+import com.tentelemed.archipel.site.domain.pub.Location;
+import com.tentelemed.archipel.site.domain.pub.LocationPath;
+import com.tentelemed.archipel.site.domain.pub.SiteId;
+import com.tentelemed.archipel.site.domain.pub.SiteType;
 import org.junit.Test;
 
 import java.util.List;

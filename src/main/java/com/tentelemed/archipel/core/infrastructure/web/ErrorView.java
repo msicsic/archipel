@@ -15,7 +15,6 @@ import ru.xpoft.vaadin.VaadinMessageSource;
 import ru.xpoft.vaadin.VaadinView;
 
 import javax.annotation.PostConstruct;
-import java.security.GeneralSecurityException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,7 +33,7 @@ public class ErrorView extends Panel implements View {
     VaadinMessageSource msg;
 
     @PostConstruct
-    public void postConstruct() throws GeneralSecurityException {
+    public void postConstruct() {
         setSizeFull();
         VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);

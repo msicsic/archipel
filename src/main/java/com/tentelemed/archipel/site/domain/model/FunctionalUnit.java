@@ -1,6 +1,8 @@
 package com.tentelemed.archipel.site.domain.model;
 
 import com.tentelemed.archipel.core.domain.model.BaseEntity;
+import com.tentelemed.archipel.site.domain.pub.Location;
+import com.tentelemed.archipel.site.domain.pub.LocationPath;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

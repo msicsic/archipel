@@ -1,8 +1,8 @@
 package com.tentelemed.archipel.site.application.command;
 
-import com.tentelemed.archipel.core.application.service.Command;
+import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.site.domain.model.Sector;
-import com.tentelemed.archipel.site.domain.model.SiteId;
+import com.tentelemed.archipel.site.domain.pub.SiteId;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

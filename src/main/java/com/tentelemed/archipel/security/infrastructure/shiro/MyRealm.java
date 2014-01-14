@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.security.infrastructure.shiro;
 
 import com.tentelemed.archipel.security.application.service.UserQueryService;
-import com.tentelemed.archipel.security.domain.model.Right;
+import com.tentelemed.archipel.security.domain.pub.Right;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;
 import org.apache.shiro.authc.*;
@@ -68,8 +68,10 @@ public class MyRealm extends AuthorizingRealm {
         }
         //THIS IS THE MAIN CODE YOU NEED TO DO !!!!
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
-        info.setRoles(roles); //fill in roles
-        //info.setObjectPermissions(permissions); //add permisions (MUST IMPLEMENT SHIRO PERMISSION INTERFACE)
+
+        //fill in roles
+        info.setRoles(roles);
+
         info.setStringPermissions(perms);
         return info;
     }

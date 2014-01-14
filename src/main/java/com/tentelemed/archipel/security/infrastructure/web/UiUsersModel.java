@@ -7,7 +7,7 @@ import com.tentelemed.archipel.security.application.command.CmdUserCreate;
 import com.tentelemed.archipel.security.application.command.CmdUserDelete;
 import com.tentelemed.archipel.security.application.command.CmdUserUpdateInfo;
 import com.tentelemed.archipel.security.application.command.UserCmdHandler;
-import com.tentelemed.archipel.security.application.event.EvtUserDomainEvent;
+import com.tentelemed.archipel.security.domain.pub.EvtUserDomainEvent;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.tentelemed.archipel.security.infrastructure.model.RoleQ;
 import com.tentelemed.archipel.security.infrastructure.model.UserQ;

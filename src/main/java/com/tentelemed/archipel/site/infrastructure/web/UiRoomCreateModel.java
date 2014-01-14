@@ -5,7 +5,7 @@ import com.tentelemed.archipel.site.application.command.CmdSiteCreateRoom;
 import com.tentelemed.archipel.site.application.command.CmdSiteUpdateRoom;
 import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
 import com.tentelemed.archipel.site.application.service.SiteQueryService;
-import com.tentelemed.archipel.site.domain.model.Location;
+import com.tentelemed.archipel.site.domain.pub.Location;
 import com.tentelemed.archipel.site.infrastructure.model.RoomQ;
 import com.tentelemed.archipel.site.infrastructure.model.SiteQ;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,6 @@ public class UiRoomCreateModel extends BaseViewModel {
         edit = true;
         cmdUpdate.name = room.getName();
         cmdUpdate.id = room.getEntityId();
-        //cmdUpdate.location = room.getLocationCode();
     }
 
     @Valid

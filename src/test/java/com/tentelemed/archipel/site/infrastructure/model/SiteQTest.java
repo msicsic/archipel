@@ -1,10 +1,10 @@
 package com.tentelemed.archipel.site.infrastructure.model;
 
-import com.tentelemed.archipel.site.domain.event.EvtSiteSectorAdded;
-import com.tentelemed.archipel.site.domain.event.EvtSiteRegistered;
+import com.tentelemed.archipel.site.domain.pub.EvtSiteSectorAdded;
+import com.tentelemed.archipel.site.domain.pub.EvtSiteRegistered;
 import com.tentelemed.archipel.site.domain.model.Sector;
-import com.tentelemed.archipel.site.domain.model.SiteId;
-import com.tentelemed.archipel.site.domain.model.SiteType;
+import com.tentelemed.archipel.site.domain.pub.SiteId;
+import com.tentelemed.archipel.site.domain.pub.SiteType;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

@@ -1,11 +1,11 @@
 package com.tentelemed.archipel.security.domain.model;
 
 import com.google.common.base.Objects;
-import com.tentelemed.archipel.core.application.service.CmdRes;
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.security.application.command.*;
-import com.tentelemed.archipel.security.application.event.*;
+import com.tentelemed.archipel.security.domain.pub.*;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.Valid;
