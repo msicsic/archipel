@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.security.infrastructure.web;
 
+import com.tentelemed.archipel.core.infrastructure.config.VersionInfo;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -22,15 +23,10 @@ import javax.validation.constraints.Size;
 @Scope("prototype")
 public class UiLoginModel extends BaseViewModel {
 
-    @Autowired
-    UserQueryService userQuery;
-
-    @NotNull @Size(min = 3)
-    String userName = "login1";
-
-    @NotNull @Size(min = 3)
-    String password = "123456789";
-
+    @Autowired UserQueryService userQuery;
+    @Autowired VersionInfo version;
+    @NotNull @Size(min = 3) String userName = "login1";
+    @NotNull @Size(min = 3) String password = "123456789";
     String error = "";
 
     public void action_doLogin() {
@@ -69,5 +65,9 @@ public class UiLoginModel extends BaseViewModel {
 
     public String getError() {
         return error;
+    }
+
+    public String getInfo() {
+        return "version : "+version.getVersion()+" config : "+System.getProperty("spring.profiles.active");
     }
 }

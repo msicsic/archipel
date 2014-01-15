@@ -10,12 +10,15 @@ import com.tentelemed.archipel.security.application.command.UserCmdHandler;
 import com.tentelemed.archipel.security.infrastructure.shiro.MyRealm;
 import com.tentelemed.archipel.site.application.command.RoomCmdHandler;
 import com.tentelemed.archipel.site.application.command.SiteCmdHandler;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,6 +47,20 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @ComponentScan("com.tentelemed.archipel")
 public class SpringConfiguration {
+    private final static Logger log = LoggerFactory.getLogger(SpringConfiguration.class);
+
+
+    @Bean
+    public VersionInfo versionInfo() {
+        try {
+            PropertiesConfiguration conf = new PropertiesConfiguration("version.properties");
+            String version = (String) conf.getProperty("version");
+            return new VersionInfo(version);
+        } catch (Exception e) {
+            log.error(null, e);
+            return null;
+        }
+    }
 
     @Bean
     public CommandServiceFactory commandServiceFactory() {

@@ -60,8 +60,12 @@ public class UiLogin extends BaseView<UiLoginModel> {
         loginButton.setStyleName("default");
         bind(loginButton, "doLogin");
 
+        // Info Label
+        Label infoLabel = new Label();
+        bind(infoLabel, "info");
+
         // Add both to a panel
-        VerticalLayout fields = new VerticalLayout(user, password, error, loginButton);
+        VerticalLayout fields = new VerticalLayout(user, password, error, loginButton, infoLabel);
         fields.setCaption(gt("caption"));
         fields.setSpacing(true);
         fields.setMargin(new MarginInfo(true, false, false, false));

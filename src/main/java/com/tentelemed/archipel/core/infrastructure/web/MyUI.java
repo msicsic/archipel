@@ -81,7 +81,7 @@ public class MyUI extends UI {
     public void _onPreDestroy() {
         eventBus.unregister(dispatcher);
         UI.getCurrent().getSession().close();
-        UI.getCurrent().getPage().setLocation("/");
+        UI.getCurrent().getPage().setLocation("");
     }
 
     IView currentView;
