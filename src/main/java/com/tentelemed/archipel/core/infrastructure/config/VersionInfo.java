@@ -7,17 +7,19 @@ package com.tentelemed.archipel.core.infrastructure.config;
  * Time: 15:16
  */
 public class VersionInfo {
-    String version;
+    private String version;
+    private String teamcity;
 
-    public VersionInfo(String version) {
+    public VersionInfo(String version, String teamcity) {
         this.version = version;
+        this.teamcity = teamcity;
     }
 
     public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public String getTeamcity() {
+        return teamcity;
     }
 }

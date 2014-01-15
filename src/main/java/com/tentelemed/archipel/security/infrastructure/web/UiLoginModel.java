@@ -68,6 +68,6 @@ public class UiLoginModel extends BaseViewModel {
     }
 
     public String getInfo() {
-        return "version : "+version.getVersion()+" config : "+System.getProperty("spring.profiles.active");
+        return "version : "+version.getVersion()+", build : "+version.getTeamcity()+", config : "+System.getProperty("spring.profiles.active");
     }
 }

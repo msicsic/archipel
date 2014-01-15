@@ -55,7 +55,8 @@ public class SpringConfiguration {
         try {
             PropertiesConfiguration conf = new PropertiesConfiguration("version.properties");
             String version = (String) conf.getProperty("version");
-            return new VersionInfo(version);
+            String build = (String) conf.getProperty("teamcity");
+            return new VersionInfo(version, build);
         } catch (Exception e) {
             log.error(null, e);
             return null;
