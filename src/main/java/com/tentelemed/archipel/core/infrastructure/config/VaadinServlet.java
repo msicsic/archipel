@@ -4,6 +4,8 @@ import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.service.CoreService;
 import com.tentelemed.archipel.core.infrastructure.web.MyUI;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
