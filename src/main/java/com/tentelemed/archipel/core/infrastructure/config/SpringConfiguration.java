@@ -14,6 +14,7 @@ import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -75,11 +76,6 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
-    }
-
-    @Bean
     public DefaultWebSecurityManager securityManager() {
         return new DefaultWebSecurityManager(myRealm());
     }
@@ -136,18 +132,40 @@ public class SpringConfiguration {
         return res;
     }
 
-    @Bean
-    public DataSource dataSource() {
-//        return new EmbeddedDatabaseBuilder()
-//                .setType(EmbeddedDatabaseType.H2)
-//                .build();
-        MysqlDataSource ds = new MysqlDataSource();
-        ds.setDatabaseName("gemed");
-        ds.setUser("root");
-        ds.setPassword("root");
+    @Profile("default")
+    @Configuration
+    static class DevConfig {
+        @Bean
+        public DataSource dataSource() {
+            MysqlDataSource ds = new MysqlDataSource();
+            ds.setDatabaseName("gemed");
+            ds.setUser("root");
+            ds.setPassword("root");
+            return ds;
+        }
 
-        return ds;
+        @Bean
+        public JdbcTemplate jdbcTemplate() {
+            return new JdbcTemplate(dataSource());
+        }
+    }
 
+    @Profile("prod")
+    @Configuration
+    static class ProdConfig {
+        @Bean
+        public DataSource dataSource() {
+            MysqlDataSource ds = new MysqlDataSource();
+            ds.setDatabaseName("gemed");
+            ds.setUser("root");
+            ds.setPassword("ttsa06");
+            return ds;
+        }
+
+        @Bean
+        public JdbcTemplate jdbcTemplate() {
+            return new JdbcTemplate(dataSource());
+        }
     }
 
     @Bean
