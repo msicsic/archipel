@@ -19,6 +19,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class LocationPath extends BaseVO {
     @NotNull String value;
 
+    LocationPath() {
+    }
+
     public LocationPath(Location location) {
         String res = "";
         while (location != null) {

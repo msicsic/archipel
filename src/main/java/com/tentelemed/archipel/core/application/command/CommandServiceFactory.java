@@ -131,7 +131,7 @@ public class CommandServiceFactory {
             }
 
             // l'agregat doit rester valide
-            result.aggregate.validate();
+            aggregate.validate();
 
             post(result);
             return result;
@@ -155,14 +155,13 @@ public class CommandServiceFactory {
         return c;
     }
 
-    //    protected <M extends EntityId, MM extends BaseAggregateRoot<M>> M post(MM target, Collection<DomainEvent> events) {
     protected <M extends EntityId> M post(CmdRes res) {
         eventStore.handleEvents(res);
-        return (M) res.aggregate.getEntityId();
+        return (M) res.entityId;
     }
 
     protected <I extends EntityId> void post(BaseAggregateRoot<I> target, AbstractDomainEvent... events) {
-        post(new CmdRes(target, Arrays.asList(events)));
+        post(new CmdRes(target.getEntityId(), Arrays.asList(events)));
     }
 
     protected void post(ApplicationEvent... events) {

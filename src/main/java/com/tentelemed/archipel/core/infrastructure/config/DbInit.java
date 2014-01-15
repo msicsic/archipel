@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.core.infrastructure.config;
 
+import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.Country;
 import com.tentelemed.archipel.security.application.command.CmdRoleCreate;
 import com.tentelemed.archipel.security.application.command.CmdUserCreate;
@@ -7,7 +8,10 @@ import com.tentelemed.archipel.security.application.command.RoleCmdHandler;
 import com.tentelemed.archipel.security.application.command.UserCmdHandler;
 import com.tentelemed.archipel.security.domain.pub.Right;
 import com.tentelemed.archipel.security.domain.pub.RoleId;
-import com.tentelemed.archipel.site.domain.pub.Bank;
+import com.tentelemed.archipel.site.application.command.*;
+import com.tentelemed.archipel.site.domain.model.Room;
+import com.tentelemed.archipel.site.domain.model.Site;
+import com.tentelemed.archipel.site.domain.pub.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -37,10 +41,12 @@ import java.util.Date;
 public class DbInit {
     private final static Logger log = LoggerFactory.getLogger(DbInit.class);
 
-    @Autowired RoleCmdHandler serviceRole;
-    @Autowired UserCmdHandler serviceUser;
+    @Autowired RoleCmdHandler roleHandler;
+    @Autowired UserCmdHandler userHandler;
+    @Autowired SiteCmdHandler siteHandler;
+    @Autowired RoomCmdHandler roomHandler;
 
-    @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection") @Autowired
     JdbcTemplate jdbcTemplate;
 
     @PersistenceContext
@@ -64,11 +70,13 @@ public class DbInit {
                 jdbcTemplate.update(
                         "create table T_AGGREGATE (c_aggregate_id INTEGER NOT NULL, c_type VARCHAR(128) NOT NULL, c_version INTEGER NOT NULL, PRIMARY KEY(c_aggregate_id), INDEX idx_version (c_version))"
                 );
-                RoleId role1 = (RoleId) serviceRole.execute(new CmdRoleCreate("administrateur", Right.RIGHT_A)).aggregate.getEntityId();
-                RoleId role2 = (RoleId) serviceRole.execute(new CmdRoleCreate("user", Right.RIGHT_B)).aggregate.getEntityId();
+                RoleId role1 = (RoleId) roleHandler.execute(new CmdRoleCreate("administrateur", Right.RIGHT_A)).entityId;
+                RoleId role2 = (RoleId) roleHandler.execute(new CmdRoleCreate("user", Right.RIGHT_B)).entityId;
                 for (int i = 0; i < 100; i++) {
-                    serviceUser.execute(new CmdUserCreate(i % 2 == 0 ? role1 : role2, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i));
+                    userHandler.execute(new CmdUserCreate(i % 2 == 0 ? role1 : role2, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i));
                 }
+
+                createSite();
             }
 
             System.err.println("hop");
@@ -128,5 +136,41 @@ public class DbInit {
         }
     }
 
+    public void createSite() {
+        CmdSiteCreate cmd = new CmdSiteCreate(SiteType.CHD, "Site 1", "CH1");
+        CmdRes res = siteHandler.execute(cmd);
+        SiteId siteId = (SiteId) res.entityId;
 
+        CmdSiteUpdateAdditionalInfo cmd2 = new CmdSiteUpdateAdditionalInfo();
+        cmd2.fax = "01 55 20 08 00";
+        cmd2.phone = "01 55 20 08 01";
+        cmd2.privateRoomAvailable = true;
+        cmd2.emergenciesAvailable = true;
+        cmd2.drugstoreAvailable = true;
+        cmd2.bankCode = "BNP";
+        cmd2.countryIso = "FRA";
+        cmd2.postalCode = "92100";
+        cmd2.directorName = "Durant";
+        cmd2.siret = "FR65412";
+        cmd2.street = "102 Edouard Vaillant";
+        cmd2.town = "Boulogne-Billancourt";
+        cmd2.id = siteId;
+        siteHandler.execute(cmd2);
+
+        CmdSiteCreateService cmd3 = new CmdSiteCreateService(siteId, "MED", "CNS", "Consultations");
+        siteHandler.execute(cmd3);
+        CmdSiteCreateFunctionalUnit cmd4 = new CmdSiteCreateFunctionalUnit(siteId, "CNS", "GEN", "Generaliste");
+        siteHandler.execute(cmd4);
+
+       // createRooms(siteId);
+    }
+
+    public void createRooms(SiteId siteId) {
+        CmdRoomCreate cmd = new CmdRoomCreate(siteId, "Consultations", true, new LocationPath("SEC:MED|SRV:CNS|FU:GEN"));
+        CmdRes res = roomHandler.execute(cmd);
+        RoomId roomId = (RoomId) res.entityId;
+        roomHandler.execute(new CmdRoomAddBed(roomId, new Bed("Lit 1")));
+        roomHandler.execute(new CmdRoomAddBed(roomId, new Bed("Lit 2")));
+        roomHandler.execute(new CmdRoomAddBed(roomId, new Bed("Lit 3")));
+    }
 }

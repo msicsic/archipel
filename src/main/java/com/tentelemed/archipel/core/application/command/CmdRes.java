@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.application.command;
 
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 
 import java.util.List;
@@ -12,13 +13,13 @@ import java.util.List;
  * Time: 11:01
  */
 public class CmdRes {
-    public CmdRes(BaseAggregateRoot aggregate, List<AbstractDomainEvent> events) {
-        this.aggregate = aggregate;
+    public List<AbstractDomainEvent> events;
+    public EntityId entityId;
+
+    public CmdRes(EntityId entityId, List<AbstractDomainEvent> events) {
+        this.entityId = entityId;
         this.events = events;
     }
-
-    public List<AbstractDomainEvent> events;
-    public BaseAggregateRoot aggregate;
 
     public <C extends AbstractDomainEvent> C getEvent(Class<C> eventClass) {
         for (AbstractDomainEvent event : events) {

@@ -9,6 +9,9 @@ package com.tentelemed.archipel.site.domain.pub;
 public class EvtRoomBedAdded extends EvtRoomDomainEvent {
     private Bed bed;
 
+    EvtRoomBedAdded() {
+    }
+
     public EvtRoomBedAdded(RoomId id, Bed bed) {
         super(id);
         this.bed = bed;

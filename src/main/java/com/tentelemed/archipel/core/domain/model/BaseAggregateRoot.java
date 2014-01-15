@@ -85,7 +85,7 @@ public abstract class BaseAggregateRoot<B extends EntityId> extends BaseEntity {
                 throw new RuntimeException("Event must have an non null id : " + event.getClass().getSimpleName());
             }
         }
-        return new CmdRes(this, Arrays.asList(events));
+        return new CmdRes(getEntityId(), Arrays.asList(events));
     }
 
     public void _setId(Integer id) {

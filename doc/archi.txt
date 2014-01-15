@@ -1,22 +1,24 @@
 TODO :
 
 - Il faudrait tester les commandes avec une BDD mémoire pour valider que le mapping JPA fonctionne
-- Les implementations des CmdHandler (ex SiteCommandService) pourraient etre générés (les traitements sont
-  systématiques : chargement des agregats et delegation de la commande)
+  En pratique le mapping pose parfois pb, il faut donc le tester
+- Les TU ne vérifient pas la présence d'un constructeur vide dans les Evts
+- Idem pour les VO (ex : LocationPath)
+- creation d'une bdd de test
+- gestion des droits
 
-- Le CmdHandler ne devrait pas accéder au QueryService (comme c'est actuellement le cas pour les Sites)
+* Les implementations des CmdHandler (ex SiteCommandService) pourraient etre générés (les traitements sont
+  systématiques : chargement des agregats et delegation de la commande)
+* Le CmdHandler ne devrait pas accéder au QueryService (comme c'est actuellement le cas pour les Sites)
   Cela rend le test difficile
   Probleme également pour les traitements asynchrones
-
-- gestion des droits
 * les methodes "handle" des BO doivent etre privées
 * La maj des ObjetQ devrait se faire dans un objet externe (mapper) car il est necessaire
   de pouvoir accéder à JPA lors de l'application de l'evt (les infos completes ne sont pas
   toutes présente dans l'evt en cours de traitement)
 
-
-- Pour simplifier les services, il faudrait faire de l'AOP au lieu de passer par un CommandHandler
-- Affectuer les controles de referencement lors modif code ou suppression
+* Pour simplifier les services, il faudrait faire de l'AOP au lieu de passer par un CommandHandler
+- Effectuer les controles de referencement lors modif code ou suppression
 - Gestion de la desactivation (afficher en gris ?)
 
 - Gestion des droits : acces aux modules possible ou non en fonction d'un droit

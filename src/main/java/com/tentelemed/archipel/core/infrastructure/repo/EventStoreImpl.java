@@ -10,6 +10,7 @@ import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.core.domain.model.Memento;
 import com.tentelemed.archipel.core.domain.model.MementoUtil;
+import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,14 +133,17 @@ public class EventStoreImpl implements EventStore {
     public void handleEvents(CmdRes res) {
 
         // recup de la derniere version
-        Long version = jdbcTemplate.queryForObject("select max(e.c_version) from T_EVENTS e where e.c_aggregate_id=?", Long.class, res.aggregate.getEntityId().getId());
+        Long version = jdbcTemplate.queryForObject("select max(e.c_version) from T_EVENTS e where e.c_aggregate_id=?", Long.class, res.entityId.getId());
         if (version == null) {
             // enregistrer l'agregat
             version = 0L;
-            jdbcTemplate.update("insert into T_AGGREGATE values (?,?,?)", res.aggregate.getEntityId().getId(), res.aggregate.getClass().getName(), version + res.events.size() - 1);
+            AbstractDomainEvent event = res.events.get(0);
+            Class aggregateClass = eventRegistry.getClassForEvent(event);
+            String className = aggregateClass.getName();
+            jdbcTemplate.update("insert into T_AGGREGATE values (?,?,?)", res.entityId.getId(), className, version + res.events.size() - 1);
         } else {
             version++;
-            jdbcTemplate.update("update T_AGGREGATE set c_version=? where c_aggregate_id=?", version + res.events.size() - 1, res.aggregate.getEntityId().getId());
+            jdbcTemplate.update("update T_AGGREGATE set c_version=? where c_aggregate_id=?", version + res.events.size() - 1, res.entityId.getId());
         }
 
         // ajout des evts dans le store

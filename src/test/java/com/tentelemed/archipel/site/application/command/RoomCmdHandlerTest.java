@@ -4,7 +4,6 @@ import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.application.service.CmdHandlerTest;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.site.domain.model.Room;
-import com.tentelemed.archipel.site.domain.model.Site;
 import com.tentelemed.archipel.site.domain.pub.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,20 +36,20 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
         handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
         handler.execute(new CmdSiteCreateService(new SiteId(0), "ABC", "SV1", "ServiceName"));
         CmdRes res = handler.execute(new CmdSiteCreateFunctionalUnit(new SiteId(0), "SV1", "FU1", "FUName"));
-        Site site = (Site) res.aggregate;
+        SiteId siteId = (SiteId) res.entityId;
 
         // When
-        res = roomHandler.execute(new CmdRoomCreate(site.getEntityId(), "RoomName", false, new LocationPath("SEC:ABC|SRV:SV1|FU:FU1")));
+        res = roomHandler.execute(new CmdRoomCreate(siteId, "RoomName", false, new LocationPath("SEC:ABC|SRV:SV1|FU:FU1")));
 
         // Then (evt levé)
         assertThat(res.getEvent(EvtRoomRegistered.class), notNullValue());
 
         // Then (Room créé)
-        Room room = (Room) eventStore.get(((Room) res.aggregate).getEntityId());
+        Room room = (Room) eventStore.get((RoomId) res.entityId);
         assertThat(room, notNullValue());
         assertThat(room.getName(), equalTo("RoomName"));
         assertThat(room.getLocationPath(), equalTo(new LocationPath("SEC:ABC|SRV:SV1|FU:FU1")));
-        assertThat(room.getSiteId(), equalTo(site.getEntityId()));
+        assertThat(room.getSiteId(), equalTo(siteId));
 
         // Then (RoomQ créé)
         RoomQ roomQ = pHandler.find(RoomQ.class, room.getEntityId().getId());
@@ -64,10 +63,10 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdRoomCreateBadLocation() {
         // Given (Site créé)
         CmdRes res = handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        Site site = (Site) res.aggregate;
+        SiteId siteId = (SiteId) res.entityId;
 
         // When
-        roomHandler.execute(new CmdRoomCreate(site.getEntityId(), "RoomName", false, new LocationPath("SEC:ABC|SRV:SV1|FU:FU4")));
+        roomHandler.execute(new CmdRoomCreate(siteId, "RoomName", false, new LocationPath("SEC:ABC|SRV:SV1|FU:FU4")));
 
         // Then (exception)
     }
@@ -77,10 +76,10 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
         // Given (Site créé)
         handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
         CmdRes res = handler.execute(new CmdSiteCreateSector(new SiteId(0), SectorType.TECH, "SectorTech", "ABC"));
-        Site site = (Site) res.aggregate;
+        SiteId siteId = (SiteId) res.entityId;
 
         // When
-        roomHandler.execute(new CmdRoomCreate(site.getEntityId(), "RoomName", true, new LocationPath("SEC:ABC")));
+        roomHandler.execute(new CmdRoomCreate(siteId, "RoomName", true, new LocationPath("SEC:ABC")));
 
         // Then (exception)
     }
@@ -89,18 +88,18 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdRoomAddBed() {
         // Given (site créé avec une Room)
         CmdRes res1 = handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        Site site = (Site) res1.aggregate;
-        CmdRes res2 = roomHandler.execute(new CmdRoomCreate(site.getEntityId(), "RoomName", true, new LocationPath("SEC:MED")));
-        Room room = (Room) res2.aggregate;
+        SiteId siteId = (SiteId) res1.entityId;
+        CmdRes res2 = roomHandler.execute(new CmdRoomCreate(siteId, "RoomName", true, new LocationPath("SEC:MED")));
+        RoomId roomId = (RoomId) res2.entityId;
 
         // When
-        CmdRes res = roomHandler.execute(new CmdRoomAddBed(room.getEntityId(), new Bed("Lit1")));
+        CmdRes res = roomHandler.execute(new CmdRoomAddBed(roomId, new Bed("Lit1")));
 
         // Then (evt levé)
         assertThat(res.getEvent(EvtRoomBedAdded.class), notNullValue());
 
         // Then (Room modifié)
-        room = (Room) eventStore.get(room.getEntityId());
+        Room room = (Room) eventStore.get(roomId);
         assertThat(room.getBeds().contains(new Bed("Lit1")), equalTo(true));
 
         // Then (RoomQ modifié)
@@ -113,19 +112,19 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdRoomRemoveBed() {
         // Given (site créé avec une Room)
         CmdRes res1 = handler.execute(new CmdSiteCreate(SiteType.CHU, "SiteName", "AAAA"));
-        Site site = (Site) res1.aggregate;
-        CmdRes res2 = roomHandler.execute(new CmdRoomCreate(site.getEntityId(), "RoomName", true, new LocationPath("SEC:MED")));
-        Room room = (Room) res2.aggregate;
-        CmdRes res3 = roomHandler.execute(new CmdRoomAddBed(room.getEntityId(), new Bed("Lit1")));
+        SiteId siteId = (SiteId) res1.entityId;
+        CmdRes res2 = roomHandler.execute(new CmdRoomCreate(siteId, "RoomName", true, new LocationPath("SEC:MED")));
+        RoomId roomId = (RoomId) res2.entityId;
+        CmdRes res3 = roomHandler.execute(new CmdRoomAddBed(roomId, new Bed("Lit1")));
 
         // When
-        CmdRes res = roomHandler.execute(new CmdRoomRemoveBed(room.getEntityId(), new Bed("Lit1")));
+        CmdRes res = roomHandler.execute(new CmdRoomRemoveBed(roomId, new Bed("Lit1")));
 
         // Then (evt levé)
         assertThat(res.getEvent(EvtRoomBedRemoved.class), notNullValue());
 
         // Then (Room modifié)
-        room = (Room) eventStore.get(room.getEntityId());
+        Room room = (Room) eventStore.get(roomId);
         assertThat(room.getBeds().contains(new Bed("Lit1")), equalTo(false));
 
         // Then (RoomQ modifié)

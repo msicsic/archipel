@@ -2,8 +2,10 @@ package com.tentelemed.archipel.site.domain.pub;
 
 import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

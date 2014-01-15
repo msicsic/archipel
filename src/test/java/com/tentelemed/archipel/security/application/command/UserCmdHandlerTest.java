@@ -41,7 +41,7 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
         CmdRes res = userCmdHandler.execute(cmd);
 
         // Then (User dans eventstore et correctement initialisé)
-        User user = (User) eventStore.get((UserId) res.aggregate.getEntityId());
+        User user = (User) eventStore.get((UserId)res.entityId);
         assertThat(user, notNullValue());
         assertThat(user.getEntityId(), notNullValue());
         assertThat(user.getEmail(), equalTo("mail@mail.com"));
@@ -82,9 +82,9 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
         CmdRes res = userCmdHandler.execute(new CmdUserDelete(new UserId(0)));
 
         // Then (l'objet n'est plus dans le store ni dans le repo)
-        Object user = eventStore.get(res.aggregate.getEntityId());
+        Object user = eventStore.get(res.entityId);
         assertThat(user, nullValue());
-        user = pHandler.find(UserQ.class, res.aggregate.getEntityId().getId());
+        user = pHandler.find(UserQ.class, res.entityId.getId());
         assertThat(user, nullValue());
     }
 
@@ -99,7 +99,7 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
         CmdRes res = userCmdHandler.execute(new CmdUserUpdateInfo(new UserId(0), "Paul2", "Durand2", date2, "mail2@mail.com"));
 
         // Then (objet User modifié)
-        User user = (User) res.aggregate;
+        User user = (User) eventStore.get((UserId)res.entityId);
         assertThat(user.getEmail(), equalTo("mail2@mail.com"));
         assertThat(user.getFirstName(), equalTo("Paul2"));
         assertThat(user.getLastName(), equalTo("Durand2"));
@@ -117,7 +117,8 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdUserChangePassword_ok() {
         // Given (user existe)
         CmdRes res = userCmdHandler.execute(new CmdUserCreate(new RoleId(111), "Paul", "Durand", new Date(), "mail@mail.com", "login"));
-        User user = (User) res.aggregate;
+        UserId userId = (UserId) res.entityId;
+        User user = (User) eventStore.get(userId);
 
         // When (exec commande)
         res = userCmdHandler.execute(new CmdUserChangePassword(user.getEntityId(), user.getPassword(), "newPass", "newPass"));
@@ -126,7 +127,7 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
         assertThat(res.getEvent(EvtUserPasswordUpdated.class), notNullValue());
 
         // Then (User mot de passe modifié)
-        user = (User) res.aggregate;
+        user = (User) eventStore.get(userId);
         assertThat(user.getPassword(), equalTo("newPass"));
 
         // Then (UserQ mot de passe modifié)
@@ -139,7 +140,7 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdUserChangePassword_bad_last_password() {
         // Given (user existe)
         CmdRes res = userCmdHandler.execute(new CmdUserCreate(new RoleId(111), "Paul", "Durand", new Date(), "mail@mail.com", "login"));
-        User user = (User) res.aggregate;
+        User user = (User) eventStore.get((UserId)res.entityId);
 
         // When (exec commande password ko)
         userCmdHandler.execute(new CmdUserChangePassword(user.getEntityId(), "badPassword", "newPass", "newPass"));
@@ -151,7 +152,7 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
     public void executeCmdUserChangePassword_bad_new_password() {
         // Given (user existe)
         CmdRes res = userCmdHandler.execute(new CmdUserCreate(new RoleId(111), "Paul", "Durand", new Date(), "mail@mail.com", "login"));
-        User user = (User) res.aggregate;
+        User user = (User) eventStore.get((UserId)res.entityId);
 
         // When (exec commande new password ko)
         userCmdHandler.execute(new CmdUserChangePassword(user.getEntityId(), user.getPassword(), "newPass", "badNewPass"));
