@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class UiSitesModel extends BaseViewModel {
     @Autowired SiteCmdHandler serviceWrite;
     SiteQ currentSite;
     private RoomQ selectedRoom;
+    private Bed selectedBed;
 
     public List<SiteQ> getSites() {
         return sort(serviceRead.getAll(), new Comparator<SiteQ>() {
@@ -77,6 +80,10 @@ public class UiSitesModel extends BaseViewModel {
         // TODO
     }
 
+    public boolean isDeleteRoomEnabled() {
+        return getSelectedRoom() != null;
+    }
+
     public boolean isEditMainEnabled() {
         return getCurrentSite() != null;
     }
@@ -91,6 +98,23 @@ public class UiSitesModel extends BaseViewModel {
         return getCurrentSite() != null;
     }
 
+    public void action_createBed() {
+
+    }
+
+    public boolean isCreateBedEnabled() {
+        return getSelectedRoom() != null;
+    }
+
+    public void action_deleteBed() {
+
+    }
+
+    public boolean isDeleteBedEnabled() {
+        return getSelectedBed() != null;
+    }
+
+
     @Override
     protected void onDomainEventReceived(DomainEvent event) {
         if (event instanceof EvtSiteDomainEvent) {
@@ -99,25 +123,13 @@ public class UiSitesModel extends BaseViewModel {
         }
     }
 
-    /*public Division createDefaultDivision() {
-        Set<Sector> sectors = new HashSet<>();
-        Sector sector = new Sector(Sector.Type.MED, "Consultations", "CNS");
-        Service service1 = new Service(sector, "Generaliste", "CGEN");
-        Service service2 = new Service(sector, "Ophtalmo", "COPH");
-        FunctionalUnit fu1 = new FunctionalUnit(service1, "FU1", "FU1");
-        FunctionalUnit fu2 = new FunctionalUnit(service1, "FU2", "FU2");
-
-        sectors.add(sector);
-        Division div = new Division(sectors);
-        return div;
-    }*/
-
     public List<RoomQ> getRooms() {
         return serviceRead.getRooms(getCurrentSite());
     }
 
     public void setSelectedRoom(RoomQ room) {
         this.selectedRoom = room;
+        this.selectedBed = null;
     }
 
     public RoomQ getSelectedRoom() {
@@ -183,5 +195,20 @@ public class UiSitesModel extends BaseViewModel {
                 serviceWrite.execute(new CmdSiteDeleteActivityUnit(currentSite.getEntityId(), loc.getCode()));
             }
         });
+    }
+
+    public List<Bed> getBeds() {
+        if (getSelectedRoom() == null) {
+            return new ArrayList<>();
+        }
+        return getSelectedRoom().getBeds();
+    }
+
+    public Bed getSelectedBed() {
+        return selectedBed;
+    }
+
+    public void setSelectedBed(Bed bed) {
+        this.selectedBed = bed;
     }
 }

@@ -133,4 +133,12 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     protected boolean isPermitted(String action) {
         return userService.isPermitted(getModel().getModule() + ":" + action);
     }
+
+    protected void listen(String path, Runnable handler) {
+        getModel().listen(path, handler);
+    }
+
+    protected boolean isRefreshing() {
+        return helper.isRefreshing();
+    }
 }

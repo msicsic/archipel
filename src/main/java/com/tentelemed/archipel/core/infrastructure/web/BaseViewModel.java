@@ -25,9 +25,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,6 +49,17 @@ public abstract class BaseViewModel {
     boolean commited = false;
     boolean discarded = false;
     String module;
+
+    private Map<String, ViewModelPath> mapListeners = new HashMap<>();
+
+    public void listen(String path, Runnable r) {
+        ViewModelPath vmp = mapListeners.get(path);
+        if (vmp == null) {
+            vmp = new ViewModelPath(this, path);
+            mapListeners.put(path, vmp);
+        }
+        vmp.addListener(r);
+    }
 
     public void setModule(String name) {
         this.module = name;
@@ -249,5 +258,26 @@ public abstract class BaseViewModel {
         return module;
     }
 
+
+    public void checkModelUpdates() {
+        for (Map.Entry<String, ViewModelPath> entry : mapListeners.entrySet()) {
+            ViewModelPath vmp = entry.getValue();
+            Object lastValue = vmp.getLastValue();
+            Object newValue = vmp.getCurrentValue();
+            if (! Objects.equals(lastValue, newValue)) {
+                // notifier
+                for (Runnable r : vmp.getListeners()) {
+                    try {
+                        r.run();
+                    } catch (Exception e) {
+                        log.error(null, e);
+                    }
+                }
+
+                // mise à jour
+                vmp.setLastValue(newValue);
+            }
+        }
+    }
 
 }

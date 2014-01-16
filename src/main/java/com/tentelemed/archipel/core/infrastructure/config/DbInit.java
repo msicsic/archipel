@@ -162,15 +162,27 @@ public class DbInit {
         CmdSiteCreateFunctionalUnit cmd4 = new CmdSiteCreateFunctionalUnit(siteId, "CNS", "GEN", "Generaliste");
         siteHandler.execute(cmd4);
 
-       // createRooms(siteId);
+        createRooms(siteId);
     }
 
     public void createRooms(SiteId siteId) {
-        CmdRoomCreate cmd = new CmdRoomCreate(siteId, "Consultations", true, new LocationPath("SEC:MED|SRV:CNS|FU:GEN"));
+        // creation d'une Room
+        CmdRoomCreate cmd = new CmdRoomCreate(siteId, "Accueil", false, new LocationPath("SEC:MED"));
+        roomHandler.execute(cmd);
+
+        // creation d'une Room
+        cmd = new CmdRoomCreate(siteId, "Consultations", true, new LocationPath("SEC:MED|SRV:CNS|FU:GEN"));
+        roomHandler.execute(cmd);
+
+        // creation d'une Room
+        cmd = new CmdRoomCreate(siteId, "Hospitalisations", true, new LocationPath("SEC:MED"));
         CmdRes res = roomHandler.execute(cmd);
         RoomId roomId = (RoomId) res.entityId;
+
+        // ajout de 3 lits à cette Room
         roomHandler.execute(new CmdRoomAddBed(roomId, new Bed("Lit 1")));
         roomHandler.execute(new CmdRoomAddBed(roomId, new Bed("Lit 2")));
         roomHandler.execute(new CmdRoomAddBed(roomId, new Bed("Lit 3")));
+        roomHandler.execute(new CmdRoomAddBed(roomId, new Bed("Lit 4")));
     }
 }

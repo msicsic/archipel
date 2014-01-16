@@ -140,4 +140,13 @@ public abstract class BasePopup<M extends BaseViewModel> extends Window implemen
     public void setModule(String name) {
         getModel().setModule(name);
     }
+
+    protected void listen(String path, Runnable handler) {
+        getModel().listen(path, handler);
+    }
+
+    protected boolean isRefreshing() {
+        return helper.isRefreshing();
+    }
+
 }

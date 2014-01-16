@@ -40,6 +40,10 @@ public class BaseViewHelper<M extends BaseViewModel> {
         this.msg = msg;
     }
 
+    public boolean isRefreshing() {
+        return refreshing;
+    }
+
     void showError(Throwable e) {
         new Notification(e.getMessage(), Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
     }
@@ -140,40 +144,55 @@ public class BaseViewHelper<M extends BaseViewModel> {
         return field;
     }
 
+    boolean refreshing = false;
+
     protected void refreshUI() {
-        for (Object os : model.getItem().getItemPropertyIds()) {
-            String s = os.toString();
-            Property prop = model.getItem().getItemProperty(s);
-            if (prop instanceof MethodProperty) {
-                ((MethodProperty) prop).fireValueChange();
-            } else if (prop instanceof NestedMethodProperty2) {
-                ((NestedMethodProperty2) prop).fireValueChange();
+        try {
+            if (refreshing) {
+                return;
             }
-        }
-        for (Map.Entry<String, Button> entry : boundedButtons.entrySet()) {
-            String path = entry.getKey();
-            Button button = entry.getValue();
-            try {
-                Method m = getModelClass().getMethod("is" + path.substring(0, 1).toUpperCase() + path.substring(1) + "Enabled");
-                if (m != null) {
-                    boolean value = (boolean) m.invoke(model);
-                    button.setEnabled(value);
+            refreshing = true;
+            for (Object os : model.getItem().getItemPropertyIds()) {
+                String s = os.toString();
+                Property prop = model.getItem().getItemProperty(s);
+                if (prop instanceof MethodProperty) {
+                    ((MethodProperty) prop).fireValueChange();
+                } else if (prop instanceof NestedMethodProperty2) {
+                    ((NestedMethodProperty2) prop).fireValueChange();
                 }
-            } catch (Exception e) {
-                // ras
             }
-            try {
-                Method m = getModelClass().getMethod("is" + path.substring(0, 1).toUpperCase() + path.substring(1) + "Visible");
-                if (m != null) {
-                    boolean value = (boolean) m.invoke(model);
-                    button.setVisible(value);
+            for (Map.Entry<String, Button> entry : boundedButtons.entrySet()) {
+                String path = entry.getKey();
+                Button button = entry.getValue();
+                try {
+                    Method m = getModelClass().getMethod("is" + path.substring(0, 1).toUpperCase() + path.substring(1) + "Enabled");
+                    if (m != null) {
+                        boolean value = (boolean) m.invoke(model);
+                        button.setEnabled(value);
+                    }
+                } catch (Exception e) {
+                    // ras
                 }
-            } catch (Exception e) {
-                // ras
+                try {
+                    Method m = getModelClass().getMethod("is" + path.substring(0, 1).toUpperCase() + path.substring(1) + "Visible");
+                    if (m != null) {
+                        boolean value = (boolean) m.invoke(model);
+                        button.setVisible(value);
+                    }
+                } catch (Exception e) {
+                    // ras
+                }
             }
+            getBinder().discard();
+
+            // notification des listeners de changement du modele
+            model.checkModelUpdates();
+
+            view.onRefresh();
+
+        } finally {
+            refreshing = false;
         }
-        getBinder().discard();
-        view.onRefresh();
     }
 
     private Class<M> getModelClass() {

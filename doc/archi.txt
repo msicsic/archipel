@@ -1,12 +1,15 @@
 TODO :
 
+- gestion des droits
 - Il faudrait tester les commandes avec une BDD mémoire pour valider que le mapping JPA fonctionne
   En pratique le mapping pose parfois pb, il faut donc le tester
-- Les TU ne vérifient pas la présence d'un constructeur vide dans les Evts
-- Idem pour les VO (ex : LocationPath)
 - creation d'une bdd de test
-- gestion des droits
 
+* UI : il faut ajouter une fonction "listen(modelPath)" qui permettre a la vue de s'enregistrer
+  sur des changements du modele de vue pour se rafraichir en consequence.
+  Par ex : listen("selectedUser.lastName", handler);
+* Les TU ne vérifient pas la présence d'un constructeur vide dans les Evts
+* Idem pour les VO (ex : LocationPath)
 * Les implementations des CmdHandler (ex SiteCommandService) pourraient etre générés (les traitements sont
   systématiques : chargement des agregats et delegation de la commande)
 * Le CmdHandler ne devrait pas accéder au QueryService (comme c'est actuellement le cas pour les Sites)
@@ -309,3 +312,22 @@ Generation des evts :
 - une fois la commande trait�e, il faut notifier l'appelant que le r�sultat est dispo
 - le resultat est post� sur le bus global, mais il faut ensuite notifier le bus local
   a l'origine de l'appel -> comment le retrouver ?
+
+
+=> Fonction d'ecoute du modele de vue
+
+- dans un premier temps, permet juste de reagir à la modification du modele de vue.
+- ne doit pas etre appelé lorsque le chemin ecouté n'a pas changé
+- la mise à jour de la vue suite à un changement est faite manuellement
+
+algo :
+- lors de l'enregistrement, le chemin est mis dans une map, associé à une valeur nulle
+- cette map contient en clé le chemin et en valeur une structure contenant la derniere
+  valeur connue et la liste des listeners
+- lors du premier affichage, chaque chemin présent dana la map est parcouru
+  pour chacun, resoudre la valeur (recup la propriété), et comparer la valeur avec
+  celle dana la map
+- si la valeur a changée, appeller les listeners associés
+- mettre à jour la valeur dans la map
+- l'algo doit etre executé a chaque refresh de la vue
+

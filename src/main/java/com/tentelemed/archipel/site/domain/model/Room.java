@@ -46,7 +46,7 @@ public class Room extends BaseAggregateRoot<RoomId> implements RoomCmdHandler {
         if (cmd.medical && !location.isMedical()) {
             throw new DomainException("Medical room must be in a medical location");
         }
-        return _result(handle(new EvtRoomRegistered(getEntityId(), cmd.siteId, cmd.name, location.isMedical(), cmd.locationPath)));
+        return _result(handle(new EvtRoomRegistered(getEntityId(), cmd.siteId, cmd.name, cmd.medical, cmd.locationPath)));
     }
 
     public CmdRes execute(CmdRoomAddBed cmd) {

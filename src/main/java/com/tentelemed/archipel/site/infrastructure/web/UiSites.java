@@ -31,6 +31,8 @@ public class UiSites extends BaseView<UiSitesModel> {
     @Autowired UiSitesModel model;
     private ComboBox combo;
     private VerticalLayout sectorsPanel;
+    private BeanItemContainer<Bed> containerBeds;
+    private Table tableBeds;
 
     @Override
     public UiSitesModel getModel() {
@@ -76,58 +78,98 @@ public class UiSites extends BaseView<UiSitesModel> {
     }
 
     private com.vaadin.ui.Component createRoomsPanel() {
-        VerticalLayout vlayout = new VerticalLayout();
-        vlayout.setCaption("Rooms management");
 
          /* Create the table with a caption. */
-        final Table table = new Table();
+        final Table tableRooms = new Table();
 
         BeanItemContainer<RoomQ> container = new BeanItemContainer<>(RoomQ.class);
-        table.setContainerDataSource(container);
+        tableRooms.setContainerDataSource(container);
 
-        /* Define the names and data types of columns.
-         * The "default value" parameter is meaningless here. */
         container.addNestedContainerProperty("name");
         container.addNestedContainerProperty("medical");
         container.addNestedContainerProperty("nbBeds");
         container.addNestedContainerProperty("locationPath");
 
-        // Headers
-        table.setColumnHeader("name", "Name");
-        table.setColumnHeader("medical", "Medical Room");
-        table.setColumnHeader("nbBeds", "Beds");
-        table.setColumnHeader("locationCode", "Location");
+        tableRooms.setColumnHeader("name", "Name");
+        tableRooms.setColumnHeader("medical", "Medical Room");
+        tableRooms.setColumnHeader("nbBeds", "Beds");
+        tableRooms.setColumnHeader("locationCode", "Location");
 
-        // Have to set explicitly to hide the "equatorial" property
-        table.setVisibleColumns(new String[]{"name", "medical", "nbBeds", "locationPath"});
-
+        tableRooms.setVisibleColumns(new String[]{"name", "medical", "nbBeds", "locationPath"});
         container.addAll(getModel().getRooms());
-
-        table.setSelectable(true);
-        table.setImmediate(true);
+        tableRooms.setSelectable(true);
+        tableRooms.setImmediate(true);
 
         // Handle selection change.
-        table.addValueChangeListener(new Property.ValueChangeListener() {
+        tableRooms.addValueChangeListener(new Property.ValueChangeListener() {
             public void valueChange(Property.ValueChangeEvent event) {
-                RoomQ room = (RoomQ) table.getValue();
+                if (isRefreshing()) return;
+                RoomQ room = (RoomQ) tableRooms.getValue();
                 model.setSelectedRoom(room);
                 refreshUI();
             }
         });
+        tableRooms.setSizeFull();
 
-        HorizontalLayout hlayout = new HorizontalLayout();
-        VerticalLayout rightLayout = new VerticalLayout();
-        rightLayout.setSizeFull();
-        HorizontalLayout btLayout = new HorizontalLayout();
-        btLayout.setSpacing(true);
-        rightLayout.addComponent(btLayout);
-        rightLayout.setComponentAlignment(btLayout, Alignment.BOTTOM_RIGHT);
-        btLayout.addComponent(bind(new Button("Create Room"), "createRoom"));
-        btLayout.addComponent(bind(new Button("Delete Room"), "deleteRoom"));
-        hlayout.addComponent(table);
-        hlayout.addComponent(rightLayout);
-        vlayout.addComponent(hlayout);
-        return vlayout;
+         /* Create the table with a caption. */
+        tableBeds = new Table();
+        containerBeds = new BeanItemContainer<>(Bed.class);
+        tableBeds.setContainerDataSource(containerBeds);
+        containerBeds.addNestedContainerProperty("name");
+        tableBeds.setColumnHeader("name", "Name");
+        tableBeds.setVisibleColumns(new String[]{"name"});
+        tableBeds.setSelectable(true);
+        tableBeds.setImmediate(true);
+        tableBeds.setSizeFull();
+        updateBeds();
+
+        // Handle selection change.
+        tableBeds.addValueChangeListener(new Property.ValueChangeListener() {
+            public void valueChange(Property.ValueChangeEvent event) {
+                if (isRefreshing()) return;
+                Bed bed = (Bed) tableBeds.getValue();
+                model.setSelectedBed(bed);
+                refreshUI();
+            }
+        });
+
+        listen("selectedRoom", new Runnable() {
+            @Override public void run() {
+                updateBeds();
+            }
+        });
+
+        HorizontalLayout btLeft = new HorizontalLayout();
+        btLeft.setSpacing(true);
+        btLeft.addComponent(bind(new Button("Create Room"), "createRoom"));
+        btLeft.addComponent(bind(new Button("Delete Room"), "deleteRoom"));
+
+        VerticalLayout left = new VerticalLayout();
+        left.setSizeFull();
+        left.setWidth("100%");
+        left.addComponent(tableRooms);
+        left.addComponent(btLeft);
+        left.setComponentAlignment(btLeft, Alignment.BOTTOM_RIGHT);
+
+        HorizontalLayout btRight = new HorizontalLayout();
+        btRight.setSpacing(true);
+        btRight.addComponent(bind(new Button("Create Bed"), "createBed"));
+        btRight.addComponent(bind(new Button("Delete Bed"), "deleteBed"));
+
+        VerticalLayout right = new VerticalLayout();
+        right.setSizeFull();
+        right.addComponent(tableBeds);
+        right.addComponent(btRight);
+        right.setComponentAlignment(btRight, Alignment.BOTTOM_RIGHT);
+
+        HorizontalLayout main = new HorizontalLayout();
+        main.setSizeFull();
+        main.setSpacing(true);
+        main.addComponent(left);
+        main.addComponent(right);
+
+        main.setCaption("Rooms management");
+        return main;
     }
 
     private com.vaadin.ui.Component createSectorsPanel() {
@@ -304,7 +346,6 @@ public class UiSites extends BaseView<UiSitesModel> {
         btEdit.setStyleName("small");
         vlayout.addComponent(btEdit);
 
-        //return panelAddInfo;
         return vlayout;
     }
 
@@ -349,37 +390,46 @@ public class UiSites extends BaseView<UiSitesModel> {
         return panelFilters;
     }
 
-    private void initCombo() {
-        combo.removeValueChangeListener(getListener());
+    private void refreshComboValues() {
         combo.removeAllItems();
         for (SiteQ center : model.getSites()) {
             combo.addItem(center);
             combo.setItemCaption(center, center.getName());
         }
-        combo.addValueChangeListener(getListener());
         combo.setValue(model.getCurrentSite());
     }
 
-    Property.ValueChangeListener listener;
+    private void initCombo() {
+        combo.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override public void valueChange(Property.ValueChangeEvent event) {
+                if (isRefreshing()) return;
+                model.setCurrentSite((SiteQ) combo.getValue());
+                refreshUI();
+            }
+        });
+        listen("sites", new Runnable() {
+            @Override public void run() {
+                refreshComboValues();
+            }
+        });
+        listen("currentSite", new Runnable() {
+            @Override public void run() {
+                createSectorsPanel();
+            }
+        });
+    }
 
-    private Property.ValueChangeListener getListener() {
-        if (listener == null) {
-            listener = new Property.ValueChangeListener() {
-                @Override public void valueChange(Property.ValueChangeEvent event) {
-                    model.setCurrentSite((SiteQ) combo.getValue());
-                    createSectorsPanel();
-                    refreshUI();
-                }
-            };
-        }
-        return listener;
+    private void updateBeds() {
+        containerBeds.removeAllItems();
+        containerBeds.addAll(getModel().getBeds());
+        tableBeds.setValue(getModel().getSelectedBed());
     }
 
     @Override
     public void onDomainEventReceived(DomainEvent event) {
         if (event instanceof EvtSiteDomainEvent) {
-            initCombo();
             refreshUI();
         }
     }
+
 }

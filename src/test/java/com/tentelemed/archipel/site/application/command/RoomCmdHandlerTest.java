@@ -50,6 +50,7 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
         assertThat(room.getName(), equalTo("RoomName"));
         assertThat(room.getLocationPath(), equalTo(new LocationPath("SEC:ABC|SRV:SV1|FU:FU1")));
         assertThat(room.getSiteId(), equalTo(siteId));
+        assertThat(room.isMedical(), equalTo(false));
 
         // Then (RoomQ créé)
         RoomQ roomQ = pHandler.find(RoomQ.class, room.getEntityId().getId());
@@ -57,6 +58,18 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
         assertThat(roomQ.getName(), equalTo(room.getName()));
         assertThat(roomQ.getLocationPath(), equalTo(room.getLocationPath().toString()));
         assertThat(roomQ.getSiteId(), notNullValue());
+        assertThat(roomQ.isMedical(), equalTo(false));
+
+        // When
+        res = roomHandler.execute(new CmdRoomCreate(siteId, "RoomName", false, new LocationPath("SEC:MED")));
+
+        // Then (Room créé)
+        room = (Room) eventStore.get((RoomId) res.entityId);
+        assertThat(room.isMedical(), equalTo(false));
+
+        // Then (RoomQ créé)
+        roomQ = pHandler.find(RoomQ.class, room.getEntityId().getId());
+        assertThat(roomQ.isMedical(), equalTo(false));
     }
 
     @Test(expected = DomainException.class)
@@ -100,11 +113,13 @@ public class RoomCmdHandlerTest extends CmdHandlerTest {
 
         // Then (Room modifié)
         Room room = (Room) eventStore.get(roomId);
+        assertThat(room.isMedical(), equalTo(true));
         assertThat(room.getBeds().contains(new Bed("Lit1")), equalTo(true));
 
         // Then (RoomQ modifié)
         RoomQ roomQ = pHandler.find(RoomQ.class, room.getEntityId().getId());
         assertThat(roomQ, notNullValue());
+        assertThat(roomQ.isMedical(), equalTo(true));
         assertThat(roomQ.getBeds().contains(new Bed("Lit1")), equalTo(true));
     }
 

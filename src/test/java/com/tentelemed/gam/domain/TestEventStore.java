@@ -6,6 +6,8 @@ import com.tentelemed.archipel.core.application.EventStore;
 import com.tentelemed.archipel.core.application.command.CmdRes;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
 import com.tentelemed.archipel.core.domain.model.EntityId;
+import com.tentelemed.archipel.core.domain.model.Memento;
+import com.tentelemed.archipel.core.domain.model.MementoUtil;
 import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.persistence.handler.TestPersistenceHandler;
@@ -28,7 +30,8 @@ public class TestEventStore implements EventStore {
     @Autowired TestPersistenceHandler pHandler;
 
     int count = 0;
-    List<DomainEvent> events = new ArrayList<>();
+//    List<DomainEvent> events = new ArrayList<>();
+    List<String> events = new ArrayList<>();
 
     protected <U extends BaseAggregateRoot> U handle(U object, DomainEvent event, boolean isNew) {
         if (object == null) {
@@ -43,7 +46,9 @@ public class TestEventStore implements EventStore {
             m.setAccessible(true);
             m.invoke(object, event);
             if (isNew) {
-                events.add(event);
+                Memento memento = MementoUtil.createMemento(event);
+                String serial = MementoUtil.mementoToString(memento);
+                events.add(serial);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -54,7 +59,10 @@ public class TestEventStore implements EventStore {
     @Override
     public <M extends EntityId> BaseAggregateRoot<M> get(M id) {
         BaseAggregateRoot<M> root = null;
-        for (DomainEvent event : events) {
+        for (String str : events) {
+            Memento memento = MementoUtil.mementoFromString(str);
+            DomainEvent event = (DomainEvent) MementoUtil.instanciateFromMemento(memento);
+
             if (id.equals(event.getId())) {
                 if (root == null) {
                     root = eventRegistry.newAggregateForEvent(event);
@@ -86,7 +94,12 @@ public class TestEventStore implements EventStore {
     @Override
     public void handleEvents(CmdRes res) {
         // ajout des evts
-        events.addAll(res.events);
+        // ajout des evts dans le store
+        for (DomainEvent event : res.events) {
+            Memento memento = MementoUtil.createMemento(event);
+            String serial = MementoUtil.mementoToString(memento);
+            events.add(serial);
+        }
 
         // propagation aux QueryManagers (pour maj des bdd de consultation)
         for (AbstractDomainEvent event : res.events) {

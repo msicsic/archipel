@@ -32,4 +32,24 @@ public class Right extends BaseVO {
     public String getValue() {
         return value;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Right)) return false;
+
+        Right right = (Right) o;
+
+        if (!name.equals(right.name)) return false;
+        if (!value.equals(right.value)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + value.hashCode();
+        return result;
+    }
 }

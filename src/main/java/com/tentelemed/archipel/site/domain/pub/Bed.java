@@ -2,7 +2,7 @@ package com.tentelemed.archipel.site.domain.pub;
 
 import com.tentelemed.archipel.core.domain.model.BaseVO;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -13,7 +13,10 @@ import javax.validation.constraints.NotNull;
  */
 @Embeddable
 public class Bed extends BaseVO {
+    @Column(name="BED_NAME")
     @NotNull String name;
+//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+//    @NotNull @ManyToOne RoomQ room;
 
     Bed() {
     }

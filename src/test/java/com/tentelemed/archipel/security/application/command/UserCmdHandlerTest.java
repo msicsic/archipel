@@ -174,13 +174,13 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
         Role role = (Role) eventStore.get(new RoleId(0));
         assertThat(role, notNullValue());
         assertThat(role.getName(), equalTo("RoleName"));
-        assertThat(role.getRights().contains(Right.RIGHT_A), equalTo(true));
+        assertThat(role.getRights().iterator().next().getName(), equalTo("admin"));
 
         // Then (RoleQ présent dans bdd)
         RoleQ roleQ = pHandler.find(RoleQ.class, role.getEntityId().getId());
         assertThat(roleQ, notNullValue());
         assertThat(roleQ.getName(), equalTo("RoleName"));
-        assertThat(roleQ.getRights().contains(Right.RIGHT_A), equalTo(true));
+        assertThat(roleQ.getRights().iterator().next().getName(), equalTo("admin"));
     }
 
     @Test
