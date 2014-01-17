@@ -121,6 +121,8 @@ public class BaseViewHelper<M extends BaseViewModel> {
             field.addValueChangeListener(new Property.ValueChangeListener() {
                 @Override
                 public void valueChange(Property.ValueChangeEvent event) {
+                    if (isRefreshing()) return;
+
                     // refresh screen
                     if (refresh) {
                         if (field == currentComponent) {

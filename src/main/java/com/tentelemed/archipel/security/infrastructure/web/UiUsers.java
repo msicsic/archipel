@@ -147,6 +147,7 @@ public class UiUsers extends BaseView<UiUsersModel> {
         // Handle selection change.
         table.addValueChangeListener(new Property.ValueChangeListener() {
             public void valueChange(Property.ValueChangeEvent event) {
+                if (isRefreshing()) return;
                 UserQ user = (UserQ) table.getValue();
                 model.setSelectedUser(user);
                 refreshUI();

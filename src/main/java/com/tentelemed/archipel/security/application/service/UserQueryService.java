@@ -36,7 +36,7 @@ import java.util.List;
  */
 @Component
 @Transactional
-public class UserQueryService extends BaseQueryService {
+public class UserQueryService extends BaseQueryService implements RightManager {
 
     @Autowired
     UserRepository userRepository;

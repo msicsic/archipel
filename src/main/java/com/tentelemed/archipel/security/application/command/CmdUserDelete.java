@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.security.application.command;
 
+import com.tentelemed.archipel.core.application.command.CmdGroup;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.security.domain.pub.UserId;
 
@@ -9,6 +10,7 @@ import com.tentelemed.archipel.security.domain.pub.UserId;
  * Date: 18/12/13
  * Time: 21:42
  */
+@CmdGroup(module="users", aggregat = "user")
 public class CmdUserDelete extends Command<UserId> {
     public CmdUserDelete() {
     }

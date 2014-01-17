@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.security.application.command;
 
+import com.tentelemed.archipel.core.application.command.CmdGroup;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.security.domain.pub.UserId;
 
@@ -12,6 +13,7 @@ import java.util.Date;
  * Date: 18/12/13
  * Time: 21:42
  */
+@CmdGroup(module="users", aggregat = "user")
 public class CmdUserUpdateInfo extends Command<UserId> {
     @NotNull public String firstName;
     @NotNull public String lastName;

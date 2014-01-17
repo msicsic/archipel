@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.site.application.command;
 
+import com.tentelemed.archipel.core.application.command.CmdGroup;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.site.domain.pub.SectorType;
 import com.tentelemed.archipel.site.domain.pub.SiteId;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
  * Date: 18/12/13
  * Time: 21:36
  */
+@CmdGroup(module="sites", aggregat = "site")
 public class CmdSiteCreateSector extends Command<SiteId> {
     @NotNull public SectorType type;
     @NotNull @Size(min = 3) public String name;

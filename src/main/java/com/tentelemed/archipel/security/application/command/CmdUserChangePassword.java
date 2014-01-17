@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.security.application.command;
 
+import com.tentelemed.archipel.core.application.command.CmdGroup;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.security.domain.pub.UserId;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
  * Date: 18/12/13
  * Time: 21:42
  */
+@CmdGroup(module="users", aggregat = "user")
 public class CmdUserChangePassword extends Command<UserId> {
     @NotNull public String old;
     @NotNull public String new1;

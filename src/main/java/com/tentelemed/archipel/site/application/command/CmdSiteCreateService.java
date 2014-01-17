@@ -1,10 +1,12 @@
 package com.tentelemed.archipel.site.application.command;
 
+import com.tentelemed.archipel.core.application.command.CmdGroup;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.site.domain.pub.SiteId;
 
 import javax.validation.constraints.NotNull;
 
+@CmdGroup(module="sites", aggregat = "site")
 public class CmdSiteCreateService extends Command<SiteId> {
     @NotNull public String sectorCode;
     @NotNull public String code;

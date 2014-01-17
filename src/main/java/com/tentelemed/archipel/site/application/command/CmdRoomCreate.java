@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.site.application.command;
 
+import com.tentelemed.archipel.core.application.command.CmdGroup;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.site.domain.pub.LocationPath;
 import com.tentelemed.archipel.site.domain.pub.RoomId;
@@ -11,6 +12,7 @@ import com.tentelemed.archipel.site.domain.pub.SiteId;
  * Date: 09/01/14
  * Time: 12:00
  */
+@CmdGroup(module="sites", aggregat = "room")
 public class CmdRoomCreate extends Command<RoomId> {
     public String name;
     public boolean medical;

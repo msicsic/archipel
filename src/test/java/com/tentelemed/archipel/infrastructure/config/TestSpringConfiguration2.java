@@ -9,6 +9,7 @@ import com.tentelemed.archipel.security.application.command.CmdRoleCreate;
 import com.tentelemed.archipel.security.application.command.CmdUserCreate;
 import com.tentelemed.archipel.security.application.command.RoleCmdHandler;
 import com.tentelemed.archipel.security.application.command.UserCmdHandler;
+import com.tentelemed.archipel.security.application.service.RightManager;
 import com.tentelemed.archipel.security.domain.model.Role;
 import com.tentelemed.archipel.security.domain.model.User;
 import com.tentelemed.archipel.security.domain.pub.*;
@@ -33,6 +34,15 @@ import org.springframework.context.annotation.ScopedProxyMode;
  */
 @Configuration
 public class TestSpringConfiguration2 {
+
+    @Bean
+    public RightManager rightManager() {
+        return new RightManager() {
+            @Override public boolean isPermitted(String toTest) {
+                return true;
+            }
+        };
+    }
 
     @Bean
     public CommandServiceFactory commandServiceFactory() {

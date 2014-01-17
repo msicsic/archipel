@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.site.application.command;
 
+import com.tentelemed.archipel.core.application.command.CmdGroup;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.site.domain.pub.SiteId;
 
@@ -9,6 +10,7 @@ import com.tentelemed.archipel.site.domain.pub.SiteId;
  * Date: 18/12/13
  * Time: 21:37
  */
+@CmdGroup(module="sites", aggregat = "site")
 public class CmdSiteDelete extends Command<SiteId> {
     public CmdSiteDelete(SiteId id) {
         super(id);

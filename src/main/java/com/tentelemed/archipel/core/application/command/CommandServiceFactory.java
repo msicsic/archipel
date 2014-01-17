@@ -5,8 +5,13 @@ import com.tentelemed.archipel.core.application.ApplicationEvent;
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
 import com.tentelemed.archipel.core.domain.model.BaseAggregateRoot;
+import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.core.domain.model.EntityId;
 import com.tentelemed.archipel.core.domain.pub.AbstractDomainEvent;
+import com.tentelemed.archipel.security.application.service.RightManager;
+import com.tentelemed.archipel.security.application.service.UserQueryService;
+import com.tentelemed.archipel.security.domain.pub.RoleQ;
+import com.tentelemed.archipel.security.domain.pub.UserQ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +44,7 @@ public class CommandServiceFactory {
     @Autowired EventBus eventBus;
     @Autowired EventRegistry registry;
     @Autowired ApplicationContext context;
+    @Autowired RightManager rightManager;
 
     PlatformTransactionManager transactionManager;
     TransactionTemplate transactionTemplate;
@@ -84,6 +90,20 @@ public class CommandServiceFactory {
     }
 
     protected CmdRes genericExec(Command cmd) {
+
+        // controle des droits
+        String module = "default";
+        String aggregat = "default";
+        if (cmd.getClass().isAnnotationPresent(CmdGroup.class)) {
+            CmdGroup group = cmd.getClass().getAnnotation(CmdGroup.class);
+            module = group.module();
+            aggregat = group.aggregat();
+        }
+        boolean check = rightManager.isPermitted(module+":"+aggregat+":"+getRealClass(cmd.getClass()).getSimpleName());
+        if (! check) {
+            throw new RightException("Current user has no execution right for command : "+getRealClass(cmd.getClass()).getSimpleName());
+        }
+
         // validation de la commande
         validate(cmd);
 

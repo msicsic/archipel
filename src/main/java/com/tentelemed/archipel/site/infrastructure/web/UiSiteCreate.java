@@ -63,6 +63,7 @@ public class UiSiteCreate extends BasePopup<UiSiteCreateModel> {
         cb.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
+                if (isRefreshing()) return;
                 if (model.isEdit()) {
                     model.getCmdUpdate().type = ((SiteType) cb.getValue());
                 } else {

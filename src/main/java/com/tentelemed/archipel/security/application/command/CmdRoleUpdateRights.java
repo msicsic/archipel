@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.security.application.command;
 
+import com.tentelemed.archipel.core.application.command.CmdGroup;
 import com.tentelemed.archipel.core.application.command.Command;
 import com.tentelemed.archipel.security.domain.pub.Right;
 import com.tentelemed.archipel.security.domain.pub.RoleId;
@@ -15,6 +16,7 @@ import java.util.Set;
  * Date: 18/12/13
  * Time: 21:42
  */
+@CmdGroup(module="users", aggregat = "role")
 public class CmdRoleUpdateRights extends Command<RoleId> {
     @NotNull public Set<Right> rights;
 

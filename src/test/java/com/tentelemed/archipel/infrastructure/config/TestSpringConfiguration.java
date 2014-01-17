@@ -3,6 +3,7 @@ package com.tentelemed.archipel.infrastructure.config;
 import com.google.common.eventbus.EventBus;
 import com.tentelemed.archipel.core.application.EventRegistry;
 import com.tentelemed.archipel.core.application.EventStore;
+import com.tentelemed.archipel.security.application.service.RightManager;
 import com.tentelemed.archipel.security.infrastructure.shiro.MyRealm;
 import com.tentelemed.gam.domain.TestEventStore;
 import org.apache.shiro.realm.Realm;
@@ -31,6 +32,15 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @ComponentScan("com.tentelemed.archipel")
 public class TestSpringConfiguration {
+
+    @Bean
+    public RightManager rightManager() {
+        return new RightManager() {
+            @Override public boolean isPermitted(String toTest) {
+                return true;
+            }
+        };
+    }
 
     @Bean
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
