@@ -1,7 +1,7 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
-import com.tentelemed.archipel.security.application.service.UserQueryService;
+import com.tentelemed.archipel.security.application.service.RightManager;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -22,7 +22,7 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     protected static Logger log = LoggerFactory.getLogger(BaseView.class);
     BaseViewHelper<M> helper;
     @Autowired protected VaadinMessageSource msg;
-    @Autowired protected UserQueryService userService;
+    @Autowired protected RightManager rightManager;
 
     public void setModule(String name) {
         getModel().setModule(name);
@@ -131,7 +131,7 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     }
 
     protected boolean isPermitted(String action) {
-        return userService.isPermitted(getModel().getModule() + ":" + action);
+        return rightManager.isPermitted(getModel().getModule() + ":" + action);
     }
 
     protected void listen(String path, Runnable handler) {

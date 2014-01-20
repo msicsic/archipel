@@ -36,10 +36,14 @@ import java.util.List;
  */
 @Component
 @Transactional
-public class UserQueryService extends BaseQueryService implements RightManager {
+public class UserQueryService extends BaseQueryService {
 
     @Autowired
     UserRepository userRepository;
+
+    public UserQueryService() {
+        System.err.println("");
+    }
 
     public List<UserQ> getAllUsers() {
         return userRepository.getAllUsers();
@@ -59,12 +63,6 @@ public class UserQueryService extends BaseQueryService implements RightManager {
 
     public RoleQ getCurrentUserRole() {
         return getRoleForUser(getCurrentUser().getEntityId());
-    }
-
-    public boolean isPermitted(String right) {
-        Subject currentUser = SecurityUtils.getSubject();
-        if (!currentUser.isAuthenticated()) return false;
-        return currentUser.isPermitted(right);
     }
 
     public void doLogin(String login, String password) throws AuthenticationException {

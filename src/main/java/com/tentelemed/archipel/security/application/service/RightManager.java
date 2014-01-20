@@ -1,5 +1,9 @@
 package com.tentelemed.archipel.security.application.service;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.stereotype.Component;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Mael
@@ -7,5 +11,6 @@ package com.tentelemed.archipel.security.application.service;
  * Time: 17:11
  */
 public interface RightManager {
+
     boolean isPermitted(String toTest);
 }

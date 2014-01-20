@@ -3,6 +3,7 @@ package com.tentelemed.archipel.core.infrastructure.web;
 import com.google.common.base.Objects;
 import com.tentelemed.archipel.core.application.service.CoreService;
 import com.tentelemed.archipel.core.domain.model.Module;
+import com.tentelemed.archipel.security.application.service.RightManager;
 import com.tentelemed.archipel.security.application.service.UserQueryService;
 import com.tentelemed.archipel.security.domain.pub.RoleQ;
 import com.tentelemed.archipel.security.domain.pub.UserQ;
@@ -26,6 +27,7 @@ public class MainViewModel extends BaseViewModel {
 
     @Autowired CoreService service;
     @Autowired UserQueryService userService;
+    @Autowired RightManager rightManager;
 
     public List<Module> getModules() {
         return service.findNonRootModules();
@@ -57,6 +59,6 @@ public class MainViewModel extends BaseViewModel {
     }
 
     public boolean isPermitted(String moduleId) {
-        return userService.isPermitted(moduleId + ":show");
+        return rightManager.isPermitted(moduleId + ":show");
     }
 }
