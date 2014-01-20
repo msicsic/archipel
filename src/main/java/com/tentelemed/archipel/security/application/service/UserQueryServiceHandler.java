@@ -19,6 +19,10 @@ public class UserQueryServiceHandler {
     @Autowired
     UserQueryService userQuery;
 
+    public UserQueryServiceHandler() {
+        System.err.println("");
+    }
+
     @Subscribe
     public void handleEvent(LogoutRequestEvent event) {
         userQuery.doLogout();
