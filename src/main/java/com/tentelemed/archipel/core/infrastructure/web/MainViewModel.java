@@ -59,6 +59,6 @@ public class MainViewModel extends BaseViewModel {
     }
 
     public boolean isPermitted(String moduleId) {
-        return rightManager.isPermitted(moduleId + ":show");
+        return rightManager.isPermitted(moduleId + ":read");
     }
 }

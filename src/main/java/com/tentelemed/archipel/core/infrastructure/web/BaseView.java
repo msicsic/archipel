@@ -101,7 +101,7 @@ public abstract class BaseView<M extends BaseViewModel> extends CustomComponent 
     }
 
     protected Button bind(Button button, final String path) {
-        return helper.bind(button, path);
+        return helper.bind(rightManager, button, path);
     }
 
     protected void call(String path) {

@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -53,14 +52,26 @@ public class RoleQ extends BaseEntityQ<RoleId> {
             rights = new HashSet<>();
             for (String r : Splitter.on(" ").split(rightString)) {
                 if (Strings.isNullOrEmpty(r)) continue;
-                List<String> values = Splitter.on("/").splitToList(r);
-                Right right = new Right(values.get(0), values.get(1));
+                Right right = Right.valueOf(r.trim());
                 rights.add(right);
             }
         }
         return Collections.unmodifiableSet(rights);
     }
 
+    //    public Set<Right> getRights() {
+//        if (rights == null) {
+//            rights = new HashSet<>();
+//            for (String r : Splitter.on(" ").split(rightString)) {
+//                if (Strings.isNullOrEmpty(r)) continue;
+//                List<String> values = Splitter.on("/").splitToList(r);
+//                Right right = new Right(values.get(0), values.get(1));
+//                rights.add(right);
+//            }
+//        }
+//        return Collections.unmodifiableSet(rights);
+//    }
+//
     public void setRights(Set<Right> rights) {
         this.rights = rights;
         buildRightsString();
@@ -70,11 +81,20 @@ public class RoleQ extends BaseEntityQ<RoleId> {
         if (rights == null) return;
         String result = "";
         for (Right r : rights) {
-            result = result + r.getName() + "/" + r.getValue() + " ";
+            result = result + r.name() + " ";
         }
         rightString = result;
     }
 
+    //    private void buildRightsString() {
+//        if (rights == null) return;
+//        String result = "";
+//        for (Right r : rights) {
+//            result = result + r.getName() + "/" + r.getValue() + " ";
+//        }
+//        rightString = result;
+//    }
+//
     public void setRightString(String rightString) {
         this.rightString = rightString;
         this.rights = null;

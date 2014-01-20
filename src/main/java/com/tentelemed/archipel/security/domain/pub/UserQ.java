@@ -3,9 +3,7 @@ package com.tentelemed.archipel.security.domain.pub;
 import com.tentelemed.archipel.core.domain.pub.BaseEntityQ;
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;

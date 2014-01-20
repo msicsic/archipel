@@ -1,10 +1,13 @@
 TODO :
 
-- gestion des droits
+- BUG : toutes les relations EntityId sont sérialisées
 - Il faudrait tester les commandes avec une BDD mémoire pour valider que le mapping JPA fonctionne
   En pratique le mapping pose parfois pb, il faut donc le tester
 - creation d'une bdd de test
 
+* Ne pas enregistrer les Right complets en bdd, mais seulement le nom (id)
+* gestion des droits : annot @Require liste de noms de commandes, il faut pouvoir en exec au moins
+  une pour executer l'action du bouton
 * UI : il faut ajouter une fonction "listen(modelPath)" qui permettre a la vue de s'enregistrer
   sur des changements du modele de vue pour se rafraichir en consequence.
   Par ex : listen("selectedUser.lastName", handler);

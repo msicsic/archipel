@@ -1,5 +1,6 @@
 package com.tentelemed.archipel.site.infrastructure.web;
 
+import com.tentelemed.archipel.core.application.command.Require;
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.tentelemed.archipel.core.infrastructure.web.BaseViewModel;
 import com.tentelemed.archipel.site.application.command.*;
@@ -47,11 +48,13 @@ public class UiSitesModel extends BaseViewModel {
         return currentSite;
     }
 
+    @Require({CmdSiteCreate.class})
     public void action_createCenter() {
         UiSiteCreate view = getView(UiSiteCreate.class);
         show(view);
     }
 
+    @Require({CmdSiteDelete.class})
     public void action_deleteCenter() {
         confirm("Medical Center deletion", "Do you really want to delete this Medical Center ?", new Runnable() {
             @Override
@@ -65,12 +68,14 @@ public class UiSitesModel extends BaseViewModel {
         return getCurrentSite() != null;
     }
 
+    @Require({CmdSiteUpdate.class})
     public void action_editMain() {
         UiSiteCreate view = getView(UiSiteCreate.class);
         view.setCenter(getCurrentSite());
         show(view);
     }
 
+    @Require({CmdSiteCreateRoom.class})
     public void action_createRoom() {
         UiRoomCreate view = getView(UiRoomCreate.class);
         show(view);
@@ -88,6 +93,7 @@ public class UiSitesModel extends BaseViewModel {
         return getCurrentSite() != null;
     }
 
+    @Require({CmdSiteUpdateAdditionalInfo.class})
     public void action_editAddInfo() {
         UiSiteEdit view = getView(UiSiteEdit.class);
         view.setCenter(getCurrentSite());
@@ -99,7 +105,6 @@ public class UiSitesModel extends BaseViewModel {
     }
 
     public void action_createBed() {
-
     }
 
     public boolean isCreateBedEnabled() {
@@ -107,7 +112,6 @@ public class UiSitesModel extends BaseViewModel {
     }
 
     public void action_deleteBed() {
-
     }
 
     public boolean isDeleteBedEnabled() {

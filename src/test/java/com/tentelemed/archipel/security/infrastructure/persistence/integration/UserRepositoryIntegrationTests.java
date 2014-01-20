@@ -110,7 +110,7 @@ public class UserRepositoryIntegrationTests {
             role = new RoleQ();
             role.setId(1111);
             role.setName("admin");
-            role.setRights(new HashSet<>(Arrays.asList(new Right[]{Right.RIGHT_A})));
+            role.setRights(new HashSet<>(Arrays.asList(new Right[]{Right.GLOBAL_ADMIN})));
             role = repository.save(role);
         }
         return role;

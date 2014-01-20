@@ -381,11 +381,9 @@ public class UiSites extends BaseView<UiSitesModel> {
         panelFilters.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
         Button btCreate = bind(new Button("create Center"), "createCenter");
         btCreate.addStyleName("default");
-        btCreate.setVisible(isPermitted("create"));
         panelFilters.addComponent(btCreate);
         Button btDelete = bind(new Button("delete Center"), "deleteCenter");
         btDelete.addStyleName("default");
-        btDelete.setVisible(isPermitted("delete"));
         panelFilters.addComponent(btDelete);
         return panelFilters;
     }

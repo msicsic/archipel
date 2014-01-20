@@ -8,17 +8,35 @@ import com.tentelemed.archipel.security.application.command.RoleCmdHandler;
 import com.tentelemed.archipel.security.application.command.UserCmdHandler;
 import com.tentelemed.archipel.security.domain.pub.Right;
 import com.tentelemed.archipel.security.domain.pub.RoleId;
+import com.tentelemed.archipel.security.infrastructure.shiro.MyRealm;
 import com.tentelemed.archipel.site.application.command.*;
-import com.tentelemed.archipel.site.domain.model.Room;
-import com.tentelemed.archipel.site.domain.model.Site;
 import com.tentelemed.archipel.site.domain.pub.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.realm.AuthenticatingRealm;
+import org.apache.shiro.realm.Realm;
+import org.apache.shiro.realm.text.IniRealm;
+import org.apache.shiro.realm.text.PropertiesRealm;
+import org.apache.shiro.realm.text.TextConfigurationRealm;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DelegatingSubject;
+import org.apache.shiro.util.Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +64,8 @@ public class DbInit {
     @Autowired SiteCmdHandler siteHandler;
     @Autowired RoomCmdHandler roomHandler;
 
+    @Autowired ApplicationContext context;
+
     @SuppressWarnings("SpringJavaAutowiringInspection") @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -56,6 +76,17 @@ public class DbInit {
         try (
                 Connection conn = jdbcTemplate.getDataSource().getConnection()
         ) {
+            // ici il faut positionner manuellement le securityManager, car nous ne sommes pas
+            // dans le contexte d'une requete http, le ShiroFilter n'a donc pas positionné
+            // le securityManager.
+            // On crée donc un secManager donnant tous les droits à un compte "root"
+            Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+            org.apache.shiro.mgt.SecurityManager securityManager = factory.getInstance();
+            SecurityUtils.setSecurityManager(securityManager);
+            UsernamePasswordToken token = new UsernamePasswordToken("root", "secret");
+            Subject currentUser = SecurityUtils.getSubject();
+            currentUser.login(token);
+
             ResultSet tables = conn.getMetaData().getTables(conn.getCatalog(), null, "T_EVENTS", null);
             boolean created = tables.next();
             tables.close();
@@ -70,8 +101,8 @@ public class DbInit {
                 jdbcTemplate.update(
                         "create table T_AGGREGATE (c_aggregate_id INTEGER NOT NULL, c_type VARCHAR(128) NOT NULL, c_version INTEGER NOT NULL, PRIMARY KEY(c_aggregate_id), INDEX idx_version (c_version))"
                 );
-                RoleId role1 = (RoleId) roleHandler.execute(new CmdRoleCreate("administrateur", Right.RIGHT_A)).entityId;
-                RoleId role2 = (RoleId) roleHandler.execute(new CmdRoleCreate("user", Right.RIGHT_B)).entityId;
+                RoleId role1 = (RoleId) roleHandler.execute(new CmdRoleCreate("administrateur", Right.GLOBAL_ADMIN)).entityId;
+                RoleId role2 = (RoleId) roleHandler.execute(new CmdRoleCreate("user", Right.SITES_ADMIN)).entityId;
                 for (int i = 0; i < 100; i++) {
                     userHandler.execute(new CmdUserCreate(i % 2 == 0 ? role1 : role2, "Paul" + i, "Durand" + i, new Date(), "mail" + i + "@mail.com", "login" + i));
                 }

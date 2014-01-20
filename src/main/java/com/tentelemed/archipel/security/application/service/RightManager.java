@@ -1,9 +1,5 @@
 package com.tentelemed.archipel.security.application.service;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.stereotype.Component;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Mael

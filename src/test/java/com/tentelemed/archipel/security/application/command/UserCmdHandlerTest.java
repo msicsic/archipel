@@ -165,7 +165,7 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
         // Given (rien)
 
         // When (exec commande)
-        CmdRes res = roleCmdHandler.execute(new CmdRoleCreate("RoleName", Right.RIGHT_A));
+        CmdRes res = roleCmdHandler.execute(new CmdRoleCreate("RoleName", Right.GLOBAL_ADMIN));
 
         // Then (Evt levé)
         assertThat(res.getEvent(EvtRoleRegistered.class), notNullValue());
@@ -174,19 +174,19 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
         Role role = (Role) eventStore.get(new RoleId(0));
         assertThat(role, notNullValue());
         assertThat(role.getName(), equalTo("RoleName"));
-        assertThat(role.getRights().iterator().next().getName(), equalTo("admin"));
+        assertThat(role.getRights().iterator().next().name(), equalTo("GLOBAL_ADMIN"));
 
         // Then (RoleQ présent dans bdd)
         RoleQ roleQ = pHandler.find(RoleQ.class, role.getEntityId().getId());
         assertThat(roleQ, notNullValue());
         assertThat(roleQ.getName(), equalTo("RoleName"));
-        assertThat(roleQ.getRights().iterator().next().getName(), equalTo("admin"));
+        assertThat(roleQ.getRights().iterator().next().name(), equalTo("GLOBAL_ADMIN"));
     }
 
     @Test
     public void executeCmdRoleDelete() {
         // Given (Role présent)
-        roleCmdHandler.execute(new CmdRoleCreate("RoleName", Right.RIGHT_A));
+        roleCmdHandler.execute(new CmdRoleCreate("RoleName", Right.GLOBAL_ADMIN));
 
         // When (exec commande)
         CmdRes res = roleCmdHandler.execute(new CmdRoleDelete(new RoleId(0)));
@@ -204,22 +204,22 @@ public class UserCmdHandlerTest extends CmdHandlerTest {
     @Test
     public void executeCmdRoleUpdateRights() {
         // Given (Role présent)
-        roleCmdHandler.execute(new CmdRoleCreate("RoleName", Right.RIGHT_A));
+        roleCmdHandler.execute(new CmdRoleCreate("RoleName", Right.GLOBAL_ADMIN));
 
         // When
-        CmdRes res = roleCmdHandler.execute(new CmdRoleUpdateRights(new RoleId(0), Right.RIGHT_B));
+        CmdRes res = roleCmdHandler.execute(new CmdRoleUpdateRights(new RoleId(0), Right.SITES_ADMIN));
 
         // Then (Evt levé)
         assertThat(res.getEvent(EvtRoleRightsUpdated.class), notNullValue());
 
         // Then (Role à jour)
         Role role = (Role) eventStore.get(new RoleId(0));
-        assertThat(role.getRights().contains(Right.RIGHT_A), equalTo(false));
-        assertThat(role.getRights().contains(Right.RIGHT_B), equalTo(true));
+        assertThat(role.getRights().contains(Right.GLOBAL_ADMIN), equalTo(false));
+        assertThat(role.getRights().contains(Right.SITES_ADMIN), equalTo(true));
 
         // Then (RoleQ à jour)
         RoleQ roleQ = pHandler.find(RoleQ.class, new RoleId(0).getId());
-        assertThat(roleQ.getRights().contains(Right.RIGHT_A), equalTo(false));
-        assertThat(roleQ.getRights().contains(Right.RIGHT_B), equalTo(true));
+        assertThat(roleQ.getRights().contains(Right.GLOBAL_ADMIN), equalTo(false));
+        assertThat(roleQ.getRights().contains(Right.SITES_ADMIN), equalTo(true));
     }
 }

@@ -1,6 +1,7 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
+import com.tentelemed.archipel.security.application.service.RightManager;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -21,6 +22,7 @@ public abstract class BasePopup<M extends BaseViewModel> extends Window implemen
     protected static Logger log = LoggerFactory.getLogger(BasePopup.class);
     BaseViewHelper<M> helper;
     @Autowired protected VaadinMessageSource msg;
+    @Autowired RightManager rightManager;
 
     protected BasePopup() {
     }
@@ -108,7 +110,7 @@ public abstract class BasePopup<M extends BaseViewModel> extends Window implemen
     }
 
     protected Button bind(Button button, final String path) {
-        return helper.bind(button, path);
+        return helper.bind(rightManager, button, path);
     }
 
     protected void call(String path) {

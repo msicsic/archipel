@@ -4,6 +4,7 @@ import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.tentelemed.archipel.core.application.BeanCreator;
+import com.tentelemed.archipel.core.application.command.RightException;
 import com.tentelemed.archipel.core.domain.model.DomainException;
 import com.tentelemed.archipel.core.domain.pub.DomainEvent;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -107,6 +108,11 @@ public abstract class BaseViewModel {
     }
 
     public void show(DomainException e) {
+        String msg = e.getMessage();
+        Notification.show(msg, Notification.Type.WARNING_MESSAGE);
+    }
+
+    public void show(RightException e) {
         String msg = e.getMessage();
         Notification.show(msg, Notification.Type.WARNING_MESSAGE);
     }

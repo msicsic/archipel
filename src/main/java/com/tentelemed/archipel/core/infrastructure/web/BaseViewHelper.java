@@ -1,6 +1,10 @@
 package com.tentelemed.archipel.core.infrastructure.web;
 
+import com.tentelemed.archipel.core.application.command.CmdGroup;
+import com.tentelemed.archipel.core.application.command.Require;
+import com.tentelemed.archipel.core.application.command.RightException;
 import com.tentelemed.archipel.core.domain.model.DomainException;
+import com.tentelemed.archipel.security.application.service.RightManager;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.MethodProperty;
@@ -11,6 +15,7 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.xpoft.vaadin.VaadinMessageSource;
 
 import javax.validation.ConstraintViolationException;
@@ -210,10 +215,31 @@ public class BaseViewHelper<M extends BaseViewModel> {
         return field;
     }
 
-    Button bind(Button button, final String path) {
+    Button bind(RightManager rightManager, Button button, final String path) {
         if (!checkActionMethod(path)) {
             throw new RuntimeException("Bad binding for button : " + path);
         }
+
+        // recupe annot des droits
+        try {
+            Method m = model.getClass().getMethod("action_" + path);
+            Require req = m.getAnnotation(Require.class);
+            if (req != null) {
+                boolean check = false;
+                for (Class cmdClass : req.value()) {
+                    CmdGroup group = (CmdGroup) cmdClass.getAnnotation(CmdGroup.class);
+                    String str = group.module()+":"+group.aggregat()+":"+cmdClass.getSimpleName();
+                    if (rightManager.isPermitted(str)) {
+                        check = true;
+                        break;
+                    }
+                }
+                button.setVisible(check);
+            }
+        } catch (Exception e) {
+            log.error(null, e);
+        }
+
         boundedButtons.put(path, button);
         button.addClickListener(new Button.ClickListener() {
             @Override
@@ -243,6 +269,8 @@ public class BaseViewHelper<M extends BaseViewModel> {
                 model.show((ConstraintViolationException) t);
             } else if (t instanceof DomainException) {
                 model.show((DomainException) t);
+            } else if (t instanceof RightException) {
+                model.show((RightException) t);
             } else {
                 model.show(t);
                 log.error(null, e);

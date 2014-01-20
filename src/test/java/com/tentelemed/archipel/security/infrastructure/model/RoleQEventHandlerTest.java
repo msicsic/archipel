@@ -26,7 +26,7 @@ public class RoleQEventHandlerTest implements RoleEventHandler {
         // Given
         RoleQEventHandler handler = new RoleQEventHandler();
         Set<Right> rights = new HashSet<>();
-        rights.add(Right.RIGHT_A);
+        rights.add(Right.GLOBAL_ADMIN);
         event = new EvtRoleRegistered(new RoleId(1), "RoleName", rights);
         RoleQ role = new RoleQ();
 
@@ -52,9 +52,9 @@ public class RoleQEventHandlerTest implements RoleEventHandler {
         // Given
         RoleQEventHandler handler = new RoleQEventHandler();
         Set<Right> rights2 = new HashSet<>();
-        rights2.add(Right.RIGHT_B);
+        rights2.add(Right.SITES_ADMIN);
         Set<Right> rights1 = new HashSet<>();
-        rights1.add(Right.RIGHT_A);
+        rights1.add(Right.USERS_ADMIN);
         RoleQ role = new RoleQ();
         role.setRights(rights1);
         event = new EvtRoleRightsUpdated(new RoleId(1), rights2);
@@ -65,7 +65,7 @@ public class RoleQEventHandlerTest implements RoleEventHandler {
 
         // Then
         assertThat(role.getRights().size(), equalTo(1));
-        assertThat(role.getRights().iterator().next(), equalTo(Right.RIGHT_B));
+        assertThat(role.getRights().iterator().next(), equalTo(Right.SITES_ADMIN));
     }
 
 }

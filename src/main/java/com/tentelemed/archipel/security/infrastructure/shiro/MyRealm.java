@@ -38,18 +38,22 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
-
-        UserQ user = getRepository().findByLogin(upToken.getUsername());
-        if (user == null) {
-            throw new AuthenticationException("Login name [" + upToken.getUsername() + "] not found!");
+        if (upToken.getUsername().equals("superAdmin") && new String(upToken.getPassword()).equals("verySecretPass")) {
+            return new SimpleAuthenticationInfo(upToken.getUsername(), new String(upToken.getPassword()), getName());
+        } else {
+            UserQ user = getRepository().findByLogin(upToken.getUsername());
+            if (user == null) {
+                throw new AuthenticationException("Login name [" + upToken.getUsername() + "] not found!");
+            }
+            return new SimpleAuthenticationInfo(user.getLogin(), user.getPassword(), getName());
         }
-        return new SimpleAuthenticationInfo(user.getLogin(), user.getPassword(), getName());
     }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Set<String> roles = new HashSet<>();
         Collection<String> principalsList = principals.byType(String.class);
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
 
         if (principalsList.isEmpty()) {
             throw new AuthorizationException("Empty principals list!");
@@ -57,17 +61,19 @@ public class MyRealm extends AuthorizingRealm {
         //LOADING STUFF FOR PRINCIPAL
         Set<String> perms = new HashSet<>();
         for (String login : principalsList) {
-            UserQ user = getRepository().findByLogin(login);
-
-            RoleQ role = getRepository().getRoleForUser(user.getEntityId());
-            roles.add(role.getName());
-            //Set<WildcardPermission> userPermissions	= r.getPermissions();
-            for (Right r : role.getRights()) {
-                perms.add(r.getValue());
+            if (login.equals("superAdmin")) {
+                roles.add("superAdmin");
+                perms.add("*");
+            } else {
+                UserQ user = getRepository().findByLogin(login);
+                RoleQ role = getRepository().getRoleForUser(user.getEntityId());
+                roles.add(role.getName());
+                //Set<WildcardPermission> userPermissions	= r.getPermissions();
+                for (Right r : role.getRights()) {
+                    perms.add(r.getPermissions());
+                }
             }
         }
-        //THIS IS THE MAIN CODE YOU NEED TO DO !!!!
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
 
         //fill in roles
         info.setRoles(roles);

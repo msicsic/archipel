@@ -41,10 +41,6 @@ public class UserQueryService extends BaseQueryService {
     @Autowired
     UserRepository userRepository;
 
-    public UserQueryService() {
-        System.err.println("");
-    }
-
     public List<UserQ> getAllUsers() {
         return userRepository.getAllUsers();
     }
