@@ -2,8 +2,6 @@ package com.tentelemed.archipel.security.domain.pub;
 
 import com.tentelemed.archipel.core.domain.model.EntityId;
 
-import javax.persistence.Entity;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Mael

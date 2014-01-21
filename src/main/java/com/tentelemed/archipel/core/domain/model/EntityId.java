@@ -1,6 +1,5 @@
 package com.tentelemed.archipel.core.domain.model;
 
-import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
@@ -9,7 +8,6 @@ import java.io.Serializable;
  * Date: 21/10/13
  * Time: 16:41
  */
-@MappedSuperclass
 public class EntityId implements Serializable {
     Integer id;
 

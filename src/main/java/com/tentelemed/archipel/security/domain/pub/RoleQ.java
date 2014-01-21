@@ -59,19 +59,6 @@ public class RoleQ extends BaseEntityQ<RoleId> {
         return Collections.unmodifiableSet(rights);
     }
 
-    //    public Set<Right> getRights() {
-//        if (rights == null) {
-//            rights = new HashSet<>();
-//            for (String r : Splitter.on(" ").split(rightString)) {
-//                if (Strings.isNullOrEmpty(r)) continue;
-//                List<String> values = Splitter.on("/").splitToList(r);
-//                Right right = new Right(values.get(0), values.get(1));
-//                rights.add(right);
-//            }
-//        }
-//        return Collections.unmodifiableSet(rights);
-//    }
-//
     public void setRights(Set<Right> rights) {
         this.rights = rights;
         buildRightsString();
@@ -86,15 +73,6 @@ public class RoleQ extends BaseEntityQ<RoleId> {
         rightString = result;
     }
 
-    //    private void buildRightsString() {
-//        if (rights == null) return;
-//        String result = "";
-//        for (Right r : rights) {
-//            result = result + r.getName() + "/" + r.getValue() + " ";
-//        }
-//        rightString = result;
-//    }
-//
     public void setRightString(String rightString) {
         this.rightString = rightString;
         this.rights = null;

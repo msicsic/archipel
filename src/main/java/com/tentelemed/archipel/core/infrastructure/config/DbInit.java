@@ -193,6 +193,16 @@ public class DbInit {
         CmdSiteCreateFunctionalUnit cmd4 = new CmdSiteCreateFunctionalUnit(siteId, "CNS", "GEN", "Generaliste");
         siteHandler.execute(cmd4);
 
+        siteHandler.execute(new CmdSiteCreateActivityUnit(siteId, "GEN", "AU1", "Primaire"));
+        siteHandler.execute(new CmdSiteCreateActivityUnit(siteId, "GEN", "AU2", "Secondaire"));
+
+        siteHandler.execute(new CmdSiteCreateSector(siteId, SectorType.TECH, "Technical", "TEC"));
+        siteHandler.execute(new CmdSiteCreateService(siteId, "TEC", "ST1", "Technical Srv"));
+        siteHandler.execute(new CmdSiteCreateService(siteId, "TEC", "ST2", "Stockage"));
+        siteHandler.execute(new CmdSiteCreateFunctionalUnit(siteId, "ST1", "FU5", "Maupassant"));
+        siteHandler.execute(new CmdSiteCreateFunctionalUnit(siteId, "ST1", "FU6", "Beaudelaire"));
+
+
         createRooms(siteId);
     }
 
